@@ -1,0 +1,16 @@
+This is freenode's Group Management System. It's still in development, and not
+exactly useful yet.
+
+If you're interested in development of it, then the top-level directory layout
+is as follows:
+
+atheme/:    Atheme modules used (via XML-RPC) to carry out various backend tasks.
+
+lib/:       Perl modules that implement most of the GMS logic. These will be
+            used by the web interface, and any other (IRC?) interfaces that may
+            be developed.
+
+sql/:       SQL setup files, used to create the GMS database and other such
+            tasks.
+
+web/:       The web interface, once written, will live here.
