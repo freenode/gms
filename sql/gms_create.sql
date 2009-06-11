@@ -11,9 +11,10 @@ DROP TABLE IF EXISTS user_roles;
 -- we use a (name, registration time) pair to uniquely identify
 -- a services account.
 CREATE TABLE accounts (
-    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id              INTEGER UNIQUE NOT NULL AUTO_INCREMENT,
     accountname     VARCHAR(32),
-    accountts       TIMESTAMP DEFAULT 0
+    accountts       INTEGER NOT NULL,
+    PRIMARY KEY (accountname, accountts)
 );
 
 CREATE TABLE contacts (
@@ -32,9 +33,9 @@ CREATE TABLE groups (
     address         INTEGER,
     status          ENUM('new', 'verified', 'approved'),
     verify_url      VARCHAR(255),
-    submitted       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    verified        TIMESTAMP DEFAULT 0,
-    approved        TIMESTAMP DEFAULT 0
+    submitted       INTEGER NOT NULL,
+    verified        INTEGER DEFAULT 0,
+    approved        INTEGER DEFAULT 0
 );
 
 CREATE TABLE group_contacts (
