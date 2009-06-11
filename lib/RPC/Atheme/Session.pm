@@ -5,6 +5,7 @@ use subs qw(new DESTROY login command logout);
 
 require RPC::XML;
 require RPC::XML::Client;
+require RPC::Atheme;
 
 sub new {
     my ($class, $host, $port, %attrs) = @_;
@@ -50,6 +51,8 @@ sub login {
         $RPC::Atheme::ERROR = "Too much response from atheme.login";
         return 0;
     }
+
+    return 1;
 }
 
 sub command {

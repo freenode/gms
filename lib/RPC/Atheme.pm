@@ -1,7 +1,7 @@
 package RPC::Atheme;
 use strict;
 
-use vars qw($ERROR);
+use vars '$ERROR';
 
 $ERROR = '';
 
