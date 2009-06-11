@@ -11,8 +11,8 @@ __PACKAGE__->set_primary_key('id');
 __PACKAGE__->has_many(group_contacts => 'GMS::Schema::Result::GroupContact', 'contact_id');
 __PACKAGE__->many_to_many(groups => 'group_contacts', 'group');
 
-#__PACKAGE__->belongs_to(address => 'GMS::Schema::Result::Address', 'address');
-#__PACKAGE__->belongs_to(account => 'GMS::Schema::Result::Account', 'account');
+__PACKAGE__->belongs_to(address => 'GMS::Schema::Result::Address', 'address');
+__PACKAGE__->belongs_to(account => 'GMS::Schema::Result::Account', 'account_id');
 
 1;
 
