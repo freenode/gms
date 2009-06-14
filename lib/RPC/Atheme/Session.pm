@@ -3,9 +3,12 @@ use strict;
 
 use subs qw(new DESTROY login command logout);
 
-require RPC::XML;
-require RPC::XML::Client;
-require RPC::Atheme;
+use Error qw/:try/;
+
+use RPC::XML;
+use RPC::XML::Client;
+use RPC::Atheme;
+use RPC::Atheme::Error;
 
 sub new {
     my ($class, $host, $port, %attrs) = @_;
@@ -20,7 +23,7 @@ sub new {
     $self->{__url} = "http://" . $host . ":" . $port . "/xmlrpc";
 
     $self->{__client} = RPC::XML::Client->new($self->{__url});
-    return "${class}::new: Couldn't create RPC::XML::Client object" unless $self->{__client};
+    throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $self->{__client};
 
     bless $self, $class;
 }
@@ -38,19 +41,19 @@ sub login {
     $self->{__username} = $user;
     $self->{__source} = $source;
 
-    $self->{__authcookie} = $self->{__client}->simple_request(
+    my $response = $self->{__client}->simple_request(
         'atheme.login', $user, $pass, $source
     );
 
-    if (! defined $self->{__authcookie}) {
-        $RPC::Atheme::ERROR = $RPC::XML::ERROR;
-        return 0;
+    if (! defined $response) {
+        throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR);
     }
 
-    if (ref $self->{__authcookie}) {
-        $RPC::Atheme::ERROR = "Too much response from atheme.login";
-        return 0;
+    if (ref $response) {
+        throw RPC::Atheme::Error($response);
     }
+
+    $self->{__authcookie} = $response;
 
     return 1;
 }
@@ -58,20 +61,29 @@ sub login {
 sub command {
     my ($self, @args) = @_;
 
-    $self->{__client}->simple_request(
+    my $result = $self->{__client}->simple_request(
         'atheme.command',
         $self->{__authcookie},
         $self->{__username},
         $self->{__source},
         @args
     );
+
+    throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    throw RPC::Atheme::Error($result) if ref $result eq 'HASH';
+    return $result;
 }
 
 sub logout {
     my ($self) = @_;
     return unless $self->{__authcookie};
 
-    $self->{__client}->simple_request('atheme.logout', $self->{__authcookie}, $self->{__username});
+    my $result = $self->{__client}->simple_request(
+        'atheme.logout', $self->{__authcookie}, $self->{__username});
+
+    throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    throw RPC::Atheme::Error($result) if ref $result eq 'HASH';
+    return $result;
 }
 
 1;

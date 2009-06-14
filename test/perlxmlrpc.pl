@@ -45,7 +45,8 @@ else
 
 if (defined $authcookie)
 {
-	$resp = $cli->simple_request('atheme.command', $authcookie, $login, $sourceip, 'GroupServ', 'getregtime', 'spb');
+#	$resp = $cli->simple_request('atheme.command', $authcookie, $login, $sourceip, 'GroupServ', 'getregtime', 'spb');
+	$resp = $cli->simple_request('atheme.command', $authcookie, $login, $sourceip, 'NickServ', 'info', 'spb');
 	#$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'KICK', '#irc', 'jilles', 'xmlrpc test');
 	#$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'INFO', '#irc');
 	#$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'FLAGS', '#irc');

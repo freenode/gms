@@ -2,12 +2,13 @@
 
 use lib './lib';
 
+use Error qw/:try/;
+
 use RPC::Atheme;
 use RPC::Atheme::Session;
 
 use GMS::Config;
 use GMS::Session;
-use Data::Dumper;
 
 my $login;
 my $password;
@@ -26,11 +27,17 @@ exit 0 if ($password eq '');
 chomp $login;
 chomp $password;
 
-my $controlsession = RPC::Atheme::Session->new($GMS::Config::atheme_host,
-                                               $GMS::Config::atheme_port);
-$controlsession->login($GMS::Config::atheme_master_login, $GMS::Config::atheme_master_pass)
-    or die "Couldn't create atheme control session";
+try {
+    my $controlsession = RPC::Atheme::Session->new($GMS::Config::atheme_host,
+                                                   $GMS::Config::atheme_port);
+    $controlsession->login($GMS::Config::atheme_master_login, $GMS::Config::atheme_master_pass)
+        or die "Couldn't create atheme control session";
 
-my $session = GMS::Session->new($login, $password, $controlsession);
+    my $session = GMS::Session->new($login, $password, $controlsession);
 
-print Data::Dumper->Dump([$session]);
+    print "Account ID: " . $session->account . "\n";
+} catch RPC::Atheme::Error with {
+    my $e = shift;
+    print "Exception: $e\n";
+}
+

@@ -71,4 +71,9 @@ sub new {
     bless $self, $class;
 }
 
+sub account {
+    my ($self) = @_;
+    return $self->{_accountid};
+}
+
 1;
