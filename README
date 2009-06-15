@@ -13,4 +13,33 @@ lib/:       Perl modules that implement most of the GMS logic. These will be
 sql/:       SQL setup files, used to create the GMS database and other such
             tasks.
 
-web/:       The web interface, once written, will live here.
+root/:      Template files and static content for the web interface.
+
+script/:    Catalyst setup scripts.
+
+t/:         Perl unit tests, created by Catalyst.
+
+
+=== Code structure:
+
+The atheme/ directory contains modules to provide a GroupServ service, with the
+following commands:
+
+ - GETREGTIME <accountname> -- returns the registration time of <accountname> as
+   a Unix timestamp.
+
+The lib/ directory contains the following packages:
+
+ - RPC::Atheme::Session -- wraps around a login session to Atheme's XML-RPC
+   interface.
+ - RPC::Atheme::Error -- describes an error result from an Atheme XML-RPC
+   command.
+
+ - GMS::Session -- a GMS login session. When created, authenticates against
+   Atheme using the credentials provided, then uses the provided 'master
+   session' to match up the login details with a unique account ID in the GMS
+   database.
+
+ - GMS::Schema::* -- a DBIx::Class schema for the GMS database.
+
+ - GMS::Web::* -- A Catalyst web application.
