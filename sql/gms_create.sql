@@ -24,7 +24,6 @@ CREATE TABLE contacts (
     address         INTEGER
 );
 
-
 CREATE TABLE groups (
     id              INTEGER PRIMARY KEY AUTO_INCREMENT,
     groupname       VARCHAR(32) NOT NULL,
@@ -36,6 +35,16 @@ CREATE TABLE groups (
     submitted       INTEGER NOT NULL,
     verified        INTEGER DEFAULT 0,
     approved        INTEGER DEFAULT 0
+);
+
+CREATE TABLE channel_namespaces (
+    group_id        INTEGER NOT NULL,
+    namespace       VARCHAR(32)
+);
+
+CREATE TABLE cloak_namespaces (
+    group_id        INTEGER NOT NULL,
+    namespace       VARCHAR(32)
 );
 
 CREATE TABLE group_contacts (

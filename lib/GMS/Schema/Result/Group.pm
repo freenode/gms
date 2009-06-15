@@ -13,4 +13,8 @@ __PACKAGE__->has_many(group_contacts => 'GMS::Schema::Result::GroupContact', 'gr
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 
 __PACKAGE__->belongs_to(address => 'GMS::Schema::Result::Address', 'address');
+
+__PACKAGE__->has_many(channel_namespaces => 'GMS::Schema::Result::ChannelNamespace', 'group_id');
+__PACKAGE__->has_many(cloak_namespaces => 'GMS::Schema::Result::CloakNamespace', 'group_id');
+
 1;
