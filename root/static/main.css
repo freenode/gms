@@ -1,0 +1,12 @@
+body {background-color: #33f; font-family:Courier; }
+
+#header {padding:3px 3px 3px 3px; background-color: #88f; overflow:hidden; }
+#header_freenode {/*height:68px; width:340px;*/ overflow:hidden; float:left; }
+#header_GMS {float:left; font-size:20px; margin-left:20px; margin-top:0px; }
+#header_auth {float:right; background-color: #aaf; width:300px; height:auto; margin-top:0px; margin-bottom:0px; }
+
+#content {background-color: #fff; padding:10px 10px 10px 10px; }
+
+#footer {background-color: #88f; }
+
+

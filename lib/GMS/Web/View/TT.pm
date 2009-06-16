@@ -7,6 +7,7 @@ __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt',
     INCLUDE_PATH => [
         GMS::Web->path_to('root','src'),
         ],
+    WRAPPER => 'wrapper.tt',
     );
 
 =head1 NAME

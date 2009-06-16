@@ -48,3 +48,14 @@ The lib/ directory contains the following packages:
 
 Template path is:
     /root/src/_controller_/_action_.tt
+
+
+Urls:
+    /login
+        username
+        password
+    /logout
+
+
+
+
