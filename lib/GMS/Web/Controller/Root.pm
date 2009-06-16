@@ -47,6 +47,13 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView') {}
 
+# TT-template test
+
+sub tttest : Local {
+    my ($self, $c) = @_;
+    $c->stash->{template} = 'tttest.tt';
+}
+
 =head1 AUTHOR
 
 Catalyst developer
