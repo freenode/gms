@@ -43,3 +43,8 @@ The lib/ directory contains the following packages:
  - GMS::Schema::* -- a DBIx::Class schema for the GMS database.
 
  - GMS::Web::* -- A Catalyst web application.
+
+=== Web interface
+
+Template path is:
+    /root/src/_controller_/_action_.tt
