@@ -30,7 +30,7 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     # Hello World
-    $c->response->body( $c->welcome_message );
+    $c->stash->{template} = 'index.tt';
 }
 
 sub default :Path {

@@ -23,7 +23,7 @@ sub id {
 }
 
 sub supported_features {
-    return undef;
+    return { session => 1 };
 }
 
 sub get {
@@ -37,7 +37,12 @@ sub get {
 sub get_object {
     my ($self) = @_;
 
-    return $self->{_account};
+    return $self;
+}
+
+sub username {
+    my ($self) = @_;
+    return $self->get('name');
 }
 
 1;

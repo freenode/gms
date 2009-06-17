@@ -4,6 +4,9 @@ use strict;
 use warnings;
 
 use GMS::Session;
+use GMS::Authentication::User;
+
+use Error qw/:try/;
 
 sub new {
     my ($class, $config, $app, $realm) = @_;

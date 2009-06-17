@@ -3,6 +3,8 @@ package GMS::Authentication::Store;
 use strict;
 use warnings;
 
+use GMS::Authentication::User;
+
 sub new {
     my ($class, $config, $app, $realm) = @_;
     $class = ref $class || $class;
@@ -19,13 +21,15 @@ sub new {
 sub for_session {
     my ($self, $c, $user) = @_;
 
-    return $user->account_id;
+    return $user->get('id');;
 }
 
 sub from_session {
     my ($self, $c, $frozenuser) = @_;
 
-    return $c->model('DB::Account')->find(account_id => $frozenuser);
+    return GMS::Authentication::User->new(
+        $c->model('DB::Account')->find({id => $frozenuser})
+    );
 }
 
 1;

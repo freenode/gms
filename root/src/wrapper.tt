@@ -10,6 +10,13 @@
       <div class="logo">
         <img src="[% c.uri_for('/static/freenode_logo.png') %]" width="340" height="68" />
       </div>
+      <div class="login">
+          [% IF c.user_exists -%]
+          You are logged in as [% c.user.username %].
+          [% ELSE -%]
+          You are not logged in.
+          [% END %]
+      </div>
     </div><!-- header end -->
     <div id="sidebar">
       <div><!-- links -->

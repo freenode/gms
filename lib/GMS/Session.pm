@@ -9,6 +9,8 @@ use GMS::Schema;
 use RPC::Atheme;
 use RPC::Atheme::Session;
 
+use Error qw/:try/;
+
 =head1 NAME
 
 GMS::Session - Represents a GMS login session
@@ -40,13 +42,13 @@ sub new {
     $self->{_rpcsession} = RPC::Atheme::Session->new(
         $GMS::Config::atheme_host,
         $GMS::Config::atheme_port
-    ) or return "Couldn't create XML-RPC session";
+    ) or throw Error::Simple("Couldn't create XML-RPC session");
 
     $self->{_rpcsession}->login($user, $pass, $self->{_source})
-        or return "XML-RPC login failed: " . $RPC::Atheme::ERROR;
+        or throw Error::Simple("XML-RPC login failed: " . $RPC::Atheme::ERROR);
 
     my $accountts = $self->{_control_session}->command($GMS::Config::service, 'getregtime', $user)
-        or return "Couldn't get account registration time";
+        or throw Error::Simple("Couldn't get account registration time");
 
     $self->{_db} = GMS::Schema->connect($GMS::Config::dbstring,
         $GMS::Config::dbuser, $GMS::Config::dbpass);
@@ -63,7 +65,7 @@ sub new {
             });
     };
     if ($@) {
-        return "Couldn't find or create an account ID: $@";
+        throw Error::Simple("Couldn't find or create an account ID: $@");
     }
 
     $self->{_account} = $account;
