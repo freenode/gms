@@ -1,0 +1,32 @@
+
+body {background-color: #ccc; padding:0px 0px 0px 0px; }
+
+body div {overflow:hidden; background-color: #aaa; }
+
+#header  {padding:3px 3px 3px 3px; margin:0 0 5px 0; }
+#sidebar {padding:3px 3px 0px 3px; margin:0 5px 0 0; float:left; width:300px; }
+#main    {padding:3px 3px 0px 3px; margin:0 0 0 0;   }
+#footer  {padding:3px 3px 3px 3px; margin:5px 0 0 0; }
+
+#sidebar div {margin:0 0 3px 0; padding:3px 3px 3px 3px; background-color: #eef; border:1px solid #000; }
+#main div {margin:0 0 3px 0; padding:10px 10px 10px 10px; }
+#header div {overflow:hidden; float:left; padding:3px 3px 3px 3px; }
+#header *.logo {display:table-cell; vertical-align:middle; }
+#header *.logo img {vertical-align:middle; }
+#header *.login {float:right; width:200px; background-color: #ccc; }
+
+
+p,div,span {font-family:Arial, Helvetica; }
+
+.text {}
+
+.content   {background-color: #fff; }
+.errormsg  {background-color: #fbb; text-align:center; border:3px solid #f00; }
+.statusmsg {background-color: #ffd; text-align:center; border:3px solid #ff0; }
+
+
+
+
+
+
+

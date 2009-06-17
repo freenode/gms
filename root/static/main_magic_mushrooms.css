@@ -1,0 +1,35 @@
+/*
+   a very special color-sheme by pyropeter
+   
+   for future use :-P
+   ( maybe 1st of april or similar )
+*/
+
+/*
+   layout
+*/
+
+body {background-color: #33f; padding:0px 0px 0px 0px; }
+
+body div {overflow:hidden; background-color: #88f; }
+
+#header  {padding:3px 3px 3px 3px; margin:0 0 5px 0; }
+#sidebar {padding:3px 3px 0px 3px; margin:0 5px 0 0; float:left; width:300px; }
+#main    {padding:3px 3px 0px 3px; margin:0 0 0 0;   }
+#footer  {padding:3px 3px 3px 3px; margin:5px 0 0 0; }
+
+#sidebar div {margin:0 0 3px 0; padding:3px 3px 3px 3px; background-color: #aaf; border:1px solid #000; }
+#main div {margin:0 0 3px 0; padding:10px 10px 10px 10px; }
+
+/*
+   Text formats
+*/
+
+p,div,span {font-family:Courier; }
+
+.text {}
+
+.content   {background-color: #fff; }
+.errormsg  {background-color: #fbb; text-align:center; border:3px solid #f00; }
+.statusmsg {background-color: #ffd; text-align:center; border:3px solid #ff0; }
+
