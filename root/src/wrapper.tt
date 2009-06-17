@@ -10,21 +10,6 @@
       <div class="logo">
         <img src="[% c.uri_for('/static/freenode_logo.png') %]" width="340" height="68" />
       </div>
-      <div class="login"><!-- login -->
-        [% IF session.status > 0 %]
-        <!-- TODO TODO TODO TODO TODO is that enough? no! TODO TODO TODO: change "session.status" to whatever -->
-        You are logged in as "[% session.user %]"
-        <!-- TODO: here, too -->
-        <br /><a href="[% c.uri_for('/logout') %]">logout!</a>
-        [% ELSE %]
-        <form method="POST" action="[% c.uri_for('/login') %]" >
-          <input type="hidden" name="task" value="login" />
-          <input type="text" name="username" value="irc/nickserv username" />
-          <input type="password" name="password" value="password" />
-          <input type="submit" value="Login!" />
-        </form>
-        [% END %]
-      </div>
     </div><!-- header end -->
     <div id="sidebar">
       <div><!-- links -->
