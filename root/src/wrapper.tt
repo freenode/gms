@@ -1,59 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
- <head>
-  <title>Freenode Group Management System</title>
-  <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/main.css') %]" />
- </head>
- <body>
-  <div id="header">
-   <div id="header_freenode">
-    <a href="http://freenode.net" >
-     <img src="[% c.uri_for('/static/freenode_logo.png') %]" width="340" height="68" />
-    </a>
-   </div>
-   <div id="header_GMS">
-    <a href="[% c.uri_for('/') %]">
-     Group<br>Management<br>System
-    </a>
-   </div>
-   <div id="header_auth">
-    [% IF session.status > 0 %]
-    <!-- TODO TODO TODO TODO TODO is that enough? no! TODO TODO TODO: change "session.status" to whatever -->
-    You are logged in as "[% session.user %]"
-    <!-- TODO: here, too -->
-    <br><a href="[% c.uri_for('/logout') %]">logout</a>
-    [% ELSE %]
-    <form method="POST" action="[% c.uri_for('/login') %]" >
-     <input type="hidden" name="task" value="login" />
-     Login with irc account:
-     <br>
-     <input type="text" name="username" value="username" />
-     <br>
-     <input type="password" name="password" value="password" />
-    </form>
-    [% END %]
-   </div>
-  </div>
-  <!-- error box -->
-  [% IF error_msg %]
-  <div id="error">
-   [% error_msg %]
-  </div>
-  [% END %]
-  <!-- status box -->
-  [% IF status_msg %]
-  <div id="status">
-   [% status_msg %]
-  </div>
-  [% END %]
-  <!-- content box -->
-  <!-- (as if you would not be able to read the id-attribute by yourself...) -->
-  <div id="content">
-   [% content %]
-  </div>
-  <div id="footer">
-   Here comes the footer
-  </div>
- </body>
+  <head>
+    <title>Freenode Group Management System</title>
+    <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/main.css') %]" />
+  </head>
+  <body>
+    <div id="header">
+      <div class="logo">
+        <img src="[% c.uri_for('/static/freenode_logo.png') %]" width="340" height="68" />
+      </div>
+      <div class="login"><!-- login -->
+        [% IF session.status > 0 %]
+        <!-- TODO TODO TODO TODO TODO is that enough? no! TODO TODO TODO: change "session.status" to whatever -->
+        You are logged in as "[% session.user %]"
+        <!-- TODO: here, too -->
+        <br /><a href="[% c.uri_for('/logout') %]">logout!</a>
+        [% ELSE %]
+        <form method="POST" action="[% c.uri_for('/login') %]" >
+          <input type="hidden" name="task" value="login" />
+          <input type="text" name="username" value="irc/nickserv username" />
+          <input type="password" name="password" value="password" />
+          <input type="submit" value="Login!" />
+        </form>
+        [% END %]
+      </div>
+    </div><!-- header end -->
+    <div id="sidebar">
+      <div><!-- links -->
+        <a href="http://freenode.net/">Freenode Main Page</a>
+        <br />
+        <a href="[% c.uri_for('/') %]">GMS Home</a>
+      </div>
+      <div>
+        Just an other sidebar element
+      </div>
+      <div>
+        and one more sidebar element
+        <br />
+        this time even multilined!
+        <br />
+        third line of text
+        <br />
+        foo bar bar foo barfoofoobarbar foooooo baarrrr foo bar bar foo barfoofoobarbar foooooo baarrrr
+      </div>
+    </div><!-- sidebar end -->
+    <div id="main">
+      <!-- error box -->
+      [% IF error_msg %]
+      <div class="errormsg">
+        [% error_msg %]
+      </div>
+      [% END %]
+      <!-- status box -->
+      [% IF status_msg %]
+      <div class="statusmsg">
+        [% status_msg %]
+      </div>
+      [% END %]
+      <!-- content box -->
+      <!-- (as if you would not be able to read the id-attribute by yourself...) -->
+      <div class="content">
+        [% content %]
+      </div>
+    </div><!-- main end -->
+    <div id="footer">
+      Here comes the footer
+    </div><!-- footer end -->
+  </body>
 </html>
