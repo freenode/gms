@@ -16,7 +16,14 @@ use Catalyst::Runtime 5.80;
 use parent qw/Catalyst/;
 use Catalyst qw/-Debug
                 ConfigLoader
-                Static::Simple/;
+                Static::Simple
+
+                Authentication
+
+                Session
+                Session::Store::FastMmap
+                Session::State::Cookie/;
+
 our $VERSION = '0.01';
 
 # Configure the application.
@@ -29,6 +36,19 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config( name => 'GMS::Web' );
+
+__PACKAGE__->config( 'Plugin::Authentication' =>
+    {
+        default => {
+            credential => {
+                class => '+GMS::Authentication::Credential'
+            },
+            store => {
+                class => '+GMS::Authentication::Store'
+            }
+        }
+    }
+);
 
 # Start the application
 __PACKAGE__->setup();

@@ -66,14 +66,14 @@ sub new {
         return "Couldn't find or create an account ID: $@";
     }
 
-    $self->{_accountid} = $account->id;
+    $self->{_account} = $account;
 
     bless $self, $class;
 }
 
 sub account {
     my ($self) = @_;
-    return $self->{_accountid};
+    return $self->{_account};
 }
 
 1;

@@ -35,7 +35,7 @@ try {
 
     my $session = GMS::Session->new($login, $password, $controlsession);
 
-    print "Account ID: " . $session->account . "\n";
+    print "Account ID: " . $session->account->id . "\n";
 } catch RPC::Atheme::Error with {
     my $e = shift;
     print "Exception: $e\n";
