@@ -12,9 +12,11 @@
       </div>
       <div class="login">
           [% IF c.user_exists -%]
-          You are logged in as [% c.user.username %].
+          You are logged in as [% c.user.username %]
+          (<a href="[% c.uri_for('/logout') %]">log out</a>).
           [% ELSE -%]
-          You are not logged in.
+          You are not logged in
+          (<a href="[% c.uri_for('/login') %]">log in</a>).
           [% END %]
       </div>
     </div><!-- header end -->
