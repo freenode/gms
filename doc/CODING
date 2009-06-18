@@ -1,0 +1,36 @@
+== Brief coding standards for GMS
+
+These aren't completely followed by existing code, but should be by new stuff.
+
+== Summary
+
+Indent with four spaces. Follow general practices for the language you're writing in, but
+never at the cost of readability.
+
+== General rules
+
+ - Indentation is by four spaces. There are no tabs except in Makefiles.
+ - One file per task/class/etc.
+ - Use blank lines to break up code. It's far more readable.
+ - Where operator precedence is not obvious to someone who doesn't know the language, use brackets.
+ - Single-letter local variables are fine; single-letter public methods/members are not.
+ - Don't comment the bleeding obvious. Do comment the highly obscure. Use discretion in between.
+
+ - Comprehensible, maintainable code is more important than being clever, in all cases. This applies
+   especially to Perl.
+
+== C code
+
+ - Braces go on their own line.
+ - Function names and variables are lowercase_with_underscores.
+ - There is a space between 'if', 'for' and 'while' and their bracket. There is no space between a
+   function name and its bracket.
+
+== Perl code
+
+ - Opening braces follow on the previous line. Closing braces have their own line.
+ - } else { is one line.
+ - Where an object is a hash ref, prefix member names with a single underscore (i.e. $self->{_something}).
+ - Module names are, as ever, Uppercase. Method names are lowercase_with_underscores.
+ - Common perl idioms are fine; obscure ones are not. Err on the side of readability.
+
