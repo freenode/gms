@@ -42,13 +42,9 @@ sub new {
     $self->{_rpcsession} = RPC::Atheme::Session->new(
         $GMS::Config::atheme_host,
         $GMS::Config::atheme_port
-    ) or throw Error::Simple("Couldn't create XML-RPC session");
+    );
 
-    $self->{_rpcsession}->login($user, $pass, $self->{_source})
-        or throw Error::Simple("XML-RPC login failed: " . $RPC::Atheme::ERROR);
-
-    my $accountts = $self->{_control_session}->command($GMS::Config::service, 'getregtime', $user)
-        or throw Error::Simple("Couldn't get account registration time");
+    $self->{_rpcsession}->login($user, $pass, $self->{_source});
 
     $self->{_db} = GMS::Schema->connect($GMS::Config::dbstring,
         $GMS::Config::dbuser, $GMS::Config::dbpass);
@@ -56,17 +52,19 @@ sub new {
 
     my $account;
 
-    eval {
+    try {
+        my $accountid = $self->{_control_session}->command($GMS::Config::service, 'accountid', $user);
+        $account = $account_rs->find({ id => $accountid });
+    }
+    catch RPC::Atheme::Error with {
         $account = $self->{_db}->txn_do( sub {
-                my $result = $account_rs->find_or_create({
+                my $result = $account_rs->create({
                         accountname => $user,
-                        accountts => $accountts
                     })
             });
+        $self->{_control_session}->command($GMS::Config::service, 'accountid',
+            $user, $account->id);
     };
-    if ($@) {
-        throw Error::Simple("Couldn't find or create an account ID: $@");
-    }
 
     $self->{_account} = $account;
 

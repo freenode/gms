@@ -11,10 +11,8 @@ DROP TABLE IF EXISTS user_roles;
 -- we use a (name, registration time) pair to uniquely identify
 -- a services account.
 CREATE TABLE accounts (
-    id              INTEGER UNIQUE NOT NULL AUTO_INCREMENT,
-    accountname     VARCHAR(32),
-    accountts       INTEGER NOT NULL,
-    PRIMARY KEY (accountname, accountts)
+    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
+    accountname     VARCHAR(32)
 );
 
 CREATE TABLE contacts (
