@@ -1,0 +1,54 @@
+The crude TODO list for GMS is "Everything." This file attempts to list some of
+the larger projects that are needed sooner rather than later.
+
+=== The registration form
+
+One of the first things that is needed to make this useful is the ability for an
+authenticated user to register a new group, and have it make its way to
+'approved' status. There are several parts to this project, which are relatively
+disjoint.
+
+ - The initial registration form. Let the would-be group contact input the
+   group information, as well as his own contact information. The new group will
+   enter the database in the 'new' state.
+
+ - Automated verification. This portion will probably run independently of the
+   web interface, through a cron job. Verification of a new group application is
+   done by checking for the existence of a randomly-generated file name at some
+   location under the group's top level URL. If the prospective contact can
+   cause this to appear, their involvement with the project is considered to be
+   verified.
+
+ - Staff approval. Once a new group has passed the verification, there needs to
+   be an easy way for suitably authorised staff members to view it in the queue
+   and decide whether or not to approve it.
+
+=== Make account associations more robust.
+
+Account names in Atheme are not globally unique identifiers -- accounts can be
+renamed or destroyed, and previously-used names can be reused. We currently
+identify an account by the (name, registration-time) pair. This assures that
+different accounts are always seen as different, but will lose the association
+between an atheme account and a GMS one if the name is changed.
+
+Ideally, there should be some mechanism to deal with account name changes
+without losing the association between services account and group contact
+information. There should also be a way for staff with god-like access to
+manually reinstate associations if the automatic scheme fails for some reason.
+
+=== Make Atheme communications more robust.
+
+Atheme XML-RPC auth cookies are valid for a fixed period of one hour, or until a
+logout. This includes the master session that GMS uses to carry out internal
+administrative tasks. It needs to cope gracefully in the event that its master
+session times out or is disconnected some other way.
+
+=== Improve the web UI
+
+The current web interface is functional but basic. Someone more experienced in
+web design could make it prettier.
+
+This will likely be an ongoing task, as new modules are written that start with
+similar functional-yet-basic templates. In most cases it should be possible to
+improve upon the templates created by backend developers.
+

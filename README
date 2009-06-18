@@ -1,61 +1,6 @@
 This is freenode's Group Management System. It's still in development, and not
 exactly useful yet.
 
-If you're interested in development of it, then the top-level directory layout
-is as follows:
-
-atheme/:    Atheme modules used (via XML-RPC) to carry out various backend tasks.
-
-lib/:       Perl modules that implement most of the GMS logic. These will be
-            used by the web interface, and any other (IRC?) interfaces that may
-            be developed.
-
-sql/:       SQL setup files, used to create the GMS database and other such
-            tasks.
-
-root/:      Template files and static content for the web interface.
-
-script/:    Catalyst setup scripts.
-
-t/:         Perl unit tests, created by Catalyst.
-
-
-=== Code structure:
-
-The atheme/ directory contains modules to provide a GroupServ service, with the
-following commands:
-
- - GETREGTIME <accountname> -- returns the registration time of <accountname> as
-   a Unix timestamp.
-
-The lib/ directory contains the following packages:
-
- - RPC::Atheme::Session -- wraps around a login session to Atheme's XML-RPC
-   interface.
- - RPC::Atheme::Error -- describes an error result from an Atheme XML-RPC
-   command.
-
- - GMS::Session -- a GMS login session. When created, authenticates against
-   Atheme using the credentials provided, then uses the provided 'master
-   session' to match up the login details with a unique account ID in the GMS
-   database.
-
- - GMS::Schema::* -- a DBIx::Class schema for the GMS database.
-
- - GMS::Web::* -- A Catalyst web application.
-
-=== Web interface
-
-Template path is:
-    /root/src/_controller_/_action_.tt
-
-
-Urls:
-    /login
-        username
-        password
-    /logout
-
-
-
+If you're interested in development of it, then further information is in the
+doc/ subdirectory.
 

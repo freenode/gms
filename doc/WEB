@@ -1,0 +1,21 @@
+The GMS web interface is a Catalyst application. Its code is in the modules
+under GMS::Web.
+
+There are at present two Models, several Controllers, and one View.
+
+The Models are Model::DB and Model::Atheme. The former wraps the DBIx::Class
+schema in GMS::Schema, while the latter is a custom model that wraps around an
+Atheme XML-RPC session.
+
+The single View is View::TT, the standard Template Toolkit view.
+
+There is one Controller per 'top-level' task, as should be expected.
+
+Also relevant to the web frontend is GMS::Authentication::*. These modules
+implement a Catalyst::Authentication backend which authenticates via XML-RPC
+against a running Atheme instance.
+
+Output templates for the web application are in root/src/*.tt. The wrapper
+template (root/src/wrapper.tt) is used by all template output to provide the
+overall structure of the page; the actual content is provided by whichever other
+template is selected by that page's Controller.

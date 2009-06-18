@@ -1,0 +1,17 @@
+The (approximate) layout of the GMS source tree:
+
+atheme/:    Atheme modules used (via XML-RPC) to carry out various backend tasks.
+
+lib/:       Perl modules that implement most of the GMS logic. These include the
+            Catalyst modules that make up the web frontend, in lib/GMS/Web.
+
+sql/:       SQL setup files, used to create the GMS database and other such
+            tasks.
+
+root/:      Template files and static content for the web interface.
+
+script/:    Catalyst setup scripts.
+
+t/:         Perl unit tests, created by Catalyst.
+
+
