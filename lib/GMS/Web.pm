@@ -37,9 +37,12 @@ our $VERSION = '0.01';
 # with an external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'GMS::Web' );
+__PACKAGE__->config(
+    name => 'GMS::Web',
 
-__PACKAGE__->config( 'Plugin::Authentication' =>
+    session => { flash_to_stash => 1 },
+
+    'Plugin::Authentication' =>
     {
         default => {
             credential => {

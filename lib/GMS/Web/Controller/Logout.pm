@@ -25,6 +25,7 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     $c->logout;
+    $c->flash->{status_msg} = "You have successfully logged out.";
     $c->response->redirect($c->uri_for('/'));
 }
 
