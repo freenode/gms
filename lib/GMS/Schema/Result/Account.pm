@@ -8,6 +8,8 @@ __PACKAGE__->table('accounts');
 __PACKAGE__->add_columns(qw/ id accountname /);
 __PACKAGE__->set_primary_key('id');
 
+__PACKAGE__->might_have('contact', 'GMS::Schema::Result::Contact', 'account_id');
+
 1;
 
 
