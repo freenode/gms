@@ -23,19 +23,6 @@ disjoint.
    be an easy way for suitably authorised staff members to view it in the queue
    and decide whether or not to approve it.
 
-=== Make account associations more robust.
-
-Account names in Atheme are not globally unique identifiers -- accounts can be
-renamed or destroyed, and previously-used names can be reused. We currently
-identify an account by the (name, registration-time) pair. This assures that
-different accounts are always seen as different, but will lose the association
-between an atheme account and a GMS one if the name is changed.
-
-Ideally, there should be some mechanism to deal with account name changes
-without losing the association between services account and group contact
-information. There should also be a way for staff with god-like access to
-manually reinstate associations if the automatic scheme fails for some reason.
-
 === Make Atheme communications more robust.
 
 Atheme XML-RPC auth cookies are valid for a fixed period of one hour, or until a
