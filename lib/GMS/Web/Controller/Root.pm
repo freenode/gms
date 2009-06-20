@@ -67,4 +67,21 @@ it under the same terms as Perl itself.
 
 =cut
 
+sub auto : Private {
+    my ($self, $c) = @_;
+    if ($c->controller eq $c->controller('Login') ||
+        $c->controller eq $c->controller('Root'))
+    {
+        return 1;
+    }
+
+    if (!$c->user_exists)
+    {
+        $c->response->redirect($c->uri_for('/login'));
+        return 0;
+    }
+
+    return 1;
+}
+
 1;
