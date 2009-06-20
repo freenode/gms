@@ -19,7 +19,7 @@ CREATE TABLE contacts (
     id              INTEGER PRIMARY KEY AUTO_INCREMENT,
     account_id      INTEGER NOT NULL,
     name            VARCHAR(255),
-    address         INTEGER
+    address_id      INTEGER
 );
 
 CREATE TABLE groups (
