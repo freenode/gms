@@ -46,6 +46,16 @@
         [% error_msg %]
       </div>
       [% END %]
+      [% IF errors %]
+      <div class="errormsg">
+          <p> The following errors were encountered:</p>
+          <ul>
+              [% FOREACH error IN errors %]
+              <li> [% error %] </li>
+              [% END %]
+          </ul>
+      </div>
+      [% END %]
       <!-- status box -->
       [% IF status_msg %]
       <div class="statusmsg">
