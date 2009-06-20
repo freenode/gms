@@ -68,7 +68,6 @@ sub update :Path('update') :Args(0) {
     if (! $address)
     {
         $address = $c->model('DB::Address')->create({});
-        print STDERR "created address id " . $address->id . "\n";
         $contact->address_id($address->id);
         $contact->update;
     }
