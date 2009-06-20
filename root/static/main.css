@@ -21,8 +21,8 @@ p,div,span {font-family:Arial, Helvetica; }
 .text {}
 
 .content   {background-color: #fff; }
-.errormsg  {background-color: #fbb; text-align:center; border:3px solid #f00; }
-.statusmsg {background-color: #ffd; text-align:center; border:3px solid #ff0; }
+.errormsg  {background-color: #fbb; border:3px solid #f00; }
+.statusmsg {background-color: #ffd; border:3px solid #ff0; }
 
 
 
