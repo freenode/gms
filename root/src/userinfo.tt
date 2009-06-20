@@ -1,0 +1,19 @@
+[% META title = 'User Information' -%]
+
+<p>Use this form to update your personal information</p>
+
+<form method="post" action="[% c.uri_for('/userinfo/update') %]">
+<table>
+<tr> <td>Name:</td><td><input type="text" name="user_name" size="40" value="[% user_name %]" /></td> </tr>
+<tr> <td colspan="2">Address:</td> </tr>
+<tr> <td>Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td> </tr>
+<tr> <td>Address 2:</td><td><input type="text" name="address_two" size="40" value="[% address_two %]"></td> </tr>
+<tr> <td>City</td><td><input type="text" name="city" size="40" value="[% city %]"></td> </tr>
+<tr> <td>State</td><td><input type="text" name="state" size="40" value="[% state %]"></td> </tr>
+<tr> <td>Postal Code</td><td><input type="text" name="postcode" size="40" value="[% postcode %]"></td> </tr>
+<tr> <td>Country</td><td><input type="text" name="country" size="40" value="[% country %]"></td> </tr>
+<tr> <td>Telephone</td><td><input type="text" name="phone_one" size="40" value="[% phone_one %]"></td> </tr>
+<tr> <td>Telephone (alternate)</td><td><input type="text" name="phone_two" size="40" value="[% phone_two %]"></td> </tr>
+<tr> <td colspan="2"><input type="submit" name="submit" value="Submit" /></td> </tr>
+</table>
+</form>
