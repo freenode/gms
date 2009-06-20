@@ -45,4 +45,9 @@ sub username {
     return $self->get('name');
 }
 
+sub account {
+    my ($self) = @_;
+    return $self->{_account};
+}
+
 1;
