@@ -50,13 +50,17 @@ sub new {
         $GMS::Config::dbuser, $GMS::Config::dbpass);
     my $account_rs = $self->{_db}->resultset('Account');
 
-    my $account;
+    my $account = undef;
 
     try {
         my $accountid = $self->{_control_session}->command($GMS::Config::service, 'accountid', $user);
         $account = $account_rs->find({ id => $accountid });
     }
     catch RPC::Atheme::Error with {
+        $account = undef;
+    };
+
+    if (!$account) {
         $account = $self->{_db}->txn_do( sub {
                 my $result = $account_rs->create({
                         accountname => $user,
