@@ -39,10 +39,12 @@ void gs_cmd_accountid(sourceinfo_t *si, int parc, char *parv[])
     if (parc > 1)
     {
         // Setting...
+        logcommand(si, CMDLOG_LOGIN, "set accountid for %s to %s", parv[0], parv[1]);
         md = metadata_add(mu, "private:gms:accountid", parv[1]);
     }
     else
     {
+        logcommand(si, CMDLOG_LOGIN, "get accountid for %s", parv[0]);
         md = metadata_find(mu, "private:gms:accountid");
     }
 
