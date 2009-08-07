@@ -63,9 +63,13 @@ sub update :Path('update') :Args(0) {
             });
     }
 
-    my $address = $contact->address;
+    my $address;
 
-    if (! $address)
+    if ($contact->address_id)
+    {
+        $address = $contact->address;
+    }
+    else
     {
         $address = $c->model('DB::Address')->create({});
         $contact->address_id($address->id);
