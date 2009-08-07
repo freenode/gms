@@ -47,15 +47,6 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView') {}
 
-# TT-template test
-
-sub tttest : Local {
-    my ($self, $c) = @_;
-    $c->stash->{error_msg} = "This is an error message.<br>\nIt has multiple lines.";
-    $c->stash->{status_msg} = "You have successfully read this fake-status-message.<br>\nYour skill in reading was increased by one point.";
-    $c->stash->{template} = 'tttest.tt';
-}
-
 =head1 AUTHOR
 
 Catalyst developer
