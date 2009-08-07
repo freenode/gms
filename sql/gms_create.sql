@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS group_contacts;
 DROP TABLE IF EXISTS addresses;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS channel_namespaces;
+DROP TABLE IF EXISTS cloak_namespaces;
 
 -- An account in GMS is referred to by this ID. Since
 -- Atheme does not have globally unique account identifiers,
