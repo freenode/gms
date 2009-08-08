@@ -93,7 +93,8 @@ sub update :Path('update') :Args(0) {
     $address->update;
 
     $c->flash->{status_msg} = "Your contact information has been updated.";
-    $c->response->redirect($c->uri_for('/userinfo'));
+    $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/userinfo'));
+    delete $c->session->{redirect_to};
     return 1;
 }
 

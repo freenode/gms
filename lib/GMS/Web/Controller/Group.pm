@@ -14,6 +14,7 @@ sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
     if (! $c->user->account->contact) {
         $c->flash->{status_msg} = "You don't yet have any contact information defined.\n" .
                                   "Use this form to enter it before registering a new group.";
+        $c->session->{redirect_to} = $c->request->uri;
         $c->response->redirect($c->uri_for('/userinfo'));
     }
 }

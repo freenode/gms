@@ -68,6 +68,7 @@ sub auto : Private {
 
     if (!$c->user_exists)
     {
+        $c->session->{redirect_to} = $c->request->uri;
         $c->response->redirect($c->uri_for('/login'));
         return 0;
     }
