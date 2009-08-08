@@ -27,16 +27,10 @@
         <a href="[% c.uri_for('/') %]">GMS Home</a>
       </div>
       <div>
-        Just an other sidebar element
-      </div>
-      <div>
-        and one more sidebar element
-        <br />
-        this time even multilined!
-        <br />
-        third line of text
-        <br />
-        foo bar bar foo barfoofoobarbar foooooo baarrrr foo bar bar foo barfoofoobarbar foooooo baarrrr
+          <ul>
+              <li><a href="[% c.uri_for('/userinfo') %]">Your contact info</a></li>
+              <li><a href="[% c.uri_for('/group/new') %]">Register a new group</a></li>
+          </ul>
       </div>
     </div><!-- sidebar end -->
     <div id="main">
@@ -63,13 +57,11 @@
       </div>
       [% END %]
       <!-- content box -->
-      <!-- (as if you would not be able to read the id-attribute by yourself...) -->
       <div class="content">
         [% content %]
       </div>
     </div><!-- main end -->
     <div id="footer">
-      Here comes the footer
     </div><!-- footer end -->
   </body>
 </html>
