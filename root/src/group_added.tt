@@ -1,0 +1,3 @@
+[% META title = 'Group Successfully Added' -%]
+
+<p>The group [% groupname %] has been successfully added.</p>
