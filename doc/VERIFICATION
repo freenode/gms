@@ -1,0 +1,21 @@
+Brief outline of the group verification system:
+
+When a new group is entered, GMS generates a random verification token, and a
+random URL under the project website. These are stored in the database.
+
+The provided project URL is compared to see whether it 'looks like'
+<groupname>.tld (strip the TLD from the domain, all whitespace and punctuation
+from the group name, and compare the two strings). If it matches, the group is
+marked as pending automatic verification. Otherwise, it is marked for manual
+verification.
+
+A cron job runs periodically, iterating over groups marked for automatic
+verification, and attempting to fetch the verification URL. If the resulting
+page contains the verification token, it is marked as verified. It may also
+expire old unverified groups.
+
+In the administration interface, a suitably authorised staff member sees two
+lists: one of automatically verified groups for approval or rejection, and one
+of groups pending manual verification and approval. The former simply requires a
+click to accept/reject, while the latter requires the staffer to visit the URL
+and check that the token matches before approving it.
