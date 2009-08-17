@@ -19,6 +19,7 @@ requires 'Config::General'; # This should reflect the config file format you've 
 requires 'Error';
 requires 'RPC::XML';
 requires 'DBIx::Class';
+requires 'String::Random';
 
 catalyst;
 

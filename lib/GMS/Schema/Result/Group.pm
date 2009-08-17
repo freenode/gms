@@ -5,7 +5,7 @@ use base 'DBIx::Class';
 
 __PACKAGE__->load_components('Core');
 __PACKAGE__->table('groups');
-__PACKAGE__->add_columns(qw/ id groupname grouptype url address status verify_url 
+__PACKAGE__->add_columns(qw/ id groupname grouptype url address status verify_url verify_token
                              submitted verified approved /);
 __PACKAGE__->set_primary_key('id');
 
@@ -16,5 +16,32 @@ __PACKAGE__->belongs_to(address => 'GMS::Schema::Result::Address', 'address');
 
 __PACKAGE__->has_many(channel_namespaces => 'GMS::Schema::Result::ChannelNamespace', 'group_id');
 __PACKAGE__->has_many(cloak_namespaces => 'GMS::Schema::Result::CloakNamespace', 'group_id');
+
+sub use_automatic_verification {
+    my ($self) = @_;
+    my $name = $self->groupname;
+    my $url = $self->url;
+    $url =~ tr/A-Z/a-z/;
+    $url =~ s!http://!!;
+    $url =~ s!www\.!!;
+    $url =~ s!\.[a-z]+/?!!;
+    $name =~ tr/A-Z/a-z/;
+    $name =~ s/\W//g;
+
+    return $name eq $url;
+}
+
+sub simple_url {
+    my ($self) = @_;
+    my $url = $self->url;
+    $url =~ tr/A-Z/a-z/;
+
+    if ($url !~ m!^[a-z]+://!) {
+        $url = "http://" . $url;
+    }
+
+    $url =~ s/\/$//;
+    return $url;
+}
 
 1;

@@ -54,39 +54,50 @@ sub do_new :Path('new/submit') :Args(0) {
         return;
     }
 
-    my $group = $group_rs->create({
-            groupname => $p->{group_name},
-            grouptype => $p->{group_type},
-            url => $p->{group_url},
-            status => 'new',
-        });
+    my $group;
 
-    if ($p->{has_address})
-    {
-        my $address = $c->model('DB::Address')->create({
-                address_one => $p->{address_one},
-                address_two => $p->{address_two},
-                city => $p->{city},
-                state => $p->{state},
-                code => $p->{postcode},
-                country => $p->{country},
-                phone => $p->{phone_one},
-                phone2 => $p->{phone_two}
+    $c->model('DB')->schema->txn_do(sub {
+        $group = $group_rs->create({
+                groupname => $p->{group_name},
+                grouptype => $p->{group_type},
+                url => $p->{group_url},
             });
-        $group->address($address);
-    }
 
-    my @channels = split /, */, $p->{channel_namespace};
-    foreach my $channel_ns ( @channels )
-    {
-        $group->add_to_channel_namespaces({ namespace => $channel_ns});
-    }
+        if ($p->{has_address})
+        {
+            my $address = $c->model('DB::Address')->create({
+                    address_one => $p->{address_one},
+                    address_two => $p->{address_two},
+                    city => $p->{city},
+                    state => $p->{state},
+                    code => $p->{postcode},
+                    country => $p->{country},
+                    phone => $p->{phone_one},
+                    phone2 => $p->{phone_two}
+                });
+            $group->address($address);
+        }
 
-    $group->add_to_group_contacts({ contact_id => $account->contact->id });
+        my @channels = split /, */, $p->{channel_namespace};
+        foreach my $channel_ns ( @channels )
+        {
+            $group->add_to_channel_namespaces({ namespace => $channel_ns});
+        }
 
-    $group->update;
+        $group->add_to_group_contacts({ contact_id => $account->contact->id });
 
-    $c->stash->{groupname} = $group->groupname;
+        if ($group->use_automatic_verification) {
+            $group->status('auto_pending');
+        } else {
+            $group->status('manual_pending');
+        }
+        $group->verify_url(GMS::Util::Group::generate_validation_url($group->simple_url));
+        $group->verify_token(GMS::Util::Group::generate_validation_token());
+
+        $group->update;
+    });
+
+    $c->stash->{group} = $group;
     $c->stash->{template} = 'group_added.tt';
 }
 

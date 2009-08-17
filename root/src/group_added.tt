@@ -1,3 +1,17 @@
 [% META title = 'Group Successfully Added' -%]
 
-<p>The group [% groupname %] has been successfully added.</p>
+<p>The group [% group.groupname %] has been successfully added.</p>
+
+<p>To verify your association with the project, please create a file
+at <a href="[% group.verify_url %]">[% group.verify_url %]</a>
+containing the token <code>[% group.verify_token | html %]</code>. </p>
+
+<p>
+[% IF group.status == 'auto_pending' %]
+  GMS will periodically check for the existence of this file, and submit
+  your group for approval once it has been found.
+[% ELSE %]
+  Once you have done this, please contact a member of staff who will
+  verify that the token matches and decide whether to approve the group.
+[% END %]
+</p>

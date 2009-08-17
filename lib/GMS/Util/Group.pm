@@ -5,6 +5,8 @@ use warnings;
 
 use GMS::Util::Address;
 
+use String::Random qw(random_string);
+
 sub validate_group {
     my ($group, $errors) = @_;
     my $ret = 1;
@@ -53,6 +55,16 @@ sub validate_group {
     }
 
     return $ret;
+}
+
+sub generate_validation_url {
+    my ($baseurl) = @_;
+
+    return $baseurl . '/' . random_string("cccccccc") . ".txt";
+}
+
+sub generate_validation_token {
+    return random_string("................");
 }
 
 1;

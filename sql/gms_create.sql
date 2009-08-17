@@ -30,8 +30,9 @@ CREATE TABLE groups (
     grouptype       INTEGER NOT NULL,
     url             VARCHAR(64) NOT NULL,
     address         INTEGER,
-    status          ENUM('new', 'verified', 'approved'),
+    status          ENUM('auto_pending', 'auto_verified', 'manual_pending', 'approved'),
     verify_url      VARCHAR(255),
+    verify_token    VARCHAR(16),
     submitted       INTEGER NOT NULL,
     verified        INTEGER DEFAULT 0,
     approved        INTEGER DEFAULT 0
