@@ -11,7 +11,7 @@ use GMS::Util::Group;
 sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    if (! $c->user->account->contact) {
+    if (! $c->user->account || ! $c->user->account->contact) {
         $c->flash->{status_msg} = "You don't yet have any contact information defined.\n" .
                                   "Use this form to enter it before registering a new group.";
         $c->session->{redirect_to} = $c->request->uri;
