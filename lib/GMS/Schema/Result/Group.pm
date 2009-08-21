@@ -3,6 +3,9 @@ use strict;
 use warnings;
 use base 'DBIx::Class';
 
+use Error qw/:try/;
+use Error::Simple;
+
 __PACKAGE__->load_components('Core');
 __PACKAGE__->table('groups');
 __PACKAGE__->add_columns(qw/ id groupname grouptype url address status verify_url verify_token
@@ -42,6 +45,15 @@ sub simple_url {
 
     $url =~ s/\/$//;
     return $url;
+}
+
+sub auto_verify {
+    my ($self) = @_;
+    if ($self->status ne 'auto_pending') {
+        throw Error::Simple->new("Can't auto-verify a group that isn't pending automatic verification");
+    }
+    $self->status('auto_verified');
+    $self->update;
 }
 
 1;
