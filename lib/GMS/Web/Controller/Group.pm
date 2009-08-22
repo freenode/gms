@@ -63,7 +63,7 @@ sub do_new :Path('new/submit') :Args(0) {
                 url => $p->{group_url},
             });
 
-        if ($p->{has_address})
+        if ($p->{has_address} eq 'y')
         {
             my $address = $c->model('DB::Address')->create({
                     address_one => $p->{address_one},

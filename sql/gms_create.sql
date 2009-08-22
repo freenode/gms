@@ -29,7 +29,7 @@ CREATE TABLE groups (
     groupname       VARCHAR(32) NOT NULL,
     grouptype       INTEGER NOT NULL,
     url             VARCHAR(64) NOT NULL,
-    address         INTEGER,
+    address         INTEGER DEFAULT NULL,
     status          ENUM('auto_pending', 'auto_verified', 'manual_pending', 'approved'),
     verify_url      VARCHAR(255),
     verify_token    VARCHAR(16),
