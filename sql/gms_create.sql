@@ -1,62 +1,23 @@
-DROP TABLE IF EXISTS accounts;
-DROP TABLE IF EXISTS contacts;
-DROP TABLE IF EXISTS groups;
-DROP TABLE IF EXISTS group_contacts;
-DROP TABLE IF EXISTS addresses;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS user_roles;
-DROP TABLE IF EXISTS channel_namespaces;
-DROP TABLE IF EXISTS cloak_namespaces;
+DROP TABLE IF EXISTS accounts CASCADE;
+DROP TABLE IF EXISTS contacts CASCADE;
+DROP TABLE IF EXISTS groups CASCADE;
+DROP TABLE IF EXISTS group_contacts CASCADE;
+DROP TABLE IF EXISTS addresses CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS channel_namespaces CASCADE;
+DROP TABLE IF EXISTS cloak_namespaces CASCADE;
 
--- An account in GMS is referred to by this ID. Since
--- Atheme does not have globally unique account identifiers,
--- we use a (name, registration time) pair to uniquely identify
--- a services account.
+DROP TYPE IF EXISTS group_status;
+CREATE TYPE group_status AS ENUM ('auto_pending', 'auto_verified', 'manual_pending', 'approved');
+
 CREATE TABLE accounts (
-    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id              SERIAL PRIMARY KEY,
     accountname     VARCHAR(32)
 );
 
-CREATE TABLE contacts (
-    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
-    account_id      INTEGER NOT NULL,
-    name            VARCHAR(255),
-    address_id      INTEGER
-);
-
-CREATE TABLE groups (
-    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
-    groupname       VARCHAR(32) NOT NULL,
-    grouptype       INTEGER NOT NULL,
-    url             VARCHAR(64) NOT NULL,
-    address         INTEGER DEFAULT NULL,
-    status          ENUM('auto_pending', 'auto_verified', 'manual_pending', 'approved'),
-    verify_url      VARCHAR(255),
-    verify_token    VARCHAR(16),
-    submitted       INTEGER NOT NULL,
-    verified        INTEGER DEFAULT 0,
-    approved        INTEGER DEFAULT 0
-);
-
-CREATE TABLE channel_namespaces (
-    group_id        INTEGER NOT NULL,
-    namespace       VARCHAR(32)
-);
-
-CREATE TABLE cloak_namespaces (
-    group_id        INTEGER NOT NULL,
-    namespace       VARCHAR(32)
-);
-
-CREATE TABLE group_contacts (
-    group_id        INTEGER NOT NULL,
-    contact_id      INTEGER NOT NULL,
-    position        VARCHAR(255),
-    PRIMARY KEY (group_id, contact_id)
-);
-
 CREATE TABLE addresses (
-    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id              SERIAL PRIMARY KEY,
     address_one     VARCHAR(255) NOT NULL,
     address_two     VARCHAR(255),
     city            VARCHAR(255) NOT NULL,
@@ -67,12 +28,52 @@ CREATE TABLE addresses (
     phone2          VARCHAR(32)
 );
 
+CREATE TABLE contacts (
+    id              SERIAL PRIMARY KEY,
+    account_id      INTEGER NOT NULL REFERENCES accounts(id),
+    name            VARCHAR(255),
+    address_id      INTEGER REFERENCES addresses(id)
+);
+
+CREATE TABLE groups (
+    id              SERIAL PRIMARY KEY,
+    groupname       VARCHAR(32) NOT NULL,
+    grouptype       INTEGER NOT NULL,
+    url             VARCHAR(64) NOT NULL,
+    address         INTEGER DEFAULT NULL,
+    status          group_status,
+    verify_url      VARCHAR(255),
+    verify_token    VARCHAR(16),
+    submitted       INTEGER NOT NULL,
+    verified        INTEGER DEFAULT 0,
+    approved        INTEGER DEFAULT 0
+);
+
+CREATE TABLE channel_namespaces (
+    group_id        INTEGER NOT NULL REFERENCES groups(id),
+    namespace       VARCHAR(32) UNIQUE NOT NULL
+);
+
+CREATE TABLE cloak_namespaces (
+    group_id        INTEGER NOT NULL REFERENCES groups(id),
+    namespace       VARCHAR(32) UNIQUE NOT NULL
+);
+
+CREATE TABLE group_contacts (
+    group_id        INTEGER NOT NULL REFERENCES groups(id),
+    contact_id      INTEGER NOT NULL REFERENCES accounts(id),
+    position        VARCHAR(255),
+    PRIMARY KEY (group_id, contact_id)
+);
+
 CREATE TABLE roles (
-    id              INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name            VARCHAR(32)
+    id              SERIAL PRIMARY KEY,
+    name            VARCHAR(32) UNIQUE NOT NULL
 );
 
 CREATE TABLE user_roles (
-    account_id      INTEGER,
-    role_id         INTEGER
+    account_id      INTEGER REFERENCES accounts(id),
+    role_id         INTEGER REFERENCES roles(id),
+    PRIMARY KEY (account_id, role_id)
 );
+

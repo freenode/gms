@@ -7,8 +7,8 @@ use vars qw($dbstring $dbuser $dbpass
             $atheme_host $atheme_port $service
             $atheme_master_login $atheme_master_pass);
 
-$dbstring = 'dbi:mysql:gmstest';
-$dbuser = 'test';
+$dbstring = 'dbi:Pg:dbname=gms';
+$dbuser = '';
 $dbpass = '';
 $atheme_host = 'localhost';
 $atheme_port = '8080';
