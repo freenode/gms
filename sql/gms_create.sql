@@ -9,7 +9,12 @@ DROP TABLE IF EXISTS channel_namespaces CASCADE;
 DROP TABLE IF EXISTS cloak_namespaces CASCADE;
 
 DROP TYPE IF EXISTS group_status;
+DROP TYPE IF EXISTS group_type;
+
 CREATE TYPE group_status AS ENUM ('auto_pending', 'auto_verified', 'manual_pending', 'approved');
+CREATE TYPE group_type AS ENUM ('informal', 'corporation', 'education', 'government',
+                                'nfp', 'internal');
+
 
 CREATE TABLE accounts (
     id              SERIAL PRIMARY KEY,
@@ -38,7 +43,7 @@ CREATE TABLE contacts (
 CREATE TABLE groups (
     id              SERIAL PRIMARY KEY,
     groupname       VARCHAR(32) NOT NULL,
-    grouptype       INTEGER NOT NULL,
+    grouptype       group_type NOT NULL,
     url             VARCHAR(64) NOT NULL,
     address         INTEGER DEFAULT NULL,
     status          group_status,
