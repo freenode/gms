@@ -16,6 +16,8 @@ sub index :Path :Args(0) {
     if (! $account->contact) {
         $c->stash->{status_msg} = "You don't yet have any contact information defined.\n" .
                                   "Use the form below to define it.";
+
+        $c->stash->{template} = 'userinfo.tt';
     } else {
         my $contact = $account->contact;
 
@@ -36,9 +38,9 @@ sub index :Path :Args(0) {
             $c->stash->{phone_one} = $address->phone;
             $c->stash->{phone_two} = $address->phone2;
         }
-    }
 
-    $c->stash->{template} = 'userinfo.tt';
+        $c->stash->{template} = 'view_userinfo.tt';
+    }
 }
 
 sub update :Path('update') :Args(0) {
@@ -50,6 +52,10 @@ sub update :Path('update') :Args(0) {
     if (! GMS::Util::Address::validate_address($params, \@errors))
     {
         $c->flash->{errors} = \@errors;
+        foreach ('user_name', 'address_one', 'address_two', 'city', 'state', 'postcode', 'country',
+                 'phone_one', 'phone_two') {
+            $c->flash->{$_} = $params->{$_};
+        }
         $c->response->redirect($c->uri_for('/userinfo'));
         return 0;
     }
@@ -58,43 +64,30 @@ sub update :Path('update') :Args(0) {
     my $contact = $account->contact;
 
     if (! $contact) {
+        my $address = $c->model('DB::Address')->create({
+            address_one => $params->{address_one},
+            address_two => $params->{address_two},
+            city => $params->{city},
+            state => $params->{state},
+            code => $params->{postcode},
+            country => $params->{country},
+            phone => $params->{phone_one},
+            phone2 => $params->{phone_two}
+        });
         $contact = $c->model('DB::Contact')->create({
-                account_id => $account->id
-            });
+            account_id => $account->id,
+            name => $params->{user_name},
+            address_id => $address->id
+        });
+
+        $c->flash->{status_msg} = "Your contact information has been updated.";
+    } else {
+        $c->flash->{errors} = [ "You have already defined your contact information." ];
     }
 
-    my $address;
-
-    if ($contact->address_id)
-    {
-        $address = $contact->address;
-    }
-    else
-    {
-        $address = $c->model('DB::Address')->create({});
-        $contact->address_id($address->id);
-        $contact->update;
-    }
-
-    my $p = $c->request->params;
-
-    $contact->name        ($p->{user_name});
-
-    $address->address_one ($p->{address_one});
-    $address->address_two ($p->{address_two});
-    $address->city        ($p->{city});
-    $address->state       ($p->{state});
-    $address->code        ($p->{postcode});
-    $address->country     ($p->{country});
-    $address->phone       ($p->{phone_one});
-    $address->phone2      ($p->{phone_two});
-
-    $contact->update;
-    $address->update;
-
-    $c->flash->{status_msg} = "Your contact information has been updated.";
     $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/userinfo'));
     delete $c->session->{redirect_to};
+
     return 1;
 }
 
