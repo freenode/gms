@@ -67,6 +67,7 @@ CREATE TABLE cloak_namespaces (
 CREATE TABLE group_contacts (
     group_id        INTEGER NOT NULL REFERENCES groups(id),
     contact_id      INTEGER NOT NULL REFERENCES accounts(id),
+    "primary"       BOOLEAN NOT NULL DEFAULT FALSE,
     position        VARCHAR(255),
     PRIMARY KEY (group_id, contact_id)
 );

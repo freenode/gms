@@ -85,7 +85,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
             $group->add_to_channel_namespaces({ namespace => $channel_ns});
         }
 
-        $group->add_to_group_contacts({ contact_id => $account->contact->id });
+        $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1 });
 
         if ($group->use_automatic_verification) {
             $group->status('auto_pending');
