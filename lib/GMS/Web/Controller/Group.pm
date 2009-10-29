@@ -26,7 +26,7 @@ sub new_form :Chained('base') :PathPart('new') :Args(0) {
     $c->stash->{template} = 'newgroup.tt';
 }
 
-sub do_new :Path('new/submit') :Args(0) {
+sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $account = $c->user->account;
@@ -61,6 +61,7 @@ sub do_new :Path('new/submit') :Args(0) {
                 groupname => $p->{group_name},
                 grouptype => $p->{group_type},
                 url => $p->{group_url},
+                submitted => time,
             });
 
         if ($p->{has_address} eq 'y')
