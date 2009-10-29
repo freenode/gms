@@ -38,8 +38,9 @@ sub DESTROY {
 sub login {
     my ($self, $user, $pass, $source) = @_;
 
-    $self->{__username} = $user;
-    $self->{__source} = $source;
+    $self->{__username} = $user if $user;
+    $self->{__password} = $pass if $pass;
+    $self->{__source} = $source if $source;
 
     my $response = $self->{__client}->simple_request(
         'atheme.login', $user, $pass, $source
@@ -59,6 +60,25 @@ sub login {
 }
 
 sub command {
+    my ($self, @args) = @_;
+
+    my $result;
+
+    try {
+        $result = $self->do_command(@args);
+    } catch RPC::Atheme::Error with {
+        my $e = shift;
+        throw $e if $e->code != RPC::Atheme::Error::badauthcookie;
+
+        # If we got here, the error was a bad authcookie, which most likely
+        # means our session timed out. Log in again and retry.
+        $self->login;
+        $result = $self->do_command(@args);
+    }
+    return $result;
+}
+
+sub do_command {
     my ($self, @args) = @_;
 
     my $result = $self->{__client}->simple_request(
