@@ -1,0 +1,18 @@
+[% META title = 'Group List' -%]
+
+<p>You are a member of the following groups:</p>
+
+<ul>
+[% FOREACH group IN groups -%]
+  <li>[% group.groupname %]</li>
+[% END %]
+</ul>
+
+<p>You have the following group applications pending:</p>
+
+<ul>
+[% FOREACH group IN pendinggroups -%]
+  <li>[% group.groupname %]</li>
+[% END %]
+</ul>
+

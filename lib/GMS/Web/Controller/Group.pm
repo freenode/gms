@@ -19,6 +19,25 @@ sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
     }
 }
 
+sub index :Chained('base') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{groups} = [];
+    $c->stash->{pendinggroups} = [];
+    foreach my $group ($c->user->account->contact->groups)
+    {
+        my $list;
+        if ($group->status eq 'approved') {
+            $list = $c->stash->{groups};
+        } else {
+            $list = $c->stash->{pendinggroups};
+        }
+        push @$list, { groupname => $group->groupname };
+    }
+
+    $c->stash->{template} = 'mygroups.tt';
+}
+
 
 sub new_form :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;
