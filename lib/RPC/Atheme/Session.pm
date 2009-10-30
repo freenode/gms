@@ -74,7 +74,7 @@ sub command {
         # means our session timed out. Log in again and retry.
         $self->login;
         $result = $self->do_command(@args);
-    }
+    };
     return $result;
 }
 
