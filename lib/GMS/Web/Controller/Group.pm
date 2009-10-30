@@ -35,14 +35,14 @@ sub index :Chained('base') :Args(0) {
         push @$list, { groupname => $group->groupname };
     }
 
-    $c->stash->{template} = 'mygroups.tt';
+    $c->stash->{template} = 'group/list.tt';
 }
 
 
 sub new_form :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{template} = 'newgroup.tt';
+    $c->stash->{template} = 'group/new.tt';
 }
 
 sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
@@ -118,7 +118,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     });
 
     $c->stash->{group} = $group;
-    $c->stash->{template} = 'group_added.tt';
+    $c->stash->{template} = 'group/added.tt';
 }
 
 1;

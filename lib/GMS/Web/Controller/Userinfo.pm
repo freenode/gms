@@ -17,7 +17,7 @@ sub index :Path :Args(0) {
         $c->stash->{status_msg} = "You don't yet have any contact information defined.\n" .
                                   "Use the form below to define it.";
 
-        $c->stash->{template} = 'userinfo.tt';
+        $c->stash->{template} = 'contact/update_userinfo.tt';
     } else {
         my $contact = $account->contact;
 
@@ -39,7 +39,7 @@ sub index :Path :Args(0) {
             $c->stash->{phone_two} = $address->phone2;
         }
 
-        $c->stash->{template} = 'view_userinfo.tt';
+        $c->stash->{template} = 'contact/view_userinfo.tt';
     }
 }
 
