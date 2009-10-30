@@ -22,6 +22,7 @@ sub index :Path :Args(0) {
         my $contact = $account->contact;
 
         $c->stash->{user_name} = $contact->name;
+        $c->stash->{user_email} = $contact->email;
 
         my $address = $contact->address;
 
@@ -52,7 +53,8 @@ sub update :Path('update') :Args(0) {
     if (! GMS::Util::Address::validate_address($params, \@errors))
     {
         $c->flash->{errors} = \@errors;
-        foreach ('user_name', 'address_one', 'address_two', 'city', 'state', 'postcode', 'country',
+        foreach ('user_name', 'user_email',
+                 'address_one', 'address_two', 'city', 'state', 'postcode', 'country',
                  'phone_one', 'phone_two') {
             $c->flash->{$_} = $params->{$_};
         }
@@ -77,6 +79,7 @@ sub update :Path('update') :Args(0) {
         $contact = $c->model('DB::Contact')->create({
             account_id => $account->id,
             name => $params->{user_name},
+            email => $params->{user_email},
             address_id => $address->id
         });
 

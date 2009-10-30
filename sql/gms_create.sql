@@ -37,6 +37,7 @@ CREATE TABLE contacts (
     id              SERIAL PRIMARY KEY,
     account_id      INTEGER NOT NULL REFERENCES accounts(id),
     name            VARCHAR(255),
+    email           VARCHAR(255),
     address_id      INTEGER NOT NULL REFERENCES addresses(id)
 );
 

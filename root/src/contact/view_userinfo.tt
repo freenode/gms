@@ -4,6 +4,7 @@
 
 <table>
 <tr> <td>Name:</td><td>[% user_name %]</td> </tr>
+<tr> <td>Email:</td><td>[% user_email %]</td> </tr>
 <tr> <td colspan="2">Address:</td> </tr>
 <tr> <td>Address 1:</td><td>[% address_one %]</td> </tr>
 <tr> <td>Address 2:</td><td>[% address_two %]</td> </tr>

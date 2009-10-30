@@ -1,0 +1,37 @@
+Your group [% group.groupname %] has been registered.
+
+To verify your association with the project, please create a file at
+[% group.verify_url %] containing the token '[% group.verify_token %]'.
+Once this is done, your group will be entered into a queue for approval
+by a member of staff.
+
+For your records, the details of the group registration are as follows:
+
+Your details:
+
+Name:               [% contact.name %]
+Address:            [% contact.address.address_one %]
+                    [% contact.address.address_two %]
+                    [% contact.address.city %]
+                    [% contact.address.state %]
+                    [% contact.address.postcode %]
+                    [% contact.address.country %]
+Telephone:          [% contact.address.phone %]
+Alternate:          [% contact.address.phone2 %]
+
+Group details:
+
+Group Name:         [% group.groupname %]
+Group Type:         [% group.grouptype %]
+Group URL:          [% group.url %]
+[% IF group.address -%]
+Group Address:      [% group.address.address_one %]
+                    [% group.address.address_two %]
+                    [% group.address.city %]
+                    [% group.address.state %]
+                    [% group.address.postcode %]
+                    [% group.address.country %]
+[% ELSE -%]
+Group Address:      None
+[% END -%]
+

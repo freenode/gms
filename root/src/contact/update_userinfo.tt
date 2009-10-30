@@ -5,6 +5,7 @@
 <form method="post" action="[% c.uri_for('/userinfo/update') %]">
 <table>
 <tr> <td>Name:</td><td><input type="text" name="user_name" size="40" value="[% user_name %]" /></td> </tr>
+<tr> <td>Email address:</td><td><input type="text" name="user_email" size="40" value="[% user_email %]" /></td> </tr>
 <tr> <td colspan="2">Address:</td> </tr>
 <tr> <td>Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td> </tr>
 <tr> <td>Address 2:</td><td><input type="text" name="address_two" size="40" value="[% address_two %]"></td> </tr>

@@ -117,7 +117,18 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
         $group->update;
     });
 
+    $c->stash->{contact} = $account->contact;
     $c->stash->{group} = $group;
+
+    $c->stash->{email} = {
+        to => $account->contact->email,
+        bcc => $c->config->{email}->{admin_address},
+        from => $c->config->{email}->{from_address},
+        subject => "Group Registration for " . $group->groupname,
+        template => 'new_group.tt',
+    };
+    $c->forward($c->view('Email'));
+
     $c->stash->{template} = 'group/added.tt';
 }
 
