@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
-use Error qw/:try/;
+use TryCatch;
 
 use GMS::Util::Group;
 

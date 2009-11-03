@@ -6,7 +6,7 @@ use warnings;
 use GMS::Session;
 use GMS::Authentication::User;
 
-use Error qw/:try/;
+use TryCatch;
 
 sub new {
     my ($class, $config, $app, $realm) = @_;
@@ -33,7 +33,7 @@ sub authenticate {
         );
 
         return GMS::Authentication::User->new($session->account);
-    } otherwise {
+    } catch {
         return undef;
     }
 }

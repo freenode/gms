@@ -3,8 +3,7 @@ use strict;
 use warnings;
 use base 'DBIx::Class';
 
-use Error qw/:try/;
-use Error::Simple;
+use TryCatch;
 
 __PACKAGE__->load_components('Core');
 __PACKAGE__->table('groups');
@@ -50,7 +49,7 @@ sub simple_url {
 sub auto_verify {
     my ($self) = @_;
     if ($self->status ne 'auto_pending') {
-        throw Error::Simple->new("Can't auto-verify a group that isn't pending automatic verification");
+        die GMS::Exception->new("Can't auto-verify a group that isn't pending automatic verification");
     }
     $self->status('auto_verified');
     $self->update;

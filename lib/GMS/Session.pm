@@ -9,7 +9,7 @@ use GMS::Schema;
 use RPC::Atheme;
 use RPC::Atheme::Session;
 
-use Error qw/:try/;
+use TryCatch;
 
 =head1 NAME
 
@@ -56,9 +56,8 @@ sub new {
         my $accountid = $self->{_control_session}->command($GMS::Config::service, 'accountid', $user);
         $account = $account_rs->find({ id => $accountid });
     }
-    catch RPC::Atheme::Error with {
-        my $e = shift;
-        throw $e if $e->code != RPC::Atheme::Error::nosuchkey;
+    catch (RPC::Atheme::Error $e) {
+        die $e if $e->code != RPC::Atheme::Error::nosuchkey;
         $account = undef;
     };
 

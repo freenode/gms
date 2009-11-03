@@ -17,7 +17,7 @@ requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 
-requires 'Error';
+requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class';
 requires 'String::Random';

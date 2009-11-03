@@ -3,7 +3,7 @@ use strict;
 
 use subs qw(new DESTROY login command logout);
 
-use Error qw/:try/;
+use TryCatch;
 
 use RPC::XML;
 use RPC::XML::Client;
@@ -23,7 +23,8 @@ sub new {
     $self->{__url} = "http://" . $host . ":" . $port . "/xmlrpc";
 
     $self->{__client} = RPC::XML::Client->new($self->{__url});
-    throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $self->{__client};
+    die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR)
+        unless $self->{__client};
 
     bless $self, $class;
 }
@@ -47,11 +48,11 @@ sub login {
     );
 
     if (! defined $response) {
-        throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR);
+        die RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR);
     }
 
     if (ref $response) {
-        throw RPC::Atheme::Error($response);
+        die RPC::Atheme::Error($response);
     }
 
     $self->{__authcookie} = $response;
@@ -66,15 +67,14 @@ sub command {
 
     try {
         $result = $self->do_command(@args);
-    } catch RPC::Atheme::Error with {
-        my $e = shift;
-        throw $e if $e->code != RPC::Atheme::Error::badauthcookie;
+    } catch (RPC::Atheme::Error $e) {
+        die $e if $e->code != RPC::Atheme::Error::badauthcookie;
 
         # If we got here, the error was a bad authcookie, which most likely
         # means our session timed out. Log in again and retry.
         $self->login;
         $result = $self->do_command(@args);
-    };
+    }
     return $result;
 }
 
@@ -89,8 +89,8 @@ sub do_command {
         @args
     );
 
-    throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
-    throw RPC::Atheme::Error($result) if ref $result eq 'HASH';
+    die RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    die RPC::Atheme::Error($result) if ref $result eq 'HASH';
     return $result;
 }
 
@@ -101,8 +101,8 @@ sub logout {
     my $result = $self->{__client}->simple_request(
         'atheme.logout', $self->{__authcookie}, $self->{__username});
 
-    throw RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
-    throw RPC::Atheme::Error($result) if ref $result eq 'HASH';
+    die RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    die RPC::Atheme::Error($result) if ref $result eq 'HASH';
     return $result;
 }
 
