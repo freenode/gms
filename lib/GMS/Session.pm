@@ -57,6 +57,8 @@ sub new {
         $account = $account_rs->find({ id => $accountid });
     }
     catch RPC::Atheme::Error with {
+        my $e = shift;
+        throw $e if $e->code != RPC::Atheme::Error::nosuchkey;
         $account = undef;
     };
 
