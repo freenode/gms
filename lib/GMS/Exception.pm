@@ -16,5 +16,13 @@ sub message {
     return $self->{message};
 }
 
+package GMS::Exception::InvalidGroup;
+
+use base GMS::Exception;
+
+package GMS::Exception::InvalidAddress;
+
+use base GMS::Exception;
+
 1;
 

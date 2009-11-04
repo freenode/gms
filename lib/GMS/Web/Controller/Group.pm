@@ -7,8 +7,6 @@ use parent 'Catalyst::Controller';
 use TryCatch;
 use GMS::Exception;
 
-use GMS::Util::Group;
-
 sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
@@ -54,15 +52,6 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     my $p = $c->request->params;
     my @errors;
 
-    if (! GMS::Util::Group::validate_group($p, \@errors))
-    {
-        $c->flash->{errors} = \@errors;
-        # Merge params into the flash so that they get back into the form for the second try.
-        %{$c->flash} = ( %{$c->flash}, %$p );
-        $c->response->redirect($c->uri_for('/group/new'));
-        return;
-    }
-
     my $group_rs = $c->model('DB::Group');
 
     if ($group_rs->find({ groupname => $p->{group_name} }))
@@ -78,16 +67,11 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     try {
         $c->model('DB')->schema->txn_do(sub {
-            $group = $group_rs->create({
-                    groupname => $p->{group_name},
-                    grouptype => $p->{group_type},
-                    url => $p->{group_url},
-                    submitted => time,
-                });
+            my $address;
 
             if ($p->{has_address} eq 'y')
             {
-                my $address = $c->model('DB::Address')->create({
+                $address = $c->model('DB::Address')->create({
                         address_one => $p->{address_one},
                         address_two => $p->{address_two},
                         city => $p->{city},
@@ -97,8 +81,15 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                         phone => $p->{phone_one},
                         phone2 => $p->{phone_two}
                     });
-                $group->address($address);
             }
+
+            $group = $group_rs->create({
+                    groupname => $p->{group_name},
+                    grouptype => $p->{group_type},
+                    url => $p->{group_url},
+                    submitted => time,
+                    address => $address,
+                });
 
             my @channels = split /, */, $p->{channel_namespace};
             foreach my $channel_ns ( @channels )
@@ -107,14 +98,6 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
             }
 
             $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1 });
-
-            if ($group->use_automatic_verification) {
-                $group->status('auto_pending');
-            } else {
-                $group->status('manual_pending');
-            }
-            $group->verify_url(GMS::Util::Group::generate_validation_url($group->simple_url));
-            $group->verify_token(GMS::Util::Group::generate_validation_token());
 
             $c->stash->{contact} = $account->contact;
             $c->stash->{group} = $group;
@@ -136,6 +119,11 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
             $group->update;
         });
+    }
+    catch (GMS::Exception::InvalidGroup $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach('new_form');
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e;
