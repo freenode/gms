@@ -78,8 +78,8 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                         state => $p->{state},
                         code => $p->{postcode},
                         country => $p->{country},
-                        phone => $p->{phone_one},
-                        phone2 => $p->{phone_two}
+                        phone => $p->{phone},
+                        phone2 => $p->{phone2}
                     });
             }
 

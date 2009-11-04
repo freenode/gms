@@ -59,6 +59,12 @@ to help us verify your registration.</p>
   <td>Country</td><td><input type="text" name="country" size="40" value="[% country %]"></td>
 </tr>
 <tr>
+  <td>Telephone</td><td><input type="text" name="phone" size="40" value="[% phone %]"></td>
+</tr>
+<tr>
+  <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 %]"></td>
+</tr>
+<tr>
   <td colspan="2"><strong>Additional Information</strong></td>
 </tr>
 <tr>
