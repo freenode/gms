@@ -5,6 +5,7 @@ use warnings;
 use parent 'Catalyst::Controller';
 
 use TryCatch;
+use GMS::Exception;
 
 use GMS::Util::Group;
 
@@ -75,59 +76,72 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     my $group;
 
-    $c->model('DB')->schema->txn_do(sub {
-        $group = $group_rs->create({
-                groupname => $p->{group_name},
-                grouptype => $p->{group_type},
-                url => $p->{group_url},
-                submitted => time,
-            });
-
-        if ($p->{has_address} eq 'y')
-        {
-            my $address = $c->model('DB::Address')->create({
-                    address_one => $p->{address_one},
-                    address_two => $p->{address_two},
-                    city => $p->{city},
-                    state => $p->{state},
-                    code => $p->{postcode},
-                    country => $p->{country},
-                    phone => $p->{phone_one},
-                    phone2 => $p->{phone_two}
+    try {
+        $c->model('DB')->schema->txn_do(sub {
+            $group = $group_rs->create({
+                    groupname => $p->{group_name},
+                    grouptype => $p->{group_type},
+                    url => $p->{group_url},
+                    submitted => time,
                 });
-            $group->address($address);
-        }
 
-        my @channels = split /, */, $p->{channel_namespace};
-        foreach my $channel_ns ( @channels )
-        {
-            $group->add_to_channel_namespaces({ namespace => $channel_ns});
-        }
+            if ($p->{has_address} eq 'y')
+            {
+                my $address = $c->model('DB::Address')->create({
+                        address_one => $p->{address_one},
+                        address_two => $p->{address_two},
+                        city => $p->{city},
+                        state => $p->{state},
+                        code => $p->{postcode},
+                        country => $p->{country},
+                        phone => $p->{phone_one},
+                        phone2 => $p->{phone_two}
+                    });
+                $group->address($address);
+            }
 
-        $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1 });
+            my @channels = split /, */, $p->{channel_namespace};
+            foreach my $channel_ns ( @channels )
+            {
+                $group->add_to_channel_namespaces({ namespace => $channel_ns});
+            }
 
-        if ($group->use_automatic_verification) {
-            $group->status('auto_pending');
-        } else {
-            $group->status('manual_pending');
-        }
-        $group->verify_url(GMS::Util::Group::generate_validation_url($group->simple_url));
-        $group->verify_token(GMS::Util::Group::generate_validation_token());
+            $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1 });
 
-        $group->update;
-    });
+            if ($group->use_automatic_verification) {
+                $group->status('auto_pending');
+            } else {
+                $group->status('manual_pending');
+            }
+            $group->verify_url(GMS::Util::Group::generate_validation_url($group->simple_url));
+            $group->verify_token(GMS::Util::Group::generate_validation_token());
 
-    $c->stash->{contact} = $account->contact;
-    $c->stash->{group} = $group;
+            $c->stash->{contact} = $account->contact;
+            $c->stash->{group} = $group;
 
-    $c->stash->{email} = {
-        to => $account->contact->email,
-        bcc => $c->config->{email}->{admin_address},
-        from => $c->config->{email}->{from_address},
-        subject => "Group Registration for " . $group->groupname,
-        template => 'new_group.tt',
-    };
-    $c->forward($c->view('Email'));
+            $c->stash->{email} = {
+                to => $account->contact->email,
+                bcc => $c->config->{email}->{admin_address},
+                from => $c->config->{email}->{from_address},
+                subject => "Group Registration for " . $group->groupname,
+                template => 'new_group.tt',
+            };
+
+            $c->forward($c->view('Email'));
+            if (scalar @{$c->error}) {
+                my $message = $c->error->[0];
+                $c->error(0);
+                die GMS::Exception->new("Email sending failed. Please try again later.");
+            }
+
+            $group->update;
+        });
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach('new_form');
+    }
 
     $c->stash->{template} = 'group/added.tt';
 }
