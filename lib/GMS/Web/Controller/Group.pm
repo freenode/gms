@@ -125,6 +125,14 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach('new_form');
     }
+    catch (GMS::Exception::InvalidAddress $e) {
+        $c->stash->{errors} = [
+            "If the group has its own address, then a valid address must be specified.",
+            @{$e->message}
+        ];
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach('new_form');
+    }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e;
         %{$c->stash} = ( %{$c->stash}, %$p );
