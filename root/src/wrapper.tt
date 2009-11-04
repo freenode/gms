@@ -12,7 +12,7 @@
       </div>
       <div class="login">
           [% IF c.user_exists -%]
-          You are logged in as [% c.user.username %]
+          You are logged in as [% c.user.username | html %]
           (<a href="[% c.uri_for('/logout') %]">log out</a>).
           [% ELSE -%]
           You are not logged in
@@ -37,7 +37,7 @@
       <!-- error box -->
       [% IF error_msg %]
       <div class="errormsg">
-        [% error_msg %]
+        [% error_msg | html %]
       </div>
       [% END %]
       [% IF errors %]
@@ -45,7 +45,7 @@
           <p> The following errors were encountered:</p>
           <ul>
               [% FOREACH error IN errors %]
-              <li> [% error %] </li>
+              <li> [% error | html %] </li>
               [% END %]
           </ul>
       </div>
@@ -53,7 +53,7 @@
       <!-- status box -->
       [% IF status_msg %]
       <div class="statusmsg">
-        [% status_msg %]
+        [% status_msg | html %]
       </div>
       [% END %]
       <!-- content box -->
