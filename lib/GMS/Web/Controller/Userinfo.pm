@@ -6,8 +6,6 @@ use parent 'Catalyst::Controller';
 
 use TryCatch;
 
-use GMS::Util::Address;
-
 sub index :Path :Args(0) {
     my ($self, $c ) = @_;
 
@@ -50,43 +48,42 @@ sub update :Path('update') :Args(0) {
     my $params = $c->request->params;
     my @errors;
 
-    if (! GMS::Util::Address::validate_address($params, \@errors))
-    {
-        $c->flash->{errors} = \@errors;
-        foreach ('user_name', 'user_email',
-                 'address_one', 'address_two', 'city', 'state', 'postcode', 'country',
-                 'phone_one', 'phone_two') {
-            $c->flash->{$_} = $params->{$_};
-        }
-        $c->response->redirect($c->uri_for('/userinfo'));
-        return 0;
-    }
-
     my $account = $c->user->account;
     my $contact = $account->contact;
 
-    if (! $contact) {
-        my $address = $c->model('DB::Address')->create({
-            address_one => $params->{address_one},
-            address_two => $params->{address_two},
-            city => $params->{city},
-            state => $params->{state},
-            code => $params->{postcode},
-            country => $params->{country},
-            phone => $params->{phone_one},
-            phone2 => $params->{phone_two}
-        });
-        $contact = $c->model('DB::Contact')->create({
-            account_id => $account->id,
-            name => $params->{user_name},
-            email => $params->{user_email},
-            address_id => $address->id
-        });
-
-        $c->flash->{status_msg} = "Your contact information has been updated.";
-    } else {
-        $c->flash->{errors} = [ "You have already defined your contact information." ];
+    if ($contact) {
+        $c->stash->{errors} = [ "You have already defined your contact information." ];
+        $c->detach('index');
     }
+
+    try {
+        $c->model('DB')->schema->txn_do(sub {
+            my $address = $c->model('DB::Address')->create({
+                address_one => $params->{address_one},
+                address_two => $params->{address_two},
+                city => $params->{city},
+                state => $params->{state},
+                code => $params->{postcode},
+                country => $params->{country},
+                phone => $params->{phone_one},
+                phone2 => $params->{phone_two}
+            });
+            $contact = $c->model('DB::Contact')->create({
+                account_id => $account->id,
+                name => $params->{user_name},
+                email => $params->{user_email},
+                address_id => $address->id
+            });
+        });
+    }
+    catch (GMS::Exception::InvalidAddress $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$params );
+        $c->detach('index');
+    }
+
+
+    $c->flash->{status_msg} = "Your contact information has been updated.";
 
     $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/userinfo'));
     delete $c->session->{redirect_to};
