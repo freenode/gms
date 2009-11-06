@@ -45,7 +45,7 @@ sub new {
         push @errors, "Group URL must be provided";
         $valid = 0;
     }
-    if ($args->{group_url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
+    if ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
         push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
                        "0-9, :_+-/)";
         $valid = 0;
