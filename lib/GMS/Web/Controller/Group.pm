@@ -54,15 +54,6 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     my $group_rs = $c->model('DB::Group');
 
-    if ($group_rs->find({ groupname => $p->{group_name} }))
-    {
-        $c->flash->{errors} = [ "A group with that name already exists." ];
-        # Merge params into the flash so that they get back into the form for the second try.
-        %{$c->flash} = ( %{$c->flash}, %$p );
-        $c->response->redirect($c->uri_for('/group/new'));
-        return;
-    }
-
     my $group;
 
     try {

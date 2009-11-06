@@ -73,6 +73,20 @@ sub new {
     return $class->next::method(\%newargs);
 }
 
+sub insert {
+    my $self=shift;
+    try {
+        return $self->next::method(@_);
+    }
+    catch (DBIx::Class::Exception $e) {
+        if ("$e" =~ /unique_group_name/) {
+            die GMS::Exception->new("A group with that name already exists.");
+        } else {
+            die $e;
+        }
+    }
+}
+
 sub use_automatic_verification {
     my ($name, $url) = @_;
     $url =~ tr/A-Z/a-z/;
