@@ -43,11 +43,11 @@ CREATE TABLE contacts (
 
 CREATE TABLE groups (
     id              SERIAL PRIMARY KEY,
-    groupname       VARCHAR(32) NOT NULL,
+    groupname       VARCHAR(32) NOT NULL CONSTRAINT unique_group_name UNIQUE,
     grouptype       group_type NOT NULL,
     url             VARCHAR(64) NOT NULL,
     address         INTEGER DEFAULT NULL,
-    status          group_status,
+    status          group_status NOT NULL,
     verify_url      VARCHAR(255),
     verify_token    VARCHAR(16),
     submitted       INTEGER NOT NULL,
@@ -57,12 +57,12 @@ CREATE TABLE groups (
 
 CREATE TABLE channel_namespaces (
     group_id        INTEGER NOT NULL REFERENCES groups(id),
-    namespace       VARCHAR(32) UNIQUE NOT NULL
+    namespace       VARCHAR(32) NOT NULL CONSTRAINT unique_channel_ns UNIQUE
 );
 
 CREATE TABLE cloak_namespaces (
     group_id        INTEGER NOT NULL REFERENCES groups(id),
-    namespace       VARCHAR(32) UNIQUE NOT NULL
+    namespace       VARCHAR(32) NOT NULL CONSTRAINT unique_cloak_ns UNIQUE
 );
 
 CREATE TABLE group_contacts (
