@@ -93,6 +93,9 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
             $c->stash->{contact} = $account->contact;
             $c->stash->{group} = $group;
 
+            $c->stash->{join_gab} = $p->{join_gab};
+            $c->stash->{gab_email} = $p->{gab_email} || $account->contact->email;
+
             $c->stash->{email} = {
                 to => $account->contact->email,
                 bcc => $c->config->{email}->{admin_address},

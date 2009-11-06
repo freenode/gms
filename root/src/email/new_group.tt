@@ -35,3 +35,7 @@ Group Address:      [% group.address.address_one %]
 Group Address:      None
 [% END -%]
 
+Join Groups Advisory Board:     [% join_gab %]
+[% IF join_gab == 'Yes' -%]
+GAB email:                      [% gab_email %]
+[% END -%]

@@ -64,9 +64,21 @@ to help us verify your registration.</p>
 <tr>
   <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 %]"></td>
 </tr>
+
 <tr>
   <td colspan="2"><strong>Additional Information</strong></td>
 </tr>
+
+<tr>
+  <td>Join the Groups Advisory Board?</td>
+  <td><input type="radio" name="join_gab" id="join_gab_y" value="Yes" checked="checked"> Yes <br />
+      <input type="radio" name="join_gab" id="join_gab_n" value="No"> No
+</tr>
+<tr>
+  <td>Email address for GAB mailing list</td>
+  <td><input type="text" name="gab_email" size="40" value="[% gab_email %]"></td>
+</tr>
+
 <tr>
   <td>Include project on Primary Groups listing?</td>
   <td><input type="radio" name="include_listing" id="include_listing_y" value="y" checked="checked"> Yes <br />
