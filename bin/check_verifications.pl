@@ -19,7 +19,7 @@ my $rs = $db->resultset('Group');
 
 use Data::Dumper;
 
-foreach my $group ( $rs->find( { status => 'auto_pending' } ) )
+foreach my $group ( $rs->search( { status => 'auto_pending' } ) )
 {
     last if !$group;
 
@@ -31,7 +31,6 @@ foreach my $group ( $rs->find( { status => 'auto_pending' } ) )
 
     if ($res->is_success)
     {
-        print $res->content;
         if (-1 != index($res->content, $token))
         {
             $group->auto_verify;
