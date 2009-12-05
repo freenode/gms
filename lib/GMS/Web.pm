@@ -42,6 +42,8 @@ __PACKAGE__->config(
 
     session => { flash_to_stash => 1 },
 
+    default_view => 'TT',
+
     'Plugin::Authentication' =>
     {
         default => {
