@@ -23,7 +23,7 @@ sub id {
 }
 
 sub supported_features {
-    return { session => 1 };
+    return { session => 1, roles => 1 };
 }
 
 sub get {
@@ -48,6 +48,16 @@ sub username {
 sub account {
     my ($self) = @_;
     return $self->{_account};
+}
+
+sub roles {
+    my ($self) = @_;
+    #return $self->{_account}->roles;
+    my @ret;
+    foreach my $role ($self->{_account}->roles) {
+        push @ret, $role->name;
+    }
+    return @ret;
 }
 
 1;

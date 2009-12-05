@@ -9,6 +9,8 @@ all_from 'lib/GMS/Web.pm';
 requires 'Catalyst::Runtime' => '5.80005';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
+requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Plugin::Authorization::Roles';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::View::Email::Template';

@@ -10,6 +10,7 @@ __PACKAGE__->set_primary_key('id');
 
 __PACKAGE__->might_have('contact', 'GMS::Schema::Result::Contact', 'account_id');
 
+__PACKAGE__->has_many(user_roles => 'GMS::Schema::Result::UserRole', 'account_id');
+__PACKAGE__->many_to_many(roles => 'user_roles', 'role');
+
 1;
-
-

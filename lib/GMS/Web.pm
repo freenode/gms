@@ -21,6 +21,7 @@ use Catalyst qw/-Debug
                 StackTrace
 
                 Authentication
+                Authorization::Roles
 
                 Session
                 Session::Store::FastMmap
