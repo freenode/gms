@@ -71,6 +71,11 @@ sub new {
             $user, $account->id);
     };
 
+    if ($account->accountname ne $user) {
+        $account->accountname($user);
+        $account->update;
+    }
+
     $self->{_account} = $account;
 
     bless $self, $class;
