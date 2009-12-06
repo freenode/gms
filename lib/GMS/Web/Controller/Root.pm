@@ -35,8 +35,14 @@ sub index :Path :Args(0) {
 
 sub default :Path {
     my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
+    $c->stash->{template} = 'error/404.tt';
     $c->response->status(404);
+}
+
+sub forbidden :Path :Args(0) {
+    my ($self, $c) = @_;
+    $c->stash->{template} = 'error/403.tt';
+    $c->response->status(403);
 }
 
 =head2 end
