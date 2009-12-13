@@ -48,11 +48,11 @@ sub login {
     );
 
     if (! defined $response) {
-        die RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR);
+        die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR);
     }
 
     if (ref $response) {
-        die RPC::Atheme::Error($response);
+        die RPC::Atheme::Error->new($response);
     }
 
     $self->{__authcookie} = $response;
@@ -89,8 +89,8 @@ sub do_command {
         @args
     );
 
-    die RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
-    die RPC::Atheme::Error($result) if ref $result eq 'HASH';
+    die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    die RPC::Atheme::Error->new($result) if ref $result eq 'HASH';
     return $result;
 }
 
@@ -101,8 +101,8 @@ sub logout {
     my $result = $self->{__client}->simple_request(
         'atheme.logout', $self->{__authcookie}, $self->{__username});
 
-    die RPC::Atheme::Error(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
-    die RPC::Atheme::Error($result) if ref $result eq 'HASH';
+    die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    die RPC::Atheme::Error->new($result) if ref $result eq 'HASH';
     return $result;
 }
 
