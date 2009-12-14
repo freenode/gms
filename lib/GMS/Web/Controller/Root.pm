@@ -16,13 +16,18 @@ GMS::Web::Controller::Root - Root Controller for GMS::Web
 
 =head1 DESCRIPTION
 
-[enter your description here]
+This module contains what small amount of global logic there is in GMS::Web.
+
+The front page and global error handlers are here, as is the code to ensure
+that a user is logged in before allowing any other operations.
 
 =head1 METHODS
 
 =cut
 
 =head2 index
+
+Presents the front page.
 
 =cut
 
@@ -33,11 +38,28 @@ sub index :Path :Args(0) {
     $c->stash->{template} = 'index.tt';
 }
 
+=head2 default
+
+The default handler, used when no other matches. This simply presents a 404
+error page.
+
+=cut
+
 sub default :Path {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'error/404.tt';
     $c->response->status(404);
 }
+
+=head2 forbidden
+
+This method should not be reached directly, but instead through detach() calls
+where other controllers have determined that the user lacks access to the page
+requested.
+
+It presents a 403 error page.
+
+=cut
 
 sub forbidden :Path :Args(0) {
     my ($self, $c) = @_;
@@ -53,14 +75,11 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView') {}
 
-=head1 AUTHOR
+=head2 auto
 
-Catalyst developer
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
+Called before all operations in all controllers. Ensures that the user
+is logged in before allowing any operations other than login and those
+in the root controller.
 
 =cut
 
@@ -81,5 +100,16 @@ sub auto : Private {
 
     return 1;
 }
+
+=head1 AUTHOR
+
+Stephen Bennett <spb@exherbo.org>
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 1;
