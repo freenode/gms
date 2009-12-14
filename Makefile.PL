@@ -23,6 +23,8 @@ requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class';
 requires 'String::Random';
+requires 'Dir::Self';
+requires 'Config::JFDI';
 
 catalyst;
 
