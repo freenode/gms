@@ -61,7 +61,7 @@ It presents a 403 error page.
 
 =cut
 
-sub forbidden :Path :Args(0) {
+sub forbidden :Path('403') :Args(0) {
     my ($self, $c) = @_;
     $c->stash->{template} = 'error/403.tt';
     $c->response->status(403);
