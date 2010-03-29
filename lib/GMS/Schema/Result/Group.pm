@@ -1,25 +1,211 @@
 package GMS::Schema::Result::Group;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
 use strict;
 use warnings;
-use base 'DBIx::Class';
+
+use base 'DBIx::Class::Core';
+
+
+=head1 NAME
+
+GMS::Schema::Result::Group
+
+=cut
+
+__PACKAGE__->table("groups");
+
+=head1 ACCESSORS
+
+=head2 id
+
+  data_type: integer
+  default_value: nextval('groups_id_seq'::regclass)
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 groupname
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 0
+  size: 32
+
+=head2 grouptype
+
+  data_type: group_type
+  default_value: undef
+  is_nullable: 0
+  size: 4
+
+=head2 url
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 0
+  size: 64
+
+=head2 address
+
+  data_type: integer
+  default_value: undef
+  is_nullable: 1
+
+=head2 status
+
+  data_type: group_status
+  default_value: undef
+  is_nullable: 1
+  size: 4
+
+=head2 verify_url
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 255
+
+=head2 verify_token
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 16
+
+=head2 submitted
+
+  data_type: integer
+  default_value: undef
+  is_nullable: 0
+
+=head2 verified
+
+  data_type: integer
+  default_value: 0
+  is_nullable: 1
+
+=head2 approved
+
+  data_type: integer
+  default_value: 0
+  is_nullable: 1
+
+=cut
+
+__PACKAGE__->add_columns(
+  "id",
+  {
+    data_type         => "integer",
+    default_value     => "nextval('groups_id_seq'::regclass)",
+    is_auto_increment => 1,
+    is_nullable       => 0,
+  },
+  "groupname",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 0,
+    size => 32,
+  },
+  "grouptype",
+  {
+    data_type => "group_type",
+    default_value => undef,
+    is_nullable => 0,
+    size => 4,
+  },
+  "url",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 0,
+    size => 64,
+  },
+  "address",
+  { data_type => "integer", default_value => undef, is_nullable => 1 },
+  "status",
+  {
+    data_type => "group_status",
+    default_value => undef,
+    is_nullable => 1,
+    size => 4,
+  },
+  "verify_url",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 255,
+  },
+  "verify_token",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 16,
+  },
+  "submitted",
+  { data_type => "integer", default_value => undef, is_nullable => 0 },
+  "verified",
+  { data_type => "integer", default_value => 0, is_nullable => 1 },
+  "approved",
+  { data_type => "integer", default_value => 0, is_nullable => 1 },
+);
+__PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
+__PACKAGE__->add_unique_constraint("unique_name", ["groupname"]);
+
+=head1 RELATIONS
+
+=head2 channel_namespaces
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::ChannelNamespace>
+
+=cut
+
+__PACKAGE__->has_many(
+  "channel_namespaces",
+  "GMS::Schema::Result::ChannelNamespace",
+  { "foreign.group_id" => "self.id" },
+);
+
+=head2 cloak_namespaces
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::CloakNamespace>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cloak_namespaces",
+  "GMS::Schema::Result::CloakNamespace",
+  { "foreign.group_id" => "self.id" },
+);
+
+=head2 group_contacts
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupContact>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_contacts",
+  "GMS::Schema::Result::GroupContact",
+  { "foreign.group_id" => "self.id" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V7u9/RSLHIriF5cy3ODn4Q
 
 use TryCatch;
-
-use String::Random qw/random_string/;
-
-__PACKAGE__->load_components('Core');
-__PACKAGE__->table('groups');
-__PACKAGE__->add_columns(qw/ id groupname grouptype url address status verify_url verify_token
-                             submitted verified approved /);
-__PACKAGE__->set_primary_key('id');
-
-__PACKAGE__->has_many(group_contacts => 'GMS::Schema::Result::GroupContact', 'group_id');
-__PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
-
-__PACKAGE__->belongs_to(address => 'GMS::Schema::Result::Address', 'address');
-
-__PACKAGE__->has_many(channel_namespaces => 'GMS::Schema::Result::ChannelNamespace', 'group_id');
-__PACKAGE__->has_many(cloak_namespaces => 'GMS::Schema::Result::CloakNamespace', 'group_id');
 
 sub new {
     my $class = shift;
@@ -121,4 +307,6 @@ sub auto_verify {
     $self->update;
 }
 
+
+# You can replace this text with custom content, and it will be preserved on regeneration
 1;

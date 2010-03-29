@@ -1,12 +1,175 @@
 package GMS::Schema::Result::Address;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
 use strict;
 use warnings;
-use base 'DBIx::Class';
 
-__PACKAGE__->load_components('Core');
-__PACKAGE__->table('addresses');
-__PACKAGE__->add_columns(qw/ id address_one address_two city state code country phone phone2 /);
-__PACKAGE__->set_primary_key('id');
+use base 'DBIx::Class::Core';
+
+
+=head1 NAME
+
+GMS::Schema::Result::Address
+
+=cut
+
+__PACKAGE__->table("addresses");
+
+=head1 ACCESSORS
+
+=head2 id
+
+  data_type: integer
+  default_value: nextval('addresses_id_seq'::regclass)
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 address_one
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 0
+  size: 255
+
+=head2 address_two
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 255
+
+=head2 city
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 0
+  size: 255
+
+=head2 state
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 255
+
+=head2 code
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 32
+
+=head2 country
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 0
+  size: 64
+
+=head2 phone
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 32
+
+=head2 phone2
+
+  data_type: character varying
+  default_value: undef
+  is_nullable: 1
+  size: 32
+
+=cut
+
+__PACKAGE__->add_columns(
+  "id",
+  {
+    data_type         => "integer",
+    default_value     => "nextval('addresses_id_seq'::regclass)",
+    is_auto_increment => 1,
+    is_nullable       => 0,
+  },
+  "address_one",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 0,
+    size => 255,
+  },
+  "address_two",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 255,
+  },
+  "city",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 0,
+    size => 255,
+  },
+  "state",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 255,
+  },
+  "code",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 32,
+  },
+  "country",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 0,
+    size => 64,
+  },
+  "phone",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 32,
+  },
+  "phone2",
+  {
+    data_type => "character varying",
+    default_value => undef,
+    is_nullable => 1,
+    size => 32,
+  },
+);
+__PACKAGE__->set_primary_key("id");
+
+=head1 RELATIONS
+
+=head2 contacts
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::Contact>
+
+=cut
+
+__PACKAGE__->has_many(
+  "contacts",
+  "GMS::Schema::Result::Contact",
+  { "foreign.address_id" => "self.id" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oX6tDIRWudGlI3IMQ0qqTg
 
 sub new {
     my $class = shift;
@@ -59,5 +222,5 @@ sub pretty_long {
     return $out;
 }
 
+# You can replace this text with custom content, and it will be preserved on regeneration
 1;
-
