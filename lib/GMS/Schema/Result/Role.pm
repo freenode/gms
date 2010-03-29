@@ -75,5 +75,9 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:14/SW6kCwmlEouF61LRMgw
 
 
+# Pseudo-relations not added by Schema::Loader
+__PACKAGE__->many_to_many(accounts => 'user_roles', 'account');
+
+
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

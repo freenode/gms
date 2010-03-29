@@ -205,6 +205,9 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V7u9/RSLHIriF5cy3ODn4Q
 
+# Pseudo-relations not added by Schema::Loader
+__PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
+
 use TryCatch;
 
 sub new {

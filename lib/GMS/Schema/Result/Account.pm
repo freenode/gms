@@ -89,5 +89,7 @@ __PACKAGE__->has_many(
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
+# Pseudo-relations not added by Schema::Loader
+__PACKAGE__->many_to_many(roles => 'user_roles', 'role');
 
 1;
