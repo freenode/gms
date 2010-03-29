@@ -51,6 +51,7 @@ __PACKAGE__->add_columns(
     size => 32,
   },
 );
+__PACKAGE__->set_primary_key("group_id", "namespace");
 __PACKAGE__->add_unique_constraint("unique_channel_ns", ["namespace"]);
 
 =head1 RELATIONS
@@ -66,8 +67,10 @@ Related object: L<GMS::Schema::Result::Group>
 __PACKAGE__->belongs_to("group", "GMS::Schema::Result::Group", { id => "group_id" }, {});
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sxQb57lWexJR6LCbV4jZSw
+# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-03-29 22:43:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KJQwSvHtUO+DDCWQ5pl3cw
+
+use TryCatch;
 
 sub insert {
     my $self = shift;
