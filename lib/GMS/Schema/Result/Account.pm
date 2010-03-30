@@ -49,16 +49,16 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 contacts
+=head2 contact
 
-Type: has_many
+Type: might_have
 
 Related object: L<GMS::Schema::Result::Contact>
 
 =cut
 
-__PACKAGE__->has_many(
-  "contacts",
+__PACKAGE__->might_have(
+  "contact",
   "GMS::Schema::Result::Contact",
   { "foreign.account_id" => "self.id" },
   {},
@@ -80,8 +80,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AldCn2q3oTobY2un+hOa1A
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 22:09:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fnkNdw853c4vIdMMON8ZYA
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
