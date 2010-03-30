@@ -21,15 +21,14 @@ __PACKAGE__->table("roles");
 
 =head2 id
 
-  data_type: integer
-  default_value: nextval('roles_id_seq'::regclass)
+  data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
+  sequence: 'roles_id_seq'
 
 =head2 name
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 32
 
@@ -39,17 +38,12 @@ __PACKAGE__->add_columns(
   "id",
   {
     data_type         => "integer",
-    default_value     => "nextval('roles_id_seq'::regclass)",
     is_auto_increment => 1,
     is_nullable       => 0,
+    sequence          => "roles_id_seq",
   },
   "name",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 32 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("roles_name_key", ["name"]);
@@ -68,11 +62,12 @@ __PACKAGE__->has_many(
   "user_roles",
   "GMS::Schema::Result::UserRole",
   { "foreign.role_id" => "self.id" },
+  {},
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:14/SW6kCwmlEouF61LRMgw
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XvxAtHTcCY/zOeUvMUIq2w
 
 
 # Pseudo-relations not added by Schema::Loader

@@ -21,28 +21,25 @@ __PACKAGE__->table("group_contacts");
 
 =head2 group_id
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
 =head2 contact_id
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
 =head2 primary
 
-  data_type: boolean
+  data_type: 'boolean'
   default_value: false
   is_nullable: 0
 
 =head2 position
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 255
 
@@ -50,28 +47,13 @@ __PACKAGE__->table("group_contacts");
 
 __PACKAGE__->add_columns(
   "group_id",
-  {
-    data_type      => "integer",
-    default_value  => undef,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "contact_id",
-  {
-    data_type      => "integer",
-    default_value  => undef,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "primary",
-  { data_type => "boolean", default_value => "false", is_nullable => 0 },
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
   "position",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 255 },
 );
 __PACKAGE__->set_primary_key("group_id", "contact_id");
 
@@ -103,8 +85,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GqkRuhDanPmFfMFoKyX0iw
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wNskHHybcEU6PZoHZmiSZQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

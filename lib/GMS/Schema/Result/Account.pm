@@ -21,15 +21,14 @@ __PACKAGE__->table("accounts");
 
 =head2 id
 
-  data_type: integer
-  default_value: nextval('accounts_id_seq'::regclass)
+  data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
+  sequence: 'accounts_id_seq'
 
 =head2 accountname
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 32
 
@@ -39,17 +38,12 @@ __PACKAGE__->add_columns(
   "id",
   {
     data_type         => "integer",
-    default_value     => "nextval('accounts_id_seq'::regclass)",
     is_auto_increment => 1,
     is_nullable       => 0,
+    sequence          => "accounts_id_seq",
   },
   "accountname",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 32 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -67,6 +61,7 @@ __PACKAGE__->has_many(
   "contacts",
   "GMS::Schema::Result::Contact",
   { "foreign.account_id" => "self.id" },
+  {},
 );
 
 =head2 user_roles
@@ -81,11 +76,12 @@ __PACKAGE__->has_many(
   "user_roles",
   "GMS::Schema::Result::UserRole",
   { "foreign.account_id" => "self.id" },
+  {},
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D+lMQO76mPmCq5xPUWelZg
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AldCn2q3oTobY2un+hOa1A
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 

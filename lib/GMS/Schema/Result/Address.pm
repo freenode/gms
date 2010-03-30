@@ -21,64 +21,56 @@ __PACKAGE__->table("addresses");
 
 =head2 id
 
-  data_type: integer
-  default_value: nextval('addresses_id_seq'::regclass)
+  data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
+  sequence: 'addresses_id_seq'
 
 =head2 address_one
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 255
 
 =head2 address_two
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 255
 
 =head2 city
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 255
 
 =head2 state
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 255
 
 =head2 code
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 32
 
 =head2 country
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 64
 
 =head2 phone
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 32
 
 =head2 phone2
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 32
 
@@ -88,66 +80,26 @@ __PACKAGE__->add_columns(
   "id",
   {
     data_type         => "integer",
-    default_value     => "nextval('addresses_id_seq'::regclass)",
     is_auto_increment => 1,
     is_nullable       => 0,
+    sequence          => "addresses_id_seq",
   },
   "address_one",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 255 },
   "address_two",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 255 },
   "city",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 255,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 255 },
   "state",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 255 },
   "code",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 32 },
   "country",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 64,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 64 },
   "phone",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 32 },
   "phone2",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 32 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -165,11 +117,12 @@ __PACKAGE__->has_many(
   "contacts",
   "GMS::Schema::Result::Contact",
   { "foreign.address_id" => "self.id" },
+  {},
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oX6tDIRWudGlI3IMQ0qqTg
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SKNpsibvAfOEJqVdskg/Bw
 
 sub new {
     my $class = shift;

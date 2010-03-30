@@ -21,15 +21,13 @@ __PACKAGE__->table("user_roles");
 
 =head2 account_id
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
 =head2 role_id
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
@@ -37,19 +35,9 @@ __PACKAGE__->table("user_roles");
 
 __PACKAGE__->add_columns(
   "account_id",
-  {
-    data_type      => "integer",
-    default_value  => undef,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "role_id",
-  {
-    data_type      => "integer",
-    default_value  => undef,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("account_id", "role_id");
 
@@ -81,8 +69,8 @@ Related object: L<GMS::Schema::Result::Role>
 __PACKAGE__->belongs_to("role", "GMS::Schema::Result::Role", { id => "role_id" }, {});
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/gtvr0sXEu3ys0ogUAkocQ
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gJ47wof32mBejimmHBNanQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

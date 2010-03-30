@@ -8,13 +8,11 @@ use warnings;
 
 use base 'DBIx::Class::Schema';
 
-__PACKAGE__->load_namespaces(
-    result_namespace => 'Result',
-);
+__PACKAGE__->load_namespaces;
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-03-29 22:41:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UYhUdZuOclw1lzy2VUSV1g
+# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ws03I+Bw9ufPfkBIUAl/Ow
 
 sub connection {
     my $self = shift;

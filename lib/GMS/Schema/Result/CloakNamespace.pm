@@ -21,15 +21,13 @@ __PACKAGE__->table("cloak_namespaces");
 
 =head2 group_id
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
 =head2 namespace
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 32
 
@@ -37,20 +35,11 @@ __PACKAGE__->table("cloak_namespaces");
 
 __PACKAGE__->add_columns(
   "group_id",
-  {
-    data_type      => "integer",
-    default_value  => undef,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "namespace",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 32 },
 );
+__PACKAGE__->set_primary_key("group_id", "namespace");
 __PACKAGE__->add_unique_constraint("cloak_namespaces_namespace_key", ["namespace"]);
 
 =head1 RELATIONS
@@ -66,8 +55,8 @@ Related object: L<GMS::Schema::Result::Group>
 __PACKAGE__->belongs_to("group", "GMS::Schema::Result::Group", { id => "group_id" }, {});
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:efsC6AhD0mriAVB71SI5nA
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rxsfjYEvqEFgD2cnV77qYA
 
 __PACKAGE__->belongs_to('group', 'GMS::Schema::Result::Group', 'group_id');
 

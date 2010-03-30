@@ -21,74 +21,66 @@ __PACKAGE__->table("groups");
 
 =head2 id
 
-  data_type: integer
-  default_value: nextval('groups_id_seq'::regclass)
+  data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
+  sequence: 'groups_id_seq'
 
 =head2 groupname
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 32
 
 =head2 grouptype
 
-  data_type: group_type
-  default_value: undef
+  data_type: 'group_type'
   is_nullable: 0
   size: 4
 
 =head2 url
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 0
   size: 64
 
 =head2 address
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_nullable: 1
 
 =head2 status
 
-  data_type: group_status
-  default_value: undef
+  data_type: 'group_status'
   is_nullable: 1
   size: 4
 
 =head2 verify_url
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 255
 
 =head2 verify_token
 
-  data_type: character varying
-  default_value: undef
+  data_type: 'character varying'
   is_nullable: 1
   size: 16
 
 =head2 submitted
 
-  data_type: integer
-  default_value: undef
+  data_type: 'integer'
   is_nullable: 0
 
 =head2 verified
 
-  data_type: integer
+  data_type: 'integer'
   default_value: 0
   is_nullable: 1
 
 =head2 approved
 
-  data_type: integer
+  data_type: 'integer'
   default_value: 0
   is_nullable: 1
 
@@ -98,56 +90,26 @@ __PACKAGE__->add_columns(
   "id",
   {
     data_type         => "integer",
-    default_value     => "nextval('groups_id_seq'::regclass)",
     is_auto_increment => 1,
     is_nullable       => 0,
+    sequence          => "groups_id_seq",
   },
   "groupname",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 32,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 32 },
   "grouptype",
-  {
-    data_type => "group_type",
-    default_value => undef,
-    is_nullable => 0,
-    size => 4,
-  },
+  { data_type => "group_type", is_nullable => 0, size => 4 },
   "url",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 0,
-    size => 64,
-  },
+  { data_type => "character varying", is_nullable => 0, size => 64 },
   "address",
-  { data_type => "integer", default_value => undef, is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "status",
-  {
-    data_type => "group_status",
-    default_value => undef,
-    is_nullable => 1,
-    size => 4,
-  },
+  { data_type => "group_status", is_nullable => 1, size => 4 },
   "verify_url",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 255 },
   "verify_token",
-  {
-    data_type => "character varying",
-    default_value => undef,
-    is_nullable => 1,
-    size => 16,
-  },
+  { data_type => "character varying", is_nullable => 1, size => 16 },
   "submitted",
-  { data_type => "integer", default_value => undef, is_nullable => 0 },
+  { data_type => "integer", is_nullable => 0 },
   "verified",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "approved",
@@ -171,6 +133,7 @@ __PACKAGE__->has_many(
   "channel_namespaces",
   "GMS::Schema::Result::ChannelNamespace",
   { "foreign.group_id" => "self.id" },
+  {},
 );
 
 =head2 cloak_namespaces
@@ -185,6 +148,7 @@ __PACKAGE__->has_many(
   "cloak_namespaces",
   "GMS::Schema::Result::CloakNamespace",
   { "foreign.group_id" => "self.id" },
+  {},
 );
 
 =head2 group_contacts
@@ -199,11 +163,12 @@ __PACKAGE__->has_many(
   "group_contacts",
   "GMS::Schema::Result::GroupContact",
   { "foreign.group_id" => "self.id" },
+  {},
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.05000 @ 2010-02-04 23:06:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V7u9/RSLHIriF5cy3ODn4Q
+# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:esRDJ+CRrxP55Bm1QURcsA
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
