@@ -1,0 +1,18 @@
+[% META title = 'Group View' %]
+
+<h2>[% group.groupname %]</h2>
+
+<table>
+<tr> <td>Type</td>              <td>[% group.grouptype %]</td> </tr>
+<tr> <td>URL</td>               <td>[% group.url %]</td> </tr>
+<tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
+<tr> <td>Verification URL</td>  <td>[% group.verify_url %]</td> </tr>
+<tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
+</table>
+
+<h3>Contacts:</h3>
+<ul>
+[% FOREACH contact = group.contacts %]
+<li>[% contact.name %]</li>
+[% END %]
+</ul>

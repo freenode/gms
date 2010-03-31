@@ -18,7 +18,7 @@ sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
     }
 }
 
-sub index :Chained('base') :Args(0) {
+sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{groups} = [];
@@ -31,12 +31,29 @@ sub index :Chained('base') :Args(0) {
         } else {
             $list = $c->stash->{pendinggroups};
         }
-        push @$list, { groupname => $group->groupname };
+        push @$list, $group;
     }
 
     $c->stash->{template} = 'group/list.tt';
 }
 
+sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
+    my ($self, $c, $group_id) = @_;
+
+    my $group = $c->user->account->contact->groups->find({ id => $group_id });
+
+    if ($group) {
+        $c->stash->{group} = $group;
+    } else {
+        $c->detach('/default');
+    }
+}
+
+sub view :Chained('single_group') :PathPart('view') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'group/view.tt';
+}
 
 sub new_form :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;

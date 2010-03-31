@@ -12,7 +12,9 @@
 
 <ul>
 [% FOREACH group IN pendinggroups -%]
-  <li>[% group.groupname %]</li>
+  <li>
+    <a href="[% c.uri_for("/group/${group.id}/view") %]">[% group.groupname | html %]</a>
+  </li>
 [% END %]
 </ul>
 
