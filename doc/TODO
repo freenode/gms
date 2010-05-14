@@ -1,41 +1,37 @@
-The crude TODO list for GMS is "Everything." This file attempts to list some of
-the larger projects that are needed sooner rather than later.
+== TODO list for GMS
 
-=== The registration form
+For a rudimentary usable release:
 
-One of the first things that is needed to make this useful is the ability for an
-authenticated user to register a new group, and have it make its way to
-'approved' status. There are several parts to this project, which are relatively
-disjoint.
+ * Finish up the group registration process. There is a rudimentary version in
+   place, which needs polishing.
+ * Handle addition and removal of additional group contacts, verified by
+   existing GCs and approved by staff.
+ * Allow changing of user and group information, again approved by staff.
+ * Add an administrative interface, allowing:
+   - Approving pending groups.
+   - Removing existing group contacts.
+   - Viewing all information about groups and users.
+ * Add a staff interface, allowing:
+   - Viewing details of groups, contacts and namespaces, but no contact
+     information.
+   - Searching groups by name, and by channel or cloak namespace.
+ * Add some means, initiated by staff and continued by users, to replace an
+   existing group registration. This could be simply marking the existing group
+   as inactive, and starting over.
+ * Add some means, with staff intervention, to take over an existing group
+   registration whose contacts are all inactive.
 
- - The initial registration form. Let the would-be group contact input the
-   group information, as well as his own contact information. The new group will
-   enter the database in the 'new' state.
+Further core functionality:
 
- - Automated verification. This portion will probably run independently of the
-   web interface, through a cron job. Verification of a new group application is
-   done by checking for the existence of a randomly-generated file name at some
-   location under the group's top level URL. If the prospective contact can
-   cause this to appear, their involvement with the project is considered to be
-   verified.
+ * Hook in to channel registration, and disallow registering primary channels
+   except for approved group contacts.
+ * Allow group contacts to request project cloaks directly through GMS.
 
- - Staff approval. Once a new group has passed the verification, there needs to
-   be an easy way for suitably authorised staff members to view it in the queue
-   and decide whether or not to approve it.
+Possible additional functionality:
 
-=== Make Atheme communications more robust.
-
-Atheme XML-RPC auth cookies are valid for a fixed period of one hour, or until a
-logout. This includes the master session that GMS uses to carry out internal
-administrative tasks. It needs to cope gracefully in the event that its master
-session times out or is disconnected some other way.
-
-=== Improve the web UI
-
-The current web interface is functional but basic. Someone more experienced in
-web design could make it prettier.
-
-This will likely be an ongoing task, as new modules are written that start with
-similar functional-yet-basic templates. In most cases it should be possible to
-improve upon the templates created by backend developers.
-
+ * Add provision for group members who are affiliated with a group, and have
+   some access, but are not group contacts.
+ * Configurable channel logging, requested by GCs for channels in their
+   namespace, and viewable through the web interface with configurable access
+   controls (for members as above).
+ * Lots of other stuff TBD.
