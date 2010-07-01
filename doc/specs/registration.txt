@@ -1,0 +1,29 @@
+Registration of new groups
+==========================
+
+ * The prospective group contact first defines his own contact
+   information, if he has not already.
+ * He can then begin to register a new group, via the group registration
+   form. This will require the following information:
+   - Group type. This is selected from a list of possibilities,
+     describing the type of group -- informal, corporation / business
+     entity, government entity, etc.
+   - Group name.
+   - Group URL.
+   - Channel namespaces claimed by this group.
+   - An address, if applicable. If not, then the 'primary' contact's
+     address will be used where one is needed.
+ * The following options will also be available on registering a new
+   group:
+   - Whether to join the Groups Advisory Board, and the email address to
+     use if yes.
+   - Whether to include this group on the Primary Groups listing on the
+     freenode website, and the URL and short description to use if yes.
+   - Any other information (one text field, free-form).
+ * All of the above information will be validated and stored in the
+   group database. At this time GMS will decide whether to use automatic
+   or manual verification, and generate a verification token and URL.
+ * The prospective contact then creates a page at the given verification
+   URL containing the verification token.
+ * Once this has been verified, or if manual verification is in use, the
+   group enters the queue for staff approval.

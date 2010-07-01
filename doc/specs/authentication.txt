@@ -1,0 +1,31 @@
+Authentication and Authorisation in GMS
+=======================================
+
+ * Authentication is against a running instance of Atheme, via XML-RPC.
+ * Services usernames and passwords are used. Each account in GMS is tied
+   to a corresponding services account. This link must be maintained even
+   as services accounts are dropped and renamed.
+ * Authorisation for GMS functionality is handled by GMS.
+ * Authorisation is role-based, based on roles defined in the GMS database.
+
+Privileged and Unprivileged Actions
+===================================
+
+Unprivileged users (meaning those logged in with a valid services account,
+but without any roles defined) can:
+
+ * Submit a new group registration.
+ * View and modify their own contact information, as well as that for groups
+   for which they are a group contact.
+ * Request changes and other actions for groups for which they are a contact.
+
+Privileged operations will include the following, though role allocations are
+subject to change:
+
+ * Staff: View information about registered groups, and which users are
+   contacts for which groups.
+ * Admin: View and approve pending registrations and changes to existing
+   groups.
+ * Admin: View contact information for registered users and groups.
+ * Admin: Provide replacement tokens for group registration.
+

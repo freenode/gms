@@ -1,0 +1,27 @@
+A Brief Overview of GMS
+=======================
+
+GMS is the Group Management System, and aims to provide a means for the
+freenode IRC network to manage group registration (see
+http://freenode.net/group_registration.shtml for a description of what
+this means).
+
+The main part of GMS is a web application, allowing group contacts to
+manage their groups, and associated channels and cloak requests, rather
+more directly than is currently possible. Supporting this are numerous
+scripts, as well as a set of Atheme modules to provide the services
+integration required.
+
+The web application itself is based on Catalyst; all of the code that
+has no pressing reason not to be (such as Atheme modules) is Perl. This
+was chosen largely because of its ubiquity as a scripting language for
+applications -- using it, we can share the backend code between the web
+interface and IRC-facing services that access the same database. This
+would not be sanely possible in more Web-oriented languages or
+frameworks.
+
+While initial efforts must be directed towards the core web interface,
+it is very much intended that GMS will provide more user- and
+group-oriented functionality than has thus far been described. Towards
+the top of this list is a web service API that groups can use for
+integration with their own web applications.
