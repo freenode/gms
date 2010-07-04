@@ -65,10 +65,10 @@ sub new {
         $account = $self->{_db}->txn_do( sub {
                 my $result = $account_rs->create({
                         accountname => $user,
-                    })
+                    });
+                $self->{_control_session}->command($GMS::Config::service, 'accountid',
+                    $user, $account->id);
             });
-        $self->{_control_session}->command($GMS::Config::service, 'accountid',
-            $user, $account->id);
     };
 
     if ($account->accountname ne $user) {
