@@ -1,0 +1,8 @@
+<h3>Administration Centre</h3>
+
+<ul>
+<li>
+  <a href="[% c.uri_for('/admin/approve') %]">Review and Approve Group Registrations</a>
+</li>
+</ul>
+
