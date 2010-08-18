@@ -277,11 +277,20 @@ sub verify {
 
 sub approve {
     my ($self) = @_;
-    if ($self->status ne 'verified' && $self->status ne 'manual_pending') {
+    if ($self->status ne 'verified' && $self->status ne 'manual_pending' && $self->status ne 'auto_pending') {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
-            . "pending manual verification");
+            . "pending verification");
     }
     $self->status('approved');
+    $self->update;
+}
+
+sub reject {
+    my ($self) = @_;
+    if ($self->status ne 'verified' && $self->status ne 'manual_pending' && $self->status ne 'auto_pending') {
+        die GMS::Exception->new("Can't reject a group not pending approval");
+    }
+    $self->status('rejected');
     $self->update;
 }
 
