@@ -266,12 +266,22 @@ sub simple_url {
     return $url;
 }
 
-sub auto_verify {
+sub verify {
     my ($self) = @_;
-    if ($self->status ne 'auto_pending') {
-        die GMS::Exception->new("Can't auto-verify a group that isn't pending automatic verification");
+    if ($self->status ne 'auto_pending' && $self->status ne 'manual_pending') {
+        die GMS::Exception->new("Can't verify a group that isn't pending verification");
     }
-    $self->status('auto_verified');
+    $self->status('verified');
+    $self->update;
+}
+
+sub approve {
+    my ($self) = @_;
+    if ($self->status ne 'verified' && $self->status ne 'manual_pending') {
+        die GMS::Exception->new("Can't approve a group that isn't verified or "
+            . "pending manual verification");
+    }
+    $self->status('approved');
     $self->update;
 }
 

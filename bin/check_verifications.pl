@@ -33,7 +33,7 @@ foreach my $group ( $rs->search( { status => 'auto_pending' } ) )
     {
         if (-1 != index($res->content, $token))
         {
-            $group->auto_verify;
+            $group->verify;
             print "Found verification token for pending group " . $group->groupname . "; marking verified\n";
         }
         else
