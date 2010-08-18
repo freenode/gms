@@ -50,7 +50,7 @@ sub deploy {
     $self->storage->dbh_do(
         sub {
             my ($storage, $dbh) = @_;
-            $dbh->do("CREATE TYPE group_status AS ENUM ('auto_pending', 'auto_verified', 'manual_pending', 'approved')");
+            $dbh->do("CREATE TYPE group_status AS ENUM ('auto_pending', 'verified', 'manual_pending', 'approved', 'rejected')");
             $dbh->do("CREATE TYPE group_type AS ENUM ('informal', 'corporation', 'education', 'government', 'nfp', 'internal')");
         }
     );
