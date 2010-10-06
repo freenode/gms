@@ -13,6 +13,6 @@
 <h3>Contacts:</h3>
 <ul>
 [% FOREACH contact = group.contacts %]
-<li>[% contact.name %]</li>
+<li>[% contact.name %] ([% contact.account.accountname %])</li>
 [% END %]
 </ul>
