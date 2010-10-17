@@ -1,24 +1,34 @@
-The (approximate) layout of the GMS source tree:
+GMS::Web interface layout
+=========================
 
-atheme/:    Atheme modules used (via XML-RPC) to carry out various backend tasks.
-
-lib/:       Perl modules that implement most of the GMS logic. These include the
-            Catalyst modules that make up the web frontend, in lib/GMS/Web.
-
-            Perl namespaces:
-            - RPC::Atheme is a set of packages using RPC::XML to provide a simple
-              wrapper around Atheme's XML-RPC interface.
-            - GMS::Session extends RPC::Atheme::Session with the GMS-specific
-              login and account code.
-            - GMS::Schema is a DBIx::Class schema providing an interface to the
-              GMS database backend.
-            - GMS::Authentication is a Catalyst authentication plugin.
-            - GMS::Web is the main GMS web application.
-
-root/:      Template files and static content for the web interface.
-
-script/:    Catalyst setup scripts.
-
-t/:         Perl unit tests, created by Catalyst.
-
-
+/ - Front page.
+  |
+  |- /login    - Login page
+  |- /logout   - Logout page
+  |
+  |- /userinfo - Here a user or (prospective) group contact can define his own contact
+  |              information.
+  |
+  |- /group    - Contact-level group administration area
+  |    |
+  |    |- /group/view   - View information about one group, of which the user is a member.
+  |    |- /group/new    - Submit a new group application.
+  |    |- /group/search - Search for groups by name, and view summary information about
+  |    |                  them. Here should also be the option to apply to join said group
+  |    |                  as a new contact.
+  |    |- /group/edit   - Submit modifications to an existing group of which the user is a
+  |    |                  contact, to be approved by an administrator.
+  |
+  |- /admin    - Administrative area
+  |    |
+  |    |- /admin/approve - Review and approve (or reject) group and other applications.
+  |    |- /admin/view    - View full information about various entities.
+  |    |    |
+  |    |    |- /admin/view/group - View full information about a group.
+  |    |    |- /admin/view/user  - View full information about a user/contact.
+  |
+  |- /staff    - Staff (non-admin) area
+  |    |
+  |    |- /staff/search            - Find users or groups by name, channel namespace, or other
+  |    |                             criteria.
+  |    |- /staff/view/{group,user} - View intermediate information about a group or user.
