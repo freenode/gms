@@ -8,6 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -28,7 +29,7 @@ __PACKAGE__->table("roles");
 
 =head2 name
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 0
   size: 32
 
@@ -43,7 +44,7 @@ __PACKAGE__->add_columns(
     sequence          => "roles_id_seq",
   },
   "name",
-  { data_type => "character varying", is_nullable => 0, size => 32 },
+  { data_type => "varchar", is_nullable => 0, size => 32 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("roles_name_key", ["name"]);
@@ -66,8 +67,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XvxAtHTcCY/zOeUvMUIq2w
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:InXZDsYrZVtVPWN+tiqIZQ
 
 
 # Pseudo-relations not added by Schema::Loader

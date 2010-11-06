@@ -8,6 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -28,49 +29,49 @@ __PACKAGE__->table("addresses");
 
 =head2 address_one
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 0
   size: 255
 
 =head2 address_two
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 255
 
 =head2 city
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 0
   size: 255
 
 =head2 state
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 255
 
 =head2 code
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 32
 
 =head2 country
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 0
   size: 64
 
 =head2 phone
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 32
 
 =head2 phone2
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 32
 
@@ -85,21 +86,21 @@ __PACKAGE__->add_columns(
     sequence          => "addresses_id_seq",
   },
   "address_one",
-  { data_type => "character varying", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "address_two",
-  { data_type => "character varying", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "city",
-  { data_type => "character varying", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "state",
-  { data_type => "character varying", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "code",
-  { data_type => "character varying", is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "country",
-  { data_type => "character varying", is_nullable => 0, size => 64 },
+  { data_type => "varchar", is_nullable => 0, size => 64 },
   "phone",
-  { data_type => "character varying", is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "phone2",
-  { data_type => "character varying", is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -120,9 +121,24 @@ __PACKAGE__->has_many(
   {},
 );
 
+=head2 groups
 
-# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SKNpsibvAfOEJqVdskg/Bw
+Type: has_many
+
+Related object: L<GMS::Schema::Result::Group>
+
+=cut
+
+__PACKAGE__->has_many(
+  "groups",
+  "GMS::Schema::Result::Group",
+  { "foreign.address" => "self.id" },
+  {},
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RuqgZvZ/7YHS2Qd9MiCn2g
 
 sub new {
     my $class = shift;

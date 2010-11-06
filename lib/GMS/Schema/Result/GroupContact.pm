@@ -8,6 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -37,12 +38,6 @@ __PACKAGE__->table("group_contacts");
   default_value: false
   is_nullable: 0
 
-=head2 position
-
-  data_type: 'character varying'
-  is_nullable: 1
-  size: 255
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -52,8 +47,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "primary",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
-  "position",
-  { data_type => "character varying", is_nullable => 1, size => 255 },
 );
 __PACKAGE__->set_primary_key("group_id", "contact_id");
 
@@ -85,8 +78,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wNskHHybcEU6PZoHZmiSZQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WgkfY5o+nUEbyVsorVONGg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

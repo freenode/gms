@@ -8,6 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -28,7 +29,7 @@ __PACKAGE__->table("groups");
 
 =head2 groupname
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 0
   size: 32
 
@@ -40,48 +41,36 @@ __PACKAGE__->table("groups");
 
 =head2 url
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 0
   size: 64
 
 =head2 address
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
-
-=head2 status
-
-  data_type: 'group_status'
-  is_nullable: 1
-  size: 4
 
 =head2 verify_url
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 255
 
 =head2 verify_token
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 16
 
 =head2 submitted
 
-  data_type: 'integer'
+  data_type: 'timestamp'
   is_nullable: 0
 
-=head2 verified
+=head2 verify_auto
 
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 approved
-
-  data_type: 'integer'
-  default_value: 0
+  data_type: 'boolean'
   is_nullable: 1
 
 =cut
@@ -95,25 +84,21 @@ __PACKAGE__->add_columns(
     sequence          => "groups_id_seq",
   },
   "groupname",
-  { data_type => "character varying", is_nullable => 0, size => 32 },
+  { data_type => "varchar", is_nullable => 0, size => 32 },
   "grouptype",
   { data_type => "group_type", is_nullable => 0, size => 4 },
   "url",
-  { data_type => "character varying", is_nullable => 0, size => 64 },
+  { data_type => "varchar", is_nullable => 0, size => 64 },
   "address",
-  { data_type => "integer", is_nullable => 1 },
-  "status",
-  { data_type => "group_status", is_nullable => 1, size => 4 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "verify_url",
-  { data_type => "character varying", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "verify_token",
-  { data_type => "character varying", is_nullable => 1, size => 16 },
+  { data_type => "varchar", is_nullable => 1, size => 16 },
   "submitted",
-  { data_type => "integer", is_nullable => 0 },
-  "verified",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "approved",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
+  { data_type => "timestamp", is_nullable => 0 },
+  "verify_auto",
+  { data_type => "boolean", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
@@ -166,9 +151,24 @@ __PACKAGE__->has_many(
   {},
 );
 
+=head2 address
 
-# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 20:57:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:esRDJ+CRrxP55Bm1QURcsA
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Address>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "address",
+  "GMS::Schema::Result::Address",
+  { id => "address" },
+  { join_type => "LEFT" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UFb1poYW4hvy1uHsUqh39w
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');

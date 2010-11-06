@@ -8,6 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -28,7 +29,7 @@ __PACKAGE__->table("accounts");
 
 =head2 accountname
 
-  data_type: 'character varying'
+  data_type: 'varchar'
   is_nullable: 1
   size: 32
 
@@ -43,7 +44,7 @@ __PACKAGE__->add_columns(
     sequence          => "accounts_id_seq",
   },
   "accountname",
-  { data_type => "character varying", is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -80,8 +81,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.06000 @ 2010-03-30 22:09:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fnkNdw853c4vIdMMON8ZYA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MJ39LFnAAdEIfuiv6bv03w
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
