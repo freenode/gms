@@ -37,25 +37,5 @@ sub connection {
     return $rv;
 }
 
-=head2 deploy
-
-Overloads the DBIx::Class::Schema deploy() method, creating the required UDTs
-before deploying.
-
-=cut
-
-sub deploy {
-    my ($self, @args) = @_;
-
-    $self->storage->dbh_do(
-        sub {
-            my ($storage, $dbh) = @_;
-            $dbh->do("CREATE TYPE group_status AS ENUM ('auto_pending', 'verified', 'manual_pending', 'approved', 'rejected')");
-            $dbh->do("CREATE TYPE group_type AS ENUM ('informal', 'corporation', 'education', 'government', 'nfp', 'internal')");
-        }
-    );
-    $self->next::method(@args);
-}
-
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

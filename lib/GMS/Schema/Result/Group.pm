@@ -33,12 +33,6 @@ __PACKAGE__->table("groups");
   is_nullable: 0
   size: 32
 
-=head2 grouptype
-
-  data_type: 'group_type'
-  is_nullable: 0
-  size: 4
-
 =head2 url
 
   data_type: 'varchar'
@@ -85,8 +79,6 @@ __PACKAGE__->add_columns(
   },
   "groupname",
   { data_type => "varchar", is_nullable => 0, size => 32 },
-  "grouptype",
-  { data_type => "group_type", is_nullable => 0, size => 4 },
   "url",
   { data_type => "varchar", is_nullable => 0, size => 64 },
   "address",
@@ -136,6 +128,21 @@ __PACKAGE__->has_many(
   {},
 );
 
+=head2 group_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_changes",
+  "GMS::Schema::Result::GroupChange",
+  { "foreign.group_id" => "self.id" },
+  {},
+);
+
 =head2 group_contacts
 
 Type: has_many
@@ -167,8 +174,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UFb1poYW4hvy1uHsUqh39w
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:11:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wZJMtArLBrMm8hpkhaEX+A
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');

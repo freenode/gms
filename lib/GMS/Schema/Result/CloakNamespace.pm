@@ -56,8 +56,8 @@ Related object: L<GMS::Schema::Result::Group>
 __PACKAGE__->belongs_to("group", "GMS::Schema::Result::Group", { id => "group_id" }, {});
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iY/c8/mrnsEkVMd8A/8kiQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:09:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mE+Mo87lChVp6adC46Snqw
 
 __PACKAGE__->belongs_to('group', 'GMS::Schema::Result::Group', 'group_id');
 

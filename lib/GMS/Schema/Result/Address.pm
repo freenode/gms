@@ -121,6 +121,21 @@ __PACKAGE__->has_many(
   {},
 );
 
+=head2 group_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_changes",
+  "GMS::Schema::Result::GroupChange",
+  { "foreign.address" => "self.id" },
+  {},
+);
+
 =head2 groups
 
 Type: has_many
@@ -137,8 +152,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RuqgZvZ/7YHS2Qd9MiCn2g
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:09:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IFzNAYLI7ItaoS3BWx66kA
 
 sub new {
     my $class = shift;

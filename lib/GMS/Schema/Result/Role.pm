@@ -67,8 +67,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:InXZDsYrZVtVPWN+tiqIZQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:06:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R1xDSQJ2Ub9Mi2ZzMqTBXw
 
 
 # Pseudo-relations not added by Schema::Loader

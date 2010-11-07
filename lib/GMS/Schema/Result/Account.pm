@@ -65,6 +65,21 @@ __PACKAGE__->might_have(
   {},
 );
 
+=head2 group_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_changes",
+  "GMS::Schema::Result::GroupChange",
+  { "foreign.changed_by" => "self.id" },
+  {},
+);
+
 =head2 user_roles
 
 Type: has_many
@@ -81,8 +96,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MJ39LFnAAdEIfuiv6bv03w
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:06:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GfriUL8CN8X5gtzK1jNMuQ
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
