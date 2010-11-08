@@ -39,12 +39,6 @@ __PACKAGE__->table("groups");
   is_nullable: 0
   size: 64
 
-=head2 address
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =head2 verify_url
 
   data_type: 'varchar'
@@ -60,7 +54,9 @@ __PACKAGE__->table("groups");
 =head2 submitted
 
   data_type: 'timestamp'
+  default_value: current_timestamp
   is_nullable: 0
+  original: {default_value => \"now()"}
 
 =head2 verify_auto
 
@@ -81,14 +77,17 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 32 },
   "url",
   { data_type => "varchar", is_nullable => 0, size => 64 },
-  "address",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "verify_url",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "verify_token",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "submitted",
-  { data_type => "timestamp", is_nullable => 0 },
+  {
+    data_type     => "timestamp",
+    default_value => \"current_timestamp",
+    is_nullable   => 0,
+    original      => { default_value => \"now()" },
+  },
   "verify_auto",
   { data_type => "boolean", is_nullable => 1 },
 );
@@ -158,29 +157,15 @@ __PACKAGE__->has_many(
   {},
 );
 
-=head2 address
 
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Address>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "address",
-  "GMS::Schema::Result::Address",
-  { id => "address" },
-  { join_type => "LEFT" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:11:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wZJMtArLBrMm8hpkhaEX+A
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:59:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k0VkwRIaEB9CVxxZKFnTFQ
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 
 use TryCatch;
+use String::Random qw/random_string/;
 
 sub new {
     my $class = shift;
@@ -216,37 +201,44 @@ sub new {
         die GMS::Exception::InvalidGroup->new(\@errors);
     }
 
-    my %newargs = %$args;
+    my %newgroupargs = (
+        groupname => $args->{groupname}
+    );
+    my %newchangeargs = (
+        grouptype => $args->{grouptype},
+        url => $args->{url},
+        address => $args->{address},
+        status => 'submitted',
+        changed_by => $args->{account},
+    );
 
-    if (use_automatic_verification($newargs{groupname}, $newargs{url})) {
-        $newargs{status} = 'auto_pending';
-    } else {
-        $newargs{status} = 'manual_pending';
+    if (!$newgroupargs{verify_url}) {
+        $newgroupargs{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
+    }
+    if (!$newgroupargs{verify_token}) {
+        $newgroupargs{verify_token} = random_string("cccccccccccc");
     }
 
-    if (!$newargs{verify_url}) {
-        $newargs{verify_url} = $newargs{url}."/".random_string("cccccccc").".txt";
-    }
-    if (!$newargs{verify_token}) {
-        $newargs{verify_token} = random_string("cccccccccccc");
-    }
+    my $self = $class->next::method(\%newgroupargs);
 
-    return $class->next::method(\%newargs);
+    #my $initial_change = $self->add_to_group_changes( \%newchangeargs );
+
+    return $self;
 }
 
-sub insert {
-    my $self=shift;
-    try {
-        return $self->next::method(@_);
-    }
-    catch (DBIx::Class::Exception $e) {
-        if ("$e" =~ /unique_group_name/) {
-            die GMS::Exception->new("A group with that name already exists.");
-        } else {
-            die $e;
-        }
-    }
-}
+#sub insert {
+#    my $self=shift;
+#    try {
+#        return $self->next::method(@_);
+#    }
+#    catch (DBIx::Class::Exception $e) {
+#        if ("$e" =~ /unique_group_name/) {
+#            die GMS::Exception->new("A group with that name already exists.");
+#        } else {
+#            die $e;
+#        }
+#    }
+#}
 
 sub use_automatic_verification {
     my ($name, $url) = @_;
@@ -274,31 +266,29 @@ sub simple_url {
 }
 
 sub verify {
-    my ($self) = @_;
+    my ($self, $account) = @_;
     if ($self->status ne 'auto_pending' && $self->status ne 'manual_pending') {
         die GMS::Exception->new("Can't verify a group that isn't pending verification");
     }
-    $self->status('verified');
+    $self->add_to_group_changes( { changed_by => $account, change_type => 'admin', status => 'verified' } );
     $self->update;
 }
 
 sub approve {
-    my ($self) = @_;
+    my ($self, $account) = @_;
     if ($self->status ne 'verified' && $self->status ne 'manual_pending' && $self->status ne 'auto_pending') {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
             . "pending verification");
     }
-    $self->status('approved');
-    $self->update;
+    $self->add_to_group_changes( { changed_by => $account, change_type => 'admin', status => 'active' } );
 }
 
 sub reject {
-    my ($self) = @_;
+    my ($self, $account) = @_;
     if ($self->status ne 'verified' && $self->status ne 'manual_pending' && $self->status ne 'auto_pending') {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
-    $self->status('rejected');
-    $self->update;
+    $self->add_to_group_changes( { changed_by => $account, change_type => 'admin', status => 'deleted' } );
 }
 
 

@@ -106,6 +106,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 contact_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::ContactChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "contact_changes",
+  "GMS::Schema::Result::ContactChange",
+  { "foreign.address" => "self.id" },
+  {},
+);
+
 =head2 contacts
 
 Type: has_many
@@ -136,24 +151,9 @@ __PACKAGE__->has_many(
   {},
 );
 
-=head2 groups
 
-Type: has_many
-
-Related object: L<GMS::Schema::Result::Group>
-
-=cut
-
-__PACKAGE__->has_many(
-  "groups",
-  "GMS::Schema::Result::Group",
-  { "foreign.address" => "self.id" },
-  {},
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:09:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IFzNAYLI7ItaoS3BWx66kA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-08 21:08:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QGdJoy0HpRSJYBhQuSokLQ
 
 sub new {
     my $class = shift;

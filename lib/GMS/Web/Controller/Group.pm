@@ -95,59 +95,62 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                     groupname => $p->{group_name},
                     grouptype => $p->{group_type},
                     url => $p->{group_url},
-                    submitted => time,
                     address => $address,
+                    account => $c->user->account,
                 });
 
-            my @channels = split /, */, $p->{channel_namespace};
-            foreach my $channel_ns ( @channels )
-            {
-                $group->add_to_channel_namespaces({ namespace => $channel_ns});
-            }
+#            my @channels = split /, */, $p->{channel_namespace};
+#            foreach my $channel_ns ( @channels )
+#            {
+#                $group->add_to_channel_namespaces({ namespace => $channel_ns});
+#            }
 
-            $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1 });
+#            $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1 });
 
-            $c->stash->{contact} = $account->contact;
-            $c->stash->{group} = $group;
+#            $c->stash->{contact} = $account->contact;
+#            $c->stash->{group} = $group;
 
-            $c->stash->{join_gab} = $p->{join_gab};
-            $c->stash->{gab_email} = $p->{gab_email} || $account->contact->email;
+#            $c->stash->{join_gab} = $p->{join_gab};
+#            $c->stash->{gab_email} = $p->{gab_email} || $account->contact->email;
 
-            $c->stash->{email} = {
-                to => $account->contact->email,
-                bcc => $c->config->{email}->{admin_address},
-                from => $c->config->{email}->{from_address},
-                subject => "Group Registration for " . $group->groupname,
-                template => 'new_group.tt',
-            };
+#            $c->stash->{email} = {
+#                to => $account->contact->email,
+#                bcc => $c->config->{email}->{admin_address},
+#                from => $c->config->{email}->{from_address},
+#                subject => "Group Registration for " . $group->groupname,
+#                template => 'new_group.tt',
+#            };
 
-            $c->forward($c->view('Email'));
-            if (scalar @{$c->error}) {
-                my $message = $c->error->[0];
-                $c->error(0);
-                die GMS::Exception->new("Email sending failed. Please try again later.");
-            }
+#            $c->forward($c->view('Email'));
+#            if (scalar @{$c->error}) {
+#                my $message = $c->error->[0];
+#                $c->error(0);
+#                die GMS::Exception->new("Email sending failed. Please try again later.");
+#            }
 
             $group->update;
         });
     }
-    catch (GMS::Exception::InvalidGroup $e) {
-        $c->stash->{errors} = $e->message;
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach('new_form');
-    }
-    catch (GMS::Exception::InvalidAddress $e) {
-        $c->stash->{errors} = [
-            "If the group has its own address, then a valid address must be specified.",
-            @{$e->message}
-        ];
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach('new_form');
-    }
-    catch (GMS::Exception $e) {
-        $c->stash->{error_msg} = $e;
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach('new_form');
+#    catch (GMS::Exception::InvalidGroup $e) {
+#        $c->stash->{errors} = $e->message;
+#        %{$c->stash} = ( %{$c->stash}, %$p );
+#        $c->detach('new_form');
+#    }
+#    catch (GMS::Exception::InvalidAddress $e) {
+#        $c->stash->{errors} = [
+#            "If the group has its own address, then a valid address must be specified.",
+#            @{$e->message}
+#        ];
+#        %{$c->stash} = ( %{$c->stash}, %$p );
+#        $c->detach('new_form');
+#    }
+#    catch (GMS::Exception $e) {
+#        $c->stash->{error_msg} = $e;
+#        %{$c->stash} = ( %{$c->stash}, %$p );
+#        $c->detach('new_form');
+#    }
+    catch {
+        die $_;
     }
 
     $c->stash->{template} = 'group/added.tt';

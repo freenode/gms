@@ -50,6 +50,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 contact_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::ContactChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "contact_changes",
+  "GMS::Schema::Result::ContactChange",
+  { "foreign.changed_by" => "self.id" },
+  {},
+);
+
 =head2 contact
 
 Type: might_have
@@ -96,8 +111,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:06:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GfriUL8CN8X5gtzK1jNMuQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-08 21:08:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vB389pKICrKlYZSYkJ6aeg
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
