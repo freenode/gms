@@ -33,12 +33,6 @@ __PACKAGE__->table("groups");
   is_nullable: 0
   size: 32
 
-=head2 url
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 64
-
 =head2 verify_url
 
   data_type: 'varchar'
@@ -75,8 +69,6 @@ __PACKAGE__->add_columns(
   },
   "groupname",
   { data_type => "varchar", is_nullable => 0, size => 32 },
-  "url",
-  { data_type => "varchar", is_nullable => 0, size => 64 },
   "verify_url",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "verify_token",
@@ -158,8 +150,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:59:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k0VkwRIaEB9CVxxZKFnTFQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-10 21:05:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6i5eEVbhkpy5MJTXdLpMHA
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
@@ -198,32 +190,27 @@ sub new {
     }
 
     if (!$valid) {
+        print STDERR "goats\n\n\n";
         die GMS::Exception::InvalidGroup->new(\@errors);
     }
 
-    my %newgroupargs = (
-        groupname => $args->{groupname}
+    $args->{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
+    $args->{verify_token} = random_string("cccccccccccc");
+
+    my %change_arg_names = (
+        grouptype => 'group_type',
+        url => 'url',
+        address => 'address',
+        account => 'changed_by'
     );
-    my %newchangeargs = (
-        grouptype => $args->{grouptype},
-        url => $args->{url},
-        address => $args->{address},
-        status => 'submitted',
-        changed_by => $args->{account},
-    );
+    my %change_args;
+    @change_args{values %change_arg_names} = delete @{$args}{keys %change_arg_names};
+    $change_args{status} = 'submitted';
+    $change_args{change_type} = 'create';
 
-    if (!$newgroupargs{verify_url}) {
-        $newgroupargs{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
-    }
-    if (!$newgroupargs{verify_token}) {
-        $newgroupargs{verify_token} = random_string("cccccccccccc");
-    }
+    $args->{group_changes} = [ \%change_args ];
 
-    my $self = $class->next::method(\%newgroupargs);
-
-    #my $initial_change = $self->add_to_group_changes( \%newchangeargs );
-
-    return $self;
+    return $class->next::method($args);
 }
 
 #sub insert {
