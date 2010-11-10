@@ -67,7 +67,7 @@ sub new {
                         accountname => $user,
                     });
                 $self->{_control_session}->command($GMS::Config::service, 'accountid',
-                    $user, $account->id);
+                    $user, $result->id);
             });
     };
 
