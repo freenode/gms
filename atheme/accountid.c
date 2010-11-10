@@ -7,22 +7,18 @@ DECLARE_MODULE_V1
         "Stephen Bennett <stephen -at- freenode.net>"
 );
 
-list_t *gs_cmdtree;
-
 static void gs_cmd_accountid(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_accountid = { "ACCOUNTID", N_("Retrieves or modifies the GMS account ID"), "special:GMS", 2, gs_cmd_accountid };
+command_t gs_accountid = { "ACCOUNTID", N_("Retrieves or modifies the GMS account ID"), "special:GMS", 2, gs_cmd_accountid, {} };
 
 void _modinit(module_t *m)
 {
-    MODULE_USE_SYMBOL(gs_cmdtree, "groupserv/main", "gs_cmdtree");
-
-    command_add(&gs_accountid, gs_cmdtree);
+    service_named_bind_command("GroupServ", &gs_accountid);
 }
 
 void _moddeinit()
 {
-    command_delete(&gs_accountid, gs_cmdtree);
+    service_named_unbind_command("GroupServ", &gs_accountid);
 }
 
 void gs_cmd_accountid(sourceinfo_t *si, int parc, char *parv[])

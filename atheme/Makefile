@@ -6,7 +6,10 @@ SRVNAME = groupserv
 
 ATHEME_CFLAGS = -I$(ATHEME)/include -I$(ATHEME)/libmowgli/src/libmowgli -DDATADIR=\"$(PREFIX)/etc\"
 
-SOURCES = $(wildcard *.c)
+SOURCES = \
+	  main.c \
+	  accountid.c
+
 MODULES = $(patsubst %.c,%.so,$(SOURCES))
 
 default: $(MODULES)
