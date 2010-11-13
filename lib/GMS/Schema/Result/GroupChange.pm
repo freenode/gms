@@ -49,21 +49,21 @@ __PACKAGE__->table("group_changes");
 =head2 change_type
 
   data_type: 'enum'
-  extra: {list => ["create","request","approve","admin"],type_name => "change_type"}
+  extra: {custom_type_name => "change_type",list => ["create","request","approve","admin"]}
   is_nullable: 0
   size: 4
 
 =head2 group_type
 
   data_type: 'enum'
-  extra: {list => ["informal","corporation","education","government","nfp","internal"],type_name => "group_type"}
-  is_nullable: 1
+  extra: {custom_type_name => "group_type",list => ["informal","corporation","education","government","nfp","internal"]}
+  is_nullable: 0
   size: 4
 
 =head2 url
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 64
 
 =head2 address
@@ -75,8 +75,8 @@ __PACKAGE__->table("group_changes");
 =head2 status
 
   data_type: 'enum'
-  extra: {list => ["submitted","verified","active","deleted"],type_name => "group_status"}
-  is_nullable: 1
+  extra: {custom_type_name => "group_status",list => ["submitted","verified","active","deleted"]}
+  is_nullable: 0
   size: 4
 
 =cut
@@ -104,8 +104,8 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
+          custom_type_name => "change_type",
           list => ["create", "request", "approve", "admin"],
-          type_name => "change_type",
         },
     is_nullable => 0,
     size => 4,
@@ -114,6 +114,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
+          custom_type_name => "group_type",
           list => [
                 "informal",
                 "corporation",
@@ -122,23 +123,22 @@ __PACKAGE__->add_columns(
                 "nfp",
                 "internal",
               ],
-          type_name => "group_type",
         },
-    is_nullable => 1,
+    is_nullable => 0,
     size => 4,
   },
   "url",
-  { data_type => "varchar", is_nullable => 1, size => 64 },
+  { data_type => "varchar", is_nullable => 0, size => 64 },
   "address",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "status",
   {
     data_type => "enum",
     extra => {
+          custom_type_name => "group_status",
           list => ["submitted", "verified", "active", "deleted"],
-          type_name => "group_status",
         },
-    is_nullable => 1,
+    is_nullable => 0,
     size => 4,
   },
 );
@@ -186,9 +186,24 @@ __PACKAGE__->belongs_to(
   {},
 );
 
+=head2 groups
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-08 21:02:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GOE6ji6nAfHgqqQawzIPSw
+Type: has_many
+
+Related object: L<GMS::Schema::Result::Group>
+
+=cut
+
+__PACKAGE__->has_many(
+  "groups",
+  "GMS::Schema::Result::Group",
+  { "foreign.active_change" => "self.id" },
+  {},
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 00:23:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:73oDmLt5NMw4rzStimiJbg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

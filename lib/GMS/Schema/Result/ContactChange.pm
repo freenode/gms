@@ -67,7 +67,7 @@ __PACKAGE__->table("contact_changes");
 =head2 change_type
 
   data_type: 'enum'
-  extra: {list => ["create","request","approve","admin"],type_name => "change_type"}
+  extra: {custom_type_name => "change_type",list => ["create","request","approve","admin"]}
   is_nullable: 0
   size: 4
 
@@ -102,8 +102,8 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
+          custom_type_name => "change_type",
           list => ["create", "request", "approve", "admin"],
-          type_name => "change_type",
         },
     is_nullable => 0,
     size => 4,
@@ -159,8 +159,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-08 21:08:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5HQ/wnYOotoXRlgCzi5QPQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-11 20:35:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Au1fjIr8CaBnLs+EIObKVg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

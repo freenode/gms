@@ -57,6 +57,12 @@ __PACKAGE__->table("groups");
   data_type: 'boolean'
   is_nullable: 1
 
+=head2 active_change
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -82,6 +88,8 @@ __PACKAGE__->add_columns(
   },
   "verify_auto",
   { data_type => "boolean", is_nullable => 1 },
+  "active_change",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
@@ -149,9 +157,24 @@ __PACKAGE__->has_many(
   {},
 );
 
+=head2 active_change
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-10 21:05:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6i5eEVbhkpy5MJTXdLpMHA
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::GroupChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "active_change",
+  "GMS::Schema::Result::GroupChange",
+  { id => "active_change" },
+  { join_type => "LEFT" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 01:17:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Kl7RQH4m3F3sVeI7c+Fvhw
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
@@ -208,24 +231,31 @@ sub new {
     $change_args{status} = 'submitted';
     $change_args{change_type} = 'create';
 
-    $args->{group_changes} = [ \%change_args ];
+    $args->{group_changes} = [\%change_args];
 
     return $class->next::method($args);
 }
 
-#sub insert {
-#    my $self=shift;
-#    try {
-#        return $self->next::method(@_);
-#    }
-#    catch (DBIx::Class::Exception $e) {
-#        if ("$e" =~ /unique_group_name/) {
-#            die GMS::Exception->new("A group with that name already exists.");
-#        } else {
-#            die $e;
-#        }
-#    }
-#}
+sub insert {
+    my ($self, @args) = @_;
+    my $ret;
+
+    my $next_method = $self->next::can;
+    
+    # Can't put this in the creation args, as we don't know the active change id
+    # until the change has been created, and we can't create the change without knowing
+    # the group id.
+    $self->result_source->storage->with_deferred_fk_checks(sub {
+            print STDERR "\n\nsheep: $next_method\n\n";
+            $ret = $self->$next_method(@args);
+            print STDERR "\n\ngoats: $ret\n\n";
+            $self->active_change($self->group_changes->single);
+            $self->update;
+        });
+
+    return $ret;
+}
+
 
 sub use_automatic_verification {
     my ($name, $url) = @_;
@@ -250,6 +280,12 @@ sub simple_url {
 
     $url =~ s/\/$//;
     return $url;
+}
+
+sub status {
+    my ($self) = @_;
+
+    return $self->active_change->status;
 }
 
 sub verify {
