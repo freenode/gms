@@ -97,6 +97,7 @@ sub do_command {
 sub logout {
     my ($self) = @_;
     return unless $self->{__authcookie};
+    return unless $self->{__client};
 
     my $result = $self->{__client}->simple_request(
         'atheme.logout', $self->{__authcookie}, $self->{__username});
