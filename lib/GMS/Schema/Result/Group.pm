@@ -27,7 +27,7 @@ __PACKAGE__->table("groups");
   is_nullable: 0
   sequence: 'groups_id_seq'
 
-=head2 groupname
+=head2 group_name
 
   data_type: 'varchar'
   is_nullable: 0
@@ -60,8 +60,9 @@ __PACKAGE__->table("groups");
 =head2 active_change
 
   data_type: 'integer'
+  default_value: -1
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
@@ -73,7 +74,7 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "groups_id_seq",
   },
-  "groupname",
+  "group_name",
   { data_type => "varchar", is_nullable => 0, size => 32 },
   "verify_url",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -89,11 +90,16 @@ __PACKAGE__->add_columns(
   "verify_auto",
   { data_type => "boolean", is_nullable => 1 },
   "active_change",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  {
+    data_type      => "integer",
+    default_value  => -1,
+    is_foreign_key => 1,
+    is_nullable    => 0,
+  },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
-__PACKAGE__->add_unique_constraint("unique_name", ["groupname"]);
+__PACKAGE__->add_unique_constraint("unique_name", ["group_name"]);
 
 =head1 RELATIONS
 
@@ -169,12 +175,12 @@ __PACKAGE__->belongs_to(
   "active_change",
   "GMS::Schema::Result::GroupChange",
   { id => "active_change" },
-  { join_type => "LEFT" },
+  {},
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 01:17:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Kl7RQH4m3F3sVeI7c+Fvhw
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 23:56:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zjq2zlJ2apQumOBn3BaVVw
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
@@ -193,11 +199,11 @@ sub new {
         push @errors, "Group type must be specified";
         $valid = 0;
     }
-    if (!$args->{groupname}) {
+    if (!$args->{group_name}) {
         push @errors, "Group name must be provided";
         $valid = 0;
     }
-    if ($args->{groupname} !~ /^[A-Za-z0-9 _\.-]*$/) {
+    if ($args->{group_name} !~ /^[A-Za-z0-9 _\.-]*$/) {
         push @errors, "Group name must contain only alphanumeric characters, space, " .
                        "underscores, hyphens and dots.";
         $valid = 0;
@@ -220,35 +226,33 @@ sub new {
     $args->{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
     $args->{verify_token} = random_string("cccccccccccc");
 
-    my %change_arg_names = (
-        grouptype => 'group_type',
-        url => 'url',
-        address => 'address',
-        account => 'changed_by'
+    my @change_arg_names = (
+        'group_type',
+        'url',
+        'address',
     );
     my %change_args;
-    @change_args{values %change_arg_names} = delete @{$args}{keys %change_arg_names};
+    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
     $change_args{status} = 'submitted';
     $change_args{change_type} = 'create';
+    $change_args{changed_by} = delete $args->{account};
 
-    $args->{group_changes} = [\%change_args];
+    $args->{group_changes} = [ \%change_args ];
 
     return $class->next::method($args);
 }
 
 sub insert {
-    my ($self, @args) = @_;
+    my ($self) = @_;
     my $ret;
 
     my $next_method = $self->next::can;
-    
+
     # Can't put this in the creation args, as we don't know the active change id
     # until the change has been created, and we can't create the change without knowing
     # the group id.
     $self->result_source->storage->with_deferred_fk_checks(sub {
-            print STDERR "\n\nsheep: $next_method\n\n";
-            $ret = $self->$next_method(@args);
-            print STDERR "\n\ngoats: $ret\n\n";
+            $ret = $self->$next_method();
             $self->active_change($self->group_changes->single);
             $self->update;
         });

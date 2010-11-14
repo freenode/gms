@@ -49,19 +49,19 @@ __PACKAGE__->table("contact_changes");
 =head2 name
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 255
 
 =head2 address
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 email
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 255
 
 =head2 change_type
@@ -93,11 +93,11 @@ __PACKAGE__->add_columns(
   "changed_by",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "name",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "address",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "email",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "change_type",
   {
     data_type => "enum",
@@ -155,12 +155,27 @@ __PACKAGE__->belongs_to(
   "address",
   "GMS::Schema::Result::Address",
   { id => "address" },
-  { join_type => "LEFT" },
+  {},
+);
+
+=head2 contacts
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::Contact>
+
+=cut
+
+__PACKAGE__->has_many(
+  "contacts",
+  "GMS::Schema::Result::Contact",
+  { "foreign.active_change" => "self.id" },
+  {},
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-11 20:35:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Au1fjIr8CaBnLs+EIObKVg
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 23:18:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bOeXH58isq9YJ1LbgH5NMA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

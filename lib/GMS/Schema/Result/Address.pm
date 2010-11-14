@@ -121,21 +121,6 @@ __PACKAGE__->has_many(
   {},
 );
 
-=head2 contacts
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::Contact>
-
-=cut
-
-__PACKAGE__->has_many(
-  "contacts",
-  "GMS::Schema::Result::Contact",
-  { "foreign.address_id" => "self.id" },
-  {},
-);
-
 =head2 group_changes
 
 Type: has_many
@@ -152,8 +137,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-08 21:08:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QGdJoy0HpRSJYBhQuSokLQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 23:18:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WpzJeXgVu0QiP6VaHiaTOg
 
 sub new {
     my $class = shift;

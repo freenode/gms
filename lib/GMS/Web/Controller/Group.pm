@@ -92,8 +92,8 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
             }
 
             $group = $group_rs->create({
-                    groupname => $p->{group_name},
-                    grouptype => $p->{group_type},
+                    group_name => $p->{group_name},
+                    group_type => $p->{group_type},
                     url => $p->{group_url},
                     address => $address,
                     account => $c->user->account,
@@ -117,7 +117,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 to => $account->contact->email,
                 bcc => $c->config->{email}->{admin_address},
                 from => $c->config->{email}->{from_address},
-                subject => "Group Registration for " . $group->groupname,
+                subject => "Group Registration for " . $group->group_name,
                 template => 'new_group.tt',
             };
 

@@ -72,7 +72,7 @@ sub update :Path('update') :Args(0) {
                 account_id => $account->id,
                 name => $params->{user_name},
                 email => $params->{user_email},
-                address_id => $address->id
+                address => $address->id
             });
         });
     }
