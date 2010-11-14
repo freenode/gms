@@ -1,4 +1,4 @@
-Your group [% group.groupname %] has been registered.
+Your group [% group.group_name %] has been registered.
 
 To verify your association with the project, please create a file at
 [% group.verify_url %] containing the token '[% group.verify_token %]'.
@@ -21,7 +21,7 @@ Alternate:          [% contact.address.phone2 %]
 
 Group details:
 
-Group Name:         [% group.groupname %]
+Group Name:         [% group.group_name %]
 Group Type:         [% group.grouptype %]
 Group URL:          [% group.url %]
 [% IF group.address -%]

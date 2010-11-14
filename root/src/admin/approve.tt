@@ -15,7 +15,7 @@
 [% FOREACH group IN to_approve -%]
   <tr>
     <td>
-      <a href="[% c.uri_for("/admin/${group.id}/view") %]">[% group.groupname | html %]</a>
+      <a href="[% c.uri_for("/admin/${group.id}/view") %]">[% group.group_name | html %]</a>
     </td>
     <td><input type="radio" name="action_[% group.id %]" value="approve" /></td>
     <td><input type="radio" name="action_[% group.id %]" value="reject" /></td>
@@ -32,7 +32,7 @@
 </tr>
 [% FOREACH group IN to_verify -%]
   <tr>
-    <td><a href="[% c.uri_for("/admin/${group.id}/view") %]">[% group.groupname | html %]</a></td>
+    <td><a href="[% c.uri_for("/admin/${group.id}/view") %]">[% group.group_name | html %]</a></td>
     <td><input type="radio" name="action_[% group.id %]" value="approve" /></td>
     <td><input type="radio" name="action_[% group.id %]" value="reject" /></td>
     <td><input type="radio" name="action_[% group.id %]" value="verify" /></td>

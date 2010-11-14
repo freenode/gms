@@ -1,6 +1,6 @@
 [% META title = 'Group View' %]
 
-<h2>[% group.groupname %]</h2>
+<h2>[% group.group_name %]</h2>
 
 <table>
 <tr> <td>Type</td>              <td>[% group.grouptype %]</td> </tr>

@@ -260,6 +260,25 @@ sub insert {
     return $ret;
 }
 
+sub change {
+    my ($self, $account, $change_type, $args) = @_;
+
+    my $active_change = $self->active_change;
+
+    my %change_args = (
+        changed_by => $account,
+        change_type => $change_type,
+        group_type => $args->{group_type} || $active_change->group_type,
+        url => $args->{url} || $active_change->url,
+        address => $args->{address} || $active_change->address,
+        status => $args->{status} || $active_change->status
+    );
+
+    my $ret = $self->active_change($self->add_to_group_changes(\%change_args));
+    $self->update;
+    return $ret;
+}
+
 
 sub use_automatic_verification {
     my ($name, $url) = @_;
@@ -294,28 +313,28 @@ sub status {
 
 sub verify {
     my ($self, $account) = @_;
-    if ($self->status ne 'auto_pending' && $self->status ne 'manual_pending') {
+    if ($self->status ne 'submitted') {
         die GMS::Exception->new("Can't verify a group that isn't pending verification");
     }
-    $self->add_to_group_changes( { changed_by => $account, change_type => 'admin', status => 'verified' } );
+    $self->change( $account, 'admin', { status => 'verified' } );
     $self->update;
 }
 
 sub approve {
     my ($self, $account) = @_;
-    if ($self->status ne 'verified' && $self->status ne 'manual_pending' && $self->status ne 'auto_pending') {
+    if ($self->status ne 'verified' && $self->status ne 'submitted') {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
             . "pending verification");
     }
-    $self->add_to_group_changes( { changed_by => $account, change_type => 'admin', status => 'active' } );
+    $self->change( $account, 'admin', { status => 'active' } );
 }
 
 sub reject {
     my ($self, $account) = @_;
-    if ($self->status ne 'verified' && $self->status ne 'manual_pending' && $self->status ne 'auto_pending') {
+    if ($self->status ne 'verified' && $self->status ne 'submitted') {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
-    $self->add_to_group_changes( { changed_by => $account, change_type => 'admin', status => 'deleted' } );
+    $self->change( $account, 'admin', { status => 'deleted' } );
 }
 
 

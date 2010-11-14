@@ -1,6 +1,6 @@
 [% META title = 'Group Successfully Added' -%]
 
-<p>The group [% group.groupname %] has been successfully added.</p>
+<p>The group [% group.group_name %] has been successfully added.</p>
 
 <p>To verify your association with the project, please create a file
 at <a href="[% group.verify_url %]">[% group.verify_url %]</a>
