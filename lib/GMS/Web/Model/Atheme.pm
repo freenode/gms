@@ -7,8 +7,13 @@ use base 'Catalyst::Model';
 
 use RPC::Atheme::Session;
 
-sub new {
-    my $self = shift->next::method(@_);
+sub start_session {
+    my ($self) = @_;
+
+    if ($self->{_session}) {
+        $self->{_session}->logout;
+        undef $self->{_session};
+    }
 
     my $session = RPC::Atheme::Session->new(
         $self->{atheme_host}, $self->{atheme_port}
@@ -20,12 +25,15 @@ sub new {
 
     $self->{_session} = $session;
 
-    return $self;
+    return $session;
 }
 
 sub session {
     my ($self) = @_;
-    return $self->{_session};
+    if ($self->{_session}) {
+        return $self->{_session};
+    }
+    return $self->start_session;
 }
 
 1;

@@ -4,19 +4,21 @@ use strict;
 use warnings;
 use Config::JFDI;
 use Dir::Self;
-use vars qw($dbstring $dbuser $dbpass
+use vars qw($dbstring $dbuser $dbpass $dbconnectinfo
             $atheme_host $atheme_port $service
             $atheme_master_login $atheme_master_pass);
 
 my $config_loader = Config::JFDI->new(
 	name => "gms_web",
-	path => __DIR__ . "/../..",
+	path => $ENV{GMS_WEB_CONFIG_PATH} || __DIR__ . "/../..",
 );
 my $config = $config_loader->get;
 
 $dbstring = $config->{"Model::DB"}{connect_info}{dsn};
 $dbuser = $config->{"Model::DB"}{connect_info}{user};
 $dbpass = $config->{"Model::DB"}{connect_info}{password};
+$dbconnectinfo = $config->{"Model::DB"}{connect_info};
+
 $atheme_host = $config->{"Model::Atheme"}{atheme_host};
 $atheme_port = $config->{"Model::Atheme"}{atheme_port};
 $service = 'GroupServ';

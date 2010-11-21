@@ -1,0 +1,10 @@
+{
+    "rules": {
+        "Group": {
+            "fetch": [ {
+                "rel": "group_changes",
+                "quantity": "all"
+            } ]
+        }
+    }
+}

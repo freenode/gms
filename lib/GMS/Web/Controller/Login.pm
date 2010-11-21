@@ -31,7 +31,7 @@ sub index :Path :Args(0) {
 
     if ($username && $password) {
         if ($c->authenticate( { username => $username, password => $password } )) {
-            $c->flash->{status_msg} = "You have successfully logged in as $username";
+            $c->flash->{status_msg} = "You are now logged in as $username";
             $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/'));
             delete $c->session->{redirect_to};
 

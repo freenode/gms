@@ -37,5 +37,24 @@ sub connection {
     return $rv;
 }
 
+=head1 do_connect
+
+Connects to the database specified in the active GMS::Web config files.
+
+=cut
+
+use GMS::Config;
+
+sub do_connect {
+    my $self = shift;
+
+    $self->connect(
+        $GMS::Config::dbstring,
+        $GMS::Config::dbuser,
+        $GMS::Config::dbpass,
+        $GMS::Config::dbconnectinfo);
+}
+
+
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

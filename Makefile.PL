@@ -22,6 +22,7 @@ requires 'Config::General'; # This should reflect the config file format you've 
 requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class' => '0.08124';
+requires 'DBIx::Class::Fixtures';
 requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
