@@ -12,15 +12,15 @@ my ($accountname, @roles_to_add) = @ARGV;
 
 die "Usage: $0 <account name> <roles...>" if ! $accountname;
 
-my $db = GMS::Schema->connect($GMS::Config::dbstring,
-    $GMS::Config::dbuser, $GMS::Config::dbpass);
+my $atheme_config = GMS::Config->atheme;
+my $db = GMS::Schema->do_connect;
 
-my $session = RPC::Atheme::Session->new($GMS::Config::atheme_host,
-                                               $GMS::Config::atheme_port);
-$session->login($GMS::Config::atheme_master_login, $GMS::Config::atheme_master_pass)
+my $session = RPC::Atheme::Session->new($atheme_config->{hostname},
+                                        $atheme_config->{port});
+$session->login($atheme_config->{master_login}, $atheme_config->{master_password})
     or die "Couldn't log in to atheme";
 
-my $accountid = $session->command($GMS::Config::service, 'accountid', $accountname);
+my $accountid = $session->command($atheme_config->{service}, 'accountid', $accountname);
 my $account = $db->resultset('Account')->find({ id => $accountid });
 
 print "Found account ID ", $account->id, ", named ", $account->accountname, "\n";

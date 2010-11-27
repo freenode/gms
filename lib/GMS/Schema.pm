@@ -48,11 +48,13 @@ use GMS::Config;
 sub do_connect {
     my $self = shift;
 
+    my $connectinfo = GMS::Config->database;
+
     $self->connect(
-        $GMS::Config::dbstring,
-        $GMS::Config::dbuser,
-        $GMS::Config::dbpass,
-        $GMS::Config::dbconnectinfo);
+        $connectinfo->{dsn},
+        $connectinfo->{user},
+        $connectinfo->{password},
+        $connectinfo);
 }
 
 

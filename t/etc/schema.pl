@@ -3,7 +3,6 @@
 
 {
     schema_class => 'GMS::Schema',
-    #connect_info => $GMS::Config::dbstring,
     resultsets => [
         'Account', 'Contact', 'GroupContact', 'Group'
     ],

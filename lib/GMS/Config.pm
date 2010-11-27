@@ -4,25 +4,59 @@ use strict;
 use warnings;
 use Config::JFDI;
 use Dir::Self;
-use vars qw($dbstring $dbuser $dbpass $dbconnectinfo
-            $atheme_host $atheme_port $service
-            $atheme_master_login $atheme_master_pass);
 
-my $config_loader = Config::JFDI->new(
-	name => "gms_web",
-	path => $ENV{GMS_WEB_CONFIG_PATH} || __DIR__ . "/../..",
-);
-my $config = $config_loader->get;
+my $config;
 
-$dbstring = $config->{"Model::DB"}{connect_info}{dsn};
-$dbuser = $config->{"Model::DB"}{connect_info}{user};
-$dbpass = $config->{"Model::DB"}{connect_info}{password};
-$dbconnectinfo = $config->{"Model::DB"}{connect_info};
+=head1 NAME
 
-$atheme_host = $config->{"Model::Atheme"}{atheme_host};
-$atheme_port = $config->{"Model::Atheme"}{atheme_port};
-$service = 'GroupServ';
-$atheme_master_login = $config->{"Model::Atheme"}{master_account};
-$atheme_master_pass = $config->{"Model::Atheme"}{master_password};
+GMS::Config
+
+=head1 DESCRIPTION
+
+GMS::Config provides an interface to GMS configuration for non-Catalyst code
+that cannot simply use C<$c->config>. Uses L<Config::JFDI>, so settings such as
+C<GMS_WEB_CONFIG_LOCAL_SUFFIX> are respected.
+
+=head1 METHODS
+
+=head2 load_config
+
+Loads the relevant configuration files. Called internally when required -- you
+shouldn't need to call this directly.
+
+=cut
+
+sub load_config {
+    my $config_loader = Config::JFDI->new(
+            name => "gms_web",
+            path => $ENV{GMS_WEB_CONFIG_PATH} || __DIR__ . "/../..",
+    );
+    $config = $config_loader->get;
+}
+
+=head2 database
+
+Returns the database connect_info defined in the C<Model::DB> section of the
+configuration file(s).
+
+=cut
+
+sub database {
+    load_config unless $config;
+    return $config->{"Model::DB"}->{connect_info};
+}
+
+=head2 atheme
+
+Returns the Atheme connection info defined in the C<Model::Atheme> section of
+the configuration file(s).
+
+=cut
+
+sub atheme {
+    load_config unless $config;
+    return $config->{"Model::Atheme"};
+}
+
 
 1;

@@ -7,12 +7,10 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 
 use GMS::Schema;
-use GMS::Config;
 
 use DBIx::Class::Fixtures;
 
-my $db = GMS::Schema->connect($GMS::Config::dbstring,
-    $GMS::Config::dbuser, $GMS::Config::dbpass);
+my $db = GMS::Schema->do_connect;
 
 my $config_dir = "$FindBin::Bin/../t/etc";
 

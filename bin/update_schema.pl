@@ -10,6 +10,8 @@ use GMS::Config;
 
 use DBIx::Class::Schema::Loader qw/make_schema_at/;
 
+my $db_config = GMS::Config->database;
+
 make_schema_at(
     'GMS::Schema',
     {
@@ -18,6 +20,6 @@ make_schema_at(
         components => 'InflateColumn::DateTime',
     },
     [
-        $GMS::Config::dbstring, $GMS::Config::dbuser, $GMS::Config::dbpass
+        $db_config->{dsn}, $db_config->{user}, $db_config->{password}
     ],
 );

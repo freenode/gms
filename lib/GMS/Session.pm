@@ -36,24 +36,25 @@ sub new {
         _control_session => $controlsession,
     };
 
+    my $config = $GMS::Config->atheme;
+
     $self->{_source} = "GMS:$user";
     $self->{_source} .= "(" . $config{source} . ")" if $config{source};
 
     $self->{_rpcsession} = RPC::Atheme::Session->new(
-        $GMS::Config::atheme_host,
-        $GMS::Config::atheme_port
+        $config->{hostname},
+        $config->{port}
     );
 
     $self->{_rpcsession}->login($user, $pass, $self->{_source});
 
-    $self->{_db} = GMS::Schema->connect($GMS::Config::dbstring,
-        $GMS::Config::dbuser, $GMS::Config::dbpass);
+    $self->{_db} = GMS::Schema->do_connect;
     my $account_rs = $self->{_db}->resultset('Account');
 
     my $account = undef;
 
     try {
-        my $accountid = $self->{_control_session}->command($GMS::Config::service, 'accountid', $user);
+        my $accountid = $self->{_control_session}->command($config->{service}, 'accountid', $user);
         $account = $account_rs->find({ id => $accountid });
     }
     catch (RPC::Atheme::Error $e) {
@@ -66,7 +67,7 @@ sub new {
                 my $result = $account_rs->create({
                         accountname => $user,
                     });
-                $self->{_control_session}->command($GMS::Config::service, 'accountid',
+                $self->{_control_session}->command($config->{service}, 'accountid',
                     $user, $result->id);
             });
     };

@@ -16,7 +16,7 @@ sub start_session {
     }
 
     my $session = RPC::Atheme::Session->new(
-        $self->{atheme_host}, $self->{atheme_port}
+        $self->{hostname}, $self->{port}
     );
 
     $session->login(

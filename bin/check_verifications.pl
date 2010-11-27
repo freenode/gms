@@ -4,7 +4,6 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 
 use GMS::Schema;
-use GMS::Config;
 
 use LWP::UserAgent;
 use HTTP::Request;
@@ -12,8 +11,7 @@ use HTTP::Request;
 my $ua = LWP::UserAgent->new;
 $ua->agent('GMS/0.1');
 
-my $db = GMS::Schema->connect($GMS::Config::dbstring,
-    $GMS::Config::dbuser, $GMS::Config::dbpass);
+my $db = GMS::Schema->do_connect;
 
 my $rs = $db->resultset('Group');
 
