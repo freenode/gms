@@ -5,23 +5,10 @@ use warnings;
 use Test::More;
 
 use lib qw(t/lib);
+use GMSTest::Common;
+use GMSTest::Database;
 
-BEGIN {
-    $ENV{GMS_WEB_CONFIG_LOCAL_SUFFIX} = 'tests';
-    $ENV{GMS_WEB_CONFIG_PATH} = '.';
-}
-
-use GMS::Schema;
-use DBIx::Class::Fixtures;
-
-my $schema = GMS::Schema->do_connect();
-$schema->deploy({ add_drop_table => 1 });
-my $fixtures = DBIx::Class::Fixtures->new({ config_dir => 't/etc' });
-$fixtures->populate({
-    directory => 't/etc/basic_db',
-    schema => $schema,
-    no_deploy => 1
-});
+need_database 'basic_db';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
