@@ -19,6 +19,14 @@
         {
             "class": "GroupChange",
             "quantity": "all"
+        },
+        {
+            "class": "Role",
+            "quantity": "all"
+        },
+        {
+            "class": "UserRole",
+            "quantity": "all"
         }
     ],
     "includes": [

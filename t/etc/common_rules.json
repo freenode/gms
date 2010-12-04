@@ -5,6 +5,12 @@
                 "rel": "group_changes",
                 "quantity": "all"
             } ]
+        },
+        "Contact": {
+            "fetch": [ {
+                "rel": "contact_changes",
+                "quantity": "all"
+            } ]
         }
     }
 }
