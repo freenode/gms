@@ -61,6 +61,16 @@ __PACKAGE__->belongs_to("group", "GMS::Schema::Result::Group", { id => "group_id
 
 use TryCatch;
 
+=head1 METHODS
+
+=head2 insert
+
+As for insert on any other DBIx::Class result class, but also does exception
+translation. A GMS::Exception object will be thrown, instead of a generic DBI
+exception, if a duplicate namespace is inserted.
+
+=cut
+
 sub insert {
     my $self = shift;
     try {

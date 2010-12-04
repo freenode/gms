@@ -2,6 +2,24 @@ package GMS::Exception;
 
 use overload '""' => \&message;
 
+=head1 NAME
+
+GMS::Exception
+
+=head1 DESCRIPTION
+
+Base class for exceptions thrown in GMS.
+
+=head1 METHODS
+
+=head2 new
+
+    GMS::Exception->new("some message here");
+
+Constructor. Takes a message argument.
+
+=cut
+
 sub new {
     my ($class, $message) = @_;
     $class = ref $class || $class;
@@ -10,6 +28,12 @@ sub new {
 
     bless $self, $class;
 }
+
+=head2 message
+
+Returns the message given during construction.
+
+=cut
 
 sub message {
     my ($self) = @_;

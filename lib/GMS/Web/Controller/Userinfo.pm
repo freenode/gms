@@ -6,6 +6,24 @@ use parent 'Catalyst::Controller';
 
 use TryCatch;
 
+=head1 NAME
+
+GMS::Web::Controller::Userinfo - Controller for GMS::Web
+
+=head1 DESCRIPTION
+
+Contains the handlers to display, define and update a user's contact
+information.
+
+=head1 METHODS
+
+=head2 index
+
+Displays the user's contact information if it has been defined, or the form to
+define it if it has not.
+
+=cut
+
 sub index :Path :Args(0) {
     my ($self, $c ) = @_;
 
@@ -41,6 +59,12 @@ sub index :Path :Args(0) {
         $c->stash->{template} = 'contact/view_userinfo.tt';
     }
 }
+
+=head2 update
+
+Submit handler to define a user's contact information.
+
+=cut
 
 sub update :Path('update') :Args(0) {
     my ($self, $c) = @_;

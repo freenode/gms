@@ -8,6 +8,23 @@ use GMS::Authentication::User;
 
 use TryCatch;
 
+=head1 NAME
+
+GMS::Authentication::Credential
+
+=head1 DESCRIPTION
+
+Implements a Credential for L<Catalyst::Plugin::Authentication>, by
+authenticating against Atheme via L<GMS::Session>.
+
+=head1 METHODS
+
+=head2 new
+
+Constructor, as called by the Authentication plugin.
+
+=cut
+
 sub new {
     my ($class, $config, $app, $realm) = @_;
     $class = ref $class || $class;
@@ -20,6 +37,13 @@ sub new {
 
     bless $self, $class;
 }
+
+=head2 authenticate
+
+Authenticates a user, and returns a L<GMS::Authentication::User> if successful.
+Otherwise, return undef.
+
+=cut
 
 sub authenticate {
     my ($self, $c, $realm, $authinfo) = @_;

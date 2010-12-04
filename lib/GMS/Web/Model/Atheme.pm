@@ -7,6 +7,29 @@ use base 'Catalyst::Model';
 
 use RPC::Atheme::Session;
 
+=head1 NAME
+
+GMS::Web::Model::Atheme
+
+=head1 DESCRIPTION
+
+Catalyst model for GMS::Web which wraps around an L<RPC::Atheme::Session>.
+
+=head1 METHODS
+
+=head2 session
+
+Returns an L<RPC::Atheme::Session> logged in as the configured GMS account.
+
+=head1 INTERNAL METHODS
+
+=head2 start_session
+
+Creates a session object and logs in, then returns it. Should only be called
+internally by L</session>.
+
+=cut
+
 sub start_session {
     my ($self) = @_;
 

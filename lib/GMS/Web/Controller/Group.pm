@@ -7,6 +7,25 @@ use parent 'Catalyst::Controller';
 use TryCatch;
 use GMS::Exception;
 
+=head1 NAME
+
+GMS::Web::Controller::Group - Controller for GMS::Web
+
+=head1 DESCRIPTION
+
+This controller contains the handlers for group management pages accessible to
+group contacts.
+
+=head1 METHODS
+
+=head2 base
+
+Base method for all of the handler chains in this controller. Verifies that the
+user is logged in, and that they have contact information defined. If not, then
+redirect to the contact information form.
+
+=cut
+
 sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
@@ -17,6 +36,12 @@ sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
         $c->response->redirect($c->uri_for('/userinfo'));
     }
 }
+
+=head2 index
+
+Show a group contact a list of his active and pending groups.
+
+=cut
 
 sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c) = @_;
@@ -37,6 +62,13 @@ sub index :Chained('base') :PathPart('') :Args(0) {
     $c->stash->{template} = 'group/list.tt';
 }
 
+=head2 single_group
+
+Chained handler which selects a single group of which the current user is a
+contact. Groups for which the user is not a contact are treated as non-existent.
+
+=cut
+
 sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
@@ -49,17 +81,39 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     }
 }
 
+=head2 view
+
+Displays a group's information to one of its contacts.
+
+=cut
+
 sub view :Chained('single_group') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'group/view.tt';
 }
 
+=head2 new_form
+
+Displays the form to register a new group.
+
+=cut
+
 sub new_form :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'group/new.tt';
 }
+
+=head2 do_new
+
+Submit handler for the new group form.
+
+Using the information submitted, creates a new Address if applicable, then a
+Group, then adds the current user as the first group contact. Any channel and
+cloak namespaces claimed are also added.
+
+=cut
 
 sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     my ($self, $c) = @_;

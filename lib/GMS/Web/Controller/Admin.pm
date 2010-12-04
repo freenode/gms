@@ -7,6 +7,23 @@ use parent 'Catalyst::Controller';
 use TryCatch;
 use GMS::Exception;
 
+=head1 NAME
+
+GMS::Web::Controller::Admin - Controller for GMS::Web
+
+=head1 DESCRIPTION
+
+This controller contains handlers for the administrative pages.
+
+=head1 METHODS
+
+=head2 base
+
+Base method for all the handler chains. Verifies that the user has the 'admin'
+role, and presents an error page if not.
+
+=cut
+
 sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
@@ -15,11 +32,25 @@ sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) {
     }
 }
 
+=head2 index
+
+Administrative home page.
+
+=cut
+
 sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'admin/index.tt';
 }
+
+=head2 single_group
+
+Chained method to select a single group. Similar to
+L<GMS::Web::Controller::Group/single_group>, but searches all groups, not those
+for which the user is a contact.
+
+=cut
 
 sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
@@ -33,6 +64,12 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     }
 }
 
+=head2 approve
+
+Presents the group approval form.
+
+=cut
+
 sub approve :Chained('base') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
@@ -43,6 +80,13 @@ sub approve :Chained('base') :PathPart('approve') :Args(0) {
     $c->stash->{to_verify} = \@to_verify;
     $c->stash->{template} = 'admin/approve.tt';
 }
+
+=head2 do_approve
+
+Handler for the group approval form. Verifies, approves, or rejects those groups
+selected for it.
+
+=cut
 
 sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
     my ($self, $c) = @_;
@@ -81,6 +125,12 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
 
     $c->response->redirect($c->uri_for('approve'));
 }
+
+=head2 view
+
+Displays information about a single group.
+
+=cut
 
 sub view :Chained('single_group') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;

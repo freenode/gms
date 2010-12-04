@@ -10,6 +10,33 @@ use RPC::XML::Client;
 use RPC::Atheme;
 use RPC::Atheme::Error;
 
+=head1 NAME
+
+RPC::Atheme::Session
+
+=head1 SYNOPSIS
+
+    my $session = RPC::Atheme::Session->new("localhost", 8080);
+    $session->login($username, $password);
+    $session->command('ChanServ', 'OP', '#test', $nickname);
+    $session->logout;
+
+=head1 DESCRIPTION
+
+An Atheme XML-RPC login session.
+
+=head1 METHODS
+
+=head2 new
+
+    my $session = RPC::Atheme::Session->new("localhost", 8080);
+
+Constructor. Takes the hostname and port number of an Atheme XML-RPC server.
+This method will connect to the services daemon, but not log in or execute any
+commands. Throws L<RPC::Atheme::Error> on failure.
+
+=cut
+
 sub new {
     my ($class, $host, $port, %attrs) = @_;
 
@@ -36,6 +63,18 @@ sub DESTROY {
     }
 }
 
+=head2 login
+
+    $session->login($user, $password, $sourceinfo);
+
+Logs in using the specified username and password. The third parameter,
+C<$sourceinfo>, is an optional string to be included in the source text in
+Atheme's log system.
+
+Throws L<RPC::Atheme::Error> on failure.
+
+=cut
+
 sub login {
     my ($self, $user, $pass, $source) = @_;
 
@@ -60,6 +99,21 @@ sub login {
     return 1;
 }
 
+=head2 command
+
+    $session->command('ChanServ', 'OP', '#test', $nickname);
+
+Sends the given command to the named service. See the documentation for
+C<atheme.command> in the Atheme source distribution for invocation of specific
+commands, in particular the argument list and return values. The first two
+arguments are always the service name and command name; further arguments depend
+on the particular command being invoked. Note in particular that not all
+commands have a convenient return value when invoked via XML-RPC.
+
+Throws L<RPC::Atheme::Error> on failure.
+
+=cut
+
 sub command {
     my ($self, @args) = @_;
 
@@ -78,6 +132,12 @@ sub command {
     return $result;
 }
 
+=head2 do_command
+
+Used internally by C<command>.
+
+=cut
+
 sub do_command {
     my ($self, @args) = @_;
 
@@ -93,6 +153,12 @@ sub do_command {
     die RPC::Atheme::Error->new($result) if ref $result eq 'HASH';
     return $result;
 }
+
+=head2 logout
+
+Logs out of this session.
+
+=cut
 
 sub logout {
     my ($self) = @_;

@@ -140,6 +140,15 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 23:18:24
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WpzJeXgVu0QiP6VaHiaTOg
 
+=head1 METHODS
+
+=head2 new
+
+Constructor. Validates arguments and presents human-readable errors when this
+fails.
+
+=cut
+
 sub new {
     my $class = shift;
     my $args = shift;
@@ -179,17 +188,17 @@ sub new {
 }
 
 
-sub pretty_long {
-    my ($self) = @_;
-    my $out = "";
-    $out .= $self->address_one . "\n";
-    $out .= $self->address_two . "\n" if $self->address_two;
-    $out .= $self->city . "\n";
-    $out .= $self->state . "\n" if $self->state;
-    $out .= $self->country . "\n";
-    $out .= $self->code . "\n" if $self->code;
-    return $out;
-}
+#sub pretty_long {
+#    my ($self) = @_;
+#    my $out = "";
+#    $out .= $self->address_one . "\n";
+#    $out .= $self->address_two . "\n" if $self->address_two;
+#    $out .= $self->city . "\n";
+#    $out .= $self->state . "\n" if $self->state;
+#    $out .= $self->country . "\n";
+#    $out .= $self->code . "\n" if $self->code;
+#    return $out;
+#}
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

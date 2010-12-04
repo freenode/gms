@@ -18,6 +18,10 @@ __PACKAGE__->load_namespaces;
 
 GMS::Schema
 
+=head1 DESCRIPTION
+
+A L<DBIx::Class> schema for the GMS database.
+
 =head1 METHODS
 
 =head2 connection
@@ -37,7 +41,7 @@ sub connection {
     return $rv;
 }
 
-=head1 do_connect
+=head2 do_connect
 
 Connects to the database specified in the active GMS::Web config files.
 

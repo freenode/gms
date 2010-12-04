@@ -188,6 +188,19 @@ __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 use TryCatch;
 use String::Random qw/random_string/;
 
+=head1 METHODS
+
+=head2 new
+
+Constructor. A Group is constructed with all of the required fields from both
+Group and GroupChange, and will implicitly create a 'create' change for the
+group with its initial state.
+
+The group name, type, and URL must be specified. Address is optional. All other
+fields will be populated automatically.
+
+=cut
+
 sub new {
     my $class = shift;
     my $args = shift;
@@ -219,7 +232,6 @@ sub new {
     }
 
     if (!$valid) {
-        print STDERR "goats\n\n\n";
         die GMS::Exception::InvalidGroup->new(\@errors);
     }
 
@@ -242,6 +254,12 @@ sub new {
     return $class->next::method($args);
 }
 
+=head2 insert
+
+Overloaded to support the implicit GroupChange creation.
+
+=cut
+
 sub insert {
     my ($self) = @_;
     my $ret;
@@ -259,6 +277,15 @@ sub insert {
 
     return $ret;
 }
+
+=head2 change
+
+    $group->change($account, $changetype, \%args);
+
+Creates a related GroupChange with the modifications specified in %args.
+Unchanged fields are populated based on the group's current state.
+
+=cut
 
 sub change {
     my ($self, $account, $change_type, $args) = @_;
@@ -280,36 +307,50 @@ sub change {
 }
 
 
-sub use_automatic_verification {
-    my ($name, $url) = @_;
-    $url =~ tr/A-Z/a-z/;
-    $url =~ s!http://!!;
-    $url =~ s!www\.!!;
-    $url =~ s!\.[a-z]+/?!!;
-    $name =~ tr/A-Z/a-z/;
-    $name =~ s/\W//g;
+#sub use_automatic_verification {
+#    my ($name, $url) = @_;
+#    $url =~ tr/A-Z/a-z/;
+#    $url =~ s!http://!!;
+#    $url =~ s!www\.!!;
+#    $url =~ s!\.[a-z]+/?!!;
+#    $name =~ tr/A-Z/a-z/;
+#    $name =~ s/\W//g;
+#
+#    return $name eq $url;
+#}
+#
+#sub simple_url {
+#    my ($self) = @_;
+#    my $url = $self->url;
+#    $url =~ tr/A-Z/a-z/;
+#
+#    if ($url !~ m!^[a-z]+://!) {
+#        $url = "http://" . $url;
+#    }
+#
+#    $url =~ s/\/$//;
+#    return $url;
+#}
 
-    return $name eq $url;
-}
+=head2 status
 
-sub simple_url {
-    my ($self) = @_;
-    my $url = $self->url;
-    $url =~ tr/A-Z/a-z/;
+Returns the current status of the group, based on the active change.
 
-    if ($url !~ m!^[a-z]+://!) {
-        $url = "http://" . $url;
-    }
-
-    $url =~ s/\/$//;
-    return $url;
-}
+=cut
 
 sub status {
     my ($self) = @_;
 
     return $self->active_change->status;
 }
+
+=head2 verify
+
+    $group->verify($verifiedby);
+
+Marks the group, which must be pending verification, as verified.
+
+=cut
 
 sub verify {
     my ($self, $account) = @_;
@@ -320,6 +361,15 @@ sub verify {
     $self->update;
 }
 
+=head2 approve
+
+    $group->approve($approvedby);
+
+Marks the group, which must be pending verification or approval, as approved.
+Takes one argument, the account which approved it.
+
+=cut
+
 sub approve {
     my ($self, $account) = @_;
     if ($self->status ne 'verified' && $self->status ne 'submitted') {
@@ -328,6 +378,13 @@ sub approve {
     }
     $self->change( $account, 'admin', { status => 'active' } );
 }
+
+=head2 reject
+
+Marks the group, which must not be approved, as rejected. The only argument is
+the account rejecting it.
+
+=cut
 
 sub reject {
     my ($self, $account) = @_;

@@ -5,6 +5,55 @@ use warnings;
 
 use base 'Catalyst::Authentication::User';
 
+=head1 NAME
+
+GMS::Authentication::User
+
+=head1 DESCRIPTION
+
+Implements a User object for L<Catalyst::Plugin::Authentication>, to go with
+L<GMS::Authentication::Store>.
+
+=head1 METHODS
+
+=head2 id
+
+Returns the numeric account ID for this user.
+
+=head2 username
+
+Returns the account name, as a string.
+
+=head2 account
+
+Returns a L<GMS::Schema::Account> object for this user.
+
+=head2 roles
+
+Returns an arrayref of strings for the roles that this user has.
+
+=head2 INTERNAL METHODS
+
+=head2 new
+
+Constructor. Should only be called by L<GMS::Authentication::Credential>.
+
+=head2 supported_features
+
+Returns the list of supported features for this user object, which is 'session'
+and 'roles'.
+
+=head2 get($fieldname)
+
+Returns the value of the field specified. Valid fields are 'id' and 'name',
+which will return the values of id() and username() respectively.
+
+=head2 get_object
+
+Returns $self.
+
+=cut
+
 sub new {
     my ($class, $account) = @_;
     $class = ref $class || $class;

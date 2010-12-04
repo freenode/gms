@@ -15,13 +15,20 @@ use TryCatch;
 
 GMS::Session - Represents a GMS login session
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
 
 A Session represents a GMS login session. Identification and authentication
 are provided by Atheme via XML-RPC; authorization is provided in the GMS
 database.
+
+=head1 METHODS
+
+=head2 new
+
+    GMS::Session->new($username, $password, $controlsession);
+
+Connects to Atheme using the specified username and password, and returns a
+GMS::Session object for the login session.
 
 =cut
 
@@ -81,6 +88,13 @@ sub new {
 
     bless $self, $class;
 }
+
+=head2 account
+
+Returns a L<GMS::Schema::Result::Account> referring to the GMS account used for
+this login session.
+
+=cut
 
 sub account {
     my ($self) = @_;
