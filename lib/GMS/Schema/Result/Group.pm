@@ -208,7 +208,7 @@ sub new {
     my @errors;
     my $valid=1;
 
-    if (!$args->{grouptype}) {
+    if (!$args->{group_type}) {
         push @errors, "Group type must be specified";
         $valid = 0;
     }

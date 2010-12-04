@@ -22,7 +22,7 @@ Alternate:          [% contact.address.phone2 %]
 Group details:
 
 Group Name:         [% group.group_name %]
-Group Type:         [% group.grouptype %]
+Group Type:         [% group.group_type %]
 Group URL:          [% group.url %]
 [% IF group.address -%]
 Group Address:      [% group.address.address_one %]
