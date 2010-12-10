@@ -188,6 +188,8 @@ __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 use TryCatch;
 use String::Random qw/random_string/;
 
+use GMS::Exception;
+
 =head1 METHODS
 
 =head2 new
