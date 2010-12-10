@@ -46,6 +46,8 @@ sub need_database {
                 $dbh->selectrow_array("SELECT setval('${_}_id_seq', (SELECT max(id) FROM $_) + 1)");
             }
         }, @id_tables);
+
+    return $schema;
 }
 
 1;
