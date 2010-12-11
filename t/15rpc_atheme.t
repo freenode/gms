@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use Test::Most;
 
+use lib qw(t/lib);
+use GMSTest::Common;
 use GMS::Config;
 
 my $config = GMS::Config->atheme;
@@ -31,6 +33,8 @@ eval {
 my $error = $@;
 isa_ok $error, 'RPC::Atheme::Error';
 is $error->code, RPC::Atheme::Error::nosuchtarget();
+ok !$error->succeeded;
+like $error->description, qr/is not registered/;
 
 # Later, just use the stringify/regex match.
 throws_ok {
