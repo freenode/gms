@@ -26,7 +26,7 @@ like $response, qr/Information on (.*) \(account \1\)/;
 # First, explicitly grab the exception object to make sure it's what we expect.
 eval {
     $response = $session->command('NickServ', 'info', '#notanickname');
-    fail("Should have thrown");
+    fail("NickServ info on invalid nickname should have thrown");
 };
 my $error = $@;
 isa_ok $error, 'RPC::Atheme::Error';
