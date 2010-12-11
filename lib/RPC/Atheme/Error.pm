@@ -7,7 +7,8 @@ use warnings;
 
 use subs qw/new code describe stringify succeeded/;
 
-use overload '""' => \&stringify, 'bool' => \&succeeded;
+#use overload '""' => \&stringify, 'bool' => \&succeeded;
+use overload '""' => \&stringify;
 
 =head1 NAME
 
@@ -19,8 +20,7 @@ This is the error class thrown by L<RPC::Atheme::Session> when an error occurs.
 It also contains symbolic names for the Atheme fault codes.
 
 Stringifying an error object will produce a meaningful human-readable
-description of the problem. Conversion to boolean will render true if the fault
-code is success.
+description of the problem.
 
 =head1 FAULT CODES
 
