@@ -175,7 +175,7 @@ sub new {
         push @errors, "Telephone number contains non-digit characters";
         $valid = 0;
     }
-    if ($args->{phone2} =~ /[^0-9 \+-]/) {
+    if ($args->{phone2} && $args->{phone2} =~ /[^0-9 \+-]/) {
         push @errors, "Alternate telephone number contains non-digit characters";
         $valid = 0;
     }

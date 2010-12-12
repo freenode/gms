@@ -218,7 +218,7 @@ sub new {
         push @errors, "Group name must be provided";
         $valid = 0;
     }
-    if ($args->{group_name} !~ /^[A-Za-z0-9 _\.-]*$/) {
+    elsif ($args->{group_name} !~ /^[A-Za-z0-9 _\.-]*$/) {
         push @errors, "Group name must contain only alphanumeric characters, space, " .
                        "underscores, hyphens and dots.";
         $valid = 0;
@@ -227,7 +227,7 @@ sub new {
         push @errors, "Group URL must be provided";
         $valid = 0;
     }
-    if ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
+    elsif ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
         push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
                        "0-9, :_+-/)";
         $valid = 0;
