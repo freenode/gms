@@ -156,24 +156,9 @@ __PACKAGE__->belongs_to(
   {},
 );
 
-=head2 contacts
 
-Type: has_many
-
-Related object: L<GMS::Schema::Result::Contact>
-
-=cut
-
-__PACKAGE__->has_many(
-  "contacts",
-  "GMS::Schema::Result::Contact",
-  { "foreign.active_change" => "self.id" },
-  {},
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-18 21:07:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v17+S1XKHhJ8JVZs20m4XA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-19 21:17:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UpsPsoQfnQ15eNHAdzaTVg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
