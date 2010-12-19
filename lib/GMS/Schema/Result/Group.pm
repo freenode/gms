@@ -240,6 +240,7 @@ sub new {
 
     $args->{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
     $args->{verify_token} = random_string("cccccccccccc");
+    $args->{verify_auto} = _use_automatic_verification($args->{group_name}, $args->{url});
 
     my @change_arg_names = (
         'group_type',
@@ -309,19 +310,6 @@ sub change {
     return $ret;
 }
 
-
-#sub use_automatic_verification {
-#    my ($name, $url) = @_;
-#    $url =~ tr/A-Z/a-z/;
-#    $url =~ s!http://!!;
-#    $url =~ s!www\.!!;
-#    $url =~ s!\.[a-z]+/?!!;
-#    $name =~ tr/A-Z/a-z/;
-#    $name =~ s/\W//g;
-#
-#    return $name eq $url;
-#}
-#
 #sub simple_url {
 #    my ($self) = @_;
 #    my $url = $self->url;
@@ -397,6 +385,27 @@ sub reject {
     $self->change( $account, 'admin', { status => 'deleted' } );
 }
 
+
+=head1 INTERNAL METHODS
+
+=head2 _use_automatic_verification
+
+Determines whether or not a group with the given name and URL will use
+automatic verification.
+
+=cut
+
+sub _use_automatic_verification {
+    my ($name, $url) = @_;
+    $url =~ tr/A-Z/a-z/;
+    $url =~ s!http://!!;
+    $url =~ s!www\.!!;
+    $url =~ s!\.[a-z]+/?!!;
+    $name =~ tr/A-Z/a-z/;
+    $name =~ s/\W//g;
+
+    return ($name eq $url) ? 1 : 0;
+}
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
