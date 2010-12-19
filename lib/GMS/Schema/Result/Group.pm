@@ -305,7 +305,8 @@ sub change {
         status => $args->{status} || $active_change->status
     );
 
-    my $ret = $self->active_change($self->add_to_group_changes(\%change_args));
+    my $ret = $self->add_to_group_changes(\%change_args);
+    $self->active_change($ret) if $change_type ne 'request';
     $self->update;
     return $ret;
 }
@@ -333,6 +334,18 @@ sub status {
     my ($self) = @_;
 
     return $self->active_change->status;
+}
+
+=head2 url
+
+Returns the current URL of the group, based on the active change.
+
+=cut
+
+sub url {
+    my ($self) = @_;
+
+    return $self->active_change->url;
 }
 
 =head2 verify
@@ -383,6 +396,31 @@ sub reject {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
     $self->change( $account, 'admin', { status => 'deleted' } );
+}
+
+=head2 approve_change
+
+    $group->approve_change($change, $approving_account);
+
+If the given change is a request, then create and return a new change identical
+to it except for the type, which will be 'approve', and the user, which must be
+provided.  The effect is to approve the given request.
+
+If the given change isn't a request, calling this is an error.
+
+=cut
+
+sub approve_change {
+    my ($self, $change, $account) = @_;
+
+    die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
+        unless $change->change_type eq 'request';
+
+    die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
+
+    my $ret = $self->active_change($change->copy({ change_type => 'approve', changed_by => $account}));
+    $self->update;
+    return $ret;
 }
 
 
