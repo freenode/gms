@@ -69,7 +69,6 @@ __PACKAGE__->table("contact_changes");
   data_type: 'enum'
   extra: {custom_type_name => "change_type",list => ["create","request","approve","admin"]}
   is_nullable: 0
-  size: 4
 
 =cut
 
@@ -106,7 +105,6 @@ __PACKAGE__->add_columns(
           list => ["create", "request", "approve", "admin"],
         },
     is_nullable => 0,
-    size => 4,
   },
 );
 __PACKAGE__->set_primary_key("id");
@@ -174,8 +172,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 23:18:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bOeXH58isq9YJ1LbgH5NMA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-18 21:07:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v17+S1XKHhJ8JVZs20m4XA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

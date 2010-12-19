@@ -55,7 +55,7 @@ __PACKAGE__->table("groups");
 =head2 verify_auto
 
   data_type: 'boolean'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 active_change
 
@@ -88,7 +88,7 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "verify_auto",
-  { data_type => "boolean", is_nullable => 1 },
+  { data_type => "boolean", is_nullable => 0 },
   "active_change",
   {
     data_type      => "integer",
@@ -100,6 +100,7 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
 __PACKAGE__->add_unique_constraint("unique_name", ["group_name"]);
+__PACKAGE__->add_unique_constraint("unique_active_change", ["active_change"]);
 
 =head1 RELATIONS
 
@@ -179,8 +180,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 23:56:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zjq2zlJ2apQumOBn3BaVVw
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-18 20:58:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bMqkMm03pWoju04C7FJkSg
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');

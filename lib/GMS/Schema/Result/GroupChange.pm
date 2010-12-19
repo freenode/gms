@@ -51,14 +51,12 @@ __PACKAGE__->table("group_changes");
   data_type: 'enum'
   extra: {custom_type_name => "change_type",list => ["create","request","approve","admin"]}
   is_nullable: 0
-  size: 4
 
 =head2 group_type
 
   data_type: 'enum'
   extra: {custom_type_name => "group_type",list => ["informal","corporation","education","government","nfp","internal"]}
   is_nullable: 0
-  size: 4
 
 =head2 url
 
@@ -77,7 +75,6 @@ __PACKAGE__->table("group_changes");
   data_type: 'enum'
   extra: {custom_type_name => "group_status",list => ["submitted","verified","active","deleted"]}
   is_nullable: 0
-  size: 4
 
 =cut
 
@@ -108,7 +105,6 @@ __PACKAGE__->add_columns(
           list => ["create", "request", "approve", "admin"],
         },
     is_nullable => 0,
-    size => 4,
   },
   "group_type",
   {
@@ -125,7 +121,6 @@ __PACKAGE__->add_columns(
               ],
         },
     is_nullable => 0,
-    size => 4,
   },
   "url",
   { data_type => "varchar", is_nullable => 0, size => 64 },
@@ -139,7 +134,6 @@ __PACKAGE__->add_columns(
           list => ["submitted", "verified", "active", "deleted"],
         },
     is_nullable => 0,
-    size => 4,
   },
 );
 __PACKAGE__->set_primary_key("id");
@@ -186,25 +180,9 @@ __PACKAGE__->belongs_to(
   {},
 );
 
-=head2 groups
 
-Type: has_many
-
-Related object: L<GMS::Schema::Result::Group>
-
-=cut
-
-__PACKAGE__->has_many(
-  "groups",
-  "GMS::Schema::Result::Group",
-  { "foreign.active_change" => "self.id" },
-  {},
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-13 00:23:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:73oDmLt5NMw4rzStimiJbg
-
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-19 00:29:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9wFHtrW8iTQeF6DAyMehyg
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
