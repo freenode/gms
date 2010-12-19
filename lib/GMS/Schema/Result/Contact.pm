@@ -212,5 +212,62 @@ sub address {
     return $self->active_change->address;
 }
 
+=head2 change
+
+    $contact->change($account, $changetype, \%args);
+
+Creates a related ContactChange with the modifications specified in %args.
+Unchanged fields are populated from the contact's current state.
+
+$account and $changetype are the account making this change and the type of
+change (create, request, approve or admin).
+
+=cut
+
+sub change {
+    my ($self, $account, $change_type, $args) = @_;
+
+    my $active_change = $self->active_change;
+
+    my %change_args = (
+        changed_by => $account,
+        change_type => $change_type,
+        name => $args->{name} || $active_change->name,
+        address => $args->{address} || $active_change->address,
+        email => $args->{email} || $active_change->email
+    );
+
+    my $ret = $self->add_to_contact_changes(\%change_args);
+    $self->active_change($ret) if $change_type ne 'request';
+    $self->update;
+    return $ret;
+}
+
+=head2 approve_change
+
+    $contact->approve_change($change, $approving_account);
+
+If the given change is a request, then create and return a new change identical
+to it except for the type, which will be 'approve', and the user, which must be
+provided.  The effect is to approve the given request.
+
+If the given change isn't a request, calling this is an error.
+
+=cut
+
+sub approve_change {
+    my ($self, $change, $account) = @_;
+
+    die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
+        unless $change->change_type eq 'request';
+
+    die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
+
+    my $ret = $self->active_change($change->copy({ change_type => 'approve', changed_by => $account}));
+    $self->update;
+    return $ret;
+}
+
+
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
