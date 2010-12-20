@@ -11,6 +11,7 @@ use GMS::Config;
 my $config = GMS::Config->atheme;
 my ($host, $port, $user, $pass) = @{$config}{qw/hostname port master_account master_password/};
 
+plan skip_all => "Set GMS_TEST_RPC_ATHEME in the environment to run RPC::Atheme tests" unless $ENV{GMS_TEST_RPC_ATHEME};
 plan skip_all => "Configure Model::Atheme in test config file to run RPC::Atheme tests" unless ($host && $port);
 
 use_ok 'RPC::Atheme::Session';
