@@ -43,7 +43,7 @@ sub new {
         _control_session => $controlsession,
     };
 
-    my $config = $GMS::Config->atheme;
+    my $config = GMS::Config->atheme;
 
     $self->{_source} = "GMS:$user";
     $self->{_source} .= "(" . $config{source} . ")" if $config{source};
