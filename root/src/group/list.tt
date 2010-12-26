@@ -4,7 +4,9 @@
 
 <ul>
 [% FOREACH group IN groups -%]
-  <li>[% group.group_name %]</li>
+  <li>
+    <a href="[% c.uri_for("/group/${group.id}/view") %]">[% group.group_name | html %]</a>
+  </li>
 [% END %]
 </ul>
 
