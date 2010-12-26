@@ -57,7 +57,8 @@ sub authenticate {
         );
 
         return GMS::Authentication::User->new($session->account);
-    } catch {
+    } catch (RPC::Atheme::Error $e) {
+        $c->log->debug("Couldn't log in to atheme as user " . $authinfo->{username} . ": $e");
         return undef;
     }
 }
