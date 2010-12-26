@@ -8,7 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 =head1 NAME
 
@@ -67,8 +67,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:06:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R1xDSQJ2Ub9Mi2ZzMqTBXw
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GtNXFGpdGdUGl6C7pdFXmg
 
 
 # Pseudo-relations not added by Schema::Loader

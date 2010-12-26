@@ -8,7 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 =head1 NAME
 
@@ -70,8 +70,8 @@ Related object: L<GMS::Schema::Result::Role>
 __PACKAGE__->belongs_to("role", "GMS::Schema::Result::Role", { id => "role_id" }, {});
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-07 23:06:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:018OBIQiwwa6IcYgqz4nSw
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rB8L15+Ip3GrvfhZSsUFHg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

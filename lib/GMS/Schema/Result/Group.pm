@@ -8,7 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 =head1 NAME
 
@@ -180,8 +180,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-18 20:58:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bMqkMm03pWoju04C7FJkSg
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:982dKQuDwX2jNjA7tRfoAA
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
