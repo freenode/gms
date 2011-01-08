@@ -73,8 +73,8 @@ Presents the group approval form.
 sub approve :Chained('base') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
-    my @to_approve = $c->model('DB::Group')->search_groups_status('verified');
-    my @to_verify  = $c->model('DB::Group')->search_groups_status('submitted')->search({ verify_auto => 0 });
+    my @to_approve = $c->model('DB::Group')->search_verified_groups;
+    my @to_verify  = $c->model('DB::Group')->search_submitted_groups->search({ verify_auto => 0 });
 
     $c->stash->{to_approve} = \@to_approve;
     $c->stash->{to_verify} = \@to_verify;

@@ -17,7 +17,7 @@ make_schema_at(
     {
         dump_directory => './lib',
         naming => 'v5',
-        components => 'InflateColumn::DateTime',
+        components => [ 'InflateColumn::DateTime', 'InflateColumn::Object::Enum' ],
     },
     [
         $db_config->{dsn}, $db_config->{user}, $db_config->{password}

@@ -23,6 +23,8 @@ requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class' => '0.08124';
 requires 'DBIx::Class::Fixtures';
+requires 'DBIx::Class::InflateColumn::Object::Enum';
+requires 'DBIx::Class::InflateColumn::DateTime';
 requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';

@@ -35,34 +35,34 @@ isa_ok $group, "GMS::Schema::Result::Group";
 #ok $group->add_to_group_contacts({ contact => $user->contact });
 ok $group->add_to_contacts($user->contact);
 
-is $group->status, 'submitted';
+ok $group->status->is_submitted;
 is $group->contacts->count, 1;
 is $group->contacts->single->id, $user->contact->id;
 
 is $group->group_changes->count, 1;
 is $group->group_changes->single->changed_by->id, $user->id;
-is $group->group_changes->single->change_type, 'create';
+ok $group->group_changes->single->change_type->is_create;
 
 # Verify the group.
 ok $group->verify($admin);
-is $group->status, 'verified';
+ok $group->status->is_verified;
 is $group->group_changes->count, 2;
-is $group->active_change->change_type, 'admin';
+ok $group->active_change->change_type->is_admin;
 
 # Double verification fails
 throws_ok { $group->verify($admin) }
           qr/Can't verify a group that isn't pending verification/,
           "Can't verify a verified group";
 
-is $schema->resultset('Group')->active_groups->count, 0,
+is $schema->resultset('Group')->search_active_groups->count, 0,
         "Verified group isn't active";
 
 ok $group->approve($admin);
-is $group->status, 'active';
+ok $group->status->is_active;
 is $group->group_changes->count, 3;
-is $group->active_change->change_type, 'admin';
+ok $group->active_change->change_type->is_admin;
 
-is $schema->resultset('Group')->active_groups->count, 1,
+is $schema->resultset('Group')->search_active_groups->count, 1,
         "Approved group becomes active";
 
 # Can't reject something already approved

@@ -185,4 +185,12 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q1vpIkhh6TFQkXLLCABbRA
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+# Set enum columns to use Object::Enum
+__PACKAGE__->add_columns(
+    '+change_type' => { is_enum => 1 },
+    '+group_type' => { is_enum => 1 },
+    '+status' => { is_enum => 1 },
+);
+
 1;

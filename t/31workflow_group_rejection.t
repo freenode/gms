@@ -24,9 +24,9 @@ isa_ok $group, "GMS::Schema::Result::Group";
 ok $group->verify($admin);
 
 ok $group->reject($admin);
-is $group->status, 'deleted';
+ok $group->status->is_deleted;
 
-is $schema->resultset('Group')->active_groups->count, 0,
+is $schema->resultset('Group')->search_active_groups->count, 0,
         "Rejected group is not active";
 
 # Can't approve something already rejected

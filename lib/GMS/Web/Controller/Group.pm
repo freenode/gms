@@ -51,9 +51,9 @@ sub index :Chained('base') :PathPart('') :Args(0) {
     foreach my $group ($c->user->account->contact->groups)
     {
         my $list;
-        if ($group->status eq 'approved') {
+        if ($group->status->is_active) {
             $list = $c->stash->{groups};
-        } else {
+        } elsif (! $group->status->is_deleted) {
             $list = $c->stash->{pendinggroups};
         }
         push @$list, $group;
