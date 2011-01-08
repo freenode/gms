@@ -95,6 +95,21 @@ __PACKAGE__->has_many(
   {},
 );
 
+=head2 group_contact_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupContactChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_contact_changes",
+  "GMS::Schema::Result::GroupContactChange",
+  { "foreign.changed_by" => "self.id" },
+  {},
+);
+
 =head2 user_roles
 
 Type: has_many
@@ -111,8 +126,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sWITW9bB04wxxPSsqfJFwQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-08 18:18:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FH/6Tttyq3dvSGGttsDJ3Q
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 

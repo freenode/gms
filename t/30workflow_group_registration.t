@@ -33,11 +33,11 @@ isa_ok $group, "GMS::Schema::Result::Group";
 
 # This should really be done automatically
 #ok $group->add_to_group_contacts({ contact => $user->contact });
-ok $group->add_to_contacts($user->contact);
+ok $group->add_contact($user->contact, $user);
 
 ok $group->status->is_submitted;
-is $group->contacts->count, 1;
-is $group->contacts->single->id, $user->contact->id;
+is $group->active_contacts->count, 1;
+is $group->active_contacts->single->id, $user->contact->id;
 
 is $group->group_changes->count, 1;
 is $group->group_changes->single->changed_by->id, $user->id;

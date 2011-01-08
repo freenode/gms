@@ -186,6 +186,18 @@ __PACKAGE__->belongs_to(
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 
+# Filtered versions of group_contacts and contacts
+__PACKAGE__->has_many(
+    "active_group_contacts",
+    "GMS::Schema::Result::GroupContact",
+    { "foreign.group_id" => "self.id" },
+    { 'join' => 'active_change',
+      'where' => { 'active_change.status' => 'active' }
+    }
+);
+
+__PACKAGE__->many_to_many(active_contacts => 'active_group_contacts', 'contact');
+
 use TryCatch;
 use String::Random qw/random_string/;
 
@@ -423,6 +435,52 @@ sub approve_change {
     return $ret;
 }
 
+=head2 invite_contact
+
+    $group->invite_contact($contact, $inviter[, \%args]);
+
+Invites a contact to join the group. A new GroupContact will be created, with
+status 'invited', and marked as being invited by $inviter. %args, if supplied,
+will be used to create the new GroupContact record. Otherwise, default values
+will be used.
+
+=cut
+
+sub invite_contact {
+    my ($self, $contact, $inviter, $args) = @_;
+
+    $args ||= {};
+
+    $self->add_to_group_contacts({
+            contact => $contact,
+            account => $inviter,
+            %$args
+        });
+}
+
+=head2 add_contact
+
+    $group->add_contact($contact, $adder[, \%args]);
+
+Administratively adds a new contact, bypassing invitation and acceptance.
+
+Behaves as for invite_contact above, except that the contact is created as
+active from the beginning.
+
+=cut
+
+sub add_contact {
+    my ($self, $contact, $inviter, $args) = @_;
+
+    $args ||= {};
+    $args->{status} = 'active';
+
+    $self->add_to_group_contacts({
+            contact => $contact,
+            account => $inviter,
+            %$args
+        });
+}
 
 =head1 INTERNAL METHODS
 
