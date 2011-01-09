@@ -11,6 +11,8 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Plugin::Session::Store::FastMmap';
+requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::View::Email::Template';
@@ -29,6 +31,11 @@ requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
 requires 'SQL::Translator' => '0.11002';
+
+test_requires 'Test::WWW::Mechanize::Catalyst';
+
+# XXX: remove these dependencies eventually -- they're here for development/debugging
+requires 'Catalyst::Plugin::StackTrace';
 
 catalyst;
 
