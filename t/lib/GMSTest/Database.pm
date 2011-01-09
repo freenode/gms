@@ -36,6 +36,7 @@ sub need_database {
                 addresses
                 contact_changes
                 contacts
+                group_contact_changes
                 group_changes
                 groups
                 roles/);

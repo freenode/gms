@@ -204,4 +204,29 @@ sub change {
     return $ret;
 }
 
+=head2 approve_change
+
+    $group_contact->approve_change($change, $approving_account);
+
+If the given change is a request, then create and return a new change identical
+to it except for the type, which will be 'approve', and the user, which must be
+provided.  The effect is to approve the given request.
+
+If the given change isn't a request, calling this is an error.
+
+=cut
+
+sub approve_change {
+    my ($self, $change, $account) = @_;
+
+    die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
+        unless $change->change_type eq 'request';
+
+    die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
+
+    my $ret = $self->active_change($change->copy({ change_type => 'approve', changed_by => $account}));
+    $self->update;
+    return $ret;
+}
+
 1;

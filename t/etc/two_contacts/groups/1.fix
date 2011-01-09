@@ -1,0 +1,9 @@
+$HASH1 = {
+           active_change => 1,
+           group_name    => 'test',
+           id            => 1,
+           submitted     => '2011-01-09 21:32:04.977421',
+           verify_auto   => 0,
+           verify_token  => 'qfyqhxokbfec',
+           verify_url    => 'http://example.com/trtwxlgl.txt'
+         };
