@@ -61,8 +61,10 @@ from a command handler.
 
 =back
 
-And the special value B<rpc_error>, which indicates a failure in XML-RPC
-communications rather than an error response from Atheme.
+=head2 rpc_error
+
+The special value B<rpc_error> indicates a failure in XML-RPC communications
+rather than an error response from Atheme.
 
 =cut
 
