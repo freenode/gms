@@ -64,6 +64,12 @@ __PACKAGE__->table("groups");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 deleted
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -96,11 +102,13 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "deleted",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
-__PACKAGE__->add_unique_constraint("unique_name", ["group_name"]);
 __PACKAGE__->add_unique_constraint("unique_active_change", ["active_change"]);
+__PACKAGE__->add_unique_constraint("unique_group_name", ["group_name", "deleted"]);
 
 =head1 RELATIONS
 
@@ -180,8 +188,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:982dKQuDwX2jNjA7tRfoAA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-02-01 21:27:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fC8WCMJinrT5Xam+mk/OOQ
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
@@ -319,6 +327,15 @@ sub change {
 
     my $ret = $self->add_to_group_changes(\%change_args);
     $self->active_change($ret) if $change_type ne 'request';
+
+    if ($self->status->is_deleted) {
+        # deleted only needs to be an increasing integer value; the current
+        # time seems convenient.
+        $self->deleted(time) unless $self->deleted;
+    } else {
+        $self->deleted(0);
+    }
+
     $self->update;
     return $ret;
 }
@@ -374,7 +391,6 @@ sub verify {
         die GMS::Exception->new("Can't verify a group that isn't pending verification");
     }
     $self->change( $account, 'admin', { status => 'verified' } );
-    $self->update;
 }
 
 =head2 approve

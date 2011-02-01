@@ -101,25 +101,25 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-          custom_type_name => "change_type",
-          list => ["create", "request", "approve", "admin"],
-        },
+      custom_type_name => "change_type",
+      list => ["create", "request", "approve", "admin"],
+    },
     is_nullable => 0,
   },
   "group_type",
   {
     data_type => "enum",
     extra => {
-          custom_type_name => "group_type",
-          list => [
-                "informal",
-                "corporation",
-                "education",
-                "government",
-                "nfp",
-                "internal",
-              ],
-        },
+      custom_type_name => "group_type",
+      list => [
+        "informal",
+        "corporation",
+        "education",
+        "government",
+        "nfp",
+        "internal",
+      ],
+    },
     is_nullable => 0,
   },
   "url",
@@ -130,9 +130,9 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-          custom_type_name => "group_status",
-          list => ["submitted", "verified", "active", "deleted"],
-        },
+      custom_type_name => "group_status",
+      list => ["submitted", "verified", "active", "deleted"],
+    },
     is_nullable => 0,
   },
 );
@@ -181,8 +181,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q1vpIkhh6TFQkXLLCABbRA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-11 20:23:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/WOEPcBCLQnrznlOq5rueQ
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 

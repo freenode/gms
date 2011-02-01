@@ -101,9 +101,9 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-          custom_type_name => "change_type",
-          list => ["create", "request", "approve", "admin"],
-        },
+      custom_type_name => "change_type",
+      list => ["create", "request", "approve", "admin"],
+    },
     is_nullable => 0,
   },
 );
@@ -157,8 +157,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nZZ26dDRXAQgcMVvMt9lBA
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-11 20:23:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ncLmSRVDVaO6N1GJD95Xhg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

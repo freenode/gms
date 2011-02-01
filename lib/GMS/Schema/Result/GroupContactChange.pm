@@ -48,7 +48,7 @@ __PACKAGE__->table("group_contact_changes");
 =head2 status
 
   data_type: 'enum'
-  extra: {custom_type_name => "group_contact_status",list => ["invited","accepted","retired","active"]}
+  extra: {custom_type_name => "group_contact_status",list => ["invited","retired","active"]}
   is_nullable: 0
 
 =head2 change_type
@@ -83,18 +83,18 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-          custom_type_name => "group_contact_status",
-          list => ["invited", "accepted", "retired", "active"],
-        },
+      custom_type_name => "group_contact_status",
+      list => ["invited", "retired", "active"],
+    },
     is_nullable => 0,
   },
   "change_type",
   {
     data_type => "enum",
     extra => {
-          custom_type_name => "change_type",
-          list => ["create", "request", "approve", "admin"],
-        },
+      custom_type_name => "change_type",
+      list => ["create", "request", "approve", "admin"],
+    },
     is_nullable => 0,
   },
   "changed_by",
@@ -135,8 +135,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-08 18:54:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uUAGzK9g0X0ikiJZX0aTkQ
+# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-11 20:23:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9euiunr7RSVF/p69PMnzOA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
