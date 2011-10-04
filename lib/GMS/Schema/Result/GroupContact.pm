@@ -138,8 +138,8 @@ and its initial GroupContactChange, and will implicitly create a 'create' change
 =cut
 
 sub new {
-    my ($class, $args) = @_;
 
+    my ($class, $args) = @_;
     my @change_arg_names = (
         'primary',
         'status',

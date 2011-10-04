@@ -8,6 +8,13 @@
 <tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
 <tr> <td>Verification URL</td>  <td>[% group.verify_url %]</td> </tr>
 <tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
+[% IF group.git_url %]
+<tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url %]</td> </tr>
+[% END %] 
+[% IF group.verify_freetext %]
+<tr> <td>This group can't be verified by URL/git because:</td> </tr>
+<tr> <td>[% group.verify_freetext %]</td> </tr>
+[% END %]
 </table>
 
 <h3>Contacts:</h3>
@@ -16,3 +23,6 @@
 <li>[% contact.name %] ([% contact.account.accountname %])</li>
 [% END %]
 </ul>
+[% IF group.status == 'pending-web' -%]
+<a href="[% c.uri_for ("/group/${group.id}/verify"); %]">Verify Group</a>
+[% END %]

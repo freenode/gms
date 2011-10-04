@@ -22,7 +22,7 @@ Returns a ResultSet of currently submitted groups.
 sub search_submitted_groups {
     my ($self) = @_;
 
-    return $self->_search_groups_status('submitted');
+    return $self->_search_groups_status('pending-staff');
 }
 
 =head2 search_verified_groups
@@ -34,7 +34,11 @@ Returns a ResultSet of currently verified groups.
 sub search_verified_groups {
     my ($self) = @_;
 
-    return $self->_search_groups_status('verified');
+    return $self->search(
+        [{ 'active_change.status' => 'pending-staff', 'verify_auto' => 1 },
+        { 'active_change.status' => 'verified' }],
+        { join => 'active_change' }
+    );
 }
 
 =head2 search_active_groups

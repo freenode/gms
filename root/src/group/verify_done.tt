@@ -1,0 +1,5 @@
+[% META title = 'Group Verify' %]
+
+[% msg %]
+<br/>
+<a href="[% c.uri_for ("/group/${group.id}/view") %]">View group status</a>

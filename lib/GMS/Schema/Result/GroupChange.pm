@@ -102,7 +102,7 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "change_type",
-      list => ["create", "request", "approve", "admin"],
+      list => ["create", "request", "approve", "admin", "workflow_change"],
     },
     is_nullable => 0,
   },
@@ -131,7 +131,7 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "group_status",
-      list => ["submitted", "verified", "active", "deleted"],
+      list => ["submitted", "verified", "active", "deleted", "pending-web", "pending-staff"],
     },
     is_nullable => 0,
   },

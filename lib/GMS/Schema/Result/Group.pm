@@ -104,6 +104,12 @@ __PACKAGE__->add_columns(
   },
   "deleted",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "git_url",
+  { data_type => "varchar", is_nullable=>1, size=>255 },
+  "verify_freetext",
+  { data_type => "text", is_nullable=>1 },
+  "verify_dns",
+  { data_type => "varchar", is_nullable=>1, size=>255 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
@@ -257,9 +263,16 @@ sub new {
     if (!$valid) {
         die GMS::Exception::InvalidGroup->new(\@errors);
     }
-
+    if ($args->{url} !~ m/^http:\/\// && $args->{url} !~ m/^https:\/\//) {
+        $args->{url} = "https://" . $args->{url};
+    }
     $args->{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
     $args->{verify_token} = random_string("cccccccccccc");
+    my $url = URI->new ($args->{url});
+    my $domain = $url->host;
+    my @parts = split (/\./, $domain);
+    $domain = $parts[-2] . "." . $parts[-1];
+    $args->{verify_dns} = "freenode-" . random_string ("ccccccc") . "." . $domain;
     $args->{verify_auto} = _use_automatic_verification($args->{group_name}, $args->{url});
 
     my @change_arg_names = (
@@ -269,7 +282,7 @@ sub new {
     );
     my %change_args;
     @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} = 'submitted';
+    $change_args{status} = 'pending-web';
     $change_args{change_type} = 'create';
     $change_args{changed_by} = delete $args->{account};
 
@@ -324,7 +337,9 @@ sub change {
         address => $args->{address} || $active_change->address,
         status => $args->{status} || $active_change->status
     );
-
+    if ( defined ( my $va = $args->{verify_auto} ) ) {
+        $self->verify_auto ($va);
+    }
     my $ret = $self->add_to_group_changes(\%change_args);
     $self->active_change($ret) if $change_type ne 'request';
 
@@ -358,12 +373,16 @@ sub change {
 Returns the current status of the group, based on the active change.
 
 =cut
-
 sub status {
     my ($self) = @_;
-
     return $self->active_change->status;
 }
+
+sub group_type {
+    my ($self) = @_;
+    return $self->active_change->group_type;
+}
+
 
 =head2 url
 
@@ -387,8 +406,8 @@ Marks the group, which must be pending verification, as verified.
 
 sub verify {
     my ($self, $account) = @_;
-    if ($self->status ne 'submitted') {
-        die GMS::Exception->new("Can't verify a group that isn't pending verification");
+    if ($self->status ne 'pending-staff') {
+        die GMS::Exception->new("Can't verify a group that isn't pending verification.");
     }
     $self->change( $account, 'admin', { status => 'verified' } );
 }
@@ -404,7 +423,7 @@ Takes one argument, the account which approved it.
 
 sub approve {
     my ($self, $account) = @_;
-    if ($self->status ne 'verified' && $self->status ne 'submitted') {
+    if ($self->status ne 'pending-staff' && $self->status != 'verified') {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
             . "pending verification");
     }
@@ -420,7 +439,7 @@ the account rejecting it.
 
 sub reject {
     my ($self, $account) = @_;
-    if ($self->status ne 'verified' && $self->status ne 'submitted') {
+    if ($self->status ne 'pending-staff' && $self->status ne 'verified') {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
     $self->change( $account, 'admin', { status => 'deleted' } );
