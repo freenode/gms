@@ -6,6 +6,8 @@ package GMS::Schema::Result::Group;
 use strict;
 use warnings;
 
+use Socket;
+use HTTP::Request;
 use base 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
@@ -82,10 +84,6 @@ __PACKAGE__->add_columns(
   },
   "group_name",
   { data_type => "varchar", is_nullable => 0, size => 32 },
-  "verify_url",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
-  "verify_token",
-  { data_type => "varchar", is_nullable => 1, size => 16 },
   "submitted",
   {
     data_type     => "timestamp",
@@ -104,15 +102,8 @@ __PACKAGE__->add_columns(
   },
   "deleted",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
-  "git_url",
-  { data_type => "varchar", is_nullable=>1, size=>255 },
-  "verify_freetext",
-  { data_type => "text", is_nullable=>1 },
-  "verify_dns",
-  { data_type => "varchar", is_nullable=>1, size=>255 },
 );
 __PACKAGE__->set_primary_key("id");
-__PACKAGE__->add_unique_constraint("unique_verify", ["verify_url"]);
 __PACKAGE__->add_unique_constraint("unique_active_change", ["active_change"]);
 __PACKAGE__->add_unique_constraint("unique_group_name", ["group_name", "deleted"]);
 
@@ -193,6 +184,20 @@ __PACKAGE__->belongs_to(
   {},
 );
 
+=head2 group_verifications
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupVerification>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_verifications",
+  "GMS::Schema::Result::GroupVerification",
+  { "foreign.group_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 # Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-02-01 21:27:34
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fC8WCMJinrT5Xam+mk/OOQ
@@ -200,6 +205,7 @@ __PACKAGE__->belongs_to(
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 
+__PACKAGE__->many_to_many(verifications => 'group_verifications', 'verification');
 # Filtered versions of group_contacts and contacts
 __PACKAGE__->has_many(
     "active_group_contacts",
@@ -266,13 +272,6 @@ sub new {
     if ($args->{url} !~ m/^http:\/\// && $args->{url} !~ m/^https:\/\//) {
         $args->{url} = "https://" . $args->{url};
     }
-    $args->{verify_url} = $args->{url}."/".random_string("cccccccc").".txt";
-    $args->{verify_token} = random_string("cccccccccccc");
-    my $url = URI->new ($args->{url});
-    my $domain = $url->host;
-    my @parts = split (/\./, $domain);
-    $domain = $parts[-2] . "." . $parts[-1];
-    $args->{verify_dns} = "freenode-" . random_string ("ccccccc") . "." . $domain;
     $args->{verify_auto} = _use_automatic_verification($args->{group_name}, $args->{url});
 
     my @change_arg_names = (
@@ -302,7 +301,6 @@ sub insert {
     my $ret;
 
     my $next_method = $self->next::can;
-
     # Can't put this in the creation args, as we don't know the active change id
     # until the change has been created, and we can't create the change without knowing
     # the group id.
@@ -312,6 +310,22 @@ sub insert {
             $self->update;
         });
 
+    $self->add_to_group_verifications ({
+            verification_type => "web_url",
+            verification_data => $self->url . "/".random_string("cccccccc").".txt",
+        });
+    $self->add_to_group_verifications ({
+            verification_type => "web_token",
+            verification_data => random_string("cccccccccccc"),
+        });
+    my $url = URI->new ($self->url);
+    my $domain = $url->host;
+    my @parts = split (/\./, $domain);
+    $domain = $parts[-2] . "." . $parts[-1];
+    $self->add_to_group_verifications ({
+            verification_type => "dns",
+            verification_data => "freenode-" . random_string ("ccccccc") . "." . $domain
+        });
     return $ret;
 }
 
@@ -383,6 +397,66 @@ sub group_type {
     return $self->active_change->group_type;
 }
 
+sub verify_url {
+    my ($self) = @_;
+    my ($res) = $self->group_verifications->find({verification_type => "web_url"});
+    my ($data) = $res->verification_data;
+    return $data;
+}
+
+sub verify_token {
+    my ($self) = @_;
+    my ($res) = $self->group_verifications->find({verification_type => "web_token"});
+    if ($res) {
+        my ($data) = $res->verification_data;
+        return $data;
+    }
+}
+
+sub verify_dns {
+    my ($self) = @_;
+    my ($res) = $self->group_verifications->find({verification_type => "dns"});
+    if ($res) {
+        my ($data) = $res->verification_data;
+        return $data;
+    }
+}
+
+sub verify_freetext {
+    my ($self) = @_;
+    my ($res) = $self->group_verifications->find({verification_type => "freetext"});
+    if ($res) {
+        my ($data) = $res->verification_data;
+        return $data;
+    }
+}
+
+sub auto_verify {
+    my ($self, $account, $args) = @_;
+    my $request = HTTP::Request->new(GET => $self->verify_url);
+    my $ua = LWP::UserAgent->new;
+    my $response = $ua->request($request);
+    my $content = $response->content;
+    $content =~ s/^\s+//;
+    $content =~ s/\s+$//;
+    if ($content eq $self->verify_token) {
+        $self->change ($account, 'workflow_change', { status => 'pending-auto' } );
+        return 1;
+    }
+    my $packed = gethostbyname($self->verify_dns); 
+    if ($packed) {
+        my $address = inet_ntoa($packed);
+        if ($address eq "140.211.167.100") {
+            $self->change ($account, 'workflow_change', { status => 'pending-auto' } );
+            return 1;
+        }
+    }
+    if ( ( my $freetext = $args->{freetext} ) ) {
+        $self->add_to_group_verifications ({ verification_type => 'freetext', verification_data => $freetext });
+    }
+    $self->change ($account, 'workflow_change', { status => 'pending-staff'});
+    return 0;
+}
 
 =head2 url
 

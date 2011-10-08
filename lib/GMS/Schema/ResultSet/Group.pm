@@ -34,11 +34,7 @@ Returns a ResultSet of currently verified groups.
 sub search_verified_groups {
     my ($self) = @_;
 
-    return $self->search(
-        [{ 'active_change.status' => 'pending-staff', 'verify_auto' => 1 },
-        { 'active_change.status' => 'verified' }],
-        { join => 'active_change' }
-    );
+    return $self->_search_groups_status(['pending-auto', 'verified']);
 }
 
 =head2 search_active_groups

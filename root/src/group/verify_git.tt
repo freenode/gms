@@ -1,5 +1,0 @@
-<form method="post" action="[% c.uri_for("/group/${group.id}/verify/git/submit") %]">
-    gitweb/cvsweb commit URL:<br/><br/>
-    <input name="giturl" type="text" /><br/><br/>
-    <input type="submit" value="Save commit URL" />
-</form>

@@ -1,8 +1,21 @@
 [% META title = 'Group Verify' %]
 
 <h2>Verify [% group.group_name %]</h2>
-How do you want to verify this group?<br/><br/>
-<a href="[% c.uri_for ("/group/${group.id}/verify/web"); %]">Verify by uploading a file</a><br/><br/>
-<a href="[% c.uri_for ("/group/${group.id}/verify/dns"); %]">Verify by creating a CNAME record</a><br/><br/>
-<a href="[% c.uri_for ("/group/${group.id}/verify/git"); %]">Verify by a git commit</a><br/><br/>
-<a href="[% c.uri_for ("/group/${group.id}/verify/other"); %]">I cannot do any of the above</a><br/><br/>
+
+<form method="post" action="[% c.uri_for("/group/${group.id}/verify/submit") %]">
+    Here are the possible verification methods:<br/><br/>
+    <ul>
+        <li>
+            Create a file called [% group.verify_url %] with content [% group.verify_token %]
+        </li><br/>
+        <li>
+            Point [% group.verify_dns %] to freenode.net (140.211.167.100)
+        </li><br/>
+        <li>
+            Enter free text in the area below explaining why you can't do the above:<br/><br/>
+            <textarea style="height:200px;width:90%" name="freetext"></textarea><br/>
+        </li><br/>
+    </ul>
+    Once you've completed one of the verification methods below, submit this form:<br/><br/>
+    <input type="submit" value="Submit" />
+</form>

@@ -2,9 +2,7 @@
 
 <p>The group [% group.group_name %] has been successfully added.</p>
 
-<p>To verify your association with the project, please create a file
-at <a href="[% group.verify_url %]">[% group.verify_url %]</a>
-containing the token <code>[% group.verify_token | html %]</code>. </p>
+<p>Click <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">here</a> to see possible verification methods.</p>
 
 <p>
 [% IF group.status == 'auto_pending' %]

@@ -131,7 +131,7 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "group_status",
-      list => ["submitted", "verified", "active", "deleted", "pending-web", "pending-staff"],
+      list => ["submitted", "verified", "active", "deleted", "pending-web", "pending-staff", "pending-auto"],
     },
     is_nullable => 0,
   },

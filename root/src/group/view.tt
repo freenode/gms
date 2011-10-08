@@ -8,11 +8,13 @@
 <tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
 <tr> <td>Verification URL</td>  <td>[% group.verify_url %]</td> </tr>
 <tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
+<tr> <td>DNS pointing to freenode.net</td> <td>[%group.verify_dns %]</td> </tr>
 [% IF group.git_url %]
 <tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url %]</td> </tr>
 [% END %] 
 [% IF group.verify_freetext %]
-<tr> <td>This group can't be verified by URL/git because:</td> </tr>
+<tr><td><br/></td></tr>
+<tr> <td>This group can't be verified by another method because:</td> </tr>
 <tr> <td>[% group.verify_freetext %]</td> </tr>
 [% END %]
 </table>

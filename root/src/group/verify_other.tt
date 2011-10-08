@@ -1,5 +1,0 @@
-<form method="post" action="[% c.uri_for("/group/${group.id}/verify/other/submit") %]">
-    If you cannot verify your group by uploading a file to your server or via a gitweb/csvweb/etc commit URL, please enter the reason why in free text:<br/>
-    <textarea style="height:200px;width:100%" name="verify_other"></textarea><br/>
-    <input type="submit" value="Submit" />
-</form>
