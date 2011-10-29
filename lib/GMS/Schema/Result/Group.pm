@@ -35,18 +35,6 @@ __PACKAGE__->table("groups");
   is_nullable: 0
   size: 32
 
-=head2 verify_url
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
-=head2 verify_token
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 16
-
 =head2 submitted
 
   data_type: 'timestamp'
@@ -497,11 +485,15 @@ Takes one argument, the account which approved it.
 
 sub approve {
     my ($self, $account) = @_;
-    if ($self->status ne 'pending-staff' && $self->status != 'verified') {
+    if ($self->status ne 'pending-staff' && $self->status ne 'pending-auto' && $self->status ne 'verified') {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
             . "pending verification");
     }
     $self->change( $account, 'admin', { status => 'active' } );
+
+    foreach my $contact ($self->group_contacts) {
+        $contact->change ($account, 'admin', { status => 'active' });
+    }
 }
 
 =head2 reject
@@ -513,7 +505,7 @@ the account rejecting it.
 
 sub reject {
     my ($self, $account) = @_;
-    if ($self->status ne 'pending-staff' && $self->status ne 'verified') {
+    if ($self->status ne 'pending-staff' && $self->status ne 'pending-auto' && $self->status ne 'verified') {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
     $self->change( $account, 'admin', { status => 'deleted' } );
@@ -559,6 +551,10 @@ sub invite_contact {
     my ($self, $contact, $inviter, $args) = @_;
 
     $args ||= {};
+
+    if ( $self->group_contacts->find ({ contact_id => $contact->id }) ) {
+        die GMS::Exception->new ("This person is already a group contact.");
+    }
 
     $self->add_to_group_contacts({
             contact => $contact,
