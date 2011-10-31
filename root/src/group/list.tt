@@ -20,3 +20,13 @@
 [% END %]
 </ul>
 
+<p>You have been invited to the following groups:</p>
+
+<ul>
+[% FOREACH group IN invitedgroups -%]
+  <li>
+    [% group.group_name | html %] <a href="[% c.uri_for("/group/${group.id}/invite/accept") %]">Accept</a> - <a href="[% c.uri_for("/group/${group.id}/invite/decline") %]">Decline</a>
+  </li>
+[% END %]
+</ul>
+

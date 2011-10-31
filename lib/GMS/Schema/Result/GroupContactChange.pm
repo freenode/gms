@@ -54,7 +54,7 @@ __PACKAGE__->table("group_contact_changes");
 =head2 change_type
 
   data_type: 'enum'
-  extra: {custom_type_name => "change_type",list => ["create","request","approve","admin","workflow_change"]}
+  extra: {custom_type_name => "change_type",list => ["create","request","approve","reject","admin","workflow_change"]}
   is_nullable: 0
 
 =head2 changed_by
@@ -62,6 +62,12 @@ __PACKAGE__->table("group_contact_changes");
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+=head2 affected_change
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
 
 =cut
 
@@ -93,12 +99,14 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "change_type",
-      list => ["create", "request", "approve", "admin", "workflow_change"],
+      list => ["create", "request", "approve", "reject", "admin", "workflow_change"],
     },
     is_nullable => 0,
   },
   "changed_by",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "affected_change",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -132,6 +140,26 @@ __PACKAGE__->belongs_to(
   "GMS::Schema::Result::Account",
   { id => "changed_by" },
   {},
+);
+
+=head2 affected_change
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::GroupContactChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "affected_change",
+  "GMS::Schema::Result::GroupContactChange",
+  { id => "affected_change" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 

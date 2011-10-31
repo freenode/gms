@@ -67,7 +67,7 @@ __PACKAGE__->table("contact_changes");
 =head2 change_type
 
   data_type: 'enum'
-  extra: {custom_type_name => "change_type",list => ["create","request","approve","admin","workflow_change"]}
+  extra: {custom_type_name => "change_type",list => ["create","request","approve","reject","admin","workflow_change"]}
   is_nullable: 0
 
 =cut
@@ -102,7 +102,7 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "change_type",
-      list => ["create", "request", "approve", "admin", "workflow_change"],
+      list => ["create", "request", "approve", "reject", "admin", "workflow_change"],
     },
     is_nullable => 0,
   },

@@ -131,6 +131,53 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
     
 }
 
+sub approve_gcc :Chained('base') :PathPart('approve_gcc') :Args(0) {
+    my ($self, $c) = @_;
+
+    my @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
+    
+    $c->stash->{to_approve} = \@to_approve;
+    $c->stash->{template} = 'admin/approve_gcc.tt';
+}
+
+sub do_approve_gcc :Chained('base') :PathPart('approve_gcc/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $params = $c->request->params;
+    my $change_rs = $c->model('DB::GroupContactChange');
+    my $account = $c->user->account;
+
+    my @approve_changes = split / /, $params->{approve_changes};
+    try { 
+        $c->model('DB')->schema->txn_do(sub {
+            foreach my $change_id (@approve_changes) {
+                my $change = $change_rs->find({ id => $change_id });
+                my $action = $params->{"action_$change_id"};
+                if ($action eq 'approve') {
+                    $c->log->info("Approving GroupContactChange id $change_id" .
+                        " by " . $c->user->username . "\n");
+                    $change->group_contact->approve_change($change, $account);
+                } elsif ($action eq 'reject') {
+                    $c->log->info("Rejecting GroupContactChange id $change_id" .
+                        " by " . $c->user->username . "\n");
+                    $change->group_contact->reject_change ($change, $account);
+                } elsif ($action eq 'hold') {
+                    next;
+                } else {
+                    $c->log->error("Got unknown action $action for change id
+                        $change_id in Admin::do_approve_gcc");
+                }
+            }
+        });
+        $c->response->redirect($c->uri_for('approve_gcc'));
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e->message;
+        $c->detach ("/admin/approve_gcc");
+    }
+    
+}
+
 =head2 view
 
 Displays information about a single group.

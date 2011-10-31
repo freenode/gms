@@ -4,5 +4,8 @@
 <li>
   <a href="[% c.uri_for('/admin/approve') %]">Review and Approve Group Registrations</a>
 </li>
+<li>
+  <a href="[% c.uri_for('/admin/approve_gcc') %]">Review and Approve Group Contact Changes</a>
+</li>
 </ul>
 

@@ -1,0 +1,7 @@
+[% META title = 'Invite Contact' %]
+
+<form method="post" action="[% c.uri_for("/group/${group.id}/invite/submit") %]">
+    Enter the user name:<br/>
+    <input type="text" name="contact" /><br/>
+    <input type="submit" value="submit" />
+</form>

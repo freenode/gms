@@ -12,19 +12,30 @@
 [% IF group.git_url %]
 <tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url %]</td> </tr>
 [% END %] 
-[% IF group.verify_freetext %]
-<tr><td><br/></td></tr>
-<tr> <td>This group can't be verified by another method because:</td> </tr>
-<tr> <td>[% group.verify_freetext %]</td> </tr>
-[% END %]
 </table>
+[% IF group.verify_freetext %]
+    <br/>
+    <b>This group can't be verified by another method because:</b><br/><br/>
+    [% group.verify_freetext %]
+[% END %]
+
 
 <h3>Contacts:</h3>
 <ul>
-[% FOREACH contact = group.contacts %]
+[% FOREACH contact = group.active_contacts %]
 <li>[% contact.name %] ([% contact.account.accountname %])</li>
 [% END %]
 </ul>
+<h3>Actions:</h3>
+<ul>
 [% IF group.status == 'pending-web' -%]
+<li>
 <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">Verify Group</a>
+</li>
 [% END %]
+[% IF group.status == 'active' -%]
+<li>
+<a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
+</li>
+[% END %]
+</ul>

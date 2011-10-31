@@ -156,6 +156,30 @@ sub new {
     return $class->next::method($args);
 }
 
+=head2 status
+
+Returns the GroupContact's current status based on their active change.
+
+=cut
+
+sub status {
+    my ($self) = @_;
+    
+    return $self->active_change->status;
+}
+
+=head2 is_primary
+
+Returns if the group contact is a primary contact for their group.
+
+=cut
+
+sub is_primary {
+    my ($self) = @_;
+    
+    return $self->active_change->primary;
+}
+
 =head2 insert
 
 Overloaded to support the implicit GroupContactChange creation
@@ -204,6 +228,18 @@ sub change {
     return $ret;
 }
 
+sub accept_invitation {
+    my ($self, $account) = @_;
+    
+    return $self->change ($self->contact->id, 'request', { 'status' => 'active' });
+}
+
+sub decline_invitation {
+    my ($self, $account) = @_;
+    
+    return $self->change ($self->contact->id, 'reject');
+}
+
 =head2 approve_change
 
     $group_contact->approve_change($change, $approving_account);
@@ -224,9 +260,49 @@ sub approve_change {
 
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
-    my $ret = $self->active_change($change->copy({ change_type => 'approve', changed_by => $account}));
+    my $ret = $self->active_change($change->copy({ change_type => 'approve', changed_by => $account, affected_change => $change->id}));
     $self->update;
     return $ret;
+}
+
+=head2 reject_change
+
+Similar to approve_change but reverts the contact's previous active change with the change_type being 'reject'.
+
+=cut
+
+sub reject_change {
+    my ($self, $change, $account) = @_;
+    
+    die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
+        unless $change->change_type eq 'request';
+        
+    die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
+    
+    my $previous = $self->active_change;
+    return $previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $change->id});
+}
+
+=head2 can_access
+
+    $group_contact->can_access ($group, $c->request->path);
+
+Returns if the user can access the particular page for the group. For example invited contacts should only be able to view /group/invite/accept and /group/invite/decline until their invitation is accepted and approved by staff.
+
+=cut
+
+sub can_access {
+    my ($self, $group, $path) = @_;
+    
+    if ( ( $group->status->is_active && $self->status->is_active ) || ( !$group->status->is_active && !$group->status->is_deleted ) ) { #contact and group are active or group is pending verification
+        return 1;
+    }
+    elsif ( $group->status->is_active && $self->status->is_invited && $self->active_change->change_type eq 'create' && ( $path =~ /invite\/accept/ || $path =~ /invite\/decline/ ) ) { #invited GC is only able to access invite/accept & invite/decline
+        return 1;
+    }
+    else {
+        return 0;    
+    }
 }
 
 1;

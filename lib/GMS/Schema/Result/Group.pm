@@ -553,7 +553,7 @@ sub invite_contact {
     $args ||= {};
 
     if ( $self->group_contacts->find ({ contact_id => $contact->id }) ) {
-        die GMS::Exception->new ("This person is already a group contact.");
+        die GMS::Exception->new ("This person has already been invited.");
     }
 
     $self->add_to_group_contacts({
