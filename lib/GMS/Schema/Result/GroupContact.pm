@@ -150,6 +150,7 @@ sub new {
     $change_args{change_type} = 'create';
     $change_args{primary} ||= 0;
     $change_args{changed_by} = delete $args->{account};
+    $change_args{change_freetext} = delete $args->{freetext};
 
     $args->{group_contact_changes} = [ \%change_args ];
 

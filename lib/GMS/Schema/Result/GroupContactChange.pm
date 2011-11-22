@@ -71,6 +71,13 @@ __PACKAGE__->table("group_contact_changes");
 
 =cut
 
+=head2 change_freetext
+
+  data_type: 'text'
+  is_nullable: 1
+
+=cut
+
 __PACKAGE__->add_columns(
   "id",
   {
@@ -107,6 +114,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "affected_change",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "change_freetext",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 

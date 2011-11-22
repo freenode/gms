@@ -1,0 +1,24 @@
+[% META title = 'Search Users' %]
+
+<form method="post" action="[% c.uri_for('/staff/search_users/submit') %]">
+
+<p>
+  Enter the search criteria. Wildcard: '%'
+</p>
+
+<table>
+  <tr>
+    <td>Account name</td>
+    <td><input type='text' name='accountname' /></td>
+  </tr>
+  <tr>
+    <td>Full name</td>
+    <td><input type='text' name='name' /></td>
+  </tr>
+</table>
+
+<p>
+  <input type='submit' value='Submit' />
+</p>
+
+</form>

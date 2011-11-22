@@ -1,0 +1,9 @@
+[% META title = 'Action Complete' %]
+
+<p>
+[% msg %]
+</p>
+
+<p>
+<a href="[% c.uri_for ("/staff") %]">Back to staff page</a>
+</p>

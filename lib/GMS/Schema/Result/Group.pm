@@ -578,6 +578,11 @@ sub add_contact {
     my ($self, $contact, $inviter, $args) = @_;
 
     $args ||= {};
+
+    if ( $self->group_contacts->find ({ contact_id => $contact->id }) ) {
+        die GMS::Exception->new ("This person has already been added.");
+    }
+
     $args->{status} = 'active';
 
     $self->add_to_group_contacts({

@@ -1,0 +1,61 @@
+[% META title = 'Search Groups' %]
+
+<form method="post" action="[% c.uri_for('/staff/search_groups/submit') %]">
+
+<p>
+  Enter the search criteria. Wildcard: '%'
+</p>
+
+<table>
+  <tr>
+    <td>Group Name</td>
+    <td><input type='text' name='group_name' /></td>
+  </tr>
+  <tr>
+    <td>Group Contact Accountname</td>
+    <td><input type='text' name='gc_accname' /></td>
+  </tr>
+  <tr>
+    <td>Channel Namespace</td>
+    <td><input type='text' name='namespace' /></td>
+  </tr>
+  <tr>
+    <td>Group Type</td>
+    <td>
+      <select name='group_type'>
+        <option value='' selected='selected'>Please select...</option>
+        <option value='informal'>Informal Group</option>
+        <option value='corporation'>Corporation - Business entity</option>
+        <option value='education'>Educational Institution</option>
+        <option value='government'>Governmental Entity</option>
+        <option value='nfp'>Not for profit - Charitable Organisation</option>
+        <option value='internal'>Internal Group</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Group Status</td>
+    <td>
+      <select name='group_status'>
+        <option value='' selected='selected'>Please select...</option>
+        <option value='pending-web'>pending-web</option>
+        <option value='pending-staff'>pending-staff</option>
+        <option value='pending-auto'>pending-auto</option>
+        <option value='verified'>verified</option>
+        <option value='active'>active</option>
+        <option value='deleted'>deleted</option>
+      </select>
+    </td>
+  <tr>
+</table>
+
+<p>
+<input type='radio' name='mode' value='1' checked='checked' /> Show groups that match any of the criteria
+<input type='radio' name='mode' value='2' /> Show groups that match all the criteria
+</p>
+
+<p>
+  <input type='submit' value='Submit' />
+</p>
+
+</form>

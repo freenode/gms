@@ -30,6 +30,8 @@ sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) {
     if (! $c->check_user_roles('admin')) {
         $c->detach('/forbidden');
     }
+
+    $c->stash->{admin} = 1;
 }
 
 =head2 index
@@ -187,7 +189,53 @@ Displays information about a single group.
 sub view :Chained('single_group') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{template} = 'group/view.tt';
+    $c->stash->{template} = 'staff/view_group.tt';
+}
+
+=head2 add_gc
+
+Displays the form to add a new group contact, bypassing invitation.
+
+=cut
+
+sub add_gc :Chained('single_group') :PathPart('add_gc') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'admin/add_gc.tt';
+}
+
+=head2 do_add_gc
+
+Adds the specified user as a group contact, bypassing invitation.
+
+=cut
+
+sub do_add_gc :Chained('single_group') :PathPart('add_gc/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+    my $account = $c->model("DB::Account")->find ({ 'accountname' => $p->{contact} });
+
+    if (! $account || ! $account->contact) {
+        $c->stash->{error_msg} = "This user doesn't exist or has no contact information defined.";
+        $c->detach ("add_gc");
+    }
+
+    else {
+        my $contact = $account->contact;
+        my $group = $c->stash->{group};
+
+        try {
+            $group->add_contact ($contact, $c->user->account->contact->id, { 'freetext' => $p->{freetext} });
+        }
+        catch (GMS::Exception $e) {
+            $c->stash->{error_msg} = $e;
+            $c->detach ("add_gc");
+        }
+    }
+
+    $c->stash->{msg} = "Successfully added the group contact.";
+    $c->stash->{template} = 'staff/action_done.tt';
 }
 
 1;

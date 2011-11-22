@@ -1,0 +1,19 @@
+[% META title = 'Search Results' %]
+
+<table>
+<tr>
+  <th>Account Name</th>
+  <th>Full Name</th>
+</tr>
+
+[% FOREACH account = results -%]
+<tr>
+  <td>[% account.accountname %]</td>
+  <td>[% account.contact.name %]</td>
+</tr>
+[% END -%]
+</table>
+
+<p>
+  <a href='[% c.uri_for ("/staff/search_users") %]'>Back to search</a>
+</p>

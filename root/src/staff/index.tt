@@ -1,0 +1,10 @@
+<h3>Staff Page</h3>
+
+<ul>
+  <li>
+    <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
+  </li>
+  <li>
+    <a href="[% c.uri_for("/staff/search_users") %]">Search Users</a>
+  </li>
+</ul>
