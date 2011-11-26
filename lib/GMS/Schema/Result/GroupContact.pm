@@ -298,7 +298,7 @@ sub can_access {
     if ( ( $group->status->is_active && $self->status->is_active ) || ( !$group->status->is_active && !$group->status->is_deleted ) ) { #contact and group are active or group is pending verification
         return 1;
     }
-    elsif ( $group->status->is_active && $self->status->is_invited && $self->active_change->change_type eq 'create' && ( $path =~ /invite\/accept/ || $path =~ /invite\/decline/ ) ) { #invited GC is only able to access invite/accept & invite/decline
+    elsif ( $group->status->is_active && $self->status->is_invited && $self->active_change->change_type eq 'create' && ( $path =~ qr|invite/accept| || $path =~ qr|invite/decline| ) ) { #invited GC is only able to access invite/accept & invite/decline
         return 1;
     }
     else {
