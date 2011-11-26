@@ -68,8 +68,8 @@ sub DESTROY {
     $session->login($user, $password, $sourceinfo);
 
 Logs in using the specified username and password. The third parameter,
-C<$sourceinfo>, is an optional string to be included in the source text in
-Atheme's log system.
+C<$sourceinfo>, which defaults to '::0', is an optional string to be included
+in the source text in Atheme's log system.
 
 Throws L<RPC::Atheme::Error> on failure.
 
@@ -80,7 +80,7 @@ sub login {
 
     $self->{__username} = $user if $user;
     $self->{__password} = $pass if $pass;
-    $self->{__source} = $source if $source;
+    $self->{__source} = $source ? defined $source : '::0';
 
     my $response = $self->{__client}->simple_request(
         'atheme.login', $user, $pass, $source
