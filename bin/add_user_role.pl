@@ -17,7 +17,7 @@ my $db = GMS::Schema->do_connect;
 
 my $session = RPC::Atheme::Session->new($atheme_config->{hostname},
                                         $atheme_config->{port});
-$session->login($atheme_config->{master_login}, $atheme_config->{master_password})
+$session->login($atheme_config->{master_account}, $atheme_config->{master_password})
     or die "Couldn't log in to atheme";
 
 my $accountid = $session->command($atheme_config->{service}, 'accountid', $accountname);
