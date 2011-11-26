@@ -28,6 +28,9 @@
       </div>
       <div>
           <ul>
+              [% IF  c.check_user_roles('admin')  %]
+              <li><a href="[% c.uri_for('/admin/') %]">Admin</a></li>
+              [% END %]
               <li><a href="[% c.uri_for('/group/') %]">Your groups</a></li>
               <li><a href="[% c.uri_for('/userinfo') %]">Your contact info</a></li>
               <li><a href="[% c.uri_for('/group/new') %]">Register a new group</a></li>
