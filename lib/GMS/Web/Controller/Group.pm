@@ -55,11 +55,11 @@ sub index :Chained('base') :PathPart('') :Args(0) {
     $c->stash->{groups} = [];
     $c->stash->{pendinggroups} = [];
     $c->stash->{invitedgroups} = [];
-    
+
     my $change_rs = $c->model("DB::GroupContactChange");
     my $contact_id = $c->user->account->contact->id;
     my @invitations = $change_rs->active_invitations->search ( { 'contact_id' => $contact_id } );
-    
+
     foreach my $group ($c->user->account->contact->groups)
     {
         my $list;
@@ -71,7 +71,7 @@ sub index :Chained('base') :PathPart('') :Args(0) {
         }
         push @$list, $group;
     }
-    
+
     foreach my $invitation (@invitations) {
         if ($invitation->group_contact->group->status->is_active) {
             my $list = $c->stash->{invitedgroups};
@@ -124,7 +124,7 @@ sub verify :Chained('single_group') :PathPart('verify') :Args(0) {
 
 sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
     my ($self, $c) = @_;
-    
+
     my $group = $c->stash->{group};
     my $result = $group->auto_verify($c->user->account->contact->id, $c->request->params);
     if ($result) {
@@ -133,13 +133,13 @@ sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
     else {
         $c->stash->{msg} = "Please wait for staff to verify your group and approve or decline your group request";
     }
-    
+
     $c->stash->{template} = 'group/action_done.tt';
 }
 
 sub invite :Chained('single_group') :PathPart('invite') :Args(0) {
     my ($self, $c) = @_;
-    
+
     $c->stash->{template} = 'group/invite.tt';
 }
 
@@ -163,11 +163,11 @@ sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
     }
     $c->stash->{msg} = "Successfully invited the contact.<br/>";
     $c->stash->{template} = 'group/action_done.tt';
-}    
+}
 
 sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
     my ($self, $c) = @_;
-    
+
     my $group = $c->stash->{group};
     my $gc = $c->user->account->contact->group_contacts->find ({ 'group_id' => $group->id });
     $gc->accept_invitation();
@@ -177,7 +177,7 @@ sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
 
 sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0) {
     my ($self, $c) = @_;
-    
+
     my $group = $c->stash->{group};
     my $gc = $c->user->account->contact->group_contacts->find ({ 'group_id' => $group->id });
     $gc->decline_invitation ();
