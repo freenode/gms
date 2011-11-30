@@ -165,7 +165,7 @@ Returns the GroupContact's current status based on their active change.
 
 sub status {
     my ($self) = @_;
-    
+
     return $self->active_change->status;
 }
 
@@ -177,7 +177,7 @@ Returns if the group contact is a primary contact for their group.
 
 sub is_primary {
     my ($self) = @_;
-    
+
     return $self->active_change->primary;
 }
 
@@ -231,13 +231,13 @@ sub change {
 
 sub accept_invitation {
     my ($self, $account) = @_;
-    
+
     return $self->change ($self->contact->id, 'request', { 'status' => 'active' });
 }
 
 sub decline_invitation {
     my ($self, $account) = @_;
-    
+
     return $self->change ($self->contact->id, 'reject');
 }
 
@@ -274,12 +274,12 @@ Similar to approve_change but reverts the contact's previous active change with 
 
 sub reject_change {
     my ($self, $change, $account) = @_;
-    
+
     die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
         unless $change->change_type eq 'request';
-        
+
     die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
-    
+
     my $previous = $self->active_change;
     return $previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $change->id});
 }
@@ -294,7 +294,7 @@ Returns if the user can access the particular page for the group. For example in
 
 sub can_access {
     my ($self, $group, $path) = @_;
-    
+
     if ( ( $group->status->is_active && $self->status->is_active ) || ( !$group->status->is_active && !$group->status->is_deleted ) ) { #contact and group are active or group is pending verification
         return 1;
     }

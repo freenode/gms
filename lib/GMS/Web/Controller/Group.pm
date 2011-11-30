@@ -150,8 +150,7 @@ sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
     if (! $account || ! $account->contact) {
         $c->stash->{error_msg} = "This user does not exist or has no contact information defined.";
         $c->detach ('invite');
-    }    
-    else {
+    } else {
         my $contact = $account->contact;
         my $group = $c->stash->{group};
         try {
@@ -184,7 +183,7 @@ sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0)
     $gc->decline_invitation ();
     $c->stash->{msg} = "Successfully declined the group invitation.<br/>";
     $c->stash->{template} = 'group/action_done.tt';
- }
+}
 
 
 =head2 new_form

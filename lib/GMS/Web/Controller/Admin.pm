@@ -99,7 +99,7 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
 
     my @approve_groups = split / /, $params->{approve_groups};
     my @verify_groups  = split / /, $params->{verify_groups};
-    try { 
+    try {
         $c->model('DB')->schema->txn_do(sub {
             foreach my $group_id (@approve_groups, @verify_groups) {
                 my $group = $group_rs->find({ id => $group_id });
@@ -130,14 +130,14 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
         $c->stash->{error_msg} = $e->message;
         $c->detach ("/admin/approve");
     }
-    
+
 }
 
 sub approve_gcc :Chained('base') :PathPart('approve_gcc') :Args(0) {
     my ($self, $c) = @_;
 
     my @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
-    
+
     $c->stash->{to_approve} = \@to_approve;
     $c->stash->{template} = 'admin/approve_gcc.tt';
 }
@@ -150,7 +150,7 @@ sub do_approve_gcc :Chained('base') :PathPart('approve_gcc/submit') :Args(0) {
     my $account = $c->user->account;
 
     my @approve_changes = split / /, $params->{approve_changes};
-    try { 
+    try {
         $c->model('DB')->schema->txn_do(sub {
             foreach my $change_id (@approve_changes) {
                 my $change = $change_rs->find({ id => $change_id });
@@ -177,7 +177,7 @@ sub do_approve_gcc :Chained('base') :PathPart('approve_gcc/submit') :Args(0) {
         $c->stash->{error_msg} = $e->message;
         $c->detach ("/admin/approve_gcc");
     }
-    
+
 }
 
 =head2 view
@@ -219,9 +219,7 @@ sub do_add_gc :Chained('single_group') :PathPart('add_gc/submit') :Args(0) {
     if (! $account || ! $account->contact) {
         $c->stash->{error_msg} = "This user doesn't exist or has no contact information defined.";
         $c->detach ("add_gc");
-    }
-
-    else {
+    } else {
         my $contact = $account->contact;
         my $group = $c->stash->{group};
 

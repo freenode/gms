@@ -23,7 +23,7 @@ Returns a resultset of changes that are the most recent for their contact.
 
 sub last_changes {
     my $self = shift;
-    
+
     return $self->search({
         'id' => {
             '=' => $self->search ({
@@ -44,7 +44,7 @@ Returns a resultset of requests that are the most recent change for their contac
 
 sub active_requests {
     my $self = shift;
-    
+
     return $self->last_changes->search ( { 'change_type' => 'request' } );
 }
 

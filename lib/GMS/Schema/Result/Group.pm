@@ -431,7 +431,7 @@ sub auto_verify {
         $self->change ($account, 'workflow_change', { status => 'pending-auto' } );
         return 1;
     }
-    my $packed = gethostbyname($self->verify_dns); 
+    my $packed = gethostbyname($self->verify_dns);
     if ($packed) {
         my $address = inet_ntoa($packed);
         if ($address eq "140.211.167.100") {
