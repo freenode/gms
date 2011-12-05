@@ -76,6 +76,7 @@ sub new {
                     });
                 $self->{_control_session}->command($config->{service}, 'accountid',
                     $user, $result->id);
+                $result;
             });
     };
 
