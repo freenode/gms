@@ -44,6 +44,11 @@
   <li>
     <a href="[% c.uri_for ("/admin/${group.id}/add_gc"); %]">Add Group Contact</a>
   </li>
+  [% IF group.address %]
+    <li>
+      <a href="[% c.uri_for ("/admin/address/${group.address.id}/view"); %]">View Address</a>
+    </li>
+  [% END %]
 [% END %]
 </ul>
 

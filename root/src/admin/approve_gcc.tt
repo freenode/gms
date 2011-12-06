@@ -1,6 +1,6 @@
 [% META title = 'Group contact changes awaiting approval' %]
 
-<form method="post" action="[% c.uri_for('/admin/approve_gcc/submit') %]">
+<form method="post" action="[% c.uri_for('/admin/approve_change/submit') %]">
 <input type="hidden" name="approve_changes"
     value="[% FOREACH gcc IN to_approve %][% gcc.id %] [% END %]" />
 <table>
@@ -47,5 +47,6 @@
   </tr>
 [% END -%]
 </table>
+<input type='hidden' name='change_item' value="[% change_item %]" />
 <input type="submit" value="Submit" />
-</form> 
+</form>

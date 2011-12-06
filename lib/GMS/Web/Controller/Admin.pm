@@ -66,6 +66,25 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     }
 }
 
+=head2 address
+
+Chained method to select an address. Admins can view addresses
+for all groups and users.
+
+=cut
+
+sub address :Chained('base') :PathPart('address') :CaptureArgs(1) {
+    my ($self, $c, $address_id) = @_;
+
+    my $address = $c->model('DB::Address')->find({ id => $address_id });
+
+    if ($address) {
+        $c->stash->{address} = $address;
+    } else {
+        $c->detach('default');
+    }
+}
+
 =head2 approve
 
 Presents the group approval form.
@@ -133,20 +152,46 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
 
 }
 
-sub approve_gcc :Chained('base') :PathPart('approve_gcc') :Args(0) {
+sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     my ($self, $c) = @_;
 
-    my @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
+    my $change_item = $c->request->params->{change_item};
+    my @to_approve;
+    $c->stash->{change_item} = $change_item;
+
+    if ($change_item == 1) { #group contact change
+        @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
+    } elsif ($change_item == 2) { #group change
+        @to_approve = $c->model ("DB::GroupChange")->active_requests();
+    }
 
     $c->stash->{to_approve} = \@to_approve;
-    $c->stash->{template} = 'admin/approve_gcc.tt';
+
+    if ($change_item == 1) {
+        $c->stash->{template} = 'admin/approve_gcc.tt';
+    } elsif ($change_item == 2) {
+        $c->stash->{template} = 'admin/approve_gc.tt';
+    } elsif (! $change_item) {
+        $c->stash->{template} = 'admin/approve_change.tt';
+    }
 }
 
-sub do_approve_gcc :Chained('base') :PathPart('approve_gcc/submit') :Args(0) {
+sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $params = $c->request->params;
-    my $change_rs = $c->model('DB::GroupContactChange');
+    my $change_item = $params->{change_item};
+    my $change_rs;
+    my $type;
+
+    if ($change_item == 1) { #group contact change
+        $change_rs = $c->model('DB::GroupContactChange');
+        $type = "GroupContactChange";
+    } elsif ($change_item == 2) { #group change
+        $change_rs = $c->model('DB::GroupChange');
+        $type = "GroupChange";
+    }
+
     my $account = $c->user->account;
 
     my @approve_changes = split / /, $params->{approve_changes};
@@ -156,28 +201,27 @@ sub do_approve_gcc :Chained('base') :PathPart('approve_gcc/submit') :Args(0) {
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"};
                 if ($action eq 'approve') {
-                    $c->log->info("Approving GroupContactChange id $change_id" .
+                    $c->log->info("Approving $type id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->group_contact->approve_change($change, $account);
+                    $change->approve ($account);
                 } elsif ($action eq 'reject') {
-                    $c->log->info("Rejecting GroupContactChange id $change_id" .
+                    $c->log->info("Rejecting $type id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->group_contact->reject_change ($change, $account);
+                    $change->reject ($account);
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
-                    $c->log->error("Got unknown action $action for change id
-                        $change_id in Admin::do_approve_gcc");
+                    $c->log->error("Got unknown action $action for $type id
+                        $change_id in Admin::do_approve_change");
                 }
             }
         });
-        $c->response->redirect($c->uri_for('approve_gcc'));
+        $c->response->redirect($c->uri_for('approve_change', undef, { 'change_item' => $change_item }));
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;
-        $c->detach ("/admin/approve_gcc");
+        $c->detach ("/admin/approve_change");
     }
-
 }
 
 =head2 view
@@ -234,6 +278,18 @@ sub do_add_gc :Chained('single_group') :PathPart('add_gc/submit') :Args(0) {
 
     $c->stash->{msg} = "Successfully added the group contact.";
     $c->stash->{template} = 'staff/action_done.tt';
+}
+
+=head2 view_address
+
+Displays the given address to the admin.
+
+=cut
+
+sub view_address :Chained('address') :PathPart('view') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'admin/view_address.tt';
 }
 
 1;

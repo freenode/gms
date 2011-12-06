@@ -1,0 +1,61 @@
+[% META title = 'Edit Group Info' -%]
+
+<form method="post" action="[% c.uri_for("/group/${group.id}/edit/submit") %]">
+<table>
+<tr>
+  <td>Group Type</td>
+  <td>
+    <select name='group_type'>
+      <option value="informal" [% IF group_type == "informal" %] selected = "selected" [% END %]>Informal Group</option>
+      <option value="corporation" [% IF group_type == "corporation" %] selected = "selected" [% END %]>Corporation / Business entity</option>
+      <option value="education" [% IF group_type == "education" %] selected = "selected" [% END %]>Educational Institution</option>
+      <option value="government" [% IF group_type == "government" %] selected = "selected" [% END %]>Governmental Entity</option>
+      <option value="nfp" [% IF group_type == "nfp" %] selected = "selected" [% END %]>Not for profit / Charitable Organisation</option>
+      <option value="internal" [% IF group_type == "internal" %] selected = "selected" [% END %]>Internal Group</option>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>Group URL</td> <td><input type="text" name="url" value="[% url %]" /></td>
+</tr>
+<tr>
+  <td>Does the group have a registered / postal address?</td>
+  <td><input type="radio" name="has_address" id="has_address_y" value="y" [% IF has_address == 'y' %] checked="checked" [% END %]> Yes <br />
+      <input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address == 'n' %] checked="checked" [% END %]> No
+  </td>
+</tr>
+<tr>
+  <td>
+    <input type="checkbox" name="update_address" value="y" [% IF update_address %] checked="checked" [% END %] /> Update address information.
+  </td>
+</tr>
+<tr>
+  <td colspan="2"><strong>Group Address</strong> (if applicable)</td>
+</tr>
+<tr>
+  <td>Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td>
+</tr>
+<tr>
+  <td>Address 2:</td><td><input type="text" name="address_two" size="40" value="[% address_two %]"></td>
+</tr>
+<tr>
+  <td>City</td><td><input type="text" name="city" size="40" value="[% city %]"></td>
+</tr>
+<tr>
+  <td>State</td><td><input type="text" name="state" size="40" value="[% state %]"></td>
+</tr>
+<tr>
+  <td>Postal Code</td><td><input type="text" name="code" size="40" value="[% code %]"></td>
+</tr>
+<tr>
+  <td>Country</td><td><input type="text" name="country" size="40" value="[% country %]"></td>
+</tr>
+<tr>
+  <td>Telephone</td><td><input type="text" name="phone" size="40" value="[% phone %]"></td>
+</tr>
+<tr>
+  <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 %]"></td>
+</tr>
+</table>
+<input type="submit" value="Submit" />
+</form>

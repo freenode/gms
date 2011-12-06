@@ -1,7 +1,7 @@
 
 body {background-color: #ccc; padding:0px 0px 0px 0px; }
 
-body div {overflow:hidden; background-color: #aaa; }
+body div {overflow:auto; background-color: #aaa; }
 
 #header  {padding:3px 3px 3px 3px; margin:0 0 5px 0; }
 #sidebar {padding:3px 3px 0px 3px; margin:0 5px 0 0; float:left; width:300px; }

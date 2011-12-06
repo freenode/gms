@@ -241,49 +241,6 @@ sub decline_invitation {
     return $self->change ($self->contact->id, 'reject');
 }
 
-=head2 approve_change
-
-    $group_contact->approve_change($change, $approving_account);
-
-If the given change is a request, then create and return a new change identical
-to it except for the type, which will be 'approve', and the user, which must be
-provided.  The effect is to approve the given request.
-
-If the given change isn't a request, calling this is an error.
-
-=cut
-
-sub approve_change {
-    my ($self, $change, $account) = @_;
-
-    die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
-        unless $change->change_type eq 'request';
-
-    die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
-
-    my $ret = $self->active_change($change->copy({ change_type => 'approve', changed_by => $account, affected_change => $change->id}));
-    $self->update;
-    return $ret;
-}
-
-=head2 reject_change
-
-Similar to approve_change but reverts the contact's previous active change with the change_type being 'reject'.
-
-=cut
-
-sub reject_change {
-    my ($self, $change, $account) = @_;
-
-    die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
-        unless $change->change_type eq 'request';
-
-    die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
-
-    my $previous = $self->active_change;
-    return $previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $change->id});
-}
-
 =head2 can_access
 
     $group_contact->can_access ($group, $c->request->path);

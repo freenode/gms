@@ -37,5 +37,8 @@
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
 </li>
+<li>
+<a href="[% c.uri_for ("/group/${group.id}/edit"); %]">Edit Group Information</a>
+</li>
 [% END %]
 </ul>

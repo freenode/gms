@@ -1,0 +1,53 @@
+[% META title = 'Group changes awaiting approval' %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_change/submit') %]">
+<input type="hidden" name="approve_changes"
+    value="[% FOREACH gc IN to_approve %][% gc.id %] [% END %]" />
+<table>
+<tr>
+ <th>Group</th> <th>Status</th> <th>Type</th> <th>URL</th> <th>Address</th> <th>Request By</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+</tr>
+[% FOREACH gc IN to_approve -%]
+  <tr>
+    <td>
+      [% gc.group.group_name %]
+    </td>
+    <td>
+      [% gc.group.status %]<br/>[% gc.status %]
+    </td>
+    <td>
+      [% gc.group.group_type %]<br/>[% gc.group_type %]
+    </td>
+    <td>
+      [% gc.group.url %]<br/>[% gc.url %]
+    </td>
+    <td>
+      [% IF gc.group.address %]
+        <a href="[% c.uri_for ("/admin/address/${gc.group.address.id}/view") %]">Current</a>
+      [% ELSIF !gc.group_address && ( gc.address && gc.address.id != gc.group.address.id ) %]
+        ( None )
+      [% END %]
+      [% IF gc.address && gc.address.id != gc.group.address.id %]
+        <a href="[% c.uri_for ("/admin/address/${gc.address.id}/view") %]">New</a>
+      [% ELSIF gc.group.address && !gc.address %]
+        (None)
+      [% END %]
+    </td>
+    <td>
+      [% gc.changed_by.accountname %]
+    </td>
+    <td>
+        <input type="radio" name="action_[% gc.id %]" value="approve" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% gc.id %]" value="reject" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% gc.id %]" value="hold" checked="checked" />
+    </td>
+  </tr>
+[% END -%]
+</table>
+<input type='hidden' name='change_item' value="[% change_item %]" />
+<input type="submit" value="Submit" />
+</form>

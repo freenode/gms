@@ -72,6 +72,21 @@ __PACKAGE__->table("contact_changes");
 
 =cut
 
+=head2 affected_change
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=cut
+
+=head2 change_freetext
+
+  data_type: 'text'
+  is_nullable: 1
+
+=cut
+
 __PACKAGE__->add_columns(
   "id",
   {
@@ -106,6 +121,10 @@ __PACKAGE__->add_columns(
     },
     is_nullable => 0,
   },
+  "affected_change",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "change_freetext",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -156,6 +175,25 @@ __PACKAGE__->belongs_to(
   {},
 );
 
+=head2 affected_change
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::ContactChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "affected_change",
+  "GMS::Schema::Result::ContactChange",
+  { id => "affected_change" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
 
 # Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-11 20:23:08
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ncLmSRVDVaO6N1GJD95Xhg
@@ -167,5 +205,54 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->add_columns(
     '+change_type' => { is_enum => 1 }
 );
+
+use TryCatch;
+
+use GMS::Exception;
+
+=head1 METHODS
+
+=head2 approve
+
+    $change->approve ($approving_account);
+
+If the given change is a request, then create and return a new change identical
+to it except for the type, which will be 'approve', and the user, which must be
+provided.  The effect is to approve the given request.
+
+If the given change isn't a request, calling this is an error.
+
+=cut
+
+sub approve {
+    my ($self, $account) = @_;
+
+    die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
+        unless $self->change_type eq 'request';
+
+    die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
+
+    my $ret = $self->contact->active_change($self->copy({ change_type => 'approve', changed_by => $account, affected_change => $self->id}));
+    $self->contact->update;
+    return $ret;
+}
+
+=head2 reject
+
+Similar to approve but reverts the contact's previous active change with the change_type being 'reject'.
+
+=cut
+
+sub reject {
+    my ($self, $account) = @_;
+
+    die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
+        unless $self->change_type eq 'request';
+
+    die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
+
+    my $previous = $self->contact->active_change;
+    return $previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $self->id});
+}
 
 1;
