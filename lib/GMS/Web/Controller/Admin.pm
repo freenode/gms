@@ -292,4 +292,83 @@ sub view_address :Chained('address') :PathPart('view') :Args(0) {
     $c->stash->{template} = 'admin/view_address.tt';
 }
 
+=head2 edit
+
+Displays the form to edit a group's details.
+If the form hasn't been submitted already,
+it's populated with the group's current data.
+
+=cut
+
+sub edit :Chained('single_group') :PathPart('edit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $address = $group->address;
+
+    if (!$c->stash->{form_submitted}) {
+        $c->stash->{group_type} = $group->group_type;
+        $c->stash->{url} = $group->url;
+
+        if ($address) {
+            $c->stash->{has_address} = 'y';
+
+            foreach (qw /address_one address_two city state code country phone phone2/) {
+                $c->stash->{$_} = $address->$_;
+            }
+        } else {
+            $c->stash->{has_address} = 'n';
+        }
+    }
+
+    $c->stash->{template} = 'admin/edit_group.tt';
+}
+
+=head2 do_edit
+
+Processes the group edit form. Similar to
+L<GMS::Web::Controller::Group/do_edit>,
+but the change_type is 'admin'.
+
+=cut
+
+sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+    my $group = $c->stash->{group};
+    my $address;
+
+    try {
+        if ($p->{has_address} eq 'y' && $p->{update_address} eq 'y') {
+            $address = $c->model('DB::Address')->create({
+                    address_one => $p->{address_one},
+                    address_two => $p->{address_two},
+                    city => $p->{city},
+                    state => $p->{state},
+                    code => $p->{code},
+                    country => $p->{country},
+                    phone => $p->{phone},
+                    phone2 => $p->{phone2}
+                });
+        } elsif ($p->{has_address} eq 'n' && $p->{update_address} eq 'y') {
+            $address = -1;
+        }
+
+        $group->change ($c->user->account->contact->id, 'admin', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
+    }
+    catch (GMS::Exception::InvalidAddress $e) {
+        $c->stash->{errors} = [
+            "If the group has its own address, then a valid address must be specified.",
+            @{$e->message}
+        ];
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->stash->{form_submitted} = 1;
+        $c->detach('edit');
+    }
+
+    $c->stash->{msg} = "Successfully edited the group's information.";
+    $c->stash->{template} = 'staff/action_done.tt';
+}
+
 1;
