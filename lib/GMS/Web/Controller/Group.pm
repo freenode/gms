@@ -188,7 +188,7 @@ sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0)
 =head2 edit
 
 Displays the form to edit a group's details.
-If the group hasn't been submitted already,
+If the form hasn't been submitted already,
 it's populated with the group's current data.
 
 =cut
