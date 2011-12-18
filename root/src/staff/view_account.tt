@@ -1,0 +1,22 @@
+[% META title = 'User View' %]
+
+<p>[% account.accountname %]'s contact information:</p>
+
+<table>
+  <tr> <td>Account name:</td> <td>[% account.accountname %]</td> </tr>
+  <tr> <td>Real name:</td> <td>[% account.contact.name %]</td> </tr>
+  <tr> <td>E-mail Address:</td> <td>[% account.contact.email %]</td> </tr>
+  [% IF admin -%]
+  <tr> <td colspan="2">Address:</td> </tr>
+  <tr> <td>Address 1:</td> <td>[% account.contact.address.address_one %]</td> </tr>
+  <tr> <td>Address 2:</td> <td>[% account.contact.address.address_two %]</td> </tr>
+  <tr> <td>City:</td> <td>[% account.contact.address.city %]</td> </tr>
+  <tr> <td>State:</td> <td>[% account.contact.address.state %]</td> </tr>
+  <tr> <td>Postal Code:</td> <td>[% account.contact.address.code %]</td> </tr>
+  <tr> <td>Country:</td> <td>[% account.contact.address.country %]</td> </tr>
+  <tr> <td>Telephone:</td> <td>[% account.contact.address.phone %]</td> </tr>
+  <tr> <td>Telephone (Alternative):</td><td>[% account.contact.address.phone2 %]</td> </tr>
+  [% END %]
+</table>
+
+

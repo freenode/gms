@@ -163,6 +163,8 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
     } elsif ($change_item == 2) { #group change
         @to_approve = $c->model ("DB::GroupChange")->active_requests();
+    } elsif ($change_item == 3) { #contact change
+        @to_approve = $c->model ("DB::ContactChange")->active_requests();
     }
 
     $c->stash->{to_approve} = \@to_approve;
@@ -171,6 +173,8 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         $c->stash->{template} = 'admin/approve_gcc.tt';
     } elsif ($change_item == 2) {
         $c->stash->{template} = 'admin/approve_gc.tt';
+    } elsif ($change_item == 3) {
+        $c->stash->{template} = 'admin/approve_cc.tt';
     } elsif (! $change_item) {
         $c->stash->{template} = 'admin/approve_change.tt';
     }
@@ -190,6 +194,9 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     } elsif ($change_item == 2) { #group change
         $change_rs = $c->model('DB::GroupChange');
         $type = "GroupChange";
+    } elsif ($change_item == 3) { #contact change
+        $change_rs = $c->model('DB::ContactChange');
+        $type = "ContactChange";
     }
 
     my $account = $c->user->account;

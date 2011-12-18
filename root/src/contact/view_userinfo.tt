@@ -15,3 +15,5 @@
 <tr> <td>Telephone</td><td>[% phone_one %]</td> </tr>
 <tr> <td>Telephone (alternate)</td><td>[% phone_two %]</td> </tr>
 </table>
+
+<p><a href="[% c.uri_for ("/userinfo/edit/") %]">Edit Contact Information</a></p>

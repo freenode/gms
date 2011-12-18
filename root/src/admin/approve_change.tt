@@ -3,5 +3,6 @@
 <form method="post" action="[% c.uri_for('/admin/approve_change') %]">
 <input type='radio' name='change_item' value='1' /> Group Contact Changes<br />
 <input type='radio' name='change_item' value='2' /> Group Changes<br />
+<input type='radio' name='change_item' value='3' /> Contact Changes<br />
 <input type="submit" value="Submit" />
 </form>

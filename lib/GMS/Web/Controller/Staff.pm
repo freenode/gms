@@ -70,6 +70,24 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     }
 }
 
+=head2 account
+
+Chained method to select an account.
+
+=cut
+
+sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
+    my ($self, $c, $account_id) = @_;
+
+    my $account = $c->model('DB::Account')->find({ id => $account_id });
+
+    if ($account) {
+        $c->stash->{account} = $account;
+    } else {
+        $c->detach('/default');
+    }
+}
+
 =head2 search_groups
 
 Presents the form to search groups.
@@ -214,6 +232,19 @@ sub view :Chained('single_group') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'staff/view_group.tt';
+}
+
+=head2 view_account
+
+Displays account & contact information about a user,
+admins can view more information than staff.
+
+=cut
+
+sub view_account :Chained('account'):PathPart('view') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'staff/view_account.tt';
 }
 
 1;

@@ -8,7 +8,7 @@
 
 [% FOREACH account = results -%]
 <tr>
-  <td>[% account.accountname %]</td>
+  <td><a href="[% c.uri_for ("/staff/account/${account.id}/view") %]">[% account.accountname %]</a></td>
   <td>[% account.contact.name %]</td>
 </tr>
 [% END -%]

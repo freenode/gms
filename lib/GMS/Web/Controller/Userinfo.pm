@@ -60,9 +60,41 @@ sub index :Path :Args(0) {
     }
 }
 
+=head2 edit
+
+Displays the form to edit the user's contact information.
+If the form hasn't been submitted already,
+it is populated with the contact's current data.
+
+=cut
+
+sub edit :Path('edit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $contact = $c->user->account->contact;
+    my $address = $contact->address;
+
+    if (!$c->stash->{form_submitted}) {
+        $c->stash->{user_name} = $contact->name;
+        $c->stash->{user_email} = $contact->email;
+
+        $c->stash->{address_one} = $address->address_one;
+        $c->stash->{address_two} = $address->address_two;
+        $c->stash->{city} = $address->city;
+        $c->stash->{state} = $address->state;
+        $c->stash->{postcode} = $address->code;
+        $c->stash->{country} = $address->country;
+        $c->stash->{phone_one} = $address->phone;
+        $c->stash->{phone_two} = $address->phone2;
+    }
+
+    $c->stash->{edit} = 1;
+    $c->stash->{template} = 'contact/update_userinfo.tt';
+}
+
 =head2 update
 
-Submit handler to define a user's contact information.
+Submit handler to define and edit a user's contact information.
 
 =cut
 
@@ -74,40 +106,61 @@ sub update :Path('update') :Args(0) {
 
     my $account = $c->user->account;
     my $contact = $account->contact;
+    my ($msg, $address);
 
     if ($contact) {
-        $c->stash->{errors} = [ "You have already defined your contact information." ];
-        $c->detach('index');
-    }
-
-    try {
-        $c->model('DB')->schema->txn_do(sub {
-            my $address = $c->model('DB::Address')->create({
-                address_one => $params->{address_one},
-                address_two => $params->{address_two},
-                city => $params->{city},
-                state => $params->{state},
-                code => $params->{postcode},
-                country => $params->{country},
-                phone => $params->{phone_one},
-                phone2 => $params->{phone_two}
+        try {
+            if ($params->{update_address} eq 'y') {
+                $address = $c->model('DB::Address')->create({
+                        address_one => $params->{address_one},
+                        address_two => $params->{address_two},
+                        city => $params->{city},
+                        state => $params->{state},
+                        code => $params->{postcode},
+                        country => $params->{country},
+                        phone => $params->{phone_one},
+                        phone2 => $params->{phone_two}
+                    });
+            }
+            $contact->change ($account->id, 'request', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address });
+            $msg = "Successfully submitted the change request. Please wait for staff to approve the change.";
+        }
+        catch (GMS::Exception::InvalidAddress $e) {
+            $c->stash->{errors} = $e->message;
+            %{$c->stash} = ( %{$c->stash}, %$params );
+            $c->stash->{form_submitted} = 1;
+            $c->detach('edit');
+        }
+    } else {
+        try {
+            $c->model('DB')->schema->txn_do(sub {
+                my $address = $c->model('DB::Address')->create({
+                    address_one => $params->{address_one},
+                    address_two => $params->{address_two},
+                    city => $params->{city},
+                    state => $params->{state},
+                    code => $params->{postcode},
+                    country => $params->{country},
+                    phone => $params->{phone_one},
+                    phone2 => $params->{phone_two}
+                });
+                $contact = $c->model('DB::Contact')->create({
+                    account_id => $account->id,
+                    name => $params->{user_name},
+                    email => $params->{user_email},
+                    address => $address->id
+                });
             });
-            $contact = $c->model('DB::Contact')->create({
-                account_id => $account->id,
-                name => $params->{user_name},
-                email => $params->{user_email},
-                address => $address->id
-            });
-        });
-    }
-    catch (GMS::Exception::InvalidAddress $e) {
-        $c->stash->{errors} = $e->message;
-        %{$c->stash} = ( %{$c->stash}, %$params );
-        $c->detach('index');
+            $msg = "Your contact information has been updated.";
+        }
+        catch (GMS::Exception::InvalidAddress $e) {
+            $c->stash->{errors} = $e->message;
+            %{$c->stash} = ( %{$c->stash}, %$params );
+            $c->detach('index');
+        }
     }
 
-
-    $c->flash->{status_msg} = "Your contact information has been updated.";
+    $c->flash->{status_msg} = $msg;
 
     $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/userinfo'));
     delete $c->session->{redirect_to};
