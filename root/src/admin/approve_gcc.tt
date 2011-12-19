@@ -5,7 +5,7 @@
     value="[% FOREACH gcc IN to_approve %][% gcc.id %] [% END %]" />
 <table>
 <tr>
- <th>Group</th> <th>Group Contact</th> <th>Old Status</th> <th>New Status</th> <th>Primary? (Old)</th> <th>Primary? (New)</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+ <th>Group</th> <th>Group Contact</th> <th>Status</th> <th>Primary?</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
 </tr>
 [% FOREACH gcc IN to_approve -%]
   <tr>
@@ -16,10 +16,7 @@
       [% gcc.group_contact.contact.name %] ([% gcc.group_contact.contact.account.accountname %])
     </td>
     <td>
-      [% gcc.group_contact.status %]
-    </td>
-    <td>
-      [% gcc.status %]
+      [% gcc.group_contact.status %]<br/>[% gcc.status %]
     </td>
     <td>
       [% IF gcc.group_contact.is_primary -%]
@@ -27,13 +24,12 @@
       [% ELSE %]
         No
       [% END %]
-    </td>
-    <td>
-        [% IF gcc.primary -%]
-          Yes
-        [% ELSE %]
-          No
-        [% END %]
+      <br/>
+      [% IF gcc.primary -%]
+        Yes
+      [% ELSE %]
+        No
+      [% END %]
     </td>
     <td>
         <input type="radio" name="action_[% gcc.id %]" value="approve" />
