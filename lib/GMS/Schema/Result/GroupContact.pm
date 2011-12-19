@@ -230,15 +230,15 @@ sub change {
 }
 
 sub accept_invitation {
-    my ($self, $account) = @_;
+    my ($self) = @_;
 
-    return $self->change ($self->contact->id, 'request', { 'status' => 'active' });
+    return $self->change ($self->contact->account->id, 'request', { 'status' => 'active' });
 }
 
 sub decline_invitation {
-    my ($self, $account) = @_;
+    my ($self) = @_;
 
-    return $self->change ($self->contact->id, 'reject');
+    return $self->change ($self->contact->account->id, 'reject');
 }
 
 =head2 can_access

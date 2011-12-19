@@ -275,7 +275,7 @@ sub do_add_gc :Chained('single_group') :PathPart('add_gc/submit') :Args(0) {
         my $group = $c->stash->{group};
 
         try {
-            $group->add_contact ($contact, $c->user->account->contact->id, { 'freetext' => $p->{freetext} });
+            $group->add_contact ($contact, $c->user->account->id, { 'freetext' => $p->{freetext} });
         }
         catch (GMS::Exception $e) {
             $c->stash->{error_msg} = $e;
@@ -362,7 +362,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
             $address = -1;
         }
 
-        $group->change ($c->user->account->contact->id, 'admin', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
+        $group->change ($c->user->account->id, 'admin', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = [

@@ -126,7 +126,7 @@ sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
-    my $result = $group->auto_verify($c->user->account->contact->id, $c->request->params);
+    my $result = $group->auto_verify($c->user->account->id, $c->request->params);
     if ($result) {
         $c->stash->{msg} = "Group successfully verified. Please wait for staff to approve or decline your group request";
     }
@@ -154,7 +154,7 @@ sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
         my $contact = $account->contact;
         my $group = $c->stash->{group};
         try {
-            $group->invite_contact ($contact, $c->user->account->contact->id);
+            $group->invite_contact ($contact, $c->user->account->id);
         }
         catch (GMS::Exception $e) {
             $c->stash->{error_msg} = $e;
@@ -247,7 +247,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
             $address = -1;
         }
 
-        $group->change ($c->user->account->contact->id, 'request', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
+        $group->change ($c->user->account->id, 'request', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = [
@@ -329,7 +329,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 $group->add_to_channel_namespaces({ namespace => $channel_ns});
             }
 
-            $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1, account => $account->contact->id });
+            $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1, account => $account->id });
 
             $c->stash->{contact} = $account->contact;
             $c->stash->{group} = $group;
