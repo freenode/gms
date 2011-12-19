@@ -85,6 +85,24 @@ sub address :Chained('base') :PathPart('address') :CaptureArgs(1) {
     }
 }
 
+=head2 account
+
+Chained method to select an account.
+
+=cut
+
+sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
+    my ($self, $c, $account_id) = @_;
+
+    my $account = $c->model('DB::Account')->find ({ id => $account_id });
+
+    if ($account) {
+        $c->stash->{account} = $account;
+    } else {
+        $c->detach('/default');
+    }
+}
+
 =head2 approve
 
 Presents the group approval form.
@@ -375,6 +393,81 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     }
 
     $c->stash->{msg} = "Successfully edited the group's information.";
+    $c->stash->{template} = 'staff/action_done.tt';
+}
+
+=head2 edit_account
+
+Displays the form to edit a user's contact information.
+If the form hasn't been submitted already,
+it is populated with the contact's current data.
+=cut
+
+sub edit_account :Chained('account') :PathPart('edit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $account = $c->stash->{account};
+    my $contact = $account->contact;
+    my $address = $contact->address;
+
+    if (!$c->stash->{form_submitted}) {
+        $c->stash->{user_name} = $contact->name;
+        $c->stash->{user_email} = $contact->email;
+
+        $c->stash->{address_one} = $address->address_one;
+        $c->stash->{address_two} = $address->address_two;
+        $c->stash->{city} = $address->city;
+        $c->stash->{state} = $address->state;
+        $c->stash->{postcode} = $address->code;
+        $c->stash->{country} = $address->country;
+        $c->stash->{phone_one} = $address->phone;
+        $c->stash->{phone_two} = $address->phone2;
+    }
+
+    $c->stash->{template} = 'admin/edit_account.tt';
+}
+
+=head2 do_edit_account
+
+Processes the contact information edit form.
+Similar to L<GMS::Web::Controller::Userinfo/update>,
+but only handles updating and not defining and the
+change_type is 'admin'
+
+=cut
+
+sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $params = $c->request->params;
+    my $account = $c->stash->{account};
+    my $contact = $account->contact;
+    my $address;
+
+    try {
+        if ($params->{update_address} eq 'y') {
+            $address = $c->model('DB::Address')->create({
+                    address_one => $params->{address_one},
+                    address_two => $params->{address_two},
+                    city => $params->{city},
+                    state => $params->{state},
+                    code => $params->{postcode},
+                    country => $params->{country},
+                    phone => $params->{phone_one},
+                    phone2 => $params->{phone_two}
+                });
+        }
+        
+        $contact->change ($c->user->account->id, 'admin', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address });
+    }
+    catch (GMS::Exception::InvalidAddress $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$params );
+        $c->stash->{form_submitted} = 1;
+        $c->detach('edit_account');
+    }
+
+    $c->stash->{msg} = "Successfully edited the user's contact information.";
     $c->stash->{template} = 'staff/action_done.tt';
 }
 

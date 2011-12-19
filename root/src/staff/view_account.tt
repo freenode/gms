@@ -19,4 +19,6 @@
   [% END %]
 </table>
 
-
+[% IF admin -%]
+<p><a href="[% c.uri_for ("/admin/account/${account.id}/edit") %]">Edit contact information</a></p>
+[% END %]
