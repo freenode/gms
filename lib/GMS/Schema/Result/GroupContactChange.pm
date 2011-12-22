@@ -229,7 +229,10 @@ sub reject {
     die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
 
     my $previous = $self->group_contact->active_change;
-    return $previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $self->id});
+    my $ret = $self->group_contact->active_change ($previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $self->id}));
+
+    $self->group_contact->update;
+    return $ret;
 }
 
 1;
