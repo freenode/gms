@@ -543,15 +543,19 @@ sub invite_contact {
 
     $args ||= {};
 
-    if ( $self->group_contacts->find ({ contact_id => $contact->id }) ) {
-        die GMS::Exception->new ("This person has already been invited.");
+    if ( ( my $group_contact = $self->group_contacts->find ({ contact_id => $contact->id }) ) ) {
+        if ($group_contact->status eq 'invited' && $group_contact->active_change->change_type eq 'reject') {
+            $group_contact->change ($inviter, 'workflow_change', { status => 'invited' });
+        } else {
+            die GMS::Exception->new ("This person has already been invited.");
+        }
+    } else {
+        $self->add_to_group_contacts({
+                contact => $contact,
+                account => $inviter,
+                %$args
+            });
     }
-
-    $self->add_to_group_contacts({
-            contact => $contact,
-            account => $inviter,
-            %$args
-        });
 }
 
 =head2 add_contact

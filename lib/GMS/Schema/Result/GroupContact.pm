@@ -241,6 +241,20 @@ sub decline_invitation {
     return $self->change ($self->contact->account->id, 'reject');
 }
 
+=head2 has_active_invitation
+
+Returns if the group contact has an active invitation to their group
+(if their status is invited and change_type is 'create' or 'workflow_change')
+
+=cut
+
+sub has_active_invitation {
+    my ($self) = @_;
+
+    my $active_change_type = $self->active_change->change_type;
+    return ($self->status eq 'invited' && ($active_change_type eq 'create' || $active_change_type eq 'workflow_change'));
+}
+
 =head2 can_access
 
     $group_contact->can_access ($group, $c->request->path);
@@ -255,7 +269,7 @@ sub can_access {
     if ( ( $group->status->is_active && $self->status->is_active ) || ( !$group->status->is_active && !$group->status->is_deleted ) ) { #contact and group are active or group is pending verification
         return 1;
     }
-    elsif ( $group->status->is_active && $self->status->is_invited && $self->active_change->change_type eq 'create' && ( $path =~ qr|invite/accept| || $path =~ qr|invite/decline| ) ) { #invited GC is only able to access invite/accept & invite/decline
+    elsif ( $group->status->is_active && $self->has_active_invitation && ( $path =~ qr|invite/accept| || $path =~ qr|invite/decline| ) ) { #invited GC is only able to access invite/accept & invite/decline
         return 1;
     }
     else {
