@@ -19,7 +19,6 @@
     [% group.verify_freetext %]
 [% END %]
 
-
 <h3>Contacts:</h3>
 <ul>
 [% FOREACH contact = group.active_contacts %]
@@ -40,5 +39,10 @@
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/edit"); %]">Edit Group Information</a>
 </li>
+[% IF gc.is_primary %]
+<li>
+<a href="[% c.uri_for ("/group/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
+</li>
+[% END %]
 [% END %]
 </ul>

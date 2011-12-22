@@ -223,6 +223,10 @@ sub change {
         primary => $args->{primary} || $active_change->primary,
     );
 
+    if ($change_args{primary} == -1) {
+        $change_args{primary} = 0; #make it possible for group contacts to remove their primary status.
+    }
+
     my $ret = $self->add_to_group_contact_changes(\%change_args);
     $self->active_change($ret) if $change_type ne 'request';
     $self->update;
@@ -267,7 +271,11 @@ sub can_access {
     my ($self, $group, $path) = @_;
 
     if ( ( $group->status->is_active && $self->status->is_active ) || ( !$group->status->is_active && !$group->status->is_deleted ) ) { #contact and group are active or group is pending verification
-        return 1;
+        if ( $path !~ /edit_gc/ || $self->is_primary ) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
     elsif ( $group->status->is_active && $self->has_active_invitation && ( $path =~ qr|invite/accept| || $path =~ qr|invite/decline| ) ) { #invited GC is only able to access invite/accept & invite/decline
         return 1;

@@ -206,6 +206,16 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->many_to_many(active_contacts => 'active_group_contacts', 'contact');
 
+#GroupContacts can edit the information for active and retired contacts.
+__PACKAGE__->has_many(
+    "editable_group_contacts",
+    "GMS::Schema::Result::GroupContact",
+    { "foreign.group_id" => "self.id" },
+    { join => 'active_change',
+      'where' => { 'active_change.status' => ['active', 'retired'] }
+    }
+);
+
 use TryCatch;
 use String::Random qw/random_string/;
 
