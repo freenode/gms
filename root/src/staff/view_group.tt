@@ -47,6 +47,9 @@
   <li>
     <a href="[% c.uri_for ("/admin/${group.id}/edit"); %]">Edit Group Information</a>
   </li>
+  <li>
+    <a href="[% c.uri_for ("/admin/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
+  </li>
   [% IF group.address %]
     <li>
       <a href="[% c.uri_for ("/admin/address/${group.address.id}/view"); %]">View Address</a>

@@ -1,0 +1,36 @@
+[% META title = 'Edit group contact information' %]
+
+<form method="post" action="[% c.uri_for("/admin/${group.id}/edit_gc/submit") %]">
+<input type="hidden" name="group_contacts"
+    value="[% FOREACH gc IN group_contacts %][% gc.contact.id %] [% END %]" />
+
+<p>Group Contacts:</p>
+
+<table>
+<tr>
+  <th>Contact</th> <th>Status</th> <th>Primary?</th> <th>Change</th> <th>Hold</th>
+</tr>
+[% FOREACH group_contact IN group_contacts -%]
+  <tr>
+    <td>
+    [% group_contact.contact.name %] ([% group_contact.contact.account.accountname %])
+    </td>
+    <td>
+    <select name="status_[% group_contact.contact.id %]">
+      <option value="active" [% IF group_contact.status == 'active' %] selected [% END %]>active</option>
+      <option value="retired" [% IF group_contact.status == 'retired' %] selected [% END %]>retired</option>
+      <option value="invited" [% IF group_contact.status == 'invited' %] selected [% END %]>invited</option>
+    </select>
+    </td>
+    <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF group_contact.is_primary %] checked [% END %] /></td>
+    <td><input type="radio" name="action_[% group_contact.contact.id %]" value="change" /></td>
+    <td><input type="radio" name="action_[% group_contact.contact.id %]" value="hold" checked="checked" /></td>
+  </tr>
+[% END -%]
+</table>
+
+<p>
+  <input type="submit" value="Submit" />
+</p>
+
+</form>

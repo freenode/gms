@@ -396,6 +396,59 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     $c->stash->{template} = 'staff/action_done.tt';
 }
 
+=head2 edit_gc
+
+Displays the form to edit Group Contact information.
+Admins can edit information for all contacts.
+
+=cut
+
+sub edit_gc :Chained('single_group') :PathPart('edit_gc') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @group_contacts = $group->group_contacts;
+
+    $c->stash->{group_contacts} = \@group_contacts;
+
+    $c->stash->{template} = 'admin/edit_gc.tt';
+}
+
+=head2 do_edit_gc
+
+Processes the Group Contact edit form and creates a
+GroupContactChange with 'admin' as the change type.
+
+=cut
+
+sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $params = $c->request->params;
+    my @group_contacts = split / /, $params->{group_contacts};
+
+    foreach my $contact_id (@group_contacts) {
+        my $contact = $group->group_contacts->find ({ contact_id => $contact_id });
+        my $action = $params->{"action_$contact_id"};
+        if ($action eq 'change') {
+            my $status = $params->{"status_$contact_id"};
+            my $primary = $params->{"primary_$contact_id"};
+
+            if (!$primary) {
+                $primary = -1;
+            }
+
+            $contact->change ($c->user->account->id, 'admin', { 'status' => $status, 'primary' => $primary });
+        } elsif ($action eq 'hold') {
+            next;
+        }
+    }
+
+    $c->stash->{msg} = "Successfully edited the Group Contacts' information.";
+    $c->stash->{template} = 'staff/action_done.tt';
+}
+
 =head2 edit_account
 
 Displays the form to edit a user's contact information.
