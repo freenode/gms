@@ -24,7 +24,9 @@ p,div,span {font-family:Arial, Helvetica; }
 .errormsg  {background-color: #fbb; border:3px solid #f00; }
 .statusmsg {background-color: #ffd; border:3px solid #ff0; }
 
+.hidden {display: none; }
 
+.wide {line-height: 180%; }
 
 
 

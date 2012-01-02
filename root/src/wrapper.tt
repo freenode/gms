@@ -4,6 +4,7 @@
   <head>
     <title>Freenode Group Management System</title>
     <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/main.css') %]" />
+    <script type="text/javascript" src="[% c.uri_for('/static/main.js') %]"></script>
   </head>
   <body>
     <div id="header">

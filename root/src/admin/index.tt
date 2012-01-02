@@ -13,5 +13,8 @@
 <li>
   <a href="[% c.uri_for("/staff/search_users") %]">Search Users</a>
 </li>
+<li>
+  <a href="[% c.uri_for("/admin/search_changes") %]">View and search Changes history</a>
+</li>
 </ul>
 

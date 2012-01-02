@@ -1,0 +1,78 @@
+[% META title = 'Search Results' %]
+
+<table>
+<tr>
+  <th>ID</th>
+  <th>Group Name</th>
+  <th>Contact Accoutname</th>
+  <th>Change Type</th>
+  <th>Status</th>
+  <th>Expand</th>
+</tr>
+
+[% FOREACH change = results -%]
+[%
+  group = change.group_contact.group;
+  account = change.group_contact.contact.account;
+%]
+<tr>
+  <td>
+    [% change.id %]
+  </td>
+  <td>
+    <a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name %]</a>
+  </td>
+  <td>
+    <a href='[% c.uri_for ("/staff/account/${account.id}/view") %]'>[% account.accountname %]</a>
+  </td>
+  <td>
+    [% change.change_type %]
+  </td>
+  <td>
+    [% change.status %]
+  <td>
+    <a href='javascript:;' onclick='show([% change.id %])' id='link_[% change.id %]'>Expand</a>
+  </td>
+</tr>
+<tr id='hidden_[% change.id %]' class='hidden'>
+  <td colspan='6' class='wide'>
+    <ul>
+      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>
+        Primary:
+        [% IF change.group_contact.is_primary %]
+          Yes
+        [% ELSE %]
+          No
+        [% END %]
+      </li>
+      <li>Affected Change: [% change.affected_change.id %]</li>
+      <li>
+        Change FreeText:<br />
+        [% change.change_freetext | html %]
+      </li>
+      <li>
+        <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
+      </li>
+    </ul>
+  </td>
+</tr>
+[% END -%]
+</table>
+
+<p>
+  <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
+    <input type='hidden' name='gc_accname' value='[% gc_accname %]' />
+    <input type='hidden' name='gc_groupname' value='[% gc_groupname %]' />
+    <input type='hidden' name='current_page' value='[% current_page %]' />
+    <input type='hidden' name='change_item' value='[% change_item %]' />
+
+    [% IF current_page != 1 %]
+      <input type='submit' name='next' value='Previous page' />
+    [% END %]
+    [% IF current_page != last_page %]
+      <input type='submit' name='next' value='Next page' />
+    [% END %]
+  </form>
+  <a href='[% c.uri_for ("/admin/search_changes") %]'>Back to search</a>
+</p>

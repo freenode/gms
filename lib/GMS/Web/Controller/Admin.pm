@@ -524,4 +524,109 @@ sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
     $c->stash->{template} = 'staff/action_done.tt';
 }
 
+=head2 search_changes
+
+Presents the form to search changes.
+
+=cut
+
+sub search_changes :Chained('base') :PathPart('search_changes') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'admin/search_changes.tt';
+}
+
+=head2 do_search_changes
+
+Processes the form to search changes,
+and displays the results.
+
+=cut
+
+sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(0) {
+    my ($self, $c) = @_;
+    my ($change_rs, $rs, $page);
+
+    my $p = $c->request->params;
+    my $change_item = $p->{change_item};
+
+    my $current_page = $p->{current_page} || 1;
+    my $next = $p->{next};
+
+    if ($next eq 'Next page') {
+        $page = $current_page + 1;
+    } elsif ($next eq 'Previous page') {
+        $page = $current_page - 1;
+    } else {
+        $page = $current_page;
+    }
+
+    if ($change_item == 1) { #GroupContactChanges
+        $change_rs = $c->model('DB::GroupContactChange');
+
+        my $accname = $p->{gc_accname};
+        my $groupname = $p->{gc_groupname};
+
+        $accname =~ s#_#\\_#g; #escape _ so it's not used as a wildcard.
+        $groupname =~ s#_#\\_#g;
+
+        $rs = $change_rs -> search(
+            {
+                'account.accountname' => { 'ilike', $accname },
+                'group.group_name' => { 'ilike', $groupname }
+            },
+            {
+                join => { 'group_contact' => [ { 'contact' => 'account' }, 'group' ] },
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            },
+        );
+
+        $c->stash->{template} = 'admin/search_gcc_results.tt';
+    } elsif ($change_item == 2) { #GroupChanges
+        $change_rs = $c->model('DB::GroupChange');
+
+        my $groupname = $p->{group_name};
+        $groupname =~ s#_#\\_#g;
+
+        $rs = $change_rs -> search(
+            { 'group.group_name' => { 'ilike', $groupname } },
+            {
+                join => 'group',
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            },
+        );
+
+        $c->stash->{template} = 'admin/search_gc_results.tt';
+    } elsif ($change_item == 3) { #ContactChanges
+        $change_rs = $c->model('DB::ContactChange');
+
+        my $accname = $p->{accname};
+        $accname =~ s#_#\\_#g;
+
+        $rs = $change_rs -> search(
+            { 'account.accountname' => { 'ilike', $accname } },
+            {
+                join => { contact => 'account' },
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            }
+        );
+
+        $c->stash->{template} = 'admin/search_cc_results.tt';
+    }
+
+    my $pager = $rs->pager;
+    my @results = $rs->all;
+
+    %{$c->stash} = ( %{$c->stash}, %$p );
+    $c->stash->{current_page} = $page;
+    $c->stash->{last_page} = $pager->last_page;
+
+    $c->stash->{results} = \@results;
+}
 1;

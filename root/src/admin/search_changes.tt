@@ -1,0 +1,48 @@
+[% META title = 'Search Changes' %]
+
+<form method="post" action="[% c.uri_for('/admin/search_changes/submit') %]">
+
+<p>
+  Enter the search criteria. Wildcard: '%'
+</p>
+
+<table>
+  <tr>
+    <td colspan="2"><input name="change_item" value="1" type="radio" checked="checked" id="radio1" /> <label for="radio1">Group Contact Changes</label></td>
+  </tr>
+  <tr>
+    <td>Group Contact Account name:</td>
+    <td><input type='text' name='gc_accname' /></td>
+  </tr>
+  <tr>
+    <td>Group Name:</td>
+    <td><input type='text' name='gc_groupname' /></td>
+  </td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="2"><input name="change_item" value="2" type="radio" id="radio2" /> <label for="radio2">Group Changes</label></td>
+  </tr>
+  <tr>
+    <td>Group name:</td>
+    <td><input type='text' name='group_name' /></td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="2"><input name="change_item" value="3" type="radio" id="radio3"/> <label for="radio3">Contact Changes</label></td>
+  </tr>
+  <tr>
+    <td>Contact name:</td>
+    <td><input type='text' name='accname' /></td>
+  </tr>
+</table>
+
+<p>
+  <input type='submit' value='Submit' />
+</p>
+
+</form>

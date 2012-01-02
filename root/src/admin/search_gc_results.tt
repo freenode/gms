@@ -1,0 +1,74 @@
+[% META title = 'Search Results' %]
+
+<table>
+<tr>
+  <th>ID</th>
+  <th>Group Name</th>
+  <th>Group Type</th>
+  <th>Change Type</th>
+  <th>Status</th>
+  <th>Expand</th>
+</tr>
+
+[% FOREACH change = results -%]
+<tr>
+  <td>
+    [% change.id %]
+  </td>
+  <td>
+    <a href='[% c.uri_for ("/staff/${change.group.id}/view") %]'>[% change.group.group_name %]</a>
+  </td>
+  <td>
+    [% change.group_type %]
+  </td>
+  <td>
+    [% change.change_type %]
+  </td>
+  <td>
+    [% change.status %]
+  <td>
+    <a href='javascript:;' onclick='show([% change.id %])' id='link_[% change.id %]'>Expand</a>
+  </td>
+</tr>
+<tr id='hidden_[% change.id %]' class='hidden'>
+  <td colspan='5'>
+    <ul>
+      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>Change time: [% change.time %]</li>
+      <li>Group URL: [% change.url %]</li>
+      <li>Affected Change: [% change.affected_change.id %]</li>
+      <li>
+        Change FreeText:<br />
+        [% change.change_freetext | html %]
+      </li>
+      <li>
+        [% IF change.address %]
+          <a href='[% c.uri_for ("/admin/address/${change.address.id}/view") %]'>Address</a>
+        [% ELSE %]
+          This Group has no address.
+        [% END %]
+      </li>
+      <li>
+        <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
+      </li>
+    </ul>
+  </td>
+</tr>
+[% END -%]
+</table>
+
+<p>
+  <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
+    <input type='hidden' name='group_name' value='[% group_name %]' />
+    <input type='hidden' name='current_page' value='[% current_page %]' />
+    <input type='hidden' name='change_item' value='[% change_item %]' />
+
+    [% IF current_page != 1 %]
+      <input type='submit' name='next' value='Previous page' />
+    [% END %]
+    [% IF current_page != last_page %]
+      <input type='submit' name='next' value='Next page' />
+    [% END %]
+  </form>
+  <a href='[% c.uri_for ("/admin/search_changes") %]'>Back to search</a>
+</p>
