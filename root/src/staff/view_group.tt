@@ -17,7 +17,7 @@
 [% IF group.verify_freetext %]
     <br/>
     <b>This group can't be verified by another method because:</b><br/><br/>
-    [% group.verify_freetext %]
+    [% group.verify_freetext | html %]
 [% END %]
 
 <h3>Contacts:</h3>
