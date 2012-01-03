@@ -33,7 +33,7 @@ __PACKAGE__->table("group_verifications");
 
 =head2 verification_data
 
-  data_type: 'text[]'
+  data_type: 'text'
   is_nullable: 1
 
 =cut
