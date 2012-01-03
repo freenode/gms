@@ -510,7 +510,7 @@ sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
                     phone2 => $params->{phone_two}
                 });
         }
-        
+
         $contact->change ($c->user->account->id, 'admin', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address });
     }
     catch (GMS::Exception::InvalidAddress $e) {

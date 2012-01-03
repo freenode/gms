@@ -400,7 +400,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 subject => "Group Registration for " . $group->group_name,
                 template => 'new_group.tt',
             };
- 
+
             #$c->forward($c->view('Email'));
             #if (scalar @{$c->error}) {
             #    my $message = $c->error->[0];
