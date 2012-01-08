@@ -73,7 +73,7 @@ __PACKAGE__->table("group_changes");
 =head2 status
 
   data_type: 'enum'
-  extra: {custom_type_name => "group_status",list => ["submitted","verified","active","deleted"]}
+  extra: {custom_type_name => "group_status",list => ["submitted","verified","active","deleted","pending-web","pending-staff","pending-auto"]}
   is_nullable: 0
 
 =cut
