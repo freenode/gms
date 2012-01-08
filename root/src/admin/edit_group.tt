@@ -15,6 +15,19 @@
     </select>
   </td>
 </tr>
+  <td>Group Status</td>
+  <td>
+    <select name='status'>
+      <option value="submitted" [% IF status == "submitted" %] selected="selected" [% END %]>submitted</option>
+      <option value="verified" [% IF status == "verified" %] selected="selected" [% END %]>verified</option>
+      <option value="active" [% IF status == "active" %] selected="active" [% END %]>active</option>
+      <option value="deleted" [% IF status == "deleted" %] selected="selected" [% END %]>deleted</option>
+      <option value="pending-web" [% IF status == "pending-web" %] selected="selected" [% END %]>pending-web</option>
+      <option value="pending-staff" [% IF status == "pending-staff" %] selected="selected" [% END %]>pending-staff</option>
+      <option value="pending-auto" [% IF status == "pending-auto" %] selected="selected" [% END %]>pending-auto</option>
+    </select>
+  </td>
+</tr>
 <tr>
   <td>Group URL</td> <td><input type="text" name="url" value="[% url %]" /></td>
 </tr>

@@ -334,6 +334,7 @@ sub edit :Chained('single_group') :PathPart('edit') :Args(0) {
     if (!$c->stash->{form_submitted}) {
         $c->stash->{group_type} = $group->group_type;
         $c->stash->{url} = $group->url;
+        $c->stash->{status} = $group->status;
 
         if ($address) {
             $c->stash->{has_address} = 'y';
@@ -380,7 +381,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
             $address = -1;
         }
 
-        $group->change ($c->user->account->id, 'admin', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
+        $group->change ($c->user->account->id, 'admin', { 'group_type' => $p->{group_type}, 'status' => $p->{status}, 'url' => $p->{url}, address => $address });
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = [
