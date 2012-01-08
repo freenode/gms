@@ -455,9 +455,11 @@ sub auto_verify {
     }
     if ( ( my $freetext = $args->{freetext} ) ) {
         $self->add_to_group_verifications ({ verification_type => 'freetext', verification_data => $freetext });
+        $self->change ($account, 'workflow_change', { status => 'pending-staff'});
+
+        return 0;
     }
-    $self->change ($account, 'workflow_change', { status => 'pending-staff'});
-    return 0;
+    return -1;
 }
 
 =head2 url

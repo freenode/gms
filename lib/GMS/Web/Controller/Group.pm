@@ -130,11 +130,16 @@ sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
 
     my $group = $c->stash->{group};
     my $result = $group->auto_verify($c->user->account->id, $c->request->params);
-    if ($result) {
+    if ($result == 1) {
         $c->stash->{msg} = "Group successfully verified. Please wait for staff to approve or decline your group request";
     }
-    else {
+    elsif ($result == 0) {
         $c->stash->{msg} = "Please wait for staff to verify your group and approve or decline your group request";
+    }
+    elsif ($result == -1) {
+        $c->stash->{error_msg} = "Unable to complete auto verification. Please check that you have completed either of the steps below. If
+        you are having trouble, please enter what you are trying to do in the freetext area below:";
+        $c->detach ('verify');
     }
 
     $c->stash->{template} = 'group/action_done.tt';
