@@ -558,8 +558,12 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         $page = $current_page + 1;
     } elsif ($next eq 'Previous page') {
         $page = $current_page - 1;
+    } elsif ($next eq 'First page') {
+        $page = 1;
+    } elsif ($next eq 'Last page') {
+        $page = $p->{last_page};
     } else {
-        $page = $current_page;
+        $page = $p->{page} || $current_page;
     }
 
     if ($change_item == 1) { #GroupContactChanges
