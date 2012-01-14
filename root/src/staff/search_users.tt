@@ -13,7 +13,7 @@
   </tr>
   <tr>
     <td>Full name</td>
-    <td><input type='text' name='name' /></td>
+    <td><input type='text' name='fullname' /></td>
   </tr>
 </table>
 

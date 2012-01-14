@@ -113,7 +113,22 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
     my $group_rs = $c->model("DB::Group");
     my $mode = $p->{mode}; #1 - At least 1 criterion must be satisfied (OR)
                            #2 - All criteria must be satisfied (AND)
-    my (@search, @join);
+    my (@search, @join, $page);
+
+    my $current_page = $p->{current_page} || 1;
+    my $next = $p->{next};
+
+    if ($next eq 'Next page') {
+        $page = $current_page + 1;
+    } elsif ($next eq 'Previous page') {
+        $page = $current_page - 1;
+    } elsif ($next eq 'First page') {
+        $page = 1;
+    } elsif ($next eq 'Last page') {
+        $page = $p->{last_page};
+    } else {
+        $page = $p->{page} || $current_page;
+    }
 
     if ($p->{group_name}) {
         my $group_name = $p->{group_name};
@@ -150,13 +165,22 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
 
     my $m = ($mode == 1?"-or":"-and");
 
-    my @results = $group_rs->search (
+    my $rs = $group_rs->search (
         { $m => \@search },
         {
             join => \@join,
             distinct => 1,
+            page => $page,
+            rows => 15
         }
     );
+
+    my $pager = $rs->pager;
+    my @results = $rs->all;
+
+    %{$c->stash} = ( %{$c->stash}, %$p );
+    $c->stash->{current_page} = $page;
+    $c->stash->{last_page} = $pager->last_page;
 
     if (scalar (@results) == 0) {
         $c->stash->{error_msg} = "Unable to find any groups that match your search criteria. Please try again.";
@@ -190,7 +214,22 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
 
     my $p = $c->request->params;
     my $account_rs = $c->model("DB::Account");
-    my (@search, @join);
+    my (@search, @join, $page);
+
+    my $current_page = $p->{current_page} || 1;
+    my $next = $p->{next};
+
+    if ($next eq 'Next page') {
+        $page = $current_page + 1;
+    } elsif ($next eq 'Previous page') {
+        $page = $current_page - 1;
+    } elsif ($next eq 'First page') {
+        $page = 1;
+    } elsif ($next eq 'Last page') {
+        $page = $p->{last_page};
+    } else {
+        $page = $p->{page} || $current_page;
+    }
 
     if ($p->{accountname}) {
         my $accountname = $p->{accountname};
@@ -199,18 +238,29 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
         push @search, { accountname => { ilike => $accountname } };
     }
 
-    if ($p->{name}) {
-        my $name = $p->{name};
+    if ($p->{fullname}) {
+        my $name = $p->{fullname};
         $name =~ s#_#\\_#g;
 
         push @search, { 'active_change.name' => { ilike => $name } };
         push @join, { 'contact' => 'active_change' };
     }
 
-    my @results = $account_rs -> search(
+    my $rs = $account_rs -> search(
         { -or => \@search },
-        { join => \@join }
+        {
+            join => \@join,
+            page => $page,
+            rows => 15
+        }
     );
+
+    my $pager = $rs->pager;
+    my @results = $rs->all;
+
+    %{$c->stash} = ( %{$c->stash}, %$p );
+    $c->stash->{current_page} = $page;
+    $c->stash->{last_page} = $pager->last_page;
 
     if ( scalar (@results) == 0 ) {
         $c->stash->{error_msg} = "Unable to find any users that match your search criteria. Please try again.";

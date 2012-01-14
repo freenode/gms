@@ -17,5 +17,37 @@
 </table>
 
 <p>
+  <form action='[% c.uri_for ("/staff/search_groups/submit") %]' method='post'>
+    <input type='hidden' name='group_name' value='[% group_name %]' />
+    <input type='hidden' name='gc_accname' value='[% gc_accname %]' />
+    <input type='hidden' name='group_type' value='[% group_type %]' />
+    <input type='hidden' name='group_status' value='[% group_status %]' />
+    <input type='hidden' name='namespace' value='[% namespace %]' />
+    <input type='hidden' name='mode' value='[% mode %]' />
+
+    <input type='hidden' name='current_page' value='[% current_page %]' />
+    <input type='hidden' name='last_page' value='[% last_page %]' />
+
+    <input type='submit' name='next' value='First page' />
+    [% IF current_page != 1 %]
+      <input type='submit' name='next' value='Previous page' />
+    [% END %]
+    [% IF current_page != last_page %]
+      <input type='submit' name='next' value='Next page' />
+    [% END %]
+    <input type='submit' name='next' value='Last page' /><br />
+
+    <select name='page'>
+      <option value=''>Select a page...</option>
+      [%
+        FOR i IN [ 1 .. last_page ]
+      %]
+        <option value='[% i %]' [% IF i == current_page %] selected='selected' [% END %]>[% i %]</option>
+      [%
+        END
+      %]
+    </select>
+    <input type='submit' value='Go' />
+  </form>
   <a href='[% c.uri_for ("/staff/search_groups") %]'>Back to search</a>
 </p>
