@@ -141,18 +141,20 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
             foreach my $group_id (@approve_groups, @verify_groups) {
                 my $group = $group_rs->find({ id => $group_id });
                 my $action = $params->{"action_$group_id"};
+                my $freetext = $params->{"freetext_$group_id"};
+
                 if ($action eq 'approve') {
                     $c->log->info("Approving group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
-                    $group->approve($account);
+                    $group->approve($account, $freetext);
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
-                    $group->reject($account);
+                    $group->reject($account, $freetext);
                 } elsif ($action eq 'verify') {
                     $c->log->info("Verifying group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
-                    $group->verify($account);
+                    $group->verify($account, $freetext);
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -225,14 +227,16 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
             foreach my $change_id (@approve_changes) {
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"};
+                my $freetext = $params->{"freetext_$change_id"};
+
                 if ($action eq 'approve') {
                     $c->log->info("Approving $type id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->approve ($account);
+                    $change->approve ($account, $freetext);
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting $type id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->reject ($account);
+                    $change->reject ($account, $freetext);
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -381,7 +385,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
             $address = -1;
         }
 
-        $group->change ($c->user->account->id, 'admin', { 'group_type' => $p->{group_type}, 'status' => $p->{status}, 'url' => $p->{url}, address => $address });
+        $group->change ($c->user->account->id, 'admin', { 'group_type' => $p->{group_type}, 'status' => $p->{status}, 'url' => $p->{url}, address => $address, 'change_freetext' => $p->{freetext} });
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = [
@@ -435,12 +439,13 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
         if ($action eq 'change') {
             my $status = $params->{"status_$contact_id"};
             my $primary = $params->{"primary_$contact_id"};
+            my $freetext = $params->{"freetext_$contact_id"};
 
             if (!$primary) {
                 $primary = -1;
             }
 
-            $contact->change ($c->user->account->id, 'admin', { 'status' => $status, 'primary' => $primary });
+            $contact->change ($c->user->account->id, 'admin', { 'status' => $status, 'primary' => $primary, 'change_freetext' => $freetext });
         } elsif ($action eq 'hold') {
             next;
         }
@@ -512,7 +517,7 @@ sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
                 });
         }
 
-        $contact->change ($c->user->account->id, 'admin', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address });
+        $contact->change ($c->user->account->id, 'admin', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address, 'change_freetext' => $params->{freetext} });
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = $e->message;

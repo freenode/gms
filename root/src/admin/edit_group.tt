@@ -70,5 +70,9 @@
   <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 %]"></td>
 </tr>
 </table>
-<input type="submit" value="Submit" />
+<p>
+  Enter optional free text about this change:<br />
+  <textarea style="width:90%;height:200px;" name="freetext">[% freetext %]</textarea><br/>
+  <input type="submit" value="Submit" />
+</p>
 </form>

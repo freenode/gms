@@ -26,6 +26,14 @@
     <td><input type="radio" name="action_[% group_contact.contact.id %]" value="change" /></td>
     <td><input type="radio" name="action_[% group_contact.contact.id %]" value="hold" checked="checked" /></td>
   </tr>
+  <tr>
+    <td>
+      Free text:
+    </td>
+    <td colspan="4">
+      <textarea name="freetext_[% group_contact.contact.id %]" style="width:350px;height:100px;"></textarea>
+   </td>
+  </tr>
 [% END -%]
 </table>
 

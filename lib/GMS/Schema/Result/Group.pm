@@ -347,7 +347,8 @@ sub change {
         group_type => $args->{group_type} || $active_change->group_type,
         url => $args->{url} || $active_change->url,
         address => $args->{address} || $active_change->address,
-        status => $args->{status} || $active_change->status
+        status => $args->{status} || $active_change->status,
+        change_freetext => $args->{change_freetext}
     );
     if ( defined ( my $va = $args->{verify_auto} ) ) {
         $self->verify_auto ($va);
@@ -488,36 +489,37 @@ sub address {
 
 =head2 verify
 
-    $group->verify($verifiedby);
+    $group->verify($verifiedby, $freetext);
 
 Marks the group, which must be pending verification, as verified.
 
 =cut
 
 sub verify {
-    my ($self, $account) = @_;
+    my ($self, $account, $freetext) = @_;
     if ($self->status ne 'pending-staff') {
         die GMS::Exception->new("Can't verify a group that isn't pending verification.");
     }
-    $self->change( $account, 'admin', { status => 'verified' } );
+    $self->change( $account, 'admin', { status => 'verified', 'change_freetext' => $freetext } );
 }
 
 =head2 approve
 
-    $group->approve($approvedby);
+    $group->approve($approvedby, $freetext);
 
 Marks the group, which must be pending verification or approval, as approved.
-Takes one argument, the account which approved it.
+Takes two arguments, the account which approved it and optional freetext about
+the approval.
 
 =cut
 
 sub approve {
-    my ($self, $account) = @_;
+    my ($self, $account, $freetext) = @_;
     if ($self->status ne 'pending-staff' && $self->status ne 'pending-auto' && $self->status ne 'verified') {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
             . "pending verification");
     }
-    $self->change( $account, 'admin', { status => 'active' } );
+    $self->change( $account, 'admin', { status => 'active', 'change_freetext' => $freetext } );
 
     foreach my $contact ($self->group_contacts) {
         $contact->change ($account, 'admin', { status => 'active' });
@@ -526,17 +528,17 @@ sub approve {
 
 =head2 reject
 
-Marks the group, which must not be approved, as rejected. The only argument is
-the account rejecting it.
+Marks the group, which must not be approved, as rejected. Takes two arguments,
+the account which rejected it and optional freetext about the rejection.
 
 =cut
 
 sub reject {
-    my ($self, $account) = @_;
+    my ($self, $account, $freetext) = @_;
     if ($self->status ne 'pending-staff' && $self->status ne 'pending-auto' && $self->status ne 'verified') {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
-    $self->change( $account, 'admin', { status => 'deleted' } );
+    $self->change( $account, 'admin', { status => 'deleted', 'change_freetext' => $freetext } );
 }
 
 =head2 invite_contact

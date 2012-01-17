@@ -221,6 +221,7 @@ sub change {
         change_type => $change_type,
         status => $args->{status} || $active_change->status,
         primary => $args->{primary} || $active_change->primary,
+        change_freetext => $args->{change_freetext}
     );
 
     if ($change_args{primary} == -1) {

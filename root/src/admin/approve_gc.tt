@@ -46,6 +46,14 @@
         <input type="radio" name="action_[% gc.id %]" value="hold" checked="checked" />
     </td>
   </tr>
+  <tr>
+    <td>
+      Free text:
+    </td>
+    <td colspan="8">
+      <textarea name="freetext_[% gc.id %]" style="width:100%;height:100px;"></textarea>
+   </td>
+  </tr>
 [% END -%]
 </table>
 <input type='hidden' name='change_item' value="[% change_item %]" />

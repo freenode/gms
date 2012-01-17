@@ -235,7 +235,8 @@ sub change {
         change_type => $change_type,
         name => $args->{name} || $active_change->name,
         address => $args->{address} || $active_change->address,
-        email => $args->{email} || $active_change->email
+        email => $args->{email} || $active_change->email,
+        change_freetext => $args->{change_freetext}
     );
 
     my $ret = $self->add_to_contact_changes(\%change_args);

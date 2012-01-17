@@ -21,6 +21,10 @@
     <td><input type="radio" name="action_[% group.id %]" value="reject" /></td>
     <td><input type="radio" name="action_[% group.id %]" value="hold" checked="checked" /></td>
   </tr>
+  <tr>
+    <td>Enter optional free text about this change:</td>
+    <td colspan="3"><textarea style="width:350px;height:100px;" name="freetext_[% group.id %]"></textarea></td>
+  </tr>
 [% END -%]
 </table>
 
@@ -37,6 +41,10 @@
     <td><input type="radio" name="action_[% group.id %]" value="reject" /></td>
     <td><input type="radio" name="action_[% group.id %]" value="verify" /></td>
     <td><input type="radio" name="action_[% group.id %]" value="hold" checked="checked" /></td>
+  </tr>
+  <tr>
+    <td>Enter optional free text about this change:</td>
+    <td colspan="4"><textarea style="width:350px;height:100px;" name="freetext_[% group.id %]"></textarea></td>
   </tr>
 [% END -%]
 </table>

@@ -239,25 +239,26 @@ use GMS::Exception;
 
 =head2 approve
 
-    $change->approve ($approving_account);
+    $change->approve ($approving_account, $freetext);
 
 If the given change is a request, then create and return a new change identical
-to it except for the type, which will be 'approve', and the user, which must be
-provided.  The effect is to approve the given request.
+to it except for the type, which will be 'approve', the user, which must be
+provided, and the optional free text about the change. The effect is to
+approve the given request.
 
 If the given change isn't a request, calling this is an error.
 
 =cut
 
 sub approve {
-    my ($self, $account) = @_;
+    my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
         unless $self->change_type eq 'request';
 
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
-    my $ret = $self->group->active_change($self->copy({ change_type => 'approve', changed_by => $account, affected_change => $self->id}));
+    my $ret = $self->group->active_change($self->copy({ change_type => 'approve', changed_by => $account, affected_change => $self->id, change_freetext => $freetext }));
     $self->group->update;
     return $ret;
 }
@@ -269,7 +270,7 @@ Similar to approve but reverts the group's previous active change with the chang
 =cut
 
 sub reject {
-    my ($self, $account) = @_;
+    my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
         unless $self->change_type eq 'request';
@@ -277,7 +278,7 @@ sub reject {
     die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
 
     my $previous = $self->group->active_change;
-    my $ret = $self->group->active_change ($previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $self->id}));
+    my $ret = $self->group->active_change ($previous->copy({ change_type => 'reject', changed_by => $account, affected_change => $self->id, change_freetext => $freetext }));
 
     $self->group->update;
     return $ret;
