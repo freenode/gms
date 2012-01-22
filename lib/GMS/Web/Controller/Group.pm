@@ -324,6 +324,62 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     $c->stash->{template} = 'group/action_done.tt';
 }
 
+=head2 take_over
+
+Displays the form to take over channels for the group.
+
+=cut
+
+sub take_over :Chained('single_group') :PathPart('take_over') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @group_contacts = $group->group_contacts;
+    my @channel_namespaces = $group->channel_namespaces;
+
+    $c->stash->{group_contacts} = \@group_contacts;
+    $c->stash->{channel_namespaces} = \@channel_namespaces;
+
+    $c->stash->{template} = 'group/take_over.tt';
+}
+
+=head2 do_take_over
+
+Processes the form to take over channels and transfers channel
+ownership to the new founder.
+
+=cut
+
+sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+
+    my $channel = $p->{channel};
+    my $gc = $p->{group_contact};
+    my $namespace = $p->{channel_namespace};
+    my $group = $c->stash->{group};
+
+    try {
+        $group->take_over ($c, $channel, $namespace, $gc);
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+
+        $c->detach ('take_over');
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+
+        $c->detach ('take_over');
+    }
+
+    $c->stash->{msg} = "Successfully transferred the channel to $gc.";
+    $c->stash->{template} = 'group/action_done.tt';
+}
+
 =head2 new_form
 
 Displays the form to register a new group.

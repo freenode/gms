@@ -39,6 +39,9 @@
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/edit"); %]">Edit Group Information</a>
 </li>
+<li>
+<a href="[% c.uri_for ("/group/${group.id}/take_over"); %]">Take over a channel that's in the group's namespace.</a>
+</li>
 [% IF gc.is_primary %]
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
