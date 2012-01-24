@@ -359,9 +359,14 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     my $gc = $p->{group_contact};
     my $namespace = $p->{channel_namespace};
     my $group = $c->stash->{group};
+    my $action = $p->{action};
 
     try {
-        $group->take_over ($c, $channel, $namespace, $gc);
+        if ($action == 1) {
+            $group->take_over ($c, $channel, $namespace, $gc);
+        } elsif ($action == 2) {
+            $group->drop ($c, $channel, $namespace);
+        }
     }
     catch (RPC::Atheme::Error $e) {
         $c->stash->{error_msg} = $e->description;
@@ -376,7 +381,12 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
         $c->detach ('take_over');
     }
 
-    $c->stash->{msg} = "Successfully transferred the channel to $gc.";
+    if ($action == 1) {
+        $c->stash->{msg} = "Successfully transferred the channel to $gc.";
+    } elsif ($action == 2) {
+        $c->stash->{msg} = "Successfully dropped the channel.";
+    }
+
     $c->stash->{template} = 'group/action_done.tt';
 }
 

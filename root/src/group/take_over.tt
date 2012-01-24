@@ -3,17 +3,30 @@
 <form method="post" action="[% c.uri_for("/group/${group.id}/take_over/submit") %]">
     Enter the channel name:<br/>
     <input type="text" name="channel" value="[% channel %]" /><br/><br />
+
+    Which namespace does the channel belong to?<br />
+
+    <select name="channel_namespace">
+      [% FOREACH namespace IN channel_namespaces %]
+        <option value="[% namespace.namespace %]" [% IF channel_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace %]</option>
+      [% END %]
+    </select><br /><br />
+    <p>What would you like to do?</p>
+    <ul>
+    <li>
+    <input type="radio" name="action"i value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a Group Contact.<br/><br/>
     Which Group Contact should it be transferred to?<br/>
     <select name="group_contact">
       [% FOREACH gc IN group_contacts %]
         <option value="[% gc.contact.account.accountname %]" [% IF group_contact == gc.contact.account.accountname %] selected [% END %]>[% gc.contact.account.accountname %]</option>
       [% END %]
     </select><br/><br/>
-    Which namespace does the group belong to?<br />
-    <select name="channel_namespace">
-      [% FOREACH namespace IN channel_namespaces %]
-        <option value="[% namespace.namespace %]" [% IF channel_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace %]</option>
-      [% END %]
-    </select><br /><br />
-    <input type="submit" value="submit" />
+    </li>
+
+    <li>
+    <input type="radio" name="action" value="2" [% IF action == 2 %] checked [% END %] /> Drop the channel.<br/ >
+    </li>
+    </ul>
+
+    <p><input type="submit" value="submit" /></p>
 </form>

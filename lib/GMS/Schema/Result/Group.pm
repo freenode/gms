@@ -632,6 +632,33 @@ sub take_over {
     }
 }
 
+=head2 drop
+
+Similar to take_over, but drops the channel instead of transferring it.
+
+=cut
+
+sub drop {
+    my ($self, $c, $channel, $namespace) = @_;
+
+    my $controlsession = $c->model('Atheme')->session;
+
+    if (! $self->channel_namespaces->find({ 'namespace' => $namespace }) ) {
+        die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
+    }
+
+    if ( match_glob ($namespace, $channel) ) {
+        try {
+            $controlsession->command('ChanServ', 'fdrop', $channel);
+        }
+        catch (RPC::Atheme::Error $e) {
+            die $e;
+        }
+    } else {
+        die GMS::Exception->new ("This channel does not belong that namespace.");
+    }
+}
+
 =head1 INTERNAL METHODS
 
 =head2 _use_automatic_verification
