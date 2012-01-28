@@ -424,6 +424,12 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     my $group;
 
+    if ($group_rs->find ({ group_name => $p->{group_name}, deleted => 0 })) {
+        $c->stash->{error_msg} = "This group name is already taken.";
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach('new_form');
+    }
+
     try {
         $c->model('DB')->schema->txn_do(sub {
             my $address;
