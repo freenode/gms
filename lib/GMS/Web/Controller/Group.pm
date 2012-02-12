@@ -513,8 +513,21 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     my @channels = split /, */, $p->{channel_namespace};
 
-    if ($namespace_rs->find ({ 'namespace' => { 'in' => \@channels } })) {
-        $c->stash->{error_msg} = "One of the namespaces you have selected is already taken.";
+    foreach my $channel_ns ( @channels ) {
+        if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
+            if ($ns->status ne 'deleted') {
+                push @errors, "The namespace $channel_ns is already taken";
+            } else {
+                if ($ns->last_change->change_type eq 'request' && !$p->{'do_confirm'}) {
+                    push @errors, "Another group has requested the $channel_ns namespace. Are you sure you want to create a conflicting request?";
+                    $c->stash->{confirm} = 1;
+                }
+            }
+        }
+    }
+
+    if (@errors) {
+        $c->stash->{errors} = \@errors;
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach('new_form');
     }
@@ -545,9 +558,12 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                     account => $c->user->account,
                 });
 
-            foreach my $channel_ns ( @channels )
-            {
-                $group->add_to_channel_namespaces({ group_id => $group->id, namespace => $channel_ns, 'account' => $c->user->account });
+            foreach my $channel_ns ( @channels ) {
+                if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
+                    $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
+                } else {
+                    $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $channel_ns, 'status' => 'pending-staff' });
+                }
             }
 
             $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1, account => $account->id });
