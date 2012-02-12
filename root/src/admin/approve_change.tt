@@ -4,5 +4,6 @@
 <input type='radio' name='change_item' value='1' /> Group Contact Changes<br />
 <input type='radio' name='change_item' value='2' /> Group Changes<br />
 <input type='radio' name='change_item' value='3' /> Contact Changes<br />
+<input type='radio' name='change_item' value='4' /> Channel Namespace Changes<br />
 <input type="submit" value="Submit" />
 </form>

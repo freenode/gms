@@ -108,8 +108,8 @@ Related object: L<GMS::Schema::Result::ChannelNamespace>
 __PACKAGE__->has_many(
   "channel_namespaces",
   "GMS::Schema::Result::ChannelNamespace",
-  { "foreign.group_id" => "self.id" },
-  {},
+  { "foreign.active_change.group_id" => "self.id" },
+  { "join" => "active_change" },
 );
 
 =head2 cloak_namespaces
@@ -194,7 +194,7 @@ __PACKAGE__->has_many(
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
 
 __PACKAGE__->many_to_many(verifications => 'group_verifications', 'verification');
-# Filtered versions of group_contacts and contacts
+# Filtered versions of group_contacts, contacts and namespaces
 __PACKAGE__->has_many(
     "active_group_contacts",
     "GMS::Schema::Result::GroupContact",
@@ -213,6 +213,15 @@ __PACKAGE__->has_many(
     { "foreign.group_id" => "self.id" },
     { join => 'active_change',
       'where' => { 'active_change.status' => ['active', 'retired'] }
+    }
+);
+
+__PACKAGE__->has_many(
+    "active_channel_namespaces",
+    "GMS::Schema::Result::ChannelNamespace",
+    { "foreign.active_change.group_id" => "self.id" },
+    { 'join' => 'active_change',
+      'where' => { 'active_change.status' => 'active' }
     }
 );
 
@@ -525,6 +534,11 @@ sub approve {
     foreach my $contact ($self->group_contacts) {
         $contact->change ($account, 'admin', { status => 'active' });
     }
+
+    foreach my $namespace ($self->channel_namespaces) {
+        $namespace->change ($account, 'admin', { status => 'active' });
+    }
+
 }
 
 =head2 reject

@@ -185,6 +185,8 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         @to_approve = $c->model ("DB::GroupChange")->active_requests();
     } elsif ($change_item == 3) { #contact change
         @to_approve = $c->model ("DB::ContactChange")->active_requests();
+    } elsif ($change_item == 4) { #channel namespace change
+        @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
     }
 
     $c->stash->{to_approve} = \@to_approve;
@@ -195,6 +197,8 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         $c->stash->{template} = 'admin/approve_gc.tt';
     } elsif ($change_item == 3) {
         $c->stash->{template} = 'admin/approve_cc.tt';
+    } elsif ($change_item == 4) {
+        $c->stash->{template} = 'admin/approve_cnc.tt';
     } elsif (! $change_item) {
         $c->stash->{template} = 'admin/approve_change.tt';
     }
@@ -217,6 +221,9 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     } elsif ($change_item == 3) { #contact change
         $change_rs = $c->model('DB::ContactChange');
         $type = "ContactChange";
+    } elsif ($change_item == 4) { #channel namespace change
+        $change_rs = $c->model('DB::ChannelNamespaceChange');
+        $type = "ChannelNamespaceChange";
     }
 
     my $account = $c->user->account;
@@ -250,6 +257,68 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;
         $c->detach ("/admin/approve_change");
+    }
+}
+
+=head2 approve_channel_namespaces
+
+Presents the channel namespaces approval form.
+
+=cut
+
+sub approve_channel_namespaces :Chained('base') :PathPart('approve_channel_namespaces') :Args(0) {
+    my ($self, $c) = @_;
+
+    my @to_approve = $c->model('DB::ChannelNamespace')->search_pending;
+
+    $c->stash->{to_approve} = \@to_approve;
+    $c->stash->{template} = 'admin/approve_channel_namespaces.tt';
+}
+
+=head2 do_approve_channel_namespaces
+
+Processes the form to approve channel namespaces.
+
+=cut
+
+sub do_approve_channel_namespaces :Chained('base') :PathPart('approve_channel_namespaces/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $params = $c->request->params;
+    my $namespace_rs = $c->model("DB::ChannelNamespace");
+
+    my $account = $c->user->account;
+
+    my @approve_namespaces = split / /, $params->{approve_namespaces};
+
+    try {
+        $c->model('DB')->schema->txn_do(sub {
+            foreach my $namespace_id (@approve_namespaces) {
+                my $namespace = $namespace_rs->find({ id => $namespace_id });
+                my $action = $params->{"action_$namespace_id"};
+                my $freetext = $params->{"freetext_$namespace_id"};
+
+                if ($action eq 'approve') {
+                    $c->log->info("Approving channel namespace id $namespace_id" .
+                        " by " . $c->user->username . "\n");
+                    $namespace->approve ($account, $freetext);
+                } elsif ($action eq 'reject') {
+                    $c->log->info("Rejecting channel namespace id $namespace_id" .
+                        " by " . $c->user->username . "\n");
+                    $namespace->reject ($account, $freetext);
+                } elsif ($action eq 'hold') {
+                    next;
+                } else {
+                    $c->log->error("Got unknown action $action for channel namespace id
+                        $namespace_id in Admin::do_approve_channel_namespaces");
+                }
+            }
+        });
+        $c->response->redirect($c->uri_for('approve_channel_namespaces'));
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e->message;
+        $c->detach ("/admin/approve_channel_namespaces");
     }
 }
 
@@ -455,6 +524,65 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     $c->stash->{template} = 'staff/action_done.tt';
 }
 
+=head2 edit_channel_namespaces
+
+Shows the group's current channel namespaces and allows the admin to edit them or add more.
+
+=cut
+
+sub edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @channel_namespaces = $group->channel_namespaces;
+
+    $c->stash->{channel_namespaces} = \@channel_namespaces;
+    $c->stash->{template} = 'admin/edit_channel_namespaces.tt';
+}
+
+=head2 do_edit_channel_namespaces
+
+Processes the form to edit channel namespaces or add a new channel namespace for the group
+
+=cut
+
+sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $p = $c->request->params;
+    my $new_namespace = $p->{namespace};
+
+    my @namespaces = $group->active_channel_namespaces;
+
+    my $namespace_rs = $c->model("DB::ChannelNamespace");
+
+    foreach my $namespace (@namespaces) {
+        my $namespace_id = $namespace->id;
+
+        if ($p->{"edit_$namespace_id"}) {
+            my $status = $p->{"status_$namespace_id"};
+            $namespace->change ($c->user->account, 'admin', { 'status' => $status });
+        }
+    }
+
+    if ($new_namespace) {
+        if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
+            if ($ns->status ne 'deleted') {
+                $c->stash->{error_msg} = "That namespace is already taken";
+                $c->detach ('edit_channel_namespaces');
+            } else {
+                $ns->change ($c->user->account, 'admin', { 'status' => 'active', 'group_id' => $group->id });
+            }
+        } else {
+            $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'active' });
+        }
+    }
+
+    $c->stash->{msg} = 'Namespaces updated successfully,';
+    $c->stash->{template} = 'staff/action_done.tt';
+}
+
 =head2 edit_account
 
 Displays the form to edit a user's contact information.
@@ -628,6 +756,29 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         );
 
         $c->stash->{template} = 'admin/search_cc_results.tt';
+    } elsif ($change_item == 4) { #ChannelNamespaceChanges
+        $change_rs = $c->model('DB::ChannelNamespaceChange');
+
+        my $namespace = $p->{namespace};
+        my $groupname = $p->{groupname};
+
+        $namespace =~ s#_#\\_#g;
+        $groupname =~ s#_#\\_#g;
+
+        $rs = $change_rs -> search(
+            {
+                'namespace.namespace' => { 'ilike', $namespace },
+                'group.group_name' => { 'ilike', $groupname }
+            },
+            {
+                join => [ 'namespace', 'group' ],
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            },
+        );
+
+        $c->stash->{template} = 'admin/search_cnc_results.tt';
     }
 
     my $pager = $rs->pager;

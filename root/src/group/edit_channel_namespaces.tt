@@ -1,0 +1,41 @@
+[% META title = 'Channel Namespaces' %]
+
+<h2>Channel Namespaces for [% group.group_name %]</h2>
+
+[% group.group_name %]'s current active namespaces are:<br/>
+
+<form method="post" action="[% c.uri_for("/group/${group.id}/edit_channel_namespaces/submit") %]">
+
+<table>
+<tr>
+<th>Namespace</th>
+<th>Status</th>
+<th>Change?</th>
+</tr>
+
+[% FOREACH namespace IN channel_namespaces %]
+<tr>
+  <td>
+    [% namespace.namespace %]
+  </td>
+  <td>
+    <select name='status_[% namespace.id %]'>
+      <option value='active' [% IF namespace.status == 'active' %] selected [% END %]>active</option>
+      <option value='deleted' [% IF namespace.status == 'deleted' %] selected [% END %]>deleted</option>
+    </select>
+  </td>
+  <td>
+    <input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change
+  </td>
+</tr>
+[% END %]
+
+</table>
+
+<p>
+  Add a new namespace:
+  Namespace: <input type='text' name='namespace' /><br />
+  <input type='submit' value='Submit' />
+</p>
+
+</form>

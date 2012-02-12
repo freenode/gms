@@ -1,0 +1,35 @@
+[% META title = 'Channel Namespaces approval' %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_channel_namespaces/submit') %]">
+<input type="hidden" name="approve_namespaces"
+    value="[% FOREACH namespace IN to_approve %][% namespace.id %] [% END %]" />
+
+<p>The following channel namespaces are awaiting approval:</p>
+
+<table>
+<tr>
+  <th>Namespace</th> <th>Group</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+</tr>
+[% FOREACH namespace IN to_approve -%]
+  <tr>
+    <td>
+      [% namespace.namespace %]
+    <td>
+      <a href="[% c.uri_for("/admin/${namespace.group.id}/view") %]">[% namespace.group.group_name | html %]</a>
+    </td>
+    <td><input type="radio" name="action_[% namespace.id %]" value="approve" /></td>
+    <td><input type="radio" name="action_[% namespace.id %]" value="reject" /></td>
+    <td><input type="radio" name="action_[% namespace.id %]" value="hold" checked="checked" /></td>
+  </tr>
+  <tr>
+    <td>Enter optional free text about this change:</td>
+    <td colspan="3"><textarea style="width:350px;height:100px;" name="freetext_[% namespace.id %]"></textarea></td>
+  </tr>
+[% END -%]
+</table>
+
+<p>
+  <input type="submit" value="Submit" />
+</p>
+
+</form>

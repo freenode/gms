@@ -39,6 +39,17 @@
     <td>Contact name:</td>
     <td><input type='text' name='accname' /></td>
   </tr>
+  <tr>
+    <td colspan="2"><input name="change_item" value="4" type="radio" id="radio4"/> <label for="radio4">Channel Namespace Changes</label></td>
+  </tr>
+  <tr>
+    <td>Namespace name:</td>
+    <td><input type='text' name='namespace' /></td>
+  </tr>
+  <tr>
+    <td>Group name:</td>
+    <td><input type='text' name='groupname' /></td>
+  </tr>
 </table>
 
 <p>

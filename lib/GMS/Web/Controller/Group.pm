@@ -390,6 +390,66 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     $c->stash->{template} = 'group/action_done.tt';
 }
 
+=head2 edit_channel_namespaces
+
+Shows the group's current channel namespaces and allows the group contact to
+request changes or request a new namespace.
+
+=cut
+
+sub edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @channel_namespaces = $group->active_channel_namespaces;
+
+    $c->stash->{channel_namespaces} = \@channel_namespaces;
+    $c->stash->{template} = 'group/edit_channel_namespaces.tt';
+}
+
+=head2 do_edit_channel_namespaces
+
+Processes the form to edit channel namespaces or add a new channel namespace for the group
+
+=cut
+
+sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $p = $c->request->params;
+    my $new_namespace = $p->{namespace};
+
+    my @namespaces = $group->active_channel_namespaces;
+
+    my $namespace_rs = $c->model("DB::ChannelNamespace");
+
+    foreach my $namespace (@namespaces) {
+        my $namespace_id = $namespace->id;
+
+        if ($p->{"edit_$namespace_id"}) {
+            my $status = $p->{"status_$namespace_id"};
+            $namespace->change ($c->user->account, 'request', { 'status' => $status });
+        }
+    }
+
+    if ($new_namespace) {
+        if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
+            if ($ns->status ne 'deleted') {
+                $c->stash->{error_msg} = "That namespace is already taken";
+                $c->detach ('edit_channel_namespaces');
+            } else {
+                $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
+            }
+        } else {
+            $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending-staff' });
+        }
+    }
+
+    $c->stash->{msg} = 'Namespace updates requested successfully,';
+    $c->stash->{template} = 'group/action_done.tt';
+}
+
 =head2 new_form
 
 Displays the form to register a new group.
@@ -421,11 +481,20 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     my @errors;
 
     my $group_rs = $c->model('DB::Group');
+    my $namespace_rs = $c->model('DB::ChannelNamespace');
 
     my $group;
 
     if ($group_rs->find ({ group_name => $p->{group_name}, deleted => 0 })) {
         $c->stash->{error_msg} = "This group name is already taken.";
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach('new_form');
+    }
+
+    my @channels = split /, */, $p->{channel_namespace};
+
+    if ($namespace_rs->find ({ 'namespace' => { 'in' => \@channels } })) {
+        $c->stash->{error_msg} = "One of the namespaces you have selected is already taken.";
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach('new_form');
     }
@@ -456,10 +525,9 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                     account => $c->user->account,
                 });
 
-            my @channels = split /, */, $p->{channel_namespace};
             foreach my $channel_ns ( @channels )
             {
-                $group->add_to_channel_namespaces({ namespace => $channel_ns});
+                $group->add_to_channel_namespaces({ group_id => $group->id, namespace => $channel_ns, 'account' => $c->user->account });
             }
 
             $group->add_to_group_contacts({ contact_id => $account->contact->id, primary => 1, account => $account->id });
