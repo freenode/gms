@@ -229,13 +229,21 @@ sub change {
     my ($self, $account, $change_type, $args) = @_;
 
     my $active_change = $self->active_change;
+    my $last_change = $self->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+    } else {
+        $change = $active_change;
+    }
 
     my %change_args = (
         changed_by => $account,
         change_type => $change_type,
-        name => $args->{name} || $active_change->name,
-        address => $args->{address} || $active_change->address,
-        email => $args->{email} || $active_change->email,
+        name => $args->{name} || $change->name,
+        address => $args->{address} || $change->address,
+        email => $args->{email} || $change->email,
         change_freetext => $args->{change_freetext}
     );
 
@@ -243,6 +251,20 @@ sub change {
     $self->active_change($ret) if $change_type ne 'request';
     $self->update;
     return $ret;
+}
+
+=head2 last_change
+
+Returns the most recent change for the contact.
+
+=cut
+
+sub last_change {
+    my ($self) = @_;
+
+    my @changes = $self->contact_changes->search({ }, { 'order_by' => { -desc => 'id' } });
+
+    return $changes[0];
 }
 
 # You can replace this text with custom content, and it will be preserved on regeneration

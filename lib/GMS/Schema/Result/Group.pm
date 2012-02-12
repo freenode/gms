@@ -350,14 +350,22 @@ sub change {
     my ($self, $account, $change_type, $args) = @_;
 
     my $active_change = $self->active_change;
+    my $last_change = $self->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+    } else {
+        $change = $active_change;
+    }
 
     my %change_args = (
         changed_by => $account,
         change_type => $change_type,
-        group_type => $args->{group_type} || $active_change->group_type,
-        url => $args->{url} || $active_change->url,
-        address => $args->{address} || $active_change->address,
-        status => $args->{status} || $active_change->status,
+        group_type => $args->{group_type} || $change->group_type,
+        url => $args->{url} || $change->url,
+        address => $args->{address} || $change->address,
+        status => $args->{status} || $change->status,
         change_freetext => $args->{change_freetext}
     );
     if ( defined ( my $va = $args->{verify_auto} ) ) {
@@ -442,6 +450,20 @@ sub verify_freetext {
         my ($data) = $res->verification_data;
         return $data;
     }
+}
+
+=head2 last_change
+
+Returns the most recent change for the group.
+
+=cut
+
+sub last_change {
+    my ($self) = @_;
+
+    my @changes = $self->group_changes->search({ }, { 'order_by' => { -desc => 'id' } });
+
+    return $changes[0];
 }
 
 sub auto_verify {

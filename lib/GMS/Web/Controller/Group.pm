@@ -205,11 +205,24 @@ sub edit :Chained('single_group') :PathPart('edit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
-    my $address = $group->address;
+
+    my $active_change = $group->active_change;
+    my $last_change = $group->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+        $c->stash->{status_msg} = "Warning: There is already a change request pending for this group.
+         As a result, information from the current request is used instead of the active change.";
+    } else {
+        $change = $active_change;
+    }
+
+    my $address = $change->address;
 
     if (!$c->stash->{form_submitted}) {
-        $c->stash->{group_type} = $group->group_type;
-        $c->stash->{url} = $group->url;
+        $c->stash->{group_type} = $change->group_type;
+        $c->stash->{url} = $change->url;
 
         if ($address) {
             $c->stash->{has_address} = 'y';
@@ -439,6 +452,13 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
                 $c->stash->{error_msg} = "That namespace is already taken";
                 $c->detach ('edit_channel_namespaces');
             } else {
+                if ($ns->last_change->change_type eq 'request' && !$p->{'do_confirm'}) {
+                    $c->stash->{error_msg} = "Another group has requested that namespace. Are you sure you want to create a conflicting request?";
+                    $c->stash->{confirm} = 1;
+                    $c->stash->{prev_namespace} = $new_namespace;
+                    $c->detach ('edit_channel_namespaces');
+                }
+
                 $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {

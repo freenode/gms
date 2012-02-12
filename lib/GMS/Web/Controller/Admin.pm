@@ -402,12 +402,25 @@ sub edit :Chained('single_group') :PathPart('edit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
-    my $address = $group->address;
+
+    my $active_change = $group->active_change;
+    my $last_change = $group->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+        $c->stash->{status_msg} = "Warning: There is already a change request pending for this group.
+         As a result, information from the current request is used instead of the active change.";
+    } else {
+        $change = $active_change;
+    }
+
+    my $address = $change->address;
 
     if (!$c->stash->{form_submitted}) {
-        $c->stash->{group_type} = $group->group_type;
-        $c->stash->{url} = $group->url;
-        $c->stash->{status} = $group->status;
+        $c->stash->{group_type} = $change->group_type;
+        $c->stash->{url} = $change->url;
+        $c->stash->{status} = $change->status;
 
         if ($address) {
             $c->stash->{has_address} = 'y';
@@ -595,11 +608,24 @@ sub edit_account :Chained('account') :PathPart('edit') :Args(0) {
 
     my $account = $c->stash->{account};
     my $contact = $account->contact;
-    my $address = $contact->address;
+
+    my $active_change = $contact->active_change;
+    my $last_change = $contact->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+        $c->stash->{status_msg} = "Warning: There is already a change request pending for this contact.
+         As a result, information from the current request is used instead of the active change.";
+    } else {
+        $change = $active_change;
+    }
+
+    my $address = $change->address;
 
     if (!$c->stash->{form_submitted}) {
-        $c->stash->{user_name} = $contact->name;
-        $c->stash->{user_email} = $contact->email;
+        $c->stash->{user_name} = $change->name;
+        $c->stash->{user_email} = $change->email;
 
         $c->stash->{address_one} = $address->address_one;
         $c->stash->{address_two} = $address->address_two;

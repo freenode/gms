@@ -10,18 +10,29 @@
 <tr>
   <th>Contact</th> <th>Status</th> <th>Primary?</th> <th>Change</th> <th>Hold</th>
 </tr>
+
 [% FOREACH group_contact IN group_contacts -%]
+
+[%
+  IF group_contact.last_change.change_type == 'request';
+    change = group_contact.last_change;
+    status_msg = "At least one of the group's contacts has a change request pending. As a result, information from the current request is used instead of the active change for those contacts.";
+  ELSE;
+    change = group_contact.active_change;
+  END;
+%]
+
   <tr>
     <td>
     [% group_contact.contact.name %] ([% group_contact.contact.account.accountname %])
     </td>
     <td>
     <select name="status_[% group_contact.contact.id %]">
-      <option value="active" [% IF group_contact.status == 'active' %] selected [% END %]>active</option>
-      <option value="retired" [% IF group_contact.status == 'retired' %] selected [% END %]>retired</option>
+      <option value="active" [% IF change.status == 'active' %] selected [% END %]>active</option>
+      <option value="retired" [% IF change.status == 'retired' %] selected [% END %]>retired</option>
     </select>
     </td>
-    <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF group_contact.is_primary %] checked [% END %] /></td>
+    <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF change.primary %] checked [% END %] /></td>
     <td><input type="radio" name="action_[% group_contact.contact.id %]" value="change" /></td>
     <td><input type="radio" name="action_[% group_contact.contact.id %]" value="hold" checked="checked" /></td>
   </tr>

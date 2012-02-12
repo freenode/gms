@@ -14,14 +14,22 @@
 </tr>
 
 [% FOREACH namespace IN channel_namespaces %]
+[%
+  IF namespace.last_change.change_type == 'request';
+    change = namespace.last_change;
+    status_msg = "At least one of the group's namespaces has a change request pending. As a result, information from the current request is used instead of the active change for those namespaces.";
+  ELSE;
+    change = namespace.active_change;
+  END;
+%]
 <tr>
   <td>
     [% namespace.namespace %]
   </td>
   <td>
     <select name='status_[% namespace.id %]'>
-      <option value='active' [% IF namespace.status == 'active' %] selected [% END %]>active</option>
-      <option value='deleted' [% IF namespace.status == 'deleted' %] selected [% END %]>deleted</option>
+      <option value='active' [% IF change.status == 'active' %] selected [% END %]>active</option>
+      <option value='deleted' [% IF change.status == 'deleted' %] selected [% END %]>deleted</option>
     </select>
   </td>
   <td>
@@ -34,7 +42,10 @@
 
 <p>
   Add a new namespace:
-  Namespace: <input type='text' name='namespace' /><br />
+  Namespace: <input type='text' name='namespace' value="[% prev_namespace %]" /><br />
+  [% IF confirm %]
+    <input type="checkbox" name="do_confirm" value="1" /> Confirm Creating Conflicting Change<br/>
+  [% END %]
   <input type='submit' value='Submit' />
 </p>
 

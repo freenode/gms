@@ -72,11 +72,24 @@ sub edit :Path('edit') :Args(0) {
     my ($self, $c) = @_;
 
     my $contact = $c->user->account->contact;
-    my $address = $contact->address;
+
+    my $active_change = $contact->active_change;
+    my $last_change = $contact->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+        $c->stash->{status_msg} = "Warning: There is already a change request pending for your contact information.
+         As a result, information from the current request is used instead of the active change.";
+    } else {
+        $change = $active_change;
+    }
+
+    my $address = $change->address;
 
     if (!$c->stash->{form_submitted}) {
-        $c->stash->{user_name} = $contact->name;
-        $c->stash->{user_email} = $contact->email;
+        $c->stash->{user_name} = $change->name;
+        $c->stash->{user_email} = $change->email;
 
         $c->stash->{address_one} = $address->address_one;
         $c->stash->{address_two} = $address->address_two;

@@ -215,12 +215,20 @@ sub change {
     my ($self, $account, $change_type, $args) = @_;
 
     my $active_change = $self->active_change;
+    my $last_change = $self->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+    } else {
+        $change = $active_change;
+    }
 
     my %change_args = (
         changed_by => $account,
         change_type => $change_type,
-        status => $args->{status} || $active_change->status,
-        primary => $args->{primary} || $active_change->primary,
+        status => $args->{status} || $change->status,
+        primary => $args->{primary} || $change->primary,
         change_freetext => $args->{change_freetext}
     );
 
@@ -232,6 +240,20 @@ sub change {
     $self->active_change($ret) if $change_type ne 'request';
     $self->update;
     return $ret;
+}
+
+=head2 last_change
+
+Returns the most recent change for the group contact.
+
+=cut
+
+sub last_change {
+    my ($self) = @_;
+
+    my @changes = $self->group_contact_changes->search({ }, { 'order_by' => { -desc => 'id' } });
+
+    return $changes[0];
 }
 
 sub accept_invitation {

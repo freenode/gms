@@ -167,12 +167,20 @@ sub change {
     my ($self, $account, $change_type, $args) = @_;
 
     my $active_change = $self->active_change;
+    my $last_change = $self->last_change;
+    my $change;
+
+    if ($last_change->change_type eq 'request') {
+        $change = $last_change;
+    } else {
+        $change = $active_change;
+    }
 
     my %change_args = (
         changed_by => $account,
         change_type => $change_type,
-        group_id => $args->{group_id} || $active_change->group_id,
-        status => $args->{status} || $active_change->status,
+        group_id => $args->{group_id} || $change->group_id,
+        status => $args->{status} || $change->status,
         change_freetext => $args->{change_freetext}
     );
 
@@ -241,4 +249,17 @@ sub group {
     return $self->active_change->group;
 }
 
+=head2 last_change
+
+Returns the most recent change for the channel namespace.
+
+=cut
+
+sub last_change {
+    my ($self) = @_;
+
+    my @changes = $self->channel_namespace_changes->search({ }, { 'order_by' => { -desc => 'id' } });
+
+    return $changes[0];
+}
 1;
