@@ -620,7 +620,7 @@ sub take_over {
         die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
     }
 
-    if ( match_glob ($namespace, $channel) ) {
+    if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
             $controlsession->command('ChanServ', 'ftransfer', $channel, $gc);
         }
@@ -647,7 +647,7 @@ sub drop {
         die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
     }
 
-    if ( match_glob ($namespace, $channel) ) {
+    if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
             $controlsession->command('ChanServ', 'fdrop', $channel);
         }
