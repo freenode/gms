@@ -17,27 +17,29 @@ ResultSet class for GroupChange.
 
 =head2 last_changes
 
-Returns a resultset of changes that are the most recent for their group.
+Returns a resultset of changes that are the newer than their group's active change.
 
 =cut
 
 sub last_changes {
     my $self = shift;
 
+    my $group_rs = $self->result_source->schema->resultset('Group');
+
     return $self->search({
-        'id' => {
-            '=' => $self->search ({
-                  'group_id' => { '=' => { -ident => 'me.group_id' } }
+        'me.id' => {
+            '>=' => $group_rs->search ({
+                  'id' => { '=' => { -ident => 'me.group_id' } }
                 },
                 { alias => 'inner' }
-            )->get_column('id')->max_rs->as_query
+            )->get_column('active_change')->as_query
         },
     });
 }
 
 =head2 active_requests
 
-Returns a resultset of requests that are the most recent change for their group
+Returns a resultset of requests that are newer than their group's active change.
 
 =cut
 

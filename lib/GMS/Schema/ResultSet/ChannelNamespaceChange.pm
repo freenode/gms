@@ -17,27 +17,29 @@ ResultSet class for ChannelNamespaceChange.
 
 =head2 last_changes
 
-Returns a resultset of changes that are the most recent for their channel namespace.
+Returns a resultset of changes that are the newer than their channel namespace's active change.
 
 =cut
 
 sub last_changes {
     my $self = shift;
 
+    my $namespace_rs = $self->result_source->schema->resultset('ChannelNamespace');
+
     return $self->search({
-        'id' => {
-            '=' => $self->search ({
-                  'namespace_id' => { '=' => { -ident => 'me.namespace_id' } }
+        'me.id' => {
+            '>=' => $namespace_rs->search ({
+                  'id' => { '=' => { -ident => 'me.namespace_id' } }
                 },
                 { alias => 'inner' }
-            )->get_column('id')->max_rs->as_query
+            )->get_column('active_change')->as_query
         },
     });
 }
 
 =head2 active_requests
 
-Returns a resultset of requests that are the most recent change for their channel namespace.
+Returns a resultset of requests that are newer than their channel namespace's active change.
 
 =cut
 

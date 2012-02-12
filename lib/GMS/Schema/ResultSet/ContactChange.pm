@@ -18,28 +18,29 @@ ResultSet class for ContactChange.
 
 =head2 last_changes
 
-Returns a resultset of changes that are the most recent for their contact.
+Returns a resultset of changes that are the newer than their contact's active change.
 
 =cut
 
 sub last_changes {
     my $self = shift;
 
+    my $contact_rs = $self->result_source->schema->resultset('Contact');
+
     return $self->search({
-        'id' => {
-            '=' => $self->search ({
-                  'contact_id' => { '=' => { -ident => 'me.contact_id' } },
+        'me.id' => {
+            '>=' => $contact_rs->search ({
+                  'id' => { '=' => { -ident => 'me.contact_id' } }
                 },
                 { alias => 'inner' }
-            )->get_column('id')->max_rs->as_query
+            )->get_column('active_change')->as_query
         },
     });
 }
 
-
 =head2 active_requests
 
-Returns a resultset of requests that are the most recent change for their contact
+Returns a resultset of requests that are newer than their contact's active change.
 
 =cut
 
