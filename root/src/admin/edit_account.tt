@@ -4,6 +4,7 @@
 
 <form method="post" action="[% c.uri_for("/admin/account/${account.id}/edit/submit") %]">
 <table>
+<tr> <td>Last Change Type:</td><td>[% account.contact.last_change.change_type %]</td> </tr>
 <tr> <td>Name:</td><td><input type="text" name="user_name" size="40" value="[% user_name %]" /></td> </tr>
 <tr> <td>Email address:</td><td><input type="text" name="user_email" size="40" value="[% user_email %]" /></td> </tr>
 <tr>

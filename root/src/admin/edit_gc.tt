@@ -8,7 +8,7 @@
 
 <table>
 <tr>
-  <th>Contact</th> <th>Status</th> <th>Primary?</th> <th>Change</th> <th>Hold</th>
+  <th>Contact</th> <th>Status</th> <th>Primary?</th> <th>Last Change Type</th> <th>Change</th> <th>Hold</th>
 </tr>
 
 [% FOREACH group_contact IN group_contacts -%]
@@ -33,6 +33,7 @@
     </select>
     </td>
     <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF change.primary %] checked [% END %] /></td>
+    <td>[% group_contact.last_change.change_type %]</td>
     <td><input type="radio" name="action_[% group_contact.contact.id %]" value="change" /></td>
     <td><input type="radio" name="action_[% group_contact.contact.id %]" value="hold" checked="checked" /></td>
   </tr>

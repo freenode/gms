@@ -3,6 +3,7 @@
 <form method="post" action="[% c.uri_for("/admin/${group.id}/edit/submit") %]">
 <table>
 <tr>
+  <td>Last Change Type</td> <td>[% group.last_change.change_type %]</td>
   <td>Group Type</td>
   <td>
     <select name='group_type'>
