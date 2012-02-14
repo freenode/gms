@@ -18,7 +18,7 @@
     Which Group Contact should it be transferred to?<br/>
     <select name="group_contact">
       [% FOREACH gc IN group_contacts %]
-        <option value="[% gc.contact.account.accountname %]" [% IF group_contact == gc.contact.account.accountname %] selected [% END %]>[% gc.contact.account.accountname %]</option>
+        <option value="[% gc.contact.id %]" [% IF group_contact == gc.contact.id %] selected [% END %]>[% gc.contact.account.accountname %]</option>
       [% END %]
     </select><br/><br/>
     </li>

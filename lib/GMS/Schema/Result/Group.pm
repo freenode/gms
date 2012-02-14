@@ -648,7 +648,7 @@ throw an error on failure. If not, an error is thrown.
 =cut
 
 sub take_over {
-    my ($self, $c, $channel, $namespace, $gc) = @_;
+    my ($self, $c, $channel, $namespace, $gc_name) = @_;
 
     my $controlsession = $c->model('Atheme')->session;
 
@@ -658,7 +658,7 @@ sub take_over {
 
     if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
-            $controlsession->command('ChanServ', 'ftransfer', $channel, $gc);
+            $controlsession->command('ChanServ', 'ftransfer', $channel, $gc_name);
         }
         catch (RPC::Atheme::Error $e) {
             die $e;

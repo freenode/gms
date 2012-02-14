@@ -374,9 +374,12 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     my $group = $c->stash->{group};
     my $action = $p->{action};
 
+    my $group_contact = $group->group_contacts->find({ contact_id => $gc });
+    my $gc_name = $group_contact->contact->account->accountname;
+
     try {
         if ($action == 1) {
-            $group->take_over ($c, $channel, $namespace, $gc);
+            $group->take_over ($c, $channel, $namespace, $gc_name);
         } elsif ($action == 2) {
             $group->drop ($c, $channel, $namespace);
         }
@@ -395,7 +398,7 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     }
 
     if ($action == 1) {
-        $c->stash->{msg} = "Successfully transferred the channel to $gc.";
+        $c->stash->{msg} = "Successfully transferred the channel to $gc_name.";
     } elsif ($action == 2) {
         $c->stash->{msg} = "Successfully dropped the channel.";
     }
