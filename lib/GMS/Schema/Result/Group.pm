@@ -652,7 +652,7 @@ sub take_over {
 
     my $controlsession = $c->model('Atheme')->session;
 
-    if (! $self->channel_namespaces->find({ 'namespace' => $namespace }) ) {
+    if (! $self->active_channel_namespaces->find({ 'namespace' => $namespace }) ) {
         die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
     }
 
@@ -679,7 +679,7 @@ sub drop {
 
     my $controlsession = $c->model('Atheme')->session;
 
-    if (! $self->channel_namespaces->find({ 'namespace' => $namespace }) ) {
+    if (! $self->active_channel_namespaces->find({ 'namespace' => $namespace }) ) {
         die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
     }
 

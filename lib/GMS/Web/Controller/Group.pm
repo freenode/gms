@@ -348,7 +348,7 @@ sub take_over :Chained('single_group') :PathPart('take_over') :Args(0) {
 
     my $group = $c->stash->{group};
     my @group_contacts = $group->group_contacts;
-    my @channel_namespaces = $group->channel_namespaces;
+    my @channel_namespaces = $group->active_channel_namespaces;
 
     $c->stash->{group_contacts} = \@group_contacts;
     $c->stash->{channel_namespaces} = \@channel_namespaces;
