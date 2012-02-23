@@ -11,6 +11,9 @@
   <a href="[% c.uri_for('/admin/approve_change') %]">Review and Approve Changes</a>
 </li>
 <li>
+  <a href="[% c.uri_for('/admin/approve_cloak') %]">Review and Approve Cloak Changes</a>
+</li>
+<li>
   <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
 </li>
 <li>

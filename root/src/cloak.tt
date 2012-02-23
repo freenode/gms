@@ -1,0 +1,11 @@
+[% META title = 'Pending Cloaks' -%]
+
+<p>You have the following group cloaks pending:</p>
+
+<ul>
+[% FOREACH cloak IN cloaks -%]
+  <li>
+    [% cloak.cloak %] <a href="[% c.uri_for("/cloak/${cloak.id}/accept") %]">Accept</a> - <a href="[% c.uri_for("/cloak/${cloak.id}/decline") %]">Decline</a>
+  </li>
+[% END %]
+</ul>

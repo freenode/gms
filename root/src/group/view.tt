@@ -11,7 +11,7 @@
 <tr> <td>DNS pointing to freenode.net</td> <td>[%group.verify_dns %]</td> </tr>
 [% IF group.git_url %]
 <tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url %]</td> </tr>
-[% END %] 
+[% END %]
 </table>
 [% IF group.verify_freetext %]
     <br/>
@@ -41,6 +41,9 @@
 </li>
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/take_over"); %]">Take over a channel that's in the group's namespace.</a>
+</li>
+<li>
+<a href="[% c.uri_for ("/group/${group.id}/cloak"); %]">Assign a group contact a group cloak.</a>
 </li>
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or request a new namespace for your group</a>

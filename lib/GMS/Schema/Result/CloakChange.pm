@@ -165,11 +165,18 @@ use TryCatch;
 =head2 accept
 
 Marks the cloak change as accepted from the user.
+Any previous pending (accepted by user but
+not staff) cloak changes will be marked as not
+accepted.
 
 =cut
 
 sub accept {
     my ($self) = @_;
+    my $changes_rs = $self->result_source->schema->resultset('CloakChange');
+
+    my $pending = $changes_rs->search_pending({ 'contact_id' => $self->contact_id });
+    $pending->update ({ 'accepted' => \"NULL" });
 
     $self->accepted (\"NOW()");
     $self->update;

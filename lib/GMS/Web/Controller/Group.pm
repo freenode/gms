@@ -406,6 +406,86 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     $c->stash->{template} = 'group/action_done.tt';
 }
 
+=head2 cloak
+
+Displays the form to request a group cloak for the user.
+
+=cut
+
+sub cloak :Chained('single_group') :PathPart('cloak') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @cloak_namespaces = $group->active_cloak_namespaces;
+
+    if (! @cloak_namespaces) {
+        $c->stash->{error_msg} = "This group has no cloak namespaces. Please request a cloak namespace first.";
+        $c->detach ('edit_cloak_namespaces');
+    }
+
+    $c->stash->{cloak_namespaces} = \@cloak_namespaces;
+
+    $c->stash->{template} = 'group/cloak.tt';
+}
+
+=head2 do_cloak
+
+Processes the form to request a group cloak for a user.
+
+=cut
+
+sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+
+    my $accountname = $p->{accountname};
+    my $namespace = $p->{cloak_namespace};
+    my $cloak = $p->{cloak};
+
+    if (!$cloak) {
+        $c->stash->{error_msg} = "The cloak cannot be empty!";
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('cloak');
+    }
+
+    $cloak = "$namespace/$cloak";
+
+    my $account_rs = $c->model("DB::Account");
+    my $change_rs = $c->model("DB::CloakChange");
+
+    my $account = $account_rs->find({ accountname => $accountname });
+
+    if (!$account || !$account->contact) {
+        $c->stash->{error_msg} = "This user does not exist or has no contact information defiend.";
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('cloak');
+    }
+
+    if ($cloak =~ /[^a-zA-Z0-9\-\/]/) {
+        $c->stash->{error_msg} = "The cloak contains invalid characters.";
+
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('cloak');
+    }
+
+    if (length $cloak > 63) {
+        $c->stash->{error_msg} = "The cloak is too long.";
+
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('cloak');
+    }
+
+    my $contact_id = $account->contact->id;
+
+    $change_rs->create ({ contact_id => $contact_id, cloak => "$cloak", changed_by => $c->user->account, offered => \"NOW()" });
+
+    $c->stash->{msg} = "Successfully requested $cloak cloak for $accountname";
+
+    $c->stash->{template} = 'group/action_done.tt';
+}
+
+
 =head2 edit_channel_namespaces
 
 Shows the group's current channel namespaces and allows the group contact to

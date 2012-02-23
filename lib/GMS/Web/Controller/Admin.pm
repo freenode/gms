@@ -267,6 +267,72 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     }
 }
 
+=head2 approve_cloak
+
+Presents the form to approve cloak changes.
+
+=cut
+
+sub approve_cloak :Chained('base') :PathPart('approve_cloak') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $change_rs = $c->model('DB::CloakChange');
+
+    my @to_approve = $change_rs->search_pending;
+
+    $c->stash->{to_approve} = \@to_approve;
+
+    $c->stash->{template} = 'admin/approve_cloak.tt';
+}
+
+=head2 do_approve_cloak
+
+Processes the form to approve cloak changes and grants the cloaks to the users.
+
+=cut
+
+sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $params = $c->request->params;
+    my $change_item = $params->{change_item};
+
+    my $account = $c->user->account;
+
+    my $change_rs = $c->model('DB::CloakChange');
+    my @approve_changes = split / /, $params->{approve_changes};
+
+    try {
+        $c->model('DB')->schema->txn_do(sub {
+            foreach my $change_id (@approve_changes) {
+                my $change = $change_rs->find({ id => $change_id });
+                my $action = $params->{"action_$change_id"};
+                my $freetext = $params->{"freetext_$change_id"};
+
+                if ($action eq 'approve') {
+                    $c->log->info("Approving CloakChange id $change_id" .
+                        " by " . $c->user->username . "\n");
+                    $change->approve ($c, $freetext);
+                } elsif ($action eq 'reject') {
+                    $c->log->info("Rejecting CloakChange id $change_id" .
+                        " by " . $c->user->username . "\n");
+                    $change->reject ($c, $freetext);
+                } elsif ($action eq 'hold') {
+                    next;
+                } else {
+                    $c->log->error("Got unknown action $action for CloakChange id
+                        $change_id in Admin::do_approve_cloak");
+                }
+            }
+        });
+        $c->response->redirect($c->uri_for('approve_cloak'));
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
+        $c->detach ("/admin/approve_cloak");
+    }
+}
+
 =head2 approve_namespaces
 
 Presents the form to accept channel and cloak namespaces.

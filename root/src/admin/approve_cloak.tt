@@ -1,0 +1,58 @@
+[% META title = 'Cloak changes awaiting approval' %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_cloak/submit') %]">
+<input type="hidden" name="approve_changes"
+    value="[% FOREACH cc IN to_approve %][% cc.id %] [% END %]" />
+<table>
+<tr>
+ <th>Account Name</th> <th>Cloak</th> <th>Expand</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+</tr>
+[% FOREACH cc IN to_approve -%]
+  <tr>
+    <td>
+      [% cc.contact.account.accountname %]
+    </td>
+    <td>
+      [% cc.cloak %]
+    </td>
+    <td>
+      <a href='javascript:;' onclick='show([% cc.id %])' id='link_[% cc.id %]'>Expand</a>
+    <td>
+        <input type="radio" name="action_[% cc.id %]" value="approve" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% cc.id %]" value="reject" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% cc.id %]" value="hold" checked="checked" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Free text:
+    </td>
+    <td colspan="6">
+      <textarea name="freetext_[% cc.id %]" style="width:100%;height:100px;"></textarea>
+   </td>
+  </tr>
+  <tr id="hidden_[% cc.id %]" class="hidden">
+    <td colspan="6" class="wide">
+      [% cc.contact.account.accountname %]'s recent cloak changes:
+
+      [% IF cc.contact.recent_cloak_changes %]
+        <ul>
+          [% FOREACH change IN cc.contact.recent_cloak_changes %]
+            <li>Cloak: [% change.cloak %], approved on [% change.approved %]</li>
+          [% END %]
+        </ul>
+      [% ELSE %]
+        <p>No cloak changes.</p>
+      [% END %]
+
+      <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
+    </td>
+  </tr>
+[% END -%]
+</table>
+<input type="submit" value="Submit" />
+</form>
