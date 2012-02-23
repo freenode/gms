@@ -123,8 +123,8 @@ Related object: L<GMS::Schema::Result::CloakNamespace>
 __PACKAGE__->has_many(
   "cloak_namespaces",
   "GMS::Schema::Result::CloakNamespace",
-  { "foreign.group_id" => "self.id" },
-  {},
+  { "foreign.active_change.group_id" => "self.id" },
+  { "join" => "active_change" },
 );
 
 =head2 group_changes
@@ -219,6 +219,15 @@ __PACKAGE__->has_many(
 __PACKAGE__->has_many(
     "active_channel_namespaces",
     "GMS::Schema::Result::ChannelNamespace",
+    { "foreign.active_change.group_id" => "self.id" },
+    { 'join' => 'active_change',
+      'where' => { 'active_change.status' => 'active' }
+    }
+);
+
+__PACKAGE__->has_many(
+    "active_cloak_namespaces",
+    "GMS::Schema::Result::CloakNamespace",
     { "foreign.active_change.group_id" => "self.id" },
     { 'join' => 'active_change',
       'where' => { 'active_change.status' => 'active' }
