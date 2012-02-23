@@ -45,6 +45,9 @@
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or request a new namespace for your group</a>
 </li>
+<li>
+<a href="[% c.uri_for ("/group/${group.id}/edit_cloak_namespaces"); %]">View the group's cloak namespaces or request a new cloak namespace for your group</a>
+</li>
 [% IF gc.is_primary %]
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>

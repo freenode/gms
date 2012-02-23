@@ -473,6 +473,73 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
     $c->stash->{template} = 'group/action_done.tt';
 }
 
+=head2 edit_cloak_namespaces
+
+Shows the group's current cloak namespaces and allows the group contact to
+request changes or request a new namespace.
+
+=cut
+
+sub edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @cloak_namespaces = $group->active_cloak_namespaces;
+
+    $c->stash->{cloak_namespaces} = \@cloak_namespaces;
+    $c->stash->{template} = 'group/edit_cloak_namespaces.tt';
+}
+
+=head2 do_edit_cloak_namespaces
+
+Processes the form to edit cloak namespaces or add a new cloak namespace for the group
+
+=cut
+
+sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $p = $c->request->params;
+    my $new_namespace = $p->{namespace};
+
+    my @namespaces = $group->active_cloak_namespaces;
+
+    my $namespace_rs = $c->model("DB::CloakNamespace");
+
+    foreach my $namespace (@namespaces) {
+        my $namespace_id = $namespace->id;
+
+        if ($p->{"edit_$namespace_id"}) {
+            my $status = $p->{"status_$namespace_id"};
+            $namespace->change ($c->user->account, 'request', { 'status' => $status });
+        }
+    }
+
+    if ($new_namespace) {
+        if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
+            if ($ns->status ne 'deleted') {
+                $c->stash->{error_msg} = "That namespace is already taken";
+                $c->detach ('edit_cloak_namespaces');
+            } else {
+                if ($ns->last_change->change_type eq 'request' && !$p->{'do_confirm'}) {
+                    $c->stash->{error_msg} = "Another group has requested that namespace. Are you sure you want to create a conflicting request?";
+                    $c->stash->{confirm} = 1;
+                    $c->stash->{prev_namespace} = $new_namespace;
+                    $c->detach ('edit_cloak_namespaces');
+                }
+
+                $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
+            }
+        } else {
+            $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending-staff' });
+        }
+    }
+
+    $c->stash->{msg} = 'Namespace updates requested successfully,';
+    $c->stash->{template} = 'group/action_done.tt';
+}
+
 =head2 new_form
 
 Displays the form to register a new group.

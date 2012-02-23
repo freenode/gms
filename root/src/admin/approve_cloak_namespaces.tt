@@ -1,10 +1,10 @@
-[% META title = 'Channel Namespaces approval' %]
+[% META title = 'Cloak Namespaces approval' %]
 
 <form method="post" action="[% c.uri_for('/admin/approve_namespaces/submit') %]">
 <input type="hidden" name="approve_namespaces"
     value="[% FOREACH namespace IN to_approve %][% namespace.id %] [% END %]" />
 
-<p>The following channel namespaces are awaiting approval:</p>
+<p>The following cloak namespaces are awaiting approval:</p>
 
 <table>
 <tr>

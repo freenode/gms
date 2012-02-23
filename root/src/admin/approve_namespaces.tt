@@ -1,0 +1,7 @@
+[% META title = 'Approve Namespaces' %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_namespaces') %]">
+<input type='radio' name='approve_item' value='1' /> Channel Namespaces<br />
+<input type='radio' name='approve_item' value='2' /> Cloak Namespaces<br />
+<input type="submit" value="Submit" />
+</form>

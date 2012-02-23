@@ -1,0 +1,45 @@
+[% META title = 'Cloak namespaces changes awaiting approval' %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_change/submit') %]">
+<input type="hidden" name="approve_changes"
+    value="[% FOREACH clnc IN to_approve %][% clnc.id %] [% END %]" />
+<table>
+<tr>
+ <th>Namespace</th> <th>Group</th> <th>Status</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+</tr>
+[% FOREACH clnc IN to_approve -%]
+  <tr>
+    <td>
+      [% clnc.namespace.namespace %]
+    </td>
+    <td>
+      [% clnc.namespace.group.group_name %]<br />
+      [% clnc.group.group_name %]
+    </td>
+    <td>
+      [% clnc.namespace.status %]<br />
+      [% clnc.status %]
+    </td>
+    <td>
+        <input type="radio" name="action_[% clnc.id %]" value="approve" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% clnc.id %]" value="reject" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% clnc.id %]" value="hold" checked="checked" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Free text:
+    </td>
+    <td colspan="6">
+      <textarea name="freetext_[% clnc.id %]" style="width:100%;height:100px;"></textarea>
+   </td>
+  </tr>
+[% END -%]
+</table>
+<input type='hidden' name='change_item' value="[% change_item %]" />
+<input type="submit" value="Submit" />
+</form>

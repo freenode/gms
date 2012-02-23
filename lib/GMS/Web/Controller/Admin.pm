@@ -187,6 +187,8 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         @to_approve = $c->model ("DB::ContactChange")->active_requests();
     } elsif ($change_item == 4) { #channel namespace change
         @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
+    } elsif ($change_item == 5) { #cloak namespace change
+        @to_approve = $c->model ("DB::CloakNameSpaceChange")->active_requests();
     }
 
     $c->stash->{to_approve} = \@to_approve;
@@ -199,6 +201,8 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         $c->stash->{template} = 'admin/approve_cc.tt';
     } elsif ($change_item == 4) {
         $c->stash->{template} = 'admin/approve_cnc.tt';
+    } elsif ($change_item == 5) {
+        $c->stash->{template} = 'admin/approve_clnc.tt';
     } elsif (! $change_item) {
         $c->stash->{template} = 'admin/approve_change.tt';
     }
@@ -224,6 +228,9 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     } elsif ($change_item == 4) { #channel namespace change
         $change_rs = $c->model('DB::ChannelNamespaceChange');
         $type = "ChannelNamespaceChange";
+    } elsif ($change_item == 5) { #cloak namespace change
+        $change_rs = $c->model('DB::CloakNamespaceChange');
+        $type = "CloakNamespaceChange";
     }
 
     my $account = $c->user->account;
@@ -260,32 +267,56 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     }
 }
 
-=head2 approve_channel_namespaces
+=head2 approve_namespaces
 
-Presents the channel namespaces approval form.
+Presents the form to accept channel and cloak namespaces.
 
 =cut
 
-sub approve_channel_namespaces :Chained('base') :PathPart('approve_channel_namespaces') :Args(0) {
+sub approve_namespaces :Chained('base') :PathPart('approve_namespaces') :Args(0) {
     my ($self, $c) = @_;
 
-    my @to_approve = $c->model('DB::ChannelNamespace')->search_pending;
+    my $approve_item = $c->request->params->{approve_item};
+    my @to_approve;
+    $c->stash->{approve_item} = $approve_item;
+
+    if ($approve_item == 1) { #channel namespaces
+        @to_approve = $c->model ("DB::ChannelNamespace")->search_pending();
+    } elsif ($approve_item == 2) { #cloak namespces
+        @to_approve = $c->model ("DB::CloakNamespace")->search_pending();
+    }
 
     $c->stash->{to_approve} = \@to_approve;
-    $c->stash->{template} = 'admin/approve_channel_namespaces.tt';
+
+    if ($approve_item == 1) {
+        $c->stash->{template} = 'admin/approve_channel_namespaces.tt';
+    } elsif ($approve_item == 2) {
+        $c->stash->{template} = 'admin/approve_cloak_namespaces.tt';
+    }
 }
 
-=head2 do_approve_channel_namespaces
+=head2 do_approve_namespaces
 
-Processes the form to approve channel namespaces.
+Processes the form to approve namespaces.
 
 =cut
 
-sub do_approve_channel_namespaces :Chained('base') :PathPart('approve_channel_namespaces/submit') :Args(0) {
+sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $params = $c->request->params;
-    my $namespace_rs = $c->model("DB::ChannelNamespace");
+    my $namespace_rs;
+    my $type;
+
+    my $approve_item = $c->request->params->{approve_item};
+
+    if ($approve_item == 1) { #channel namespaces
+        $namespace_rs = $c->model ("DB::ChannelNamespace");
+        $type = "ChannelNamespace";
+    } elsif ($approve_item == 2) { #cloak namespces
+        $namespace_rs = $c->model ("DB::CloakNamespace");
+        $type = "CloakNamespace";
+    }
 
     my $account = $c->user->account;
 
@@ -299,11 +330,11 @@ sub do_approve_channel_namespaces :Chained('base') :PathPart('approve_channel_na
                 my $freetext = $params->{"freetext_$namespace_id"};
 
                 if ($action eq 'approve') {
-                    $c->log->info("Approving channel namespace id $namespace_id" .
+                    $c->log->info("Approving $type id $namespace_id" .
                         " by " . $c->user->username . "\n");
                     $namespace->approve ($account, $freetext);
                 } elsif ($action eq 'reject') {
-                    $c->log->info("Rejecting channel namespace id $namespace_id" .
+                    $c->log->info("Rejecting $type id $namespace_id" .
                         " by " . $c->user->username . "\n");
                     $namespace->reject ($account, $freetext);
                 } elsif ($action eq 'hold') {
@@ -314,11 +345,11 @@ sub do_approve_channel_namespaces :Chained('base') :PathPart('approve_channel_na
                 }
             }
         });
-        $c->response->redirect($c->uri_for('approve_channel_namespaces'));
+        $c->response->redirect($c->uri_for('approve_namespaces', undef, { 'approve_item' => $approve_item }));
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;
-        $c->detach ("/admin/approve_channel_namespaces");
+        $c->detach ("/admin/approve_namespaces");
     }
 }
 
