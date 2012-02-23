@@ -1,0 +1,83 @@
+[% META title = 'Search Results' %]
+
+<table>
+<tr>
+  <th>ID</th>
+  <th>Namespace</th>
+  <th>Group</th>
+  <th>Change Type</th>
+  <th>Status</th>
+  <th>Expand</th>
+</tr>
+
+[% FOREACH change = results -%]
+[% group = change.group %]
+<tr>
+  <td>
+    [% change.id %]
+  </td>
+  <td>
+    [% change.namespace.namespace %]
+  <td>
+    <a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name %]</a>
+  </td>
+  <td>
+    [% change.change_type %]
+  </td>
+  <td>
+    [% change.status %]
+  </td>
+  <td>
+    <a href='javascript:;' onclick='show([% change.id %])' id='link_[% change.id %]'>Expand</a>
+  </td>
+</tr>
+<tr id='hidden_[% change.id %]' class='hidden'>
+  <td colspan='6' class='wide'>
+    <ul>
+      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>Change Time: [% change.time %]</li>
+      <li>Affected Change: [% change.affected_change.id %]</li>
+      <li>
+        Change FreeText:<br />
+        [% change.change_freetext | html %]
+      </li>
+      <li>
+        <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
+      </li>
+    </ul>
+  </td>
+</tr>
+[% END -%]
+</table>
+
+<p>
+  <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
+    <input type='hidden' name='cloak_namespace' value='[% cloak_namespace %]' />
+    <input type='hidden' name='cloak_groupname' value='[% cloak_groupname %]' />
+    <input type='hidden' name='current_page' value='[% current_page %]' />
+    <input type='hidden' name='change_item' value='[% change_item %]' />
+    <input type='hidden' name='last_page' value='[% last_page %]' />
+
+    <input type='submit' name='next' value='First page' />
+    [% IF current_page != 1 %]
+      <input type='submit' name='next' value='Previous page' />
+    [% END %]
+    [% IF current_page != last_page %]
+      <input type='submit' name='next' value='Next page' />
+    [% END %]
+    <input type='submit' name='next' value='Last page' /><br />
+
+    <select name='page'>
+      <option value=''>Select a page...</option>
+      [%
+        FOR i IN [ 1 .. last_page ]
+      %]
+        <option value='[% i %]' [% IF i == current_page %] selected='selected' [% END %]>[% i %]</option>
+      [%
+        END
+      %]
+    </select>
+    <input type='submit' value='Go' />
+  </form>
+  <a href='[% c.uri_for ("/admin/search_changes") %]'>Back to search</a>
+</p>

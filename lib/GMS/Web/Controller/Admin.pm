@@ -836,6 +836,29 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         );
 
         $c->stash->{template} = 'admin/search_cnc_results.tt';
+    } elsif ($change_item == 5) { #CloakNamespaceChanges
+        $change_rs = $c->model('DB::CloakNamespaceChange');
+
+        my $namespace = $p->{cloak_namespace};
+        my $groupname = $p->{cloak_groupname};
+
+        $namespace =~ s#_#\\_#g;
+        $groupname =~ s#_#\\_#g;
+
+        $rs = $change_rs -> search(
+            {
+                'namespace.namespace' => { 'ilike', $namespace },
+                'group.group_name' => { 'ilike', $groupname }
+            },
+            {
+                join => [ 'namespace', 'group' ],
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            },
+        );
+
+        $c->stash->{template} = 'admin/search_clnc_results.tt';
     }
 
     my $pager = $rs->pager;
