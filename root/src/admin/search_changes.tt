@@ -61,6 +61,13 @@
     <td>Group name:</td>
     <td><input type='text' name='cloak_groupname' /></td>
   </tr>
+  <tr>
+    <td colspan="2"><input name="change_item" value="6" type="radio" id="radio6"/> <label for="radio6">Cloak Changes</label></td>
+  </tr>
+  <tr>
+    <td>Account name:</td>
+    <td><input type='text' name='cloak_accountname' /></td>
+  </tr>
 </table>
 
 <p>

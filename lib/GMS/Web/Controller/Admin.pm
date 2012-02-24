@@ -925,6 +925,27 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         );
 
         $c->stash->{template} = 'admin/search_clnc_results.tt';
+    } elsif ($change_item == 6) { #CloakChanges
+        $change_rs = $c->model('DB::CloakChange');
+
+        my $cloak = $p->{cloak};
+        my $accountname = $p->{cloak_accountname};
+
+        $accountname =~ s#_#\\_#g;
+
+        $rs = $change_rs -> search(
+            {
+                'account.accountname' => { 'ilike', $accountname }
+            },
+            {
+                join => { contact => 'account' },
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            }
+        );
+
+        $c->stash->{template} = 'admin/search_clc_results.tt';
     }
 
     my $pager = $rs->pager;
