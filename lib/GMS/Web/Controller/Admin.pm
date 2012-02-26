@@ -693,6 +693,66 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
     $c->stash->{template} = 'staff/action_done.tt';
 }
 
+=head2 edit_cloak_namespaces
+
+Shows the group's cloak namespaces and allows the admin to
+change namespaces or add new namespaces.
+
+=cut
+
+sub edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @cloak_namespaces = $group->cloak_namespaces;
+
+    $c->stash->{cloak_namespaces} = \@cloak_namespaces;
+    $c->stash->{template} = 'admin/edit_cloak_namespaces.tt';
+}
+
+=head2 do_edit_cloak_namespaces
+
+Processes the form to edit cloak namespaces or add a new cloak namespace for the group
+
+=cut
+
+sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $p = $c->request->params;
+    my $new_namespace = $p->{namespace};
+
+    my @namespaces = $group->cloak_namespaces;
+
+    my $namespace_rs = $c->model("DB::CloakNamespace");
+
+    foreach my $namespace (@namespaces) {
+        my $namespace_id = $namespace->id;
+
+        if ($p->{"edit_$namespace_id"}) {
+            my $status = $p->{"status_$namespace_id"};
+            $namespace->change ($c->user->account, 'admin', { 'status' => $status });
+        }
+    }
+
+    if ($new_namespace) {
+        if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
+            if ($ns->status ne 'deleted') {
+                $c->stash->{error_msg} = "That namespace is already taken";
+                $c->detach ('edit_cloak_namespaces');
+            } else {
+                $ns->change ($c->user->account, 'admin', { 'status' => 'active', 'group_id' => $group->id });
+            }
+        } else {
+            $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'active' });
+        }
+    }
+
+    $c->stash->{msg} = 'Namespaces updated successfully';
+    $c->stash->{template} = 'staff/action_done.tt';
+}
+
 =head2 edit_account
 
 Displays the form to edit a user's contact information.

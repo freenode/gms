@@ -58,6 +58,9 @@
   <li>
       <a href="[% c.uri_for ("/admin/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or add a new namespace for the group</a>
   </li>
+  <li>
+      <a href="[% c.uri_for ("/admin/${group.id}/edit_cloak_namespaces"); %]">View the group's cloak namespaces or add a new namespace for the group</a>
+  </li>
 [% END %]
 </ul>
 
