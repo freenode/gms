@@ -1,0 +1,49 @@
+[% META title = 'Search Results' %]
+
+<table>
+<tr>
+  <th>Group</th>
+  <th>Namespace</th>
+  <th>Status</th>
+</tr>
+
+[% FOREACH ns = results -%]
+<tr>
+  <td><a href='[% c.uri_for ("/staff/${ns.group.id}/view") %]'>[% ns.group.group_name %]</a></td>
+  <td>[% ns.namespace %]</td>
+  <td>[% ns.status %]</td>
+</tr>
+[% END -%]
+</table>
+
+<p>
+  <form action='[% c.uri_for ("/staff/search_namespaces/submit") %]' method='post'>
+    <input type='hidden' name='namespace' value='[% namespace %]' />
+    <input type='hidden' name='search_item' value='[% search_item  %]' />
+
+    <input type='hidden' name='current_page' value='[% current_page %]' />
+    <input type='hidden' name='last_page' value='[% last_page %]' />
+
+    <input type='submit' name='next' value='First page' />
+    [% IF current_page != 1 %]
+      <input type='submit' name='next' value='Previous page' />
+    [% END %]
+    [% IF current_page != last_page %]
+      <input type='submit' name='next' value='Next page' />
+    [% END %]
+    <input type='submit' name='next' value='Last page' /><br />
+
+    <select name='page'>
+      <option value=''>Select a page...</option>
+      [%
+        FOR i IN [ 1 .. last_page ]
+      %]
+        <option value='[% i %]' [% IF i == current_page %] selected='selected' [% END %]>[% i %]</option>
+      [%
+        END
+      %]
+    </select>
+    <input type='submit' value='Go' />
+  </form>
+  <a href='[% c.uri_for ("/staff/search_namespaces") %]'>Back to search</a>
+</p>

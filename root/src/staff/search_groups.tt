@@ -16,10 +16,6 @@
     <td><input type='text' name='gc_accname' /></td>
   </tr>
   <tr>
-    <td>Channel Namespace</td>
-    <td><input type='text' name='namespace' /></td>
-  </tr>
-  <tr>
     <td>Group Type</td>
     <td>
       <select name='group_type'>

@@ -1,0 +1,21 @@
+<form method="post" action="[% c.uri_for('/staff/search_namespaces/submit') %]">
+
+<p>
+  Enter the search criteria. Wildcard: '%'
+</p>
+
+<table>
+  <tr>
+    <td>Namespace Type</td>
+    <td><select name="search_item"><option value="1">Channel Namespaces</option><option value="2">Cloak Namespaces</option></select></td>
+  <tr>
+    <td>Namespace</td>
+    <td><input type='text' name='namespace' /></td>
+  </tr>
+</table>
+
+<p>
+  <input type='submit' value='Submit' />
+</p>
+
+</form>

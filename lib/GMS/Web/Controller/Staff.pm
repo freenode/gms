@@ -155,14 +155,6 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
         push @join, 'active_change';
     }
 
-    if ($p->{namespace}) {
-        my $namespace = $p->{namespace};
-        $namespace =~ s#_#\\_#g;
-
-        push @search, 'channel_namespaces.namespace' => { 'ilike', $namespace };
-        push @join, 'channel_namespaces';
-    }
-
     my $m = ($mode == 1?"-or":"-and");
 
     my $rs = $group_rs->search (
@@ -269,6 +261,83 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
 
     $c->stash->{results} = \@results;
     $c->stash->{template} = "staff/search_users_results.tt";
+
+}
+
+=head2 search_namespaces
+
+Presents the form to search namespaces.
+
+=cut
+
+sub search_namespaces :Chained('base') :PathPart('search_namespaces') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'staff/search_namespaces.tt';
+}
+
+=head2 do_search_namespaces
+
+Performs a search with the criteria provided and displays the namespaces found.
+
+=cut
+
+sub do_search_namespaces :Chained('base') :PathPart('search_namespaces/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+
+    my (@search, @join, $page);
+    my $search_item = $p->{search_item};
+
+    my $namespace_rs;
+
+    if ($search_item == 1) {
+        $namespace_rs = $c->model("DB::ChannelNamespace");
+    } elsif ($search_item == 2) {
+        $namespace_rs = $c->model("DB::CloakNamespace");
+    }
+
+    my $current_page = $p->{current_page} || 1;
+    my $next = $p->{next};
+
+    if ($next eq 'Next page') {
+        $page = $current_page + 1;
+    } elsif ($next eq 'Previous page') {
+        $page = $current_page - 1;
+    } elsif ($next eq 'First page') {
+        $page = 1;
+    } elsif ($next eq 'Last page') {
+        $page = $p->{last_page};
+    } else {
+        $page = $p->{page} || $current_page;
+    }
+
+    my $namespace = $p->{namespace};
+    $namespace =~ s#_#\\_#g; #escape _ so it's not used as a wildcard.
+
+    my $rs = $namespace_rs -> search(
+        { 'namespace' => { 'ilike' => $namespace } },
+        {
+            page => $page,
+            rows => 15
+        }
+    );
+
+    my $pager = $rs->pager;
+    my @results = $rs->all;
+
+    %{$c->stash} = ( %{$c->stash}, %$p );
+    $c->stash->{current_page} = $page;
+    $c->stash->{last_page} = $pager->last_page;
+
+    if ( scalar (@results) == 0 ) {
+        $c->stash->{error_msg} = "Unable to find any namespaces that match your search criteria. Please try again.";
+        $c->detach ('search_namespaces');
+    }
+
+    $c->stash->{results} = \@results;
+    $c->stash->{template} = "staff/search_namespaces_results.tt";
 
 }
 
