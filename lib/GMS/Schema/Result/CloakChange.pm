@@ -48,7 +48,7 @@ __PACKAGE__->table("cloak_changes");
 
 =head2 changed_by
 
-  data_type: 'integer'
+  data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
 
@@ -111,7 +111,7 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "changed_by",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
   "offered",
   { data_type => "timestamp", default_value => \"NULL", is_nullable => 1},
   "accepted",

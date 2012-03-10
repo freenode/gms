@@ -22,7 +22,7 @@ __PACKAGE__->table("user_roles");
 
 =head2 account_id
 
-  data_type: 'integer'
+  data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
 
@@ -36,7 +36,7 @@ __PACKAGE__->table("user_roles");
 
 __PACKAGE__->add_columns(
   "account_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
   "role_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );

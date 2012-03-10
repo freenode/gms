@@ -22,10 +22,9 @@ __PACKAGE__->table("accounts");
 
 =head2 id
 
-  data_type: 'integer'
-  is_auto_increment: 1
+  data_type: 'varchar'
   is_nullable: 0
-  sequence: 'accounts_id_seq'
+  size: 9
 
 =head2 accountname
 
@@ -38,10 +37,9 @@ __PACKAGE__->table("accounts");
 __PACKAGE__->add_columns(
   "id",
   {
-    data_type         => "integer",
-    is_auto_increment => 1,
+    data_type         => "varchar",
     is_nullable       => 0,
-    sequence          => "accounts_id_seq",
+    size              => 9
   },
   "accountname",
   { data_type => "varchar", is_nullable => 1, size => 32 },

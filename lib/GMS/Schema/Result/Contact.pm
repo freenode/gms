@@ -29,7 +29,7 @@ __PACKAGE__->table("contacts");
 
 =head2 account_id
 
-  data_type: 'integer'
+  data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
 
@@ -51,7 +51,7 @@ __PACKAGE__->add_columns(
     sequence          => "contacts_id_seq",
   },
   "account_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
   "active_change",
   {
     data_type      => "integer",

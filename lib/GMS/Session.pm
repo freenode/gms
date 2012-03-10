@@ -60,8 +60,10 @@ sub new {
 
     my $account = undef;
 
+    my $accountid;
+
     try {
-        my $accountid = $self->{_control_session}->command($config->{service}, 'accountid', $user);
+        $accountid = $self->{_control_session}->command($config->{service}, 'uid', $user);
         $account = $account_rs->find({ id => $accountid });
     }
     catch (RPC::Atheme::Error $e) {
@@ -73,9 +75,8 @@ sub new {
         $account = $self->{_db}->txn_do( sub {
                 my $result = $account_rs->create({
                         accountname => $user,
+                        id => $accountid
                     });
-                $self->{_control_session}->command($config->{service}, 'accountid',
-                    $user, $result->id);
                 $result;
             });
     };
