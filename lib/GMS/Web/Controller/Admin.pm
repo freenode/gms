@@ -43,6 +43,18 @@ Administrative home page.
 sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c) = @_;
 
+    $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;
+    $c->stash->{pending_namespaces} = $c->model('DB::ChannelNamespace')->search_pending->count + $c->model('DB::CloakNamespace')->search_pending->count;
+
+    $c->stash->{pending_changes} =
+      $c->model('DB::GroupContactChange')->active_requests->count
+      + $c->model('DB::GroupChange')->active_requests->count
+      + $c->model('DB::ContactChange')->active_requests->count
+      + $c->model('DB::ChannelNamespaceChange')->active_requests->count
+      + $c->model('DB::CloakNamespaceChange')->active_requests->count;
+
+    $c->stash->{pending_cloaks} = $c->model('DB::CloakChange')->search_pending->count;
+
     $c->stash->{template} = 'admin/index.tt';
 }
 
@@ -190,6 +202,12 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     } elsif ($change_item == 5) { #cloak namespace change
         @to_approve = $c->model ("DB::CloakNameSpaceChange")->active_requests();
     }
+
+    $c->stash->{pending_groupcontact} = $c->model("DB::GroupContactChange")->active_requests->count;
+    $c->stash->{pending_group} = $c->model("DB::GroupChange")->active_requests->count;
+    $c->stash->{pending_contact} = $c->model("DB::ContactChange")->active_requests->count;
+    $c->stash->{pending_cns} = $c->model("DB::ChannelNamespaceChange")->active_requests->count;
+    $c->stash->{pending_clns} = $c->model("DB::CloakNameSpaceChange")->active_requests->count;
 
     $c->stash->{to_approve} = \@to_approve;
 
@@ -353,6 +371,9 @@ sub approve_namespaces :Chained('base') :PathPart('approve_namespaces') :Args(0)
     }
 
     $c->stash->{to_approve} = \@to_approve;
+
+    $c->stash->{pending_channel} = $c->model ("DB::ChannelNamespace")->search_pending->count;
+    $c->stash->{pending_cloak} = $c->model ("DB::CloakNamespace")->search_pending->count;
 
     if ($approve_item == 1) {
         $c->stash->{template} = 'admin/approve_channel_namespaces.tt';

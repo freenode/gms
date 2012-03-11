@@ -1,10 +1,10 @@
 [% META title = 'Approve Changes' %]
 
 <form method="post" action="[% c.uri_for('/admin/approve_change') %]">
-<input type='radio' name='change_item' value='1' /> Group Contact Changes<br />
-<input type='radio' name='change_item' value='2' /> Group Changes<br />
-<input type='radio' name='change_item' value='3' /> Contact Changes<br />
-<input type='radio' name='change_item' value='4' /> Channel Namespace Changes<br />
-<input type='radio' name='change_item' value='5' /> Cloak Namespace Changes<br />
+<input type='radio' name='change_item' value='1' /> Group Contact Changes ([% pending_groupcontact %] pending) <br />
+<input type='radio' name='change_item' value='2' /> Group Changes ([% pending_group %] pending) <br />
+<input type='radio' name='change_item' value='3' /> Contact Changes ([% pending_contact %] pending) <br />
+<input type='radio' name='change_item' value='4' /> Channel Namespace Changes ([% pending_cns %] pending) <br />
+<input type='radio' name='change_item' value='5' /> Cloak Namespace Changes ([% pending_clns %] pending) <br />
 <input type="submit" value="Submit" />
 </form>

@@ -2,16 +2,16 @@
 
 <ul>
 <li>
-  <a href="[% c.uri_for('/admin/approve') %]">Review and Approve Group Registrations</a>
+  <a href="[% c.uri_for('/admin/approve') %]">Review and Approve Group Registrations</a> ([% pending_groups %] pending)
 </li>
 <li>
-  <a href="[% c.uri_for('/admin/approve_namespaces') %]">Review and Approve Namespace Requests</a>
+  <a href="[% c.uri_for('/admin/approve_namespaces') %]">Review and Approve Namespace Requests</a> ([% pending_namespaces %] pending)
 </li>
 <li>
-  <a href="[% c.uri_for('/admin/approve_change') %]">Review and Approve Changes</a>
+  <a href="[% c.uri_for('/admin/approve_change') %]">Review and Approve Changes</a> ([% pending_changes %] pending)
 </li>
 <li>
-  <a href="[% c.uri_for('/admin/approve_cloak') %]">Review and Approve Cloak Changes</a>
+  <a href="[% c.uri_for('/admin/approve_cloak') %]">Review and Approve Cloak Changes</a> ([% pending_cloaks %] pending)
 </li>
 <li>
   <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
