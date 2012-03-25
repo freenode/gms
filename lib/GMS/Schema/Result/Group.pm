@@ -667,7 +667,7 @@ sub take_over {
 
     if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
-            $controlsession->command('ChanServ', 'ftransfer', $channel, $gc_name);
+            $controlsession->command('GMSServ', 'transfer', $channel, $gc_name, $c->user->account->accountname);
         }
         catch (RPC::Atheme::Error $e) {
             die $e;
@@ -694,7 +694,7 @@ sub drop {
 
     if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
-            $controlsession->command('ChanServ', 'fdrop', $channel);
+            $controlsession->command('GMSServ', 'drop', $channel, $c->user->account->accountname);
         }
         catch (RPC::Atheme::Error $e) {
             die $e;

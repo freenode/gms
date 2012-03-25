@@ -6,7 +6,7 @@ SRVNAME = groupserv
 ATHEME_CFLAGS = -I$(ATHEME)/include -I$(ATHEME)/libmowgli/src/libmowgli -DDATADIR=\"$(PREFIX)/etc\"
 
 SOURCES = \
-	uid.pl
+	gmsserv.pl
 
 MODULES = $(patsubst %.c,%.so,$(SOURCES))
 
