@@ -132,4 +132,51 @@ __PACKAGE__->has_many(
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(roles => 'user_roles', 'role');
 
+use TryCatch;
+use GMS::Exception;
+
+=head1 METHODS
+
+=head2 metadata
+
+Returns metadata of an account
+
+=cut
+
+sub metadata {
+    my ($self, $c, $name) = @_;
+
+    my $controlsession = $c->model('Atheme')->session;
+
+    try {
+        my $data = $controlsession->command('GMSServ', 'metadata', $self->accountname, $name);
+
+        return $data;
+    }
+    catch (RPC::Atheme::Error $e) {
+        die $e if ($e->code != $RPC::Atheme::Error::nosuch_key);
+    }
+}
+
+=head2 mark
+
+Returns the mark on the account, if there is one
+
+=cut
+
+sub mark {
+    my ($self, $c) = @_;
+
+    try {
+        my $mark = $self->metadata ($c, 'private:mark:reason');
+        my $setter = $self->metadata ($c, 'private:mark:setter');
+        my $time = $self->metadata ($c, 'private:mark:timestamp');
+
+        return [$mark, $setter, $time];
+    }
+    catch (RPC::Atheme::Error $e) {
+        die $e;
+    }
+}
+
 1;

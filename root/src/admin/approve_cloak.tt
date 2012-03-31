@@ -1,4 +1,5 @@
 [% META title = 'Cloak changes awaiting approval' %]
+[% USE date %]
 
 <form method="post" action="[% c.uri_for('/admin/approve_cloak/submit') %]">
 <input type="hidden" name="approve_changes"
@@ -37,6 +38,17 @@
   </tr>
   <tr id="hidden_[% cc.id %]" class="hidden">
     <td colspan="6" class="wide">
+
+      [% data = cc.contact.account.mark (c) %]
+      [% mark = data.0; mark_setter = data.1; time = data.2; %]
+
+      [% IF mark %]
+        <p>
+          <b>Note:</b> The account has been <b>marked</b> by <b>[% mark_setter %]</b> on [% date.format(time); %]:<br/>
+          [% mark | html %]
+        </p>
+      [% END %]
+
       [% cc.contact.account.accountname %]'s recent cloak changes:
 
       [% IF cc.contact.recent_cloak_changes %]

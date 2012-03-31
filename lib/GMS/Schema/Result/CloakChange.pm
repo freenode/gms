@@ -205,7 +205,7 @@ sub approve {
     my $accountname = $contact->account->accountname;
 
     try {
-        $controlsession->command('NickServ', 'VHOST', $accountname, 'ON', $cloak);
+        $controlsession->command('GMSServ', 'cloak', $accountname, $cloak);
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
