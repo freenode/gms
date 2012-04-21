@@ -7,11 +7,16 @@ sure you've read the <a href="http://freenode.net/group_registration.shtml">
 explanation</a> of the group system, and provide as much information as you can
 to help us verify your registration.</p>
 
+<p>
+  Fields with * are mandatory. 
+  (Address fields are only required if the group has a registered address).
+</p>
+
 <form method="post" action="[% c.uri_for('/group/new/submit') %]">
 <table>
 <tr> <td colspan="2"><strong>Group Information</strong></td> </tr>
 <tr>
-  <td>Group Type</td>
+  <td>* Group Type</td>
   <td><select name="group_type" id="group_type">
     <option value="informal" selected="selected">Informal Group</option>
     <option value="corporation">Corporation / Business entity</option>
@@ -22,13 +27,13 @@ to help us verify your registration.</p>
   </select></td>
 </tr>
 <tr>
-  <td>Group Name</td> <td><input type="text" name="group_name" size="40" value="[% group_name %]"></td>
+  <td>* Group Name</td> <td><input type="text" name="group_name" size="40" value="[% group_name %]"></td>
 </tr>
 <tr>
-  <td>Group URL</td> <td><input type="text" name="group_url" size="40" value="[% group_url %]"></td>
+  <td>* Group URL</td> <td><input type="text" name="group_url" size="40" value="[% group_url %]"></td>
 </tr>
 <tr>
-  <td>Channel Namespace</td>
+  <td>* Channel Namespace</td>
   <td><input type="text" name="channel_namespace" size="40" value="[% channel_namespace %]"></td>
 </tr>
 [% IF confirm %]
@@ -48,13 +53,13 @@ to help us verify your registration.</p>
   <td colspan="2"><strong>Group Address</strong> (if applicable)</td>
 </tr>
 <tr>
-  <td>Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td>
+  <td>* Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td>
 </tr>
 <tr>
   <td>Address 2:</td><td><input type="text" name="address_two" size="40" value="[% address_two %]"></td>
 </tr>
 <tr>
-  <td>City</td><td><input type="text" name="city" size="40" value="[% city %]"></td>
+  <td>* City</td><td><input type="text" name="city" size="40" value="[% city %]"></td>
 </tr>
 <tr>
   <td>State</td><td><input type="text" name="state" size="40" value="[% state %]"></td>
@@ -63,10 +68,10 @@ to help us verify your registration.</p>
   <td>Postal Code</td><td><input type="text" name="postcode" size="40" value="[% postcode %]"></td>
 </tr>
 <tr>
-  <td>Country</td><td><input type="text" name="country" size="40" value="[% country %]"></td>
+  <td>* Country</td><td><input type="text" name="country" size="40" value="[% country %]"></td>
 </tr>
 <tr>
-  <td>Telephone</td><td><input type="text" name="phone" size="40" value="[% phone %]"></td>
+  <td>* Telephone</td><td><input type="text" name="phone" size="40" value="[% phone %]"></td>
 </tr>
 <tr>
   <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 %]"></td>
