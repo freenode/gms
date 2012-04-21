@@ -530,6 +530,8 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
     }
 
     if ($new_namespace) {
+        $new_namespace =~ s/-\*//;
+
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
             if ($ns->status ne 'deleted') {
                 $c->stash->{error_msg} = "That namespace is already taken";
@@ -664,6 +666,8 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     my @channels = split /, */, $p->{channel_namespace};
 
     foreach my $channel_ns ( @channels ) {
+        $channel_ns =~ s/-\*//;
+
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
             if ($ns->status ne 'deleted') {
                 push @errors, "The namespace $channel_ns is already taken";
@@ -709,6 +713,8 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 });
 
             foreach my $channel_ns ( @channels ) {
+                $channel_ns =~ s/-\*//;
+
                 if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
                     $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
                 } else {
