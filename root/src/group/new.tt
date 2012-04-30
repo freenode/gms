@@ -17,24 +17,40 @@ to help us verify your registration.</p>
 <tr> <td colspan="2"><strong>Group Information</strong></td> </tr>
 <tr>
   <td>* Group Type</td>
-  <td><select name="group_type" id="group_type">
-    <option value="informal" selected="selected">Informal Group</option>
-    <option value="corporation">Corporation / Business entity</option>
-    <option value="education">Educational Institution</option>
-    <option value="government">Governmental Entity</option>
-    <option value="nfp">Not for profit / Charitable Organisation</option>
-    <option value="internal">Internal Group</option>
-  </select></td>
+  <td>
+      <select name="group_type" id="group_type">
+        <option value="informal" selected="selected">Informal Group</option>
+        <option value="corporation">Corporation / Business entity</option>
+        <option value="education">Educational Institution</option>
+        <option value="government">Governmental Entity</option>
+        <option value="nfp">Not for profit / Charitable Organisation</option>
+        <option value="internal">Internal Group</option>
+      </select>
+
+      <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 1)" onmouseout="untooltip()" />
+  </td>
 </tr>
 <tr>
-  <td>* Group Name</td> <td><input type="text" name="group_name" size="40" value="[% group_name %]"></td>
+  <td>* Group Name</td>
+  <td>
+    <input type="text" name="group_name" size="40" value="[% group_name %]">
+    <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 2)" onmouseout="untooltip()" />
+  </td>
 </tr>
 <tr>
-  <td>* Group URL</td> <td><input type="text" name="group_url" size="40" value="[% group_url %]"></td>
+  <td>* Group URL</td>
+  <td>
+    <input type="text" name="group_url" size="40" value="[% group_url %]">
+    <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 3)" onmouseout="untooltip()" />
+  </td>
 </tr>
 <tr>
   <td>* Channel Namespace</td>
-  <td><input type="text" name="channel_namespace" size="40" value="[% channel_namespace %]"></td>
+  <td>
+    <input type="text" name="channel_namespace" size="40" value="[% channel_namespace %]">
+    <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 4)" onmouseout="untooltip()" />
+  </td>
+
 </tr>
 [% IF confirm %]
   <tr>
@@ -50,7 +66,10 @@ to help us verify your registration.</p>
   </td>
 </tr>
 <tr>
-  <td colspan="2"><strong>Group Address</strong> (if applicable)</td>
+  <td colspan="2">
+    <strong>Group Address</strong> (if applicable)
+    <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 5)" onmouseout="untooltip()" />
+  </td>
 </tr>
 <tr>
   <td>* Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td>
@@ -83,8 +102,12 @@ to help us verify your registration.</p>
 
 <tr>
   <td>Join the Groups Advisory Board?</td>
-  <td><input type="radio" name="join_gab" id="join_gab_y" value="Yes" checked="checked"> Yes <br />
-      <input type="radio" name="join_gab" id="join_gab_n" value="No"> No
+  <td>
+    <input type="radio" name="join_gab" id="join_gab_y" value="Yes" checked="checked"> Yes
+    <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 6)" onmouseout="untooltip()" />
+    <br />
+    <input type="radio" name="join_gab" id="join_gab_n" value="No"> No
+  </td>
 </tr>
 <tr>
   <td>Email address for GAB mailing list</td>
@@ -93,8 +116,11 @@ to help us verify your registration.</p>
 
 <tr>
   <td>Include project on Primary Groups listing?</td>
-  <td><input type="radio" name="include_listing" id="include_listing_y" value="y" checked="checked"> Yes <br />
-      <input type="radio" name="include_listing" id="include_listing_n" value="n"> No
+  <td>
+    <input type="radio" name="include_listing" id="include_listing_y" value="y" checked="checked"> Yes
+    <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 7)" onmouseout="untooltip()" />
+    <br />
+    <input type="radio" name="include_listing" id="include_listing_n" value="n"> No
   </td>
 </tr>
 <tr>
@@ -112,5 +138,60 @@ to help us verify your registration.</p>
   <td colspan="2"><input type="submit" name="submit" value="Submit" /></td>
 </tr>
 </table>
+
+<!-- Text for the mouseover tooltip elements !-->
+
+<div class="hidden" id="tooltipText1">
+    <b>Informal Group</b><br />
+    The majority of registrations will be an informal group.<br />
+    Select this if your group is not associated with a legal entity in any way.<br /><br />
+
+    <b>Internal Group</b><br />
+    Select this option if your group is not public, and part of a larger internal organisation<br />
+    like a university association.
+</div>
+
+<div class="hidden" id="tooltipText2">
+    <b>Group Name</b><br/>
+    The name of your group.
+</div>
+
+<div class="hidden" id="tooltipText3">
+    <b>Group URL</b><br/>
+    The public website for your group. This will be used to help identify your claim to the group,
+    and to make sure the group request is on topic for freenode.
+</div>
+
+<div class="hidden" id="tooltipText4">
+    <b>Channel Namespace</b><br />
+    The channels which your group request to be reserved.<br />
+    This should be specified as a list of channel names or masks seperated by a comma.<br />
+    A channel mask is one which covers a group of channels, for example freenode would cover<br />
+    all channels starting with #freenode-, such as #freenode-help, #freenode-dev, et cetera.<br /><br />
+
+    You only need to enter the namespace name (you do not need to use -*) <br />
+
+    Don't claim too broad a range of channels, or your application may be denied. In this context, potentially<br />
+    confusing acronyms may be disallowed.
+</div>
+
+<div class="hidden" id="tooltipText5">
+    <b>Address</b><br/>
+    The address where the group is located, if applicable.<br/>
+</div>
+
+<div class="hidden" id="tooltipText6">
+    <b>Groups Advisory Board</b><br />
+    The Groups Advisory Board (GAB) is open to all Group Contacts. GAB membership is optional<br />
+    and provides your project with a voice in helping steer the direction of freenode and the<br />
+    PDPC in current and future services provided to the FOSS communities.
+</div>
+
+<div class="hidden" id="tooltipText7">
+    <b>Primary Groups Listing</b><br/>
+    As groups are an important part of freenode, you may request that we list your group's information<br />
+    publically on freenode.net. Answer yes if you would like to be listed -- this is optional!
+</div>
+
 </form>
 
