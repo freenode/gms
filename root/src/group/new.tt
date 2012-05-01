@@ -33,21 +33,21 @@ to help us verify your registration.</p>
 <tr>
   <td>* Group Name</td>
   <td>
-    <input type="text" name="group_name" size="40" value="[% group_name %]">
+    <input type="text" name="group_name" style="width:90%" value="[% group_name %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 2)" onmouseout="untooltip()" />
   </td>
 </tr>
 <tr>
   <td>* Group URL</td>
   <td>
-    <input type="text" name="group_url" size="40" value="[% group_url %]">
+    <input type="text" name="group_url" style="width:90%" value="[% group_url %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 3)" onmouseout="untooltip()" />
   </td>
 </tr>
 <tr>
   <td>* Channel Namespace</td>
   <td>
-    <input type="text" name="channel_namespace" size="40" value="[% channel_namespace %]">
+    <input type="text" name="channel_namespace" style="width:90%" value="[% channel_namespace %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 4)" onmouseout="untooltip()" />
   </td>
 
@@ -72,28 +72,28 @@ to help us verify your registration.</p>
   </td>
 </tr>
 <tr>
-  <td>* Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one %]"></td>
+  <td>* Address 1:</td><td><input type="text" name="address_one" style="width:90%" value="[% address_one %]"></td>
 </tr>
 <tr>
-  <td>Address 2:</td><td><input type="text" name="address_two" size="40" value="[% address_two %]"></td>
+  <td>Address 2:</td><td><input type="text" name="address_two" style="width:90%" value="[% address_two %]"></td>
 </tr>
 <tr>
-  <td>* City</td><td><input type="text" name="city" size="40" value="[% city %]"></td>
+  <td>* City</td><td><input type="text" name="city" style="width:90%" value="[% city %]"></td>
 </tr>
 <tr>
-  <td>State</td><td><input type="text" name="state" size="40" value="[% state %]"></td>
+  <td>State</td><td><input type="text" name="state" style="width:90%" value="[% state %]"></td>
 </tr>
 <tr>
-  <td>Postal Code</td><td><input type="text" name="postcode" size="40" value="[% postcode %]"></td>
+  <td>Postal Code</td><td><input type="text" name="postcode" style="width:90%" value="[% postcode %]"></td>
 </tr>
 <tr>
-  <td>* Country</td><td><input type="text" name="country" size="40" value="[% country %]"></td>
+  <td>* Country</td><td><input type="text" name="country" style="width:90%" value="[% country %]"></td>
 </tr>
 <tr>
-  <td>* Telephone</td><td><input type="text" name="phone" size="40" value="[% phone %]"></td>
+  <td>* Telephone</td><td><input type="text" name="phone" style="width:90%" value="[% phone %]"></td>
 </tr>
 <tr>
-  <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 %]"></td>
+  <td>Telephone (alternate)</td><td><input type="text" name="phone2" style="width:90%" value="[% phone2 %]"></td>
 </tr>
 
 <tr>
@@ -111,7 +111,7 @@ to help us verify your registration.</p>
 </tr>
 <tr>
   <td>Email address for GAB mailing list</td>
-  <td><input type="text" name="gab_email" size="40" value="[% gab_email %]"></td>
+  <td><input type="text" name="gab_email" style="width:90%" value="[% gab_email %]"></td>
 </tr>
 
 <tr>
@@ -124,7 +124,7 @@ to help us verify your registration.</p>
   </td>
 </tr>
 <tr>
-  <td>URL to be linked</td><td><input type="text" name="listing_url" size="40" value="[% listing_url %]"></td>
+  <td>URL to be linked</td><td><input type="text" name="listing_url" style="width:90%" value="[% listing_url %]"></td>
 </tr>
 <tr>
   <td>Small blurb about the project</td>
