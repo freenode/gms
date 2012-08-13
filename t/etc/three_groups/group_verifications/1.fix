@@ -1,0 +1,5 @@
+$HASH1 = {
+    group_id => 3,
+    verification_type => 'web_url',
+    verification_data => 'http://localhost/ovrsl.txt'
+};

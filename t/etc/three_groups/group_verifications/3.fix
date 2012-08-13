@@ -1,0 +1,4 @@
+$HASH1 = {
+    group_id => 3,
+    dns => 'freenode-g34tg.localhost.'
+};

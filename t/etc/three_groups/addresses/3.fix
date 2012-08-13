@@ -1,0 +1,14 @@
+$HASH1 = {
+           address_one
+                  => 'Address',
+           address_two
+                  => '',
+           city   => 'City',
+           code   => 1245,
+           country
+                  => 'Country',
+           id     => 3,
+           phone  => 2352351,
+           phone2 => '',
+           state  => 'State'
+         };

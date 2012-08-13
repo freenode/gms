@@ -1,5 +1,0 @@
-$HASH1 = {
-           accountname
-                   => 'test01',
-           id      => 1
-         };

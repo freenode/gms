@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 1,
+           id          => 3,
+           verification_data
+                       => 'freenode-btspuik..localhost',
+           verification_type
+                       => 'dns'
+         };

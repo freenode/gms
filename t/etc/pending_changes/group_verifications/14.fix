@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 4,
+           id          => 14,
+           verification_data
+                       => 'freenode-uokwash..localhost',
+           verification_type
+                       => 'dns'
+         };

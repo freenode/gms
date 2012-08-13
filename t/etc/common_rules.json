@@ -4,13 +4,37 @@
             "fetch": [ {
                 "rel": "group_changes",
                 "quantity": "all"
-            } ]
+            },
+            {
+                "rel": "group_verifications",
+                "quantity": "all"
+            },
+            {
+                "rel": "channel_namespaces",
+                "quantity": "all"
+            },
+            {
+                "rel": "cloak_namespaces",
+                "quantity": "all"
+            }  ]
         },
         "Contact": {
             "fetch": [ {
                 "rel": "contact_changes",
                 "quantity": "all"
             } ]
-        }
+        },
+        "ChannelNamespace": {
+            "fetch": [ {
+                "rel": "channel_namespace_changes",
+                "quantity": "all"
+            } ]
+        },
+        "CloakNamespace": {
+            "fetch": [ {
+                "rel": "cloak_namespace_changes",
+                "quantity": "all"
+            } ]
+        },
     }
 }
