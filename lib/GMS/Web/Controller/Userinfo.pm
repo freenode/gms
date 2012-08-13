@@ -6,6 +6,9 @@ use parent 'Catalyst::Controller';
 
 use TryCatch;
 
+use Carp;
+$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
+
 =head1 NAME
 
 GMS::Web::Controller::Userinfo - Controller for GMS::Web
@@ -77,7 +80,7 @@ sub edit :Path('edit') :Args(0) {
     my $last_change = $contact->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
         $c->stash->{status_msg} = "Warning: There is already a change request pending for your contact information.
          As a result, information from the current request is used instead of the active change.";
@@ -146,23 +149,21 @@ sub update :Path('update') :Args(0) {
         }
     } else {
         try {
-            $c->model('DB')->schema->txn_do(sub {
-                my $address = $c->model('DB::Address')->create({
-                    address_one => $params->{address_one},
-                    address_two => $params->{address_two},
-                    city => $params->{city},
-                    state => $params->{state},
-                    code => $params->{postcode},
-                    country => $params->{country},
-                    phone => $params->{phone_one},
-                    phone2 => $params->{phone_two}
-                });
-                $contact = $c->model('DB::Contact')->create({
-                    account_id => $account->id,
-                    name => $params->{user_name},
-                    email => $params->{user_email},
-                    address => $address->id
-                });
+            my $address = $c->model('DB::Address')->create({
+                address_one => $params->{address_one},
+                address_two => $params->{address_two},
+                city => $params->{city},
+                state => $params->{state},
+                code => $params->{postcode},
+                country => $params->{country},
+                phone => $params->{phone_one},
+                phone2 => $params->{phone_two}
+            });
+            $contact = $c->model('DB::Contact')->create({
+                account_id => $account->id,
+                name => $params->{user_name},
+                email => $params->{user_email},
+                address => $address->id
             });
             $msg = "Your contact information has been updated.";
         }

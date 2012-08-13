@@ -147,7 +147,7 @@ to help us verify your registration.</p>
     Select this if your group is not associated with a legal entity in any way.<br /><br />
 
     <b>Internal Group</b><br />
-    Select this option if your group is not public, and part of a larger internal organisation<br />
+    Select this option if your group is not public, and part of a larger internal organisation 
     like a university association.
 </div>
 
@@ -166,12 +166,12 @@ to help us verify your registration.</p>
     <b>Channel Namespace</b><br />
     The channels which your group request to be reserved.<br />
     This should be specified as a list of channel names or masks seperated by a comma.<br />
-    A channel mask is one which covers a group of channels, for example freenode would cover<br />
+    A channel mask is one which covers a group of channels, for example freenode would cover
     all channels starting with #freenode-, such as #freenode-help, #freenode-dev, et cetera.<br /><br />
 
     You only need to enter the namespace name (you do not need to use -*) <br />
 
-    Don't claim too broad a range of channels, or your application may be denied. In this context, potentially<br />
+    Don't claim too broad a range of channels, or your application may be denied. In this context, potentially
     confusing acronyms may be disallowed.
 </div>
 
@@ -182,14 +182,14 @@ to help us verify your registration.</p>
 
 <div class="hidden" id="tooltipText6">
     <b>Groups Advisory Board</b><br />
-    The Groups Advisory Board (GAB) is open to all Group Contacts. GAB membership is optional<br />
-    and provides your project with a voice in helping steer the direction of freenode and the<br />
+    The Groups Advisory Board (GAB) is open to all Group Contacts. GAB membership is optional 
+    and provides your project with a voice in helping steer the direction of freenode and the 
     PDPC in current and future services provided to the FOSS communities.
 </div>
 
 <div class="hidden" id="tooltipText7">
     <b>Primary Groups Listing</b><br/>
-    As groups are an important part of freenode, you may request that we list your group's information<br />
+    As groups are an important part of freenode, you may request that we list your group's information 
     publically on freenode.net. Answer yes if you would like to be listed -- this is optional!
 </div>
 

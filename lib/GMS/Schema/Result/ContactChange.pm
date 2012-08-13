@@ -218,7 +218,7 @@ use GMS::Exception;
 
 If the given change is a request, then create and return a new change identical
 to it except for the type, which will be 'approve', the user, which must be
-provided, and the optional free text about the change. The effect is to 
+provided, and the optional free text about the change. The effect is to
 approve the given request.
 
 If the given change isn't a request, calling this is an error.
@@ -229,7 +229,7 @@ sub approve {
     my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
-        unless $self->change_type eq 'request';
+        unless $self->change_type->is_request;
 
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
@@ -248,7 +248,7 @@ sub reject {
     my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
-        unless $self->change_type eq 'request';
+        unless $self->change_type->is_request;
 
     die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
 

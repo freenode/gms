@@ -23,7 +23,7 @@ sub search_pending {
     my ($self) = @_;
 
     return $self->search(
-        { 'active_change.status' => 'pending-staff' },
+        { 'active_change.status' => 'pending_staff' },
         { join => 'active_change' }
     );
 }

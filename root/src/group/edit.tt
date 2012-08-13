@@ -6,12 +6,12 @@
   <td>Group Type</td>
   <td>
     <select name='group_type'>
-      <option value="informal" [% IF group_type == "informal" %] selected = "selected" [% END %]>Informal Group</option>
-      <option value="corporation" [% IF group_type == "corporation" %] selected = "selected" [% END %]>Corporation / Business entity</option>
-      <option value="education" [% IF group_type == "education" %] selected = "selected" [% END %]>Educational Institution</option>
-      <option value="government" [% IF group_type == "government" %] selected = "selected" [% END %]>Governmental Entity</option>
-      <option value="nfp" [% IF group_type == "nfp" %] selected = "selected" [% END %]>Not for profit / Charitable Organisation</option>
-      <option value="internal" [% IF group_type == "internal" %] selected = "selected" [% END %]>Internal Group</option>
+      <option value="informal" [% IF group_type.is_informal %] selected = "selected" [% END %]>Informal Group</option>
+      <option value="corporation" [% IF group_type.is_corporation %] selected = "selected" [% END %]>Corporation / Business entity</option>
+      <option value="education" [% IF group_type.is_education %] selected = "selected" [% END %]>Educational Institution</option>
+      <option value="government" [% IF group_type.is_government %] selected = "selected" [% END %]>Governmental Entity</option>
+      <option value="nfp" [% IF group_type.is_nfp %] selected = "selected" [% END %]>Not for profit / Charitable Organisation</option>
+      <option value="internal" [% IF group_type.is_internal %] selected = "selected" [% END %]>Internal Group</option>
     </select>
   </td>
 </tr>

@@ -28,8 +28,8 @@
     </td>
     <td>
     <select name="status_[% group_contact.contact.id %]">
-      <option value="active" [% IF change.status == 'active' %] selected [% END %]>active</option>
-      <option value="retired" [% IF change.status == 'retired' %] selected [% END %]>retired</option>
+      <option value="active" [% IF change.status.is_active %] selected [% END %]>active</option>
+      <option value="retired" [% IF change.status.is_retired %] selected [% END %]>retired</option>
     </select>
     </td>
     <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF change.primary %] checked [% END %] /></td>

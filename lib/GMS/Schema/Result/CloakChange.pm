@@ -175,7 +175,7 @@ sub accept {
     my ($self) = @_;
     my $changes_rs = $self->result_source->schema->resultset('CloakChange');
 
-    my $pending = $changes_rs->search_pending({ 'contact_id' => $self->contact_id });
+    my $pending = $changes_rs->search_pending->search({ 'contact_id' => $self->contact_id });
     $pending->update ({ 'accepted' => \"NULL" });
 
     $self->accepted (\"NOW()");
@@ -199,18 +199,19 @@ sub approve {
     my $contact_id = $self->contact_id;
 
     my $controlsession = $c->model('Atheme')->session;
-    my $contact_rs = $c->model('DB::Contact');
+
+    my $schema = $self->result_source->schema;
+    my $contact_rs = $schema->resultset ('Contact');
 
     my $contact = $contact_rs->find({ 'id' => $contact_id });
     my $accountname = $contact->account->accountname;
 
     try {
-        $controlsession->command('GMSServ', 'cloak', $accountname, $cloak);
+        return $controlsession->command('GMSServ', 'cloak', $accountname, $cloak);
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
     }
-
 }
 
 =head2 rejected

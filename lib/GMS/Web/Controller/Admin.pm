@@ -45,6 +45,7 @@ sub index :Chained('base') :PathPart('') :Args(0) {
 
     $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;
     $c->stash->{pending_namespaces} = $c->model('DB::ChannelNamespace')->search_pending->count + $c->model('DB::CloakNamespace')->search_pending->count;
+    $c->stash->{pending_contacts} = $c->model('DB::GroupContact')->search_pending->count;
 
     $c->stash->{pending_changes} =
       $c->model('DB::GroupContactChange')->active_requests->count
@@ -183,6 +184,70 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
     }
 
 }
+
+=head2 approve_new_gc
+
+Presents the form to approve new contact additions.
+
+=cut
+
+sub approve_new_gc :Chained('base') :PathPart('approve_new_gc') :Args(0) {
+    my ($self, $c) = @_;
+
+    my @to_approve = $c->model('DB::GroupContact')->search_pending;
+
+    $c->stash->{to_approve} = \@to_approve;
+    $c->stash->{template} = 'admin/approve_new_gc.tt';
+}
+
+=head2 do_approve_new_gc
+
+Handler for the group contact approval form. Verifies, approves, or rejects those group
+contacts selected for it.
+
+=cut
+
+sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $params = $c->request->params;
+    my $rs = $c->model('DB::GroupContact');
+    my $account = $c->user->account;
+
+    my @approve_contacts = split / /, $params->{approve_contacts};
+    try {
+        $c->model('DB')->schema->txn_do(sub {
+            foreach my $contact_id (@approve_contacts) {
+                my $gc = $rs->find_by_id($contact_id);
+                my $action = $params->{"action_$contact_id"};
+                my $freetext = $params->{"freetext_$contact_id"};
+
+                if ($action eq 'approve') {
+                    $c->log->info("Approving group contact id $contact_id for group $gc->group->id (" .
+                        $gc->contact->account->accountname . " is now group contact for " .
+                        $gc->group->group_name . ") by " . $c->user->username . "\n");
+                    $gc->approve($account, $freetext);
+                } elsif ($action eq 'reject') {
+                    $c->log->info("Rejecting group contact id $contact_id for group $gc->group->id (" .
+                        $gc->contact->account->accountname . " rejected as group contact for " .
+                        $gc->group->group_name . ") by " . $c->user->username . "\n");
+                    $gc->reject($account, $freetext);
+                } elsif ($action eq 'hold') {
+                    next;
+                } else {
+                    $c->log->error("Got unknown action $action for gc id
+                        $contact_id (group $gc->group->id) in Admin::do_approve_new_gc");
+                }
+            }
+        });
+        $c->response->redirect($c->uri_for('approve_new_gc'));
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e->message;
+        $c->detach ("/admin/approve_new_gc");
+    }
+}
+
 
 sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     my ($self, $c) = @_;
@@ -525,7 +590,7 @@ sub edit :Chained('single_group') :PathPart('edit') :Args(0) {
     my $last_change = $group->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
         $c->stash->{status_msg} = "Warning: There is already a change request pending for this group.
          As a result, information from the current request is used instead of the active change.";
@@ -701,7 +766,7 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
         $new_namespace =~ s/-\*//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
-            if ($ns->status ne 'deleted') {
+            if (!$ns->status->is_deleted) {
                 $c->stash->{error_msg} = "That namespace is already taken";
                 $c->detach ('edit_channel_namespaces');
             } else {
@@ -761,7 +826,7 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
 
     if ($new_namespace) {
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
-            if ($ns->status ne 'deleted') {
+            if (!$ns->status->is_deleted) {
                 $c->stash->{error_msg} = "That namespace is already taken";
                 $c->detach ('edit_cloak_namespaces');
             } else {
@@ -793,7 +858,7 @@ sub edit_account :Chained('account') :PathPart('edit') :Args(0) {
     my $last_change = $contact->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
         $c->stash->{status_msg} = "Warning: There is already a change request pending for this contact.
          As a result, information from the current request is used instead of the active change.";

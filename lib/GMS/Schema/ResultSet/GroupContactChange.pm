@@ -59,7 +59,7 @@ Returns a resultset of invitations that are the most recent change for their con
 sub active_invitations {
     my ($self, $contact) = @_;
 
-    return $self->last_changes->search ( { 'change_type' => [ 'create', 'workflow_change'], 'status' => 'invited' } );
+    return $self->last_changes->search ( { 'status' => 'invited' } );
 }
 
 1;

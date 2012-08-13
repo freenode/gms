@@ -210,7 +210,7 @@ sub edit :Chained('single_group') :PathPart('edit') :Args(0) {
     my $last_change = $group->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
         $c->stash->{status_msg} = "Warning: There is already a change request pending for this group.
          As a result, information from the current request is used instead of the active change.";
@@ -533,11 +533,11 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
         $new_namespace =~ s/-\*//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
-            if ($ns->status ne 'deleted') {
+            if (!$ns->status->is_deleted) {
                 $c->stash->{error_msg} = "That namespace is already taken";
                 $c->detach ('edit_channel_namespaces');
             } else {
-                if ($ns->last_change->change_type eq 'request' && !$p->{'do_confirm'}) {
+                if ($ns->last_change->change_type->is_request && !$p->{'do_confirm'}) {
                     $c->stash->{error_msg} = "Another group has requested that namespace. Are you sure you want to create a conflicting request?";
                     $c->stash->{confirm} = 1;
                     $c->stash->{prev_namespace} = $new_namespace;
@@ -547,7 +547,7 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
                 $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {
-            $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending-staff' });
+            $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending_staff' });
         }
     }
 
@@ -600,11 +600,11 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
 
     if ($new_namespace) {
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
-            if ($ns->status ne 'deleted') {
+            if (!$ns->status->is_deleted) {
                 $c->stash->{error_msg} = "That namespace is already taken";
                 $c->detach ('edit_cloak_namespaces');
             } else {
-                if ($ns->last_change->change_type eq 'request' && !$p->{'do_confirm'}) {
+                if ($ns->last_change->change_type->is_request && !$p->{'do_confirm'}) {
                     $c->stash->{error_msg} = "Another group has requested that namespace. Are you sure you want to create a conflicting request?";
                     $c->stash->{confirm} = 1;
                     $c->stash->{prev_namespace} = $new_namespace;
@@ -614,7 +614,7 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
                 $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {
-            $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending-staff' });
+            $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending_staff' });
         }
     }
 
@@ -669,10 +669,10 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
         $channel_ns =~ s/-\*//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
-            if ($ns->status ne 'deleted') {
+            if (!$ns->status->is_deleted) {
                 push @errors, "The namespace $channel_ns is already taken";
             } else {
-                if ($ns->last_change->change_type eq 'request' && !$p->{'do_confirm'}) {
+                if ($ns->last_change->change_type->is_request && !$p->{'do_confirm'}) {
                     push @errors, "Another group has requested the $channel_ns namespace. Are you sure you want to create a conflicting request?";
                     $c->stash->{confirm} = 1;
                 }
@@ -718,7 +718,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
                     $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
                 } else {
-                    $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $channel_ns, 'status' => 'pending-staff' });
+                    $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $channel_ns, 'status' => 'pending_staff' });
                 }
             }
 

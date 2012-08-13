@@ -30,5 +30,35 @@ sub search_status {
     );
 }
 
-1;
+=head2 search_pending
 
+Returns a ResultSet of group contacts pending staff acceptance.
+
+=cut
+
+sub search_pending {
+    my ($self) = @_;
+
+    return $self->search_status ('pending_staff');
+}
+
+=head2 find_by_id
+
+Takes an id in the format of contact->id_group->id,
+splits it and finds the group contact with the specified
+contact & group id combination.
+
+=cut
+
+sub find_by_id {
+    my ($self, $id) = @_;
+
+    my ($contact_id, $group_id) = split /\_/, $id;
+
+    return $self->find({
+        'contact_id' => $contact_id,
+        'group_id' => $group_id
+    });
+}
+
+1;

@@ -8,6 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 =head1 NAME
 
@@ -60,7 +61,7 @@ __PACKAGE__->table("channel_namespace_changes");
 =head2 status
 
   data_type: 'enum'
-  extra: {custom_type_name => "channel_namespace_changes_status_type",list => ["active","deleted","pending-staff"]}
+  extra: {custom_type_name => "channel_namespace_changes_status_type",list => ["active","deleted","pending_staff"]}
   is_nullable: 0
 
 =head2 affected_change
@@ -118,7 +119,7 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "channel_namespace_changes_status_type",
-      list => ["active", "deleted", "pending-staff"],
+      list => ["active", "deleted", "pending_staff"],
     },
     is_nullable => 0,
   },
@@ -226,7 +227,7 @@ sub approve {
     my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
-        unless $self->change_type eq 'request';
+        unless $self->change_type->is_request;
 
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
@@ -245,7 +246,7 @@ sub reject {
     my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
-        unless $self->change_type eq 'request';
+        unless $self->change_type->is_request;
 
     die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
 
@@ -255,5 +256,10 @@ sub reject {
     $self->namespace->update;
     return $ret;
 }
+
+__PACKAGE__->add_columns(
+    '+change_type' => { is_enum => 1 },
+    '+status' => { is_enum => 1 },
+);
 
 1;

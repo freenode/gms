@@ -48,7 +48,7 @@ __PACKAGE__->table("group_contact_changes");
 =head2 status
 
   data_type: 'enum'
-  extra: {custom_type_name => "group_contact_status",list => ["invited","retired","active"]}
+  extra: {custom_type_name => "group_contact_status",list => ["invited","retired","active","deleted","pending_staff"]}
   is_nullable: 0
 
 =head2 change_type
@@ -97,7 +97,7 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "group_contact_status",
-      list => ["invited", "retired", "active"],
+      list => ["invited", "retired", "active", "deleted","pending_staff"],
     },
     is_nullable => 0,
   },
@@ -206,7 +206,7 @@ sub approve {
     my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't approve a change that isn't a request")
-        unless $self->change_type eq 'request';
+        unless $self->change_type->is_request;
 
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
@@ -225,7 +225,7 @@ sub reject {
     my ($self, $account, $freetext) = @_;
 
     die GMS::Exception::InvalidChange->new("Can't reject a change that isn't a request")
-        unless $self->change_type eq 'request';
+        unless $self->change_type->is_request;
 
     die GMS::Exception::InvalidChange->new("Need an account to reject a change") unless $account;
 

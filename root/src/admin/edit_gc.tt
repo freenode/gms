@@ -14,7 +14,7 @@
 [% FOREACH group_contact IN group_contacts -%]
 
 [%
-  IF group_contact.last_change.change_type == 'request';
+  IF group_contact.last_change.change_type.is_request;
     change = group_contact.last_change;
     status_msg = "At least one of the group's contacts has a change request pending. As a result, information from the current request is used instead of the active change for those contacts.";
   ELSE;
@@ -27,9 +27,9 @@
     </td>
     <td>
     <select name="status_[% group_contact.contact.id %]">
-      <option value="active" [% IF change.status == 'active' %] selected [% END %]>active</option>
-      <option value="retired" [% IF change.status == 'retired' %] selected [% END %]>retired</option>
-      <option value="invited" [% IF change.status == 'invited' %] selected [% END %]>invited</option>
+      <option value="active" [% IF change.status.is_active %] selected [% END %]>active</option>
+      <option value="retired" [% IF change.status.is_retired %] selected [% END %]>retired</option>
+      <option value="invited" [% IF change.status.is_invited %] selected [% END %]>invited</option>
     </select>
     </td>
     <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF change.primary %] checked [% END %] /></td>

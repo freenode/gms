@@ -5,7 +5,7 @@
 <p>Click <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">here</a> to see possible verification methods.</p>
 
 <p>
-[% IF group.status == 'auto_pending' %]
+[% IF group.status.is_auto_pending %]
   GMS will periodically check for the existence of this file, and submit
   your group for approval once it has been found.
 [% ELSE %]

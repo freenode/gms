@@ -27,12 +27,12 @@
 </ul>
 <h3>Actions:</h3>
 <ul>
-[% IF group.status == 'pending-web' -%]
+[% IF group.status.is_pending_web -%]
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">Verify Group</a>
 </li>
 [% END %]
-[% IF group.status == 'active' -%]
+[% IF group.status.is_active -%]
 <li>
 <a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
 </li>

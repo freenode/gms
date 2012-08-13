@@ -218,7 +218,7 @@ sub change {
     my $last_change = $self->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
     } else {
         $change = $active_change;
@@ -259,27 +259,26 @@ sub last_change {
 sub accept_invitation {
     my ($self) = @_;
 
-    return $self->change ($self->contact->account->id, 'request', { 'status' => 'active' });
+    return $self->change ($self->contact->account->id, 'workflow_change', { 'status' => 'pending_staff' });
 }
 
 sub decline_invitation {
     my ($self) = @_;
 
-    return $self->change ($self->contact->account->id, 'reject');
+    return $self->change ($self->contact->account->id, 'workflow_change', { 'status' => 'deleted' });
 }
 
 =head2 has_active_invitation
 
 Returns if the group contact has an active invitation to their group
-(if their status is invited and change_type is 'create' or 'workflow_change')
+(if their status is invited)
 
 =cut
 
 sub has_active_invitation {
     my ($self) = @_;
 
-    my $active_change_type = $self->active_change->change_type;
-    return ($self->status eq 'invited' && ($active_change_type eq 'create' || $active_change_type eq 'workflow_change'));
+    return ($self->status->is_invited);
 }
 
 =head2 can_access
@@ -306,6 +305,56 @@ sub can_access {
     else {
         return 0;
     }
+}
+
+=head2 approve
+
+Marks the group contact, who must be pending approval, as approved.
+Takes two arguments, the account which approved it and optional freetext about
+the approval.
+
+=cut
+
+sub approve {
+    my ($self, $account, $freetext) = @_;
+
+    if (!$self->status->is_pending_staff) {
+        die GMS::Exception->new ("Can't approve a group contact not pending"
+            . "approval");
+    }
+
+    $self->change( $account, 'admin', { status => 'active', 'change_freetext' => $freetext } );
+}
+
+=head2 reject
+
+Marks the group contact, who must be pending approval, as rejected.
+Takes two arguments, the account which rejected it and optional freetext about
+the approval.
+
+=cut
+
+sub reject {
+    my ($self, $account, $freetext) = @_;
+
+    if (!$self->status->is_pending_staff) {
+        die GMS::Exception->new ("Can't reject a group contact not pending"
+            . "approval");
+    }
+
+    $self->change( $account, 'admin', { status => 'deleted', 'change_freetext' => $freetext } );
+}
+
+=head2 id
+
+Returns contact->id_group->id for for easier manipluating of group contact objects.
+
+=cut
+
+sub id {
+    my ($self) = @_;
+
+    return $self->contact->id . "_" . $self->group->id;
 }
 
 1;

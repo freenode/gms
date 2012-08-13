@@ -34,9 +34,9 @@
     <td>
       <select name='group_status'>
         <option value='' selected='selected'>Please select...</option>
-        <option value='pending-web'>pending-web</option>
-        <option value='pending-staff'>pending-staff</option>
-        <option value='pending-auto'>pending-auto</option>
+        <option value='pending_web'>pending_web</option>
+        <option value='pending_staff'>pending_staff</option>
+        <option value='pending_auto'>pending_auto</option>
         <option value='verified'>verified</option>
         <option value='active'>active</option>
         <option value='deleted'>deleted</option>

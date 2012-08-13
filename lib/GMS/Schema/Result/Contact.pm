@@ -241,7 +241,7 @@ sub change {
     my $last_change = $self->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
     } else {
         $change = $active_change;

@@ -20,8 +20,8 @@
   </td>
   <td>
     <select name='status_[% namespace.id %]'>
-      <option value='active' [% IF namespace.status == 'active' %] selected [% END %]>active</option>
-      <option value='deleted' [% IF namespace.status == 'deleted' %] selected [% END %]>deleted</option>
+      <option value='active' [% IF namespace.status.is_active %] selected [% END %]>active</option>
+      <option value='deleted' [% IF namespace.status.is_deleted %] selected [% END %]>deleted</option>
     </select>
   </td>
   <td>

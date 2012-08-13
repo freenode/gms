@@ -1,0 +1,36 @@
+[% META title = 'Groups awaiting approval' %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_new_gc/submit') %]">
+<input type="hidden" name="approve_contacts"
+    value="[% FOREACH gc IN to_approve %][% gc.id %] [% END %]" />
+
+<p>The following group contacts are awaiting approval:</p>
+
+<table>
+<tr>
+  <th>Group</th> <th>Account</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+</tr>
+[% FOREACH gc IN to_approve -%]
+  <tr>
+    <td>
+      <a href="[% c.uri_for("/admin/${gc.group.id}/view") %]">[% gc.group.group_name | html %]</a>
+    </td>
+    <td>
+      <a href="[% c.uri_for("/admin/account/${gc.contact.account.id}/view") %]">[% gc.contact.account.accountname | html %]</a>
+    </td>
+    <td><input type="radio" name="action_[% gc.id %]" value="approve" /></td>
+    <td><input type="radio" name="action_[% gc.id %]" value="reject" /></td>
+    <td><input type="radio" name="action_[% gc.id %]" value="hold" checked="checked" /></td>
+  </tr>
+  <tr>
+    <td>Enter optional free text about this change:</td>
+    <td colspan="3"><textarea style="width:350px;height:100px;" name="freetext_[% gc.id %]"></textarea></td>
+  </tr>
+[% END -%]
+</table>
+
+<p>
+  <input type="submit" value="Submit" />
+</p>
+
+</form>

@@ -8,6 +8,9 @@
   <a href="[% c.uri_for('/admin/approve_namespaces') %]">Review and Approve Namespace Requests</a> ([% pending_namespaces %] pending)
 </li>
 <li>
+  <a href="[% c.uri_for('/admin/approve_new_gc') %]">Review and Approve Group Contact Additions</a> ([% pending_contacts %] pending)
+</li>
+<li>
   <a href="[% c.uri_for('/admin/approve_change') %]">Review and Approve Changes</a> ([% pending_changes %] pending)
 </li>
 <li>

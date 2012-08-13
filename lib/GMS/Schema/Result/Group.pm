@@ -6,6 +6,7 @@ package GMS::Schema::Result::Group;
 use strict;
 use warnings;
 
+use LWP::UserAgent;
 use Socket;
 use HTTP::Request;
 use base 'DBIx::Class::Core';
@@ -298,7 +299,7 @@ sub new {
     );
     my %change_args;
     @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} = 'pending-web';
+    $change_args{status} = 'pending_web';
     $change_args{change_type} = 'create';
     $change_args{changed_by} = delete $args->{account};
 
@@ -362,7 +363,7 @@ sub change {
     my $last_change = $self->last_change;
     my $change;
 
-    if ($last_change->change_type eq 'request') {
+    if ($last_change->change_type->is_request) {
         $change = $last_change;
     } else {
         $change = $active_change;
@@ -484,20 +485,23 @@ sub auto_verify {
     $content =~ s/^\s+//;
     $content =~ s/\s+$//;
     if ($content eq $self->verify_token) {
-        $self->change ($account, 'workflow_change', { status => 'pending-auto' } );
+        $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
         return 1;
     }
-    my $packed = gethostbyname($self->verify_dns);
+
+    my $packed = Socket::inet_aton($self->verify_dns);
+
     if ($packed) {
-        my $address = inet_ntoa($packed);
+        my $address = Socket::inet_ntoa($packed);
+
         if ($address eq "140.211.167.100") {
-            $self->change ($account, 'workflow_change', { status => 'pending-auto' } );
+            $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
             return 1;
         }
     }
     if ( ( my $freetext = $args->{freetext} ) ) {
         $self->add_to_group_verifications ({ verification_type => 'freetext', verification_data => $freetext });
-        $self->change ($account, 'workflow_change', { status => 'pending-staff'});
+        $self->change ($account, 'workflow_change', { status => 'pending_staff'});
 
         return 0;
     }
@@ -538,7 +542,7 @@ Marks the group, which must be pending verification, as verified.
 
 sub verify {
     my ($self, $account, $freetext) = @_;
-    if ($self->status ne 'pending-staff') {
+    if (!$self->status->is_pending_staff) {
         die GMS::Exception->new("Can't verify a group that isn't pending verification.");
     }
     $self->change( $account, 'admin', { status => 'verified', 'change_freetext' => $freetext } );
@@ -556,7 +560,7 @@ the approval.
 
 sub approve {
     my ($self, $account, $freetext) = @_;
-    if ($self->status ne 'pending-staff' && $self->status ne 'pending-auto' && $self->status ne 'verified') {
+    if (!$self->status->is_pending_staff && !$self->status->is_pending_auto && !$self->status->is_verified) {
         die GMS::Exception->new("Can't approve a group that isn't verified or "
             . "pending verification");
     }
@@ -581,7 +585,7 @@ the account which rejected it and optional freetext about the rejection.
 
 sub reject {
     my ($self, $account, $freetext) = @_;
-    if ($self->status ne 'pending-staff' && $self->status ne 'pending-auto' && $self->status ne 'verified') {
+    if (!$self->status->is_pending_staff && !$self->status->is_pending_auto && !$self->status->is_verified) {
         die GMS::Exception->new("Can't reject a group not pending approval");
     }
     $self->change( $account, 'admin', { status => 'deleted', 'change_freetext' => $freetext } );
@@ -604,7 +608,7 @@ sub invite_contact {
     $args ||= {};
 
     if ( ( my $group_contact = $self->group_contacts->find ({ contact_id => $contact->id }) ) ) {
-        if ($group_contact->status eq 'invited' && $group_contact->active_change->change_type eq 'reject') {
+        if ($group_contact->status->is_deleted) {
             $group_contact->change ($inviter, 'workflow_change', { status => 'invited' });
         } else {
             die GMS::Exception->new ("This person has already been invited.");
@@ -667,13 +671,13 @@ sub take_over {
 
     if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
-            $controlsession->command('GMSServ', 'transfer', $channel, $gc_name, $c->user->account->accountname);
+            return $controlsession->command('GMSServ', 'transfer', $channel, $gc_name, $c->user->account->accountname);
         }
         catch (RPC::Atheme::Error $e) {
             die $e;
         }
     } else {
-        die GMS::Exception->new ("This channel does not belong that namespace.");
+        die GMS::Exception->new ("This channel does not belong in that namespace.");
     }
 }
 
@@ -694,13 +698,13 @@ sub drop {
 
     if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
         try {
-            $controlsession->command('GMSServ', 'drop', $channel, $c->user->account->accountname);
+            return $controlsession->command('GMSServ', 'drop', $channel, $c->user->account->accountname);
         }
         catch (RPC::Atheme::Error $e) {
             die $e;
         }
     } else {
-        die GMS::Exception->new ("This channel does not belong that namespace.");
+        die GMS::Exception->new ("This channel does not belong in that namespace.");
     }
 }
 

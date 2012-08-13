@@ -7,25 +7,25 @@
   <td>Group Type</td>
   <td>
     <select name='group_type'>
-      <option value="informal" [% IF group_type == "informal" %] selected = "selected" [% END %]>Informal Group</option>
-      <option value="corporation" [% IF group_type == "corporation" %] selected = "selected" [% END %]>Corporation / Business entity</option>
-      <option value="education" [% IF group_type == "education" %] selected = "selected" [% END %]>Educational Institution</option>
-      <option value="government" [% IF group_type == "government" %] selected = "selected" [% END %]>Governmental Entity</option>
-      <option value="nfp" [% IF group_type == "nfp" %] selected = "selected" [% END %]>Not for profit / Charitable Organisation</option>
-      <option value="internal" [% IF group_type == "internal" %] selected = "selected" [% END %]>Internal Group</option>
+      <option value="informal" [% IF group_type.is_informal %] selected = "selected" [% END %]>Informal Group</option>
+      <option value="corporation" [% IF group_type.is_corporation %] selected = "selected" [% END %]>Corporation / Business entity</option>
+      <option value="education" [% IF group_type.is_education %] selected = "selected" [% END %]>Educational Institution</option>
+      <option value="government" [% IF group_type.is_government %] selected = "selected" [% END %]>Governmental Entity</option>
+      <option value="nfp" [% IF group_type.is_nfp %] selected = "selected" [% END %]>Not for profit / Charitable Organisation</option>
+      <option value="internal" [% IF group_type.is_internal %] selected = "selected" [% END %]>Internal Group</option>
     </select>
   </td>
 </tr>
   <td>Group Status</td>
   <td>
     <select name='status'>
-      <option value="submitted" [% IF status == "submitted" %] selected="selected" [% END %]>submitted</option>
-      <option value="verified" [% IF status == "verified" %] selected="selected" [% END %]>verified</option>
-      <option value="active" [% IF status == "active" %] selected="active" [% END %]>active</option>
-      <option value="deleted" [% IF status == "deleted" %] selected="selected" [% END %]>deleted</option>
-      <option value="pending-web" [% IF status == "pending-web" %] selected="selected" [% END %]>pending-web</option>
-      <option value="pending-staff" [% IF status == "pending-staff" %] selected="selected" [% END %]>pending-staff</option>
-      <option value="pending-auto" [% IF status == "pending-auto" %] selected="selected" [% END %]>pending-auto</option>
+      <option value="submitted" [% IF status.is_submitted %] selected="selected" [% END %]>submitted</option>
+      <option value="verified" [% IF status.is_verified %] selected="selected" [% END %]>verified</option>
+      <option value="active" [% IF status.is_active %] selected="active" [% END %]>active</option>
+      <option value="deleted" [% IF status.is_deleted %] selected="selected" [% END %]>deleted</option>
+      <option value="pending_web" [% IF status.is_pending_web %] selected="selected" [% END %]>pending_web</option>
+      <option value="pending_staff" [% IF status.is_pending_staff %] selected="selected" [% END %]>pending_staff</option>
+      <option value="pending_auto" [% IF status.is_pending_auto %] selected="selected" [% END %]>pending_auto</option>
     </select>
   </td>
 </tr>

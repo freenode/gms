@@ -124,7 +124,7 @@ sub new {
     my %change_args;
 
     @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'pending-staff';
+    $change_args{status} ||= 'pending_staff';
     $change_args{change_type} = 'create';
     $change_args{changed_by} = delete $args->{account};
     $change_args{change_freetext} = delete $args->{freetext};
@@ -203,7 +203,7 @@ the approval.
 sub approve {
     my ($self, $account, $freetext) = @_;
 
-    if ($self->status ne 'pending-staff') {
+    if (!$self->status->is_pending_staff) {
         die GMS::Exception->new("Can't approve a namespace that isn't pending approval");
     }
 
@@ -220,7 +220,7 @@ the account which rejected it and optional freetext about the rejection.
 sub reject {
     my ($self, $account, $freetext) = @_;
 
-    if ($self->status ne 'pending-staff') {
+    if (!$self->status->is_pending_staff) {
         die GMS::Exception->new("Can't reject a namespace not pending approval");
     }
 
