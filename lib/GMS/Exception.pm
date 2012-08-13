@@ -1,6 +1,8 @@
 package GMS::Exception;
 
-use overload '""' => \&message;
+use overload ('""' => \&message,
+              'cmp' => \&compare);
+
 
 =head1 NAME
 
@@ -38,6 +40,12 @@ Returns the message given during construction.
 sub message {
     my ($self) = @_;
     return $self->{message};
+}
+
+sub compare {
+    my ($self, $other) = @_;
+
+    return "$self" <=> "$other";
 }
 
 package GMS::Exception::InvalidGroup;
