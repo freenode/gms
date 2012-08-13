@@ -32,14 +32,18 @@ sub need_database {
     # used for that purpose, so the default 'next' PK value will already be in
     # use. Set the next sequence values to something higher than what's used.
     my @id_tables = ( qw/
-                accounts
                 addresses
                 contact_changes
                 contacts
                 group_contact_changes
                 group_changes
+                group_verifications
                 groups
-                roles/);
+                roles
+                channel_namespaces
+                channel_namespace_changes
+                cloak_namespaces
+                cloak_namespace_changes/);
 
     $schema->storage->dbh_do(sub {
             my ($storage, $dbh, @tables) = @_;

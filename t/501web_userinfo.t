@@ -68,6 +68,22 @@ ok($address->country eq 'Testland', "Check address is correct");
 ok($address->phone eq '123 4567890', "Check address is correct");
 ok($address->phone2 eq '', "Check address is correct");
 
+$ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
+
+$ua->submit_form(fields => {
+        user_name => 'Second Contact Test',
+        user_email => 'test03@example.com',
+    });
+
+$ua->content_contains("Successfully submitted the change request", "Check editing contact info");
+
+$ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
+
+$ua->content_contains("There is already a change request pending", "Perevious requests to edit are considered");
+
+$ua->content_contains("Second Contact Test", "The input fields have the new information for editing");
+
+$ua->content_contains('test03@example.com', "The input fields have the new information for editing");
 
 done_testing;
 

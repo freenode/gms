@@ -10,10 +10,10 @@ use GMSTest::Database;
 
 my $schema = need_database 'basic_db';
 
-my $account = $schema->resultset('Account')->search({ accountname => 'test01' })->single;
+my $account = $schema->resultset('Account')->find({ accountname => 'test01' });
 isa_ok $account, 'GMS::Schema::Result::Account';
 
-my $adminaccount = $schema->resultset('Account')->search({ accountname => 'admin01' })->single;
+my $adminaccount = $schema->resultset('Account')->find({ accountname => 'admin01' });
 isa_ok $adminaccount, 'GMS::Schema::Result::Account';
 
 my $contact = $account->contact;
@@ -25,15 +25,17 @@ my $original_email = $contact->email;
 my $new_name = 'Test Contact Changed';
 my $new_email = 'changed@example.com';
 
-my $change = $contact->change($account, 'request', { name => $new_name,  email => $new_email });
+my $change = $contact->change($account, 'request', { 'name' => $new_name,  'email' => $new_email });
 isa_ok $change, 'GMS::Schema::Result::ContactChange';
 
 is $contact->name, $original_name, "Requested change doesn't update active state";
 is $contact->email, $original_email, "Requested change doesn't update active state";
 
-$contact->approve_change($change, $adminaccount);
+$change->approve($adminaccount, "test");
 
-is $contact->name, $new_name, "Approving change updates active state";
-is $contact->email, $new_email, "Approving change updates active state";
+$contact->discard_changes;
+
+is $contact->active_change->name, $new_name, "Approving change updates active state";
+is $contact->active_change->email, $new_email, "Approving change updates active state";
 
 done_testing;

@@ -43,12 +43,24 @@ is $group->active_contacts->count, 1;
 
 my $invited_group_contact = $group->group_contacts->search_status('invited')->single;
 isa_ok $invited_group_contact, 'GMS::Schema::Result::GroupContact';
-my $change = $invited_group_contact->change($account2, 'request', { status => 'active' });
+$invited_group_contact->change($account2, 'workflow_change', { status => 'pending_staff' });
 
 is $group->contacts->count, 2;
 is $group->active_contacts->count, 1;
 
-$invited_group_contact->approve_change($change, $adminaccount);
+$invited_group_contact->reject ($adminaccount);
+
+$group->discard_changes;
+
+is $group->contacts->count, 2;
+is $group->active_contacts->count, 1;
+
+$group->invite_contact ($account2->contact, $account);
+$invited_group_contact->change ($account2, 'workflow_change', { 'status' => 'pending_staff' });
+
+$invited_group_contact->approve ($adminaccount);
+
+$group->discard_changes;
 
 is $group->contacts->count, 2;
 is $group->active_contacts->count, 2;
