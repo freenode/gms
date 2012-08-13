@@ -43,6 +43,14 @@ Displays all pending cloaks for the contact, if any.
 
 sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c ) = @_;
+    
+    if (! $c->user->account || ! $c->user->account->contact) {
+        $c->flash->{status_msg} = "You don't yet have any contact information defined.\n" .
+                                  "Use this form to enter it before registering a new group.";
+        $c->session->{redirect_to} = $c->request->uri;
+        $c->response->redirect($c->uri_for('/userinfo'));
+        return;
+    }
 
     my $contact = $c->user->account->contact;
     my $change_rs = $c->model("DB::CloakChange");
