@@ -494,7 +494,7 @@ sub auto_verify {
     if ($packed) {
         my $address = Socket::inet_ntoa($packed);
 
-        if ($address eq "140.211.167.100") {
+        if ($address eq "5.9.244.117") {
             $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
             return 1;
         }

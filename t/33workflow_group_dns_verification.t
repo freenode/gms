@@ -31,7 +31,7 @@ BEGIN {
 
     $mock->fake_module (
         'Socket',
-        'inet_ntoa' => sub { '140.211.167.100' },
+        'inet_ntoa' => sub { '5.9.244.117' },
         'inet_aton' => sub { 1 }, # since we're also faking inet_ntoa a nonzero value will suffice.
     );
 }
