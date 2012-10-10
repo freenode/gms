@@ -165,9 +165,9 @@ use TryCatch;
 =head2 accept
 
 Marks the cloak change as accepted from the user.
-Any previous pending (accepted by user but
-not staff) cloak changes will be marked as not
-accepted.
+Any previous pending (accepted by user but not
+staff) cloak changes the user had will be marked 
+as not accepted.
 
 =cut
 
@@ -214,16 +214,18 @@ sub approve {
     }
 }
 
-=head2 rejected
+=head2 reject
 
-Marks the cloak change as rejected.
+Marks the cloak change as rejected,
+by either the user or staff.
 
 =cut
 
 sub reject {
-    my ($self) = @_;
+    my ($self, $freetext) = @_;
 
     $self->rejected(\"NOW()");
+    $self->change_freetext($freetext);
     $self->update;
 }
 

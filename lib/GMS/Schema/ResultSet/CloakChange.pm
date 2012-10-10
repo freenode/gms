@@ -21,7 +21,7 @@ or rejected.
 
 =cut
 
-sub search_created {
+sub search_offered {
     my ($self) = @_;
 
     return $self->search(

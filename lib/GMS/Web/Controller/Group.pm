@@ -119,11 +119,25 @@ sub view :Chained('single_group') :PathPart('view') :Args(0) {
     $c->stash->{template} = 'group/view.tt';
 }
 
+=head2 verify
+
+Presents the form with the available verification methods.
+
+=cut
+
 sub verify :Chained('single_group') :PathPart('verify') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'group/verify.tt';
 }
+
+=head2 verify_submit
+
+Attempts to automatically verify the group with the details given.
+Displays an error if neither method succeeds and the text area has
+been left empty.
+
+=cut
 
 sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
     my ($self, $c) = @_;
@@ -145,11 +159,24 @@ sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
     $c->stash->{template} = 'group/action_done.tt';
 }
 
+=head2 invite
+
+Presents the form to invite a group contact to the group.
+
+=cut
+
 sub invite :Chained('single_group') :PathPart('invite') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'group/invite.tt';
 }
+
+=head2 invite_submit
+
+Processes the invitation form and marks the group contact
+as having been invited.
+
+=cut
 
 sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
     my ($self, $c) = @_;
@@ -173,6 +200,13 @@ sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
     $c->stash->{template} = 'group/action_done.tt';
 }
 
+=head2 invite_accept
+
+Allows the group contact to confirm the invitation and mark their status
+as pending staff approval.
+
+=cut
+
 sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
     my ($self, $c) = @_;
 
@@ -182,6 +216,12 @@ sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
     $c->stash->{msg} = "Successfully accepted the group invitation. Please wait for staff to accept this.<br/>";
     $c->stash->{template} = 'group/action_done.tt';
 }
+
+=head2 invite_decline
+
+Allows the group contact to reject the invitation to the group.
+
+=cut
 
 sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0) {
     my ($self, $c) = @_;

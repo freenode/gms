@@ -248,6 +248,11 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
     }
 }
 
+=head2 approve_change
+
+Presents changes pending approval.
+
+=cut
 
 sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     my ($self, $c) = @_;
@@ -290,6 +295,14 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
         $c->stash->{template} = 'admin/approve_change.tt';
     }
 }
+
+=head2 do_approve_change
+
+Processes the change approval form.
+Accepted changes become the object's
+current active change.
+
+=cut
 
 sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(0) {
     my ($self, $c) = @_;
@@ -399,7 +412,7 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->reject ($c, $freetext);
+                    $change->reject ($freetext);
                 } elsif ($action eq 'hold') {
                     next;
                 } else {

@@ -423,10 +423,23 @@ sub status {
     return $self->active_change->status;
 }
 
+=head2 group_type
+
+Returns the group type ( informal, coorporation, NGO, etc) of the
+group, based on the active change.
+
+=cut
+
 sub group_type {
     my ($self) = @_;
     return $self->active_change->group_type;
 }
+
+=head2 verify_url
+
+Returns the URL that can be used to verify affiliation to the group.
+
+=cut
 
 sub verify_url {
     my ($self) = @_;
@@ -434,6 +447,12 @@ sub verify_url {
     my ($data) = $res->verification_data;
     return $data;
 }
+
+=head2 verify_token
+
+Returns the text that should be present in the above URL.
+
+=cut
 
 sub verify_token {
     my ($self) = @_;
@@ -444,6 +463,13 @@ sub verify_token {
     }
 }
 
+=head2 verify_dns
+
+Returns the subdomain that must resolve to freenode.net
+for DNS-based verification.
+
+=cut
+
 sub verify_dns {
     my ($self) = @_;
     my ($res) = $self->group_verifications->find({verification_type => "dns"});
@@ -452,6 +478,13 @@ sub verify_dns {
         return $data;
     }
 }
+
+=head2 verify_freetext
+
+Returns the user-provided text that they provide if they
+can't use any of the automated verification methods.
+
+=cut
 
 sub verify_freetext {
     my ($self) = @_;
@@ -475,6 +508,22 @@ sub last_change {
 
     return $changes[0];
 }
+
+=head2 auto_verify
+
+Checks if the group ownership can automatically be verified.
+First, it checks if the verification document exists in the
+domain. Failing that, it checks if the subdomain provided 
+for verification resolves to the same IP as freenode.net.
+Finally, it takes the text the user has given that explains
+why the group hasn't been verified, if provided, or asks the
+user to try again or to provide the reason for failure if not.
+
+Depending on the result, the group will be either marked as
+pending_staff (pending staff verification) or as pending_auto
+(automatically verified and pending approval or rejection).
+
+=cut
 
 sub auto_verify {
     my ($self, $account, $args) = @_;

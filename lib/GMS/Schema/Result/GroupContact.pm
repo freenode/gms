@@ -256,11 +256,27 @@ sub last_change {
     return $changes[0];
 }
 
+=head2 accept_invitation
+
+Marks the user as having accepted the invitation to be a group contact.
+Their status now is pending_staff as staff has to approve their group 
+contact status.
+
+=cut
+
 sub accept_invitation {
     my ($self) = @_;
 
     return $self->change ($self->contact->account->id, 'workflow_change', { 'status' => 'pending_staff' });
 }
+
+=head2 decline_invitation
+
+Marks the user as having rejected the invitation to be a group contact.
+The group contact's status is now 'deleted', since the creation of the
+group contact has been rejected.
+
+=cut
 
 sub decline_invitation {
     my ($self) = @_;

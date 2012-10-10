@@ -55,7 +55,7 @@ sub index :Chained('base') :PathPart('') :Args(0) {
     my $contact = $c->user->account->contact;
     my $change_rs = $c->model("DB::CloakChange");
 
-    my @cloaks = $change_rs->search_created->search({ 'contact_id' => $contact->id });
+    my @cloaks = $change_rs->search_offered->search({ 'contact_id' => $contact->id });
 
     $c->stash->{cloaks} = \@cloaks;
     $c->stash->{template} = 'cloak.tt';

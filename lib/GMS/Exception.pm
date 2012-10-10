@@ -42,6 +42,15 @@ sub message {
     return $self->{message};
 }
 
+=head2 compare
+
+Overloads the comparison operation.
+Compares the string representation of the Exception
+object with the string representation of the object
+provided
+
+=cut
+
 sub compare {
     my ($self, $other) = @_;
 
