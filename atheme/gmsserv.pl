@@ -12,6 +12,7 @@ $Services{GMSServ}->bind_command(
     desc => "Returns a user's UID",
     help_path => "gmsserv/uid",
     handler => \&gms_uid,
+    access => "special:gms"
 );
 
 $Services{GMSServ}->bind_command(
@@ -19,6 +20,7 @@ $Services{GMSServ}->bind_command(
     desc => "Forces dropping a channel",
     help_path => "gmsserv/drop",
     handler => \&gms_drop,
+    access => "special:gms"
 );
 
 $Services{GMSServ}->bind_command(
@@ -26,6 +28,7 @@ $Services{GMSServ}->bind_command(
     desc => "Forces transferring a channel",
     help_path => "gmsserv/transfer",
     handler => \&gms_transfer,
+    access => "special:gms"
 );
 
 $Services{GMSServ}->bind_command(
@@ -33,6 +36,7 @@ $Services{GMSServ}->bind_command(
     desc => "Cloaks a user",
     help_path => "gmsserv/cloak",
     handler => \&gms_cloak,
+    access => "special:gms"
 );
 
 $Services{GMSServ}->bind_command(
@@ -40,6 +44,7 @@ $Services{GMSServ}->bind_command(
     desc => "Returns metadata on a user",
     help_path => "gmsserv/metadata",
     handler => \&gms_metadata,
+    access => "special:gms"
 );
 
 sub gms_uid {
