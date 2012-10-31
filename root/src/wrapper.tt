@@ -1,73 +1,111 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
-  <head>
-    <title>Freenode Group Management System</title>
-    <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/main.css') %]" />
-    <script type="text/javascript" src="[% c.uri_for('/static/main.js') %]"></script>
-  </head>
-  <body>
-    <div id="header">
-      <div class="logo">
-        <img src="[% c.uri_for('/static/freenode_logo.png') %]" width="340" height="68" />
-      </div>
-      <div class="login">
-          [% IF c.user_exists -%]
-          You are logged in as [% c.user.username | html %]
-          (<a href="[% c.uri_for('/logout') %]">log out</a>).
-          [% ELSE -%]
-          You are not logged in
-          (<a href="[% c.uri_for('/login') %]">log in</a>).
-          [% END %]
-      </div>
-    </div><!-- header end -->
-    <div id="sidebar">
-      <div><!-- links -->
-        <a href="http://freenode.net/">Freenode Main Page</a>
-        <br />
-        <a href="[% c.uri_for('/') %]">GMS Home</a>
-      </div>
-      <div>
-          <ul>
-              [% IF  c.check_user_roles('admin')  %]
-              <li><a href="[% c.uri_for('/admin/') %]">Admin</a></li>
+[% matches = content.match ('(\<form .*\>)') -%]
+[% IF matches %]
+    [% content = content.replace (matches.0,matches.0 _ '<input type="hidden" name="_token" value="' _ c.controller.token(c) _ '" />' ); %]
+[%END -%]
+[% IF (!c.request.param ('ajax')) -%]
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+      <head>
+        <title>Freenode Group Management System</title>
+        <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/main.css') %]" />
+        <script type="text/javascript" src="[% c.uri_for('/static/main.js') %]"></script>
+      </head>
+      <body>
+        <div id="header">
+          <div class="logo">
+            <img src="[% c.uri_for('/static/freenode_logo.png') %]" width="340" height="68" />
+          </div>
+          <div class="login">
+              [% IF c.user_exists -%]
+              You are logged in as [% c.user.username | html %]
+              (<a href="[% c.uri_for('/logout') %]">log out</a>).
+              [% ELSE -%]
+              You are not logged in
+              (<a href="[% c.uri_for('/login') %]">log in</a>).
               [% END %]
-              <li><a href="[% c.uri_for('/group/') %]">Your groups</a></li>
-              <li><a href="[% c.uri_for('/userinfo') %]">Your contact info</a></li>
-              <li><a href="[% c.uri_for('/cloak') %]">Your pending group cloaks</a></li>
-              <li><a href="[% c.uri_for('/group/new') %]">Register a new group</a></li>
-          </ul>
-      </div>
-    </div><!-- sidebar end -->
-    <div id="main">
-      <!-- error box -->
-      [% IF error_msg %]
+          </div>
+        </div><!-- header end -->
+        <div id="sidebar">
+          <div><!-- links -->
+            <a href="http://freenode.net/">Freenode Main Page</a>
+            <br />
+            <a href="[% c.uri_for('/') %]">GMS Home</a>
+          </div>
+          <div>
+              <ul>
+                  [% IF  c.check_user_roles('admin')  %]
+                  <li><a href="[% c.uri_for('/admin/') %]">Admin</a></li>
+                  [% END %]
+                  <li><a href="[% c.uri_for('/group/') %]">Your groups</a></li>
+                  <li><a href="[% c.uri_for('/userinfo') %]">Your contact info</a></li>
+                  <li><a href="[% c.uri_for('/cloak') %]">Your pending group cloaks</a></li>
+                  <li><a href="[% c.uri_for('/group/new') %]">Register a new group</a></li>
+              </ul>
+          </div>
+        </div><!-- sidebar end -->
+        <div id="main">
+          <!-- error box -->
+          [% IF error_msg %]
+          <div class="errormsg">
+            [% error_msg | html %]
+          </div>
+          [% END %]
+          [% IF errors %]
+          <div class="errormsg">
+              <p> The following errors were encountered:</p>
+              <ul>
+                  [% FOREACH error IN errors %]
+                  <li> [% error | html %] </li>
+                  [% END %]
+              </ul>
+          </div>
+          [% END %]
+          <!-- status box -->
+          [% IF status_msg %]
+          <div class="statusmsg">
+            [% status_msg | html %]
+          </div>
+          [% END %]
+          <!-- content box -->
+          <div class="content">
+            [% content %]
+          </div>
+        </div><!-- main end -->
+        <div id="footer">
+        </div><!-- footer end -->
+      </body>
+    </html>
+[% ELSE -%]
+   <!--
+      Very minimal page shown if 'ajax' is set in the POST body,
+      which it will be if we're loading it though an AJAX request.
+      The page shows the error/status message and the content.
+      The ajax result will be loaded into another, already-existing
+      HTML element, so we don't need to (and shoudln't) output full
+      HTML code.
+   -->
+   [% IF error_msg %]
       <div class="errormsg">
         [% error_msg | html %]
       </div>
-      [% END %]
-      [% IF errors %]
+  [% END %]
+  [% IF errors %]
       <div class="errormsg">
-          <p> The following errors were encountered:</p>
-          <ul>
-              [% FOREACH error IN errors %]
-              <li> [% error | html %] </li>
-              [% END %]
-          </ul>
+        <p> The following errors were encountered:</p>
+        <ul>
+          [% FOREACH error IN errors %]
+          <li> [% error | html %] </li>
+          [% END %]
+        </ul>
       </div>
-      [% END %]
-      <!-- status box -->
-      [% IF status_msg %]
+  [% END %]
+  [% IF status_msg %]
       <div class="statusmsg">
         [% status_msg | html %]
       </div>
-      [% END %]
-      <!-- content box -->
-      <div class="content">
-        [% content %]
-      </div>
-    </div><!-- main end -->
-    <div id="footer">
-    </div><!-- footer end -->
-  </body>
-</html>
+  [% END %]
+
+  [% content %]
+
+[% END -%]

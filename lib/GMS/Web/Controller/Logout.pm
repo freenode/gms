@@ -2,7 +2,7 @@ package GMS::Web::Controller::Logout;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 
 =head1 NAME
 
@@ -21,7 +21,7 @@ Catalyst Controller.
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path :Args(0) :DestroyToken {
     my ( $self, $c ) = @_;
 
     $c->logout;

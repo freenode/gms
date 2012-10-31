@@ -2,7 +2,7 @@ package GMS::Web::Controller::Login;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 
 use TryCatch;
 
@@ -23,7 +23,7 @@ Catalyst Controller.
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path :Args(0) :Local :GenerateToken :VerifyToken {
     my ( $self, $c ) = @_;
 
     my $username = $c->request->params->{username} || "";

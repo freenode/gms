@@ -60,3 +60,62 @@ function untooltip () {
         elem.parentNode.removeChild(elem);
     }
 }
+
+function getXmlHttpObject () { //Get the appropriate object to do AJAX requests.
+    var xmlHttp = false;
+
+    try {
+        xmlHttp = new XMLHttpRequest(); //IE 7+, and everything else that does AJAX
+    } catch (e) {
+        try {
+            xmlHttp = new ActiveXObject ("Microsoft.XMLHTTP"); //IE < 7
+        } catch (e) { //AJAX isn't supported at all
+        }
+    }
+
+    return xmlHttp;
+}
+
+function sendAjaxRequest (url, method, params, func) {
+    /*
+        url - the URL to load
+        method - GET or POST
+        params - the body parameters for POST
+        func - the function to be called when the AJAX request is done
+        It should accept a parameter so that it gets the xmlHttp response
+        and does something with it.
+
+        sendAjaxRequest ("/group/1/edit", "POST", "name=group1&address=Address here",
+        function (xmlHttp) { document.getElementById('response').innerHTML = xmlHttp.responseText; });
+    */
+
+    var xmlHttp = getXmlHttpObject();
+
+    if (!xmlHttp) { //AJAX isn't supported
+        return;
+    }
+
+    xmlHttp.open (method, url, true); //the url and method (GET/POST)
+
+    xmlHttp.onreadystatechange =  //the state of the request has changed
+        function () {
+            if (xmlHttp.readyState == 4) { //finished loading
+                func (xmlHttp); //call the provided function
+            }
+        }
+
+    if (method == "POST") {
+		xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlHttp.send (params);
+    } else {
+        xmlHttp.send (null);
+    }
+}
+
+function approveCloak (id, action, token) {
+    sendAjaxRequest ("/cloak/" + id + "/approve", "POST", "action=" + action + "&ajax=1" + "&_token=" + token,
+        function( xmlHttp ) {
+            document.getElementsByClassName ("content")[0].innerHTML = xmlHttp.responseText;
+        }
+    );
+}

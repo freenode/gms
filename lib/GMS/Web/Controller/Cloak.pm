@@ -2,7 +2,7 @@ package GMS::Web::Controller::Cloak;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 
 =head1 NAME
 
@@ -24,7 +24,7 @@ redirect to the contact information form.
 
 =cut
 
-sub base :Chained('/') :PathPart('cloak') :CaptureArgs(0) {
+sub base :Chained('/') :PathPart('cloak') :CaptureArgs(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
     if (! $c->user->account || ! $c->user->account->contact) {
@@ -85,36 +85,25 @@ sub cloak :Chained('base') :PathPart('') :CaptureArgs(1) {
 
 =head2 approve
 
-Approves the cloak change.
+Approves or rejects the cloak change.
 
 =cut
 
-sub approve :Chained('cloak') :PathPart('accept') :Args(0) {
+sub approve :Chained('cloak') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
     my $cloak = $c->stash->{cloak};
 
-    $cloak->accept();
+    if ($c->request->body_params->{action} eq 'approve') {
+        $cloak->accept();
 
-    $c->stash->{status_msg} = "Successfully approved the cloak. Please wait for staff to also approve it.";
+        $c->stash->{status_msg} = "Successfully approved the cloak. Please wait for staff to also approve it.";
+    } elsif ($c->request->body_params->{action} eq 'reject') {
+        $cloak->reject();
 
-    $c->detach ('index');
-}
+        $c->stash->{status_msg} = "Successfully rejected the cloak.";
+    }
 
-=head2 decline
-
-Rejects the cloak change.
-
-=cut
-
-sub decline :Chained('cloak') :PathPart('decline') :Args(0) {
-    my ($self, $c) = @_;
-
-    my $cloak = $c->stash->{cloak};
-
-    $cloak->reject();
-
-    $c->stash->{status_msg} = "Successfully rejected the cloak.";
 
     $c->detach ('index');
 }

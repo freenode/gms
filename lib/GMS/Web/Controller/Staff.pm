@@ -2,7 +2,7 @@ package GMS::Web::Controller::Staff;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 
 use TryCatch;
 use GMS::Exception;
@@ -24,7 +24,7 @@ error page if not.
 
 =cut
 
-sub base :Chained('/') :PathPart('staff') :CaptureArgs(0) {
+sub base :Chained('/') :PathPart('staff') :CaptureArgs(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
     if (! $c->check_user_roles('staff') && ! $c->check_user_roles('admin')) {

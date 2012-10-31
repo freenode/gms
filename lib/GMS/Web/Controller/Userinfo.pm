@@ -2,7 +2,7 @@ package GMS::Web::Controller::Userinfo;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 
 use TryCatch;
 
@@ -27,7 +27,7 @@ define it if it has not.
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path :Args(0) :Local :VerifyToken {
     my ($self, $c ) = @_;
 
     my $account = $c->user->account;
@@ -71,7 +71,7 @@ it is populated with the contact's current data.
 
 =cut
 
-sub edit :Path('edit') :Args(0) {
+sub edit :Path('edit') :Args(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
     my $contact = $c->user->account->contact;
@@ -114,7 +114,7 @@ Submit handler to define and edit a user's contact information.
 
 =cut
 
-sub update :Path('update') :Args(0) {
+sub update :Path('update') :Args(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
     my $params = $c->request->params;

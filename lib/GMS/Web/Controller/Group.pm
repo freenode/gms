@@ -2,7 +2,7 @@ package GMS::Web::Controller::Group;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 use TryCatch;
 use GMS::Exception;
 
@@ -25,7 +25,7 @@ redirect to the contact information form.
 
 =cut
 
-sub base :Chained('/') :PathPart('group') :CaptureArgs(0) {
+sub base :Chained('/') :PathPart('group') :CaptureArgs(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
     if (! $c->user->account || ! $c->user->account->contact) {

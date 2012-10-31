@@ -2,10 +2,10 @@
 
 <p>You have the following group cloaks pending:</p>
 
-<ul>
 [% FOREACH cloak IN cloaks -%]
-  <li>
-    [% cloak.cloak %] <a href="[% c.uri_for("/cloak/${cloak.id}/accept") %]">Accept</a> - <a href="[% c.uri_for("/cloak/${cloak.id}/decline") %]">Decline</a>
-  </li>
+    <form action="[% c.uri_for("/cloak/${cloak.id}/approve") %]" method="post" >
+        [% cloak.cloak %]
+        <input type="submit" name="action" value="approve" onclick="approveCloak('[% cloak.id%]', 'approve', '[% c.controller.token(c) %]');return false;" />
+        <input type="submit" name="action" value="reject" onclick="approveCloak('[% cloak.id %]', 'reject', '[% c.controller.token(c) %]');return false;" />
+    </form>
 [% END %]
-</ul>

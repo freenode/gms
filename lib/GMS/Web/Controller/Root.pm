@@ -2,7 +2,7 @@ package GMS::Web::Controller::Root;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base qw (GMS::Web::TokenVerification);
 
 #
 # Sets the actions in this controller to be registered with no prefix
@@ -31,7 +31,7 @@ Presents the front page.
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path :Args(0) :Local :GenerateToken {
     my ( $self, $c ) = @_;
 
     # Hello World
@@ -66,6 +66,23 @@ sub forbidden :Path('403') :Args(0) {
     $c->stash->{template} = 'error/403.tt';
     $c->response->status(403);
 }
+
+=head2 bad_request
+
+This page is shown if the client has made a bad request. This also includes cases
+where an invalid token is provided when submitting the form, or the token is missing altogether
+(when it shouldn't be).
+
+It presents a 400 error page.
+
+=cut
+
+sub bad_request :Path('400') :Args(0) {
+    my ($self, $c) = @_;
+    $c->stash->{template} = 'error/400.tt';
+    $c->response->status(400);
+}
+
 
 =head2 end
 
