@@ -110,7 +110,7 @@ sub _parse_VerifyToken_attr {
     my ( $self, $app_class, $action_name, $vaue, $attrs ) = @_;
 
     return (
-        ActionClass => 'GMS::Web::Action::VerifyToken'
+        ActionClass => '+GMS::Web::Action::VerifyToken'
     );
 }
 
@@ -118,7 +118,7 @@ sub _parse_GenerateToken_attr {
     my ( $self, $app_class, $action_name, $vaue, $attrs ) = @_;
 
     return (
-        ActionClass => 'GMS::Web::Action::GenerateToken'
+        ActionClass => '+GMS::Web::Action::GenerateToken'
     );
 }
 
@@ -126,7 +126,7 @@ sub _parse_DestroyToken_attr {
     my ( $self, $app_class, $action_name, $vaue, $attrs ) = @_;
 
     return (
-        ActionClass => 'GMS::Web::Action::DestroyToken'
+        ActionClass => '+GMS::Web::Action::DestroyToken'
     );
 }
 
