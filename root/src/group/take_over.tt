@@ -2,13 +2,13 @@
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/take_over/submit") %]">
     Enter the channel name:<br/>
-    <input type="text" name="channel" value="[% channel %]" /><br/><br />
+    <input type="text" name="channel" value="[% channel | html %]" /><br/><br />
 
     Which namespace does the channel belong to?<br />
 
     <select name="channel_namespace">
       [% FOREACH namespace IN channel_namespaces %]
-        <option value="[% namespace.namespace %]" [% IF channel_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace %]</option>
+        <option value="[% namespace.namespace | html %]" [% IF channel_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace | html %]</option>
       [% END %]
     </select><br /><br />
     <p>What would you like to do?</p>
@@ -18,7 +18,7 @@
     Which Group Contact should it be transferred to?<br/>
     <select name="group_contact">
       [% FOREACH gc IN group_contacts %]
-        <option value="[% gc.contact.id %]" [% IF group_contact == gc.contact.id %] selected [% END %]>[% gc.contact.account.accountname %]</option>
+        <option value="[% gc.contact.id %]" [% IF group_contact == gc.contact.id %] selected [% END %]>[% gc.contact.account.accountname | html %]</option>
       [% END %]
     </select><br/><br/>
     </li>

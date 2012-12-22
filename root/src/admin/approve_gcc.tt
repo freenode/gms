@@ -10,10 +10,10 @@
 [% FOREACH gcc IN to_approve -%]
   <tr>
     <td>
-      [% gcc.group_contact.group.group_name %]
+      [% gcc.group_contact.group.group_name | html %]
     </td>
     <td>
-      [% gcc.group_contact.contact.name %] ([% gcc.group_contact.contact.account.accountname %])
+      [% gcc.group_contact.contact.name | html %] ([% gcc.group_contact.contact.account.accountname | html %])
     </td>
     <td>
       [% gcc.group_contact.status %]<br/>[% gcc.status %]

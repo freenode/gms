@@ -11,7 +11,7 @@
 [% FOREACH cc IN to_approve -%]
   <tr>
     <td>
-      [% cc.contact.account.accountname %]
+      [% cc.contact.account.accountname | html %]
     </td>
     <td>
       [% cc.cloak %]
@@ -44,12 +44,12 @@
 
       [% IF mark %]
         <p>
-          <b>Note:</b> The account has been <b>marked</b> by <b>[% mark_setter %]</b> on [% date.format(time); %]:<br/>
+          <b>Note:</b> The account has been <b>marked</b> by <b>[% mark_setter | html %]</b> on [% date.format(time); %]:<br/>
           [% mark | html %]
         </p>
       [% END %]
 
-      [% cc.contact.account.accountname %]'s recent cloak changes:
+      [% cc.contact.account.accountname | html %]'s recent cloak changes:
 
       [% IF cc.contact.recent_cloak_changes %]
         <ul>

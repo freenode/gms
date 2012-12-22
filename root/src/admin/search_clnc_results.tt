@@ -17,9 +17,9 @@
     [% change.id %]
   </td>
   <td>
-    [% change.namespace.namespace %]
+    [% change.namespace.namespace | html %]
   <td>
-    <a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name %]</a>
+    <a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name | html %]</a>
   </td>
   <td>
     [% change.change_type %]
@@ -34,7 +34,7 @@
 <tr id='hidden_[% change.id %]' class='hidden'>
   <td colspan='6' class='wide'>
     <ul>
-      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>Changed By: [% change.changed_by.accountname | html %]</li>
       <li>Change Time: [% change.time %]</li>
       <li>Affected Change: [% change.affected_change.id %]</li>
       <li>
@@ -52,8 +52,8 @@
 
 <p>
   <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
-    <input type='hidden' name='cloak_namespace' value='[% cloak_namespace %]' />
-    <input type='hidden' name='cloak_groupname' value='[% cloak_groupname %]' />
+    <input type='hidden' name='cloak_namespace' value='[% cloak_namespace | html %]' />
+    <input type='hidden' name='cloak_groupname' value='[% cloak_groupname | html %]' />
     <input type='hidden' name='current_page' value='[% current_page %]' />
     <input type='hidden' name='change_item' value='[% change_item %]' />
     <input type='hidden' name='last_page' value='[% last_page %]' />

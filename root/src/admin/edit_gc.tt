@@ -23,7 +23,7 @@
 %]
   <tr>
     <td>
-    [% group_contact.contact.name %] ([% group_contact.contact.account.accountname %])
+    [% group_contact.contact.name | html %] ([% group_contact.contact.account.accountname | html %])
     </td>
     <td>
     <select name="status_[% group_contact.contact.id %]">

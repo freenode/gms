@@ -9,7 +9,7 @@
 
 [% FOREACH group = results -%]
 <tr>
-  <td><a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name %]</a></td>
+  <td><a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name | html %]</a></td>
   <td>[% group.group_type %]</td>
   <td>[% group.status %]</td>
 </tr>
@@ -18,11 +18,11 @@
 
 <p>
   <form action='[% c.uri_for ("/staff/search_groups/submit") %]' method='post'>
-    <input type='hidden' name='group_name' value='[% group_name %]' />
-    <input type='hidden' name='gc_accname' value='[% gc_accname %]' />
-    <input type='hidden' name='group_type' value='[% group_type %]' />
+    <input type='hidden' name='group_name' value='[% group_name | html %]' />
+    <input type='hidden' name='gc_accname' value='[% gc_accname | html %]' />
+    <input type='hidden' name='group_type' value='[% group_type | html %]' />
     <input type='hidden' name='group_status' value='[% group_status %]' />
-    <input type='hidden' name='namespace' value='[% namespace %]' />
+    <input type='hidden' name='namespace' value='[% namespace | html %]' />
     <input type='hidden' name='mode' value='[% mode %]' />
 
     <input type='hidden' name='current_page' value='[% current_page %]' />

@@ -10,7 +10,7 @@
 [% FOREACH gc IN to_approve -%]
   <tr>
     <td>
-      [% gc.group.group_name %]
+      [% gc.group.group_name | html %]
     </td>
     <td>
       [% gc.group.status %]<br/>[% gc.status %]
@@ -19,7 +19,7 @@
       [% gc.group.group_type %]<br/>[% gc.group_type %]
     </td>
     <td>
-      [% gc.group.url %]<br/>[% gc.url %]
+      [% gc.group.url | html %]<br/>[% gc.url | html %]
     </td>
     <td>
       [% IF gc.group.address %]
@@ -34,7 +34,7 @@
       [% END %]
     </td>
     <td>
-      [% gc.changed_by.accountname %]
+      [% gc.changed_by.accountname | html %]
     </td>
     <td>
         <input type="radio" name="action_[% gc.id %]" value="approve" />

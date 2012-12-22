@@ -10,11 +10,11 @@
 [% FOREACH clnc IN to_approve -%]
   <tr>
     <td>
-      [% clnc.namespace.namespace %]
+      [% clnc.namespace.namespace | html %]
     </td>
     <td>
-      [% clnc.namespace.group.group_name %]<br />
-      [% clnc.group.group_name %]
+      [% clnc.namespace.group.group_name | html %]<br />
+      [% clnc.group.group_name | html %]
     </td>
     <td>
       [% clnc.namespace.status %]<br />

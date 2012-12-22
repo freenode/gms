@@ -10,13 +10,13 @@
 [% FOREACH cc IN to_approve -%]
   <tr>
     <td>
-      [% cc.contact.account.accountname %]
+      [% cc.contact.account.accountname | html %]
     </td>
     <td>
-      [% cc.contact.name %]<br/>[% cc.name %]
+      [% cc.contact.name | html %]<br/>[% cc.name | html %]
     </td>
     <td>
-      [% cc.contact.email %]<br/>[% cc.email %]
+      [% cc.contact.email | html %]<br/>[% cc.email | html %]
     </td>
     <td>
       <a href="[% c.uri_for ("/admin/address/${cc.contact.address.id}/view") %]">Current</a>

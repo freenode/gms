@@ -1,28 +1,28 @@
 [% META title = 'Group View' %]
 
-<h2>[% group.group_name %]</h2>
+<h2>[% group.group_name | html %]</h2>
 
 <table>
 <tr> <td>Type</td>              <td>[% group.group_type %]</td> </tr>
 <tr> <td>URL</td>               <td>[% group.url %]</td> </tr>
 <tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
-<tr> <td>Verification URL</td>  <td>[% group.verify_url %]</td> </tr>
+<tr> <td>Verification URL</td>  <td>[% group.verify_url | html %]</td> </tr>
 <tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
-<tr> <td>DNS pointing to freenode.net</td> <td>[%group.verify_dns %]</td> </tr>
+<tr> <td>DNS pointing to freenode.net</td> <td>[%group.verify_dns | html %]</td> </tr>
 [% IF group.git_url %]
-<tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url %]</td> </tr>
+<tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url | html %]</td> </tr>
 [% END %]
 </table>
 [% IF group.verify_freetext %]
     <br/>
     <b>This group can't be verified by another method because:</b><br/><br/>
-    [% group.verify_freetext %]
+    [% group.verify_freetext | html %]
 [% END %]
 
 <h3>Contacts:</h3>
 <ul>
 [% FOREACH contact = group.active_contacts %]
-<li>[% contact.name %] ([% contact.account.accountname %])</li>
+<li>[% contact.name %] ([% contact.account.accountname | html %])</li>
 [% END %]
 </ul>
 <h3>Actions:</h3>

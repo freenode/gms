@@ -33,21 +33,21 @@ to help us verify your registration.</p>
 <tr>
   <td>* Group Name</td>
   <td>
-    <input type="text" name="group_name" style="width:90%" value="[% group_name %]">
+    <input type="text" name="group_name" style="width:90%" value="[% group_name | html %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 2)" onmouseout="untooltip()" />
   </td>
 </tr>
 <tr>
   <td>* Group URL</td>
   <td>
-    <input type="text" name="group_url" style="width:90%" value="[% group_url %]">
+    <input type="text" name="group_url" style="width:90%" value="[% group_url | html %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 3)" onmouseout="untooltip()" />
   </td>
 </tr>
 <tr>
   <td>* Channel Namespace</td>
   <td>
-    <input type="text" name="channel_namespace" style="width:90%" value="[% channel_namespace %]">
+    <input type="text" name="channel_namespace" style="width:90%" value="[% channel_namespace | html %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 4)" onmouseout="untooltip()" />
   </td>
 
@@ -72,28 +72,28 @@ to help us verify your registration.</p>
   </td>
 </tr>
 <tr>
-  <td>* Address 1:</td><td><input type="text" name="address_one" style="width:90%" value="[% address_one %]"></td>
+  <td>* Address 1:</td><td><input type="text" name="address_one" style="width:90%" value="[% address_one | html %]"></td>
 </tr>
 <tr>
-  <td>Address 2:</td><td><input type="text" name="address_two" style="width:90%" value="[% address_two %]"></td>
+  <td>Address 2:</td><td><input type="text" name="address_two" style="width:90%" value="[% address_two | html %]"></td>
 </tr>
 <tr>
-  <td>* City</td><td><input type="text" name="city" style="width:90%" value="[% city %]"></td>
+  <td>* City</td><td><input type="text" name="city" style="width:90%" value="[% city | html %]"></td>
 </tr>
 <tr>
-  <td>State</td><td><input type="text" name="state" style="width:90%" value="[% state %]"></td>
+  <td>State</td><td><input type="text" name="state" style="width:90%" value="[% state | html %]"></td>
 </tr>
 <tr>
-  <td>Postal Code</td><td><input type="text" name="postcode" style="width:90%" value="[% postcode %]"></td>
+  <td>Postal Code</td><td><input type="text" name="postcode" style="width:90%" value="[% postcode | html %]"></td>
 </tr>
 <tr>
-  <td>* Country</td><td><input type="text" name="country" style="width:90%" value="[% country %]"></td>
+  <td>* Country</td><td><input type="text" name="country" style="width:90%" value="[% country | html %]"></td>
 </tr>
 <tr>
-  <td>* Telephone</td><td><input type="text" name="phone" style="width:90%" value="[% phone %]"></td>
+  <td>* Telephone</td><td><input type="text" name="phone" style="width:90%" value="[% phone | html %]"></td>
 </tr>
 <tr>
-  <td>Telephone (alternate)</td><td><input type="text" name="phone2" style="width:90%" value="[% phone2 %]"></td>
+  <td>Telephone (alternate)</td><td><input type="text" name="phone2" style="width:90%" value="[% phone2 | html %]"></td>
 </tr>
 
 <tr>

@@ -16,7 +16,7 @@
     [% change.id %]
   </td>
   <td>
-    <a href='[% c.uri_for ("/staff/${change.group.id}/view") %]'>[% change.group.group_name %]</a>
+    <a href='[% c.uri_for ("/staff/${change.group.id}/view") %]'>[% change.group.group_name | html %]</a>
   </td>
   <td>
     [% change.group_type %]
@@ -33,7 +33,7 @@
 <tr id='hidden_[% change.id %]' class='hidden'>
   <td colspan='5'>
     <ul>
-      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>Changed By: [% change.changed_by.accountname | html %]</li>
       <li>Change time: [% change.time %]</li>
       <li>Group URL: [% change.url %]</li>
       <li>Affected Change: [% change.affected_change.id %]</li>
@@ -59,7 +59,7 @@
 
 <p>
   <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
-    <input type='hidden' name='group_name' value='[% group_name %]' />
+    <input type='hidden' name='group_name' value='[% group_name | html %]' />
     <input type='hidden' name='current_page' value='[% current_page %]' />
     <input type='hidden' name='change_item' value='[% change_item %]' />
     <input type='hidden' name='last_page' value='[% last_page %]' />

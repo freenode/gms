@@ -10,11 +10,11 @@
 [% FOREACH cnc IN to_approve -%]
   <tr>
     <td>
-      [% cnc.namespace.namespace %]
+      [% cnc.namespace.namespace | html %]
     </td>
     <td>
-      [% cnc.namespace.group.group_name %]<br />
-      [% cnc.group.group_name %]
+      [% cnc.namespace.group.group_name | html %]<br />
+      [% cnc.group.group_name | html %]
     </td>
     <td>
       [% cnc.namespace.status %]<br />

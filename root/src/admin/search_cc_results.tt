@@ -23,10 +23,10 @@
     [% change.change_type %]
   </td>
   <td>
-    [% change.name %]
+    [% change.name | html %]
   </td>
   <td>
-    [% change.email %]
+    [% change.email | html %]
   <td>
     <a href='javascript:;' onclick='show([% change.id %])' id='link_[% change.id %]'>Expand</a>
   </td>
@@ -34,7 +34,7 @@
 <tr id='hidden_[% change.id %]' class='hidden'>
   <td colspan='6' class='wide'>
     <ul>
-      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>Changed By: [% change.changed_by.accountname | html %]</li>
       <li>Change Time: [% change.time %]</li>
       <li>Affected Change: [% change.affected_change.id %]</li>
       <li>
@@ -56,7 +56,7 @@
 
 <p>
   <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
-    <input type='hidden' name='accname' value='[% accname %]' />
+    <input type='hidden' name='accname' value='[% accname | html %]' />
     <input type='hidden' name='current_page' value='[% current_page %]' />
     <input type='hidden' name='change_item' value='[% change_item %]' />
     <input type='hidden' name='last_page' value='[% last_page %]' />

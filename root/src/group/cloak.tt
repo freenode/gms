@@ -4,16 +4,16 @@
 
 Which user to cloak?<br/>
 
-<input type="text" name="accountname" value="[% accountname %]" /><br/>
+<input type="text" name="accountname" value="[% accountname | html %]" /><br/>
 
 Enter the cloak:<br/>
 
 <select name="cloak_namespace">
   [% FOREACH namespace IN cloak_namespaces %]
-    <option value="[% namespace.namespace %]" [% IF cloak_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace %]</option>
+    <option value="[% namespace.namespace | html %]" [% IF cloak_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace | html %]</option>
   [% END %]
 </select>/
-<input type="text" name="cloak" value="[% cloak %]" />
+<input type="text" name="cloak" value="[% cloak | html %]" />
 
 <p><input type="submit" /></p>
 

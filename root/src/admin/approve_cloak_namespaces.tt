@@ -13,7 +13,7 @@
 [% FOREACH namespace IN to_approve -%]
   <tr>
     <td>
-      [% namespace.namespace %]
+      [% namespace.namespace | html %]
     <td>
       <a href="[% c.uri_for("/admin/${namespace.group.id}/view") %]">[% namespace.group.group_name | html %]</a>
     </td>

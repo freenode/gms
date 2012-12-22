@@ -1,8 +1,8 @@
 [% META title = 'Channel Namespaces' %]
 
-<h2>Channel Namespaces for [% group.group_name %]</h2>
+<h2>Channel Namespaces for [% group.group_name | html %]</h2>
 
-[% group.group_name %]'s current active namespaces are:<br/>
+[% group.group_name | html %]'s current active namespaces are:<br/>
 
 <form method="post" action="[% c.uri_for("/admin/${group.id}/edit_channel_namespaces/submit") %]">
 
@@ -16,7 +16,7 @@
 [% FOREACH namespace IN channel_namespaces %]
 <tr>
   <td>
-    [% namespace.namespace %]
+    [% namespace.namespace | html %]
   </td>
   <td>
     <select name='status_[% namespace.id %]'>

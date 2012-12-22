@@ -17,7 +17,7 @@
   <td>
     [% change.cloak %]
   <td>
-    <a href='[% c.uri_for ("/staff/account/${contact.account.id}/view") %]'>[% contact.name %] ([% contact.account.accountname %])</a>
+    <a href='[% c.uri_for ("/staff/account/${contact.account.id}/view") %]'>[% contact.name | html %] ([% contact.account.accountname | html %])</a>
   </td>
   <td>
     <a href='javascript:;' onclick='show([% change.id %])' id='link_[% change.id %]'>Expand</a>
@@ -30,7 +30,7 @@
       <li>Time accepted: [% IF change.accepted; change.accepted; ELSE; %] not accepted [% END %]</li>
       <li>Time approved: [% IF change.approved; change.approved; ELSE %] not approved [% END %]</li>
       <li>Time rejected: [% IF change.rejected; change.rejected; ELSE %] not rejected [% END %]</li>
-      <li>Changed By: [% change.changed_by.accountname %]</li>
+      <li>Changed By: [% change.changed_by.accountname | html %]</li>
       <li>Change Time: [% change.time %]</li>
       <li>
         Change FreeText:<br />
@@ -47,7 +47,7 @@
 
 <p>
   <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
-    <input type='hidden' name='cloak_accountname' value='[% cloak_accountname %]' />
+    <input type='hidden' name='cloak_accountname' value='[% cloak_accountname | html %]' />
     <input type='hidden' name='current_page' value='[% current_page %]' />
     <input type='hidden' name='change_item' value='[% change_item %]' />
     <input type='hidden' name='last_page' value='[% last_page %]' />

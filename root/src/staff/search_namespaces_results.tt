@@ -9,8 +9,8 @@
 
 [% FOREACH ns = results -%]
 <tr>
-  <td><a href='[% c.uri_for ("/staff/${ns.group.id}/view") %]'>[% ns.group.group_name %]</a></td>
-  <td>[% ns.namespace %]</td>
+  <td><a href='[% c.uri_for ("/staff/${ns.group.id}/view") %]'>[% ns.group.group_name | html %]</a></td>
+  <td>[% ns.namespace | html %]</td>
   <td>[% ns.status %]</td>
 </tr>
 [% END -%]
@@ -18,8 +18,8 @@
 
 <p>
   <form action='[% c.uri_for ("/staff/search_namespaces/submit") %]' method='post'>
-    <input type='hidden' name='namespace' value='[% namespace %]' />
-    <input type='hidden' name='search_item' value='[% search_item  %]' />
+    <input type='hidden' name='namespace' value='[% namespace | html %]' />
+    <input type='hidden' name='search_item' value='[% search_item  | html %]' />
 
     <input type='hidden' name='current_page' value='[% current_page %]' />
     <input type='hidden' name='last_page' value='[% last_page %]' />

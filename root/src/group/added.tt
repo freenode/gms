@@ -1,6 +1,6 @@
 [% META title = 'Group Successfully Added' -%]
 
-<p>The group [% group.group_name %] has been successfully added.</p>
+<p>The group [% group.group_name | html %] has been successfully added.</p>
 
 <p>Click <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">here</a> to see possible verification methods.</p>
 
