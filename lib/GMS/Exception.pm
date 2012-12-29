@@ -69,5 +69,13 @@ package GMS::Exception::InvalidChange;
 
 use base GMS::Exception;
 
+package GMS::Exception::InvalidNamespace;
+
+use base GMS::Exception;
+
+package GMS::Exception::InvalidChange;
+
+use base GMS::Exception;
+
 1;
 

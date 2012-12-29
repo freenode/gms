@@ -179,6 +179,39 @@ sub new {
         push @errors, "Alternate telephone number contains non-digit characters";
         $valid = 0;
     }
+    
+    if (length $args->{address_one} > 255) {
+        push @errors, "Address 1 can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (length $args->{address_two} > 255) {
+        push @errors, "Address 2 can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (length $args->{city} > 255) {
+        push @errors, "City can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (length $args->{state} > 255) {
+        push @errors, "State can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (length $args->{code} > 32) {
+        push @errors, "Postcode can be up to 32 characters.";
+        $valid = 0;
+    }
+    if (length $args->{country} > 64) {
+        push @errors, "Country can be up to 64 characters.";
+        $valid = 0;
+    }
+    if (length $args->{phone} > 32) {
+        push @errors, "Phone can be up to 32 characters.";
+        $valid = 0;
+    }
+    if (length $args->{phone2} > 32) {
+        push @errors, "Alternate Phone can be up to 32 characters.";
+        $valid = 0;
+    }
 
     if (!$valid) {
         die GMS::Exception::InvalidAddress->new(\@errors);

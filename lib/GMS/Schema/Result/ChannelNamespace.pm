@@ -31,7 +31,7 @@ __PACKAGE__->table("channel_namespaces");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 32
+  size: 50
 
 =head2 active_change
 
@@ -51,7 +51,7 @@ __PACKAGE__->add_columns(
     sequence          => "channel_namespaces_id_seq",
   },
   "namespace",
-  { data_type => "varchar", is_nullable => 0, size => 32 },
+  { data_type => "varchar", is_nullable => 0, size => 50 },
   "active_change",
   {
     data_type      => "integer",
@@ -110,11 +110,31 @@ use GMS::Exception;
 
 Constructor. A ChannelNamespace is constructed with all the fields required both for itself
 and its initial ChannelNamespaceChange, and will implicitly create a 'create' change.
+If the channel namespace has invalid characters or is too long, an error is shown to the 
+user.
 
 =cut
 
 sub new {
     my ($class, $args) = @_;
+
+    my @errors;
+    my $valid=1;
+
+    if ($args->{namespace} !~ /^[A-Za-z0-9_\.]*$/) {
+        push @errors, "Channel namespaces must contain only alphanumeric characters, " .
+                       "underscores, and dots.";
+        $valid = 0;
+    }
+
+    if (length $args->{namespace} > 50) { #maximum length of channel names
+        push @errors, 'Channel namespaces can be no longer than 50 characters.';
+        $valid = 0;
+    }
+    
+    if (!$valid) {
+        die GMS::Exception::InvalidNamespace->new(\@errors);
+    }
 
     my @change_arg_names = (
         'group_id',

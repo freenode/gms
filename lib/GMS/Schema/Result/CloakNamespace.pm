@@ -31,7 +31,7 @@ __PACKAGE__->table("cloak_namespaces");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 32
+  size: 63
 
 =head2 active_change
 
@@ -51,7 +51,7 @@ __PACKAGE__->add_columns(
     sequence          => "cloak_namespaces_id_seq",
   },
   "namespace",
-  { data_type => "varchar", is_nullable => 0, size => 32 },
+  { data_type => "varchar", is_nullable => 0, size => 63 },
   "active_change",
   {
     data_type      => "integer",
@@ -110,11 +110,32 @@ use GMS::Exception;
 
 Constructor. A CloakNamespace is constructed with all the fields required both for itself
 and its initial CloakNamespaceChange, and will implicitly create a 'create' change.
+If the cloak namespace has invalid characters or is too long, an error is shown to the 
+user.
+
 
 =cut
 
 sub new {
     my ($class, $args) = @_;
+    
+    my @errors;
+    my $valid=1;
+
+    if ($args->{namespace} =~ /[^a-zA-Z0-9\.]/) {
+        push @errors, "Cloak namespaces must contain only alphanumeric characters and dots.";
+        $valid = 0;
+    }
+
+    if (length $args->{namespace} > 63) {
+        push @errors, "Cloak namespaces must be up to 63 characters.";
+        $valid = 0;
+    }
+
+    if (!$valid) {
+        die GMS::Exception::InvalidNamespace->new(\@errors);
+    }
+
 
     my @change_arg_names = (
         'group_id',

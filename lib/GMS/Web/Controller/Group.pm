@@ -319,6 +319,12 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
         $c->stash->{form_submitted} = 1;
         $c->detach('edit');
     }
+    catch (GMS::Exception::InvalidChange $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->stash->{form_submitted} = 1;
+        $c->detach('edit');
+    }
 
     $c->stash->{msg} = "Successfully submitted the change request. Please wait for staff to approve the change.";
     $c->stash->{template} = 'group/action_done.tt';
@@ -587,7 +593,13 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
                 $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {
-            $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending_staff' });
+            try {
+                $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending_staff' });
+            } catch (GMS::Exception::InvalidNamespace $e) {
+                $c->stash->{errors} = $e->message;
+                $c->stash->{prev_namespace} = $new_namespace;
+                $c->detach ('edit_channel_namespaces');
+            }
         }
     }
 
@@ -654,7 +666,13 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
                 $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {
-            $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending_staff' });
+            try {
+                $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'pending_staff' });
+            } catch (GMS::Exception::InvalidNamespace $e) {
+                $c->stash->{errors} = $e->message;
+                $c->stash->{prev_namespace} = $new_namespace;
+                $c->detach ('edit_cloak_namespaces');
+            }
         }
     }
 
@@ -798,6 +816,11 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
             "If the group has its own address, then a valid address must be specified.",
             @{$e->message}
         ];
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach('new_form');
+    }
+    catch (GMS::Exception::InvalidNamespace $e) {
+        $c->stash->{errors} = $e->message;
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach('new_form');
     }

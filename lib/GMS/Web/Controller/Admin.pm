@@ -673,6 +673,11 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->stash->{form_submitted} = 1;
         $c->detach('edit');
+    } catch (GMS::Exception::InvalidChange $e) {
+        $c->stash->{errors} = $e->message;
+         %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->stash->{form_submitted} = 1;
+        $c->detach('edit');
     }
 
     $c->stash->{msg} = "Successfully edited the group's information.";
@@ -786,7 +791,13 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
                 $ns->change ($c->user->account, 'admin', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {
-            $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'active' });
+            try {
+                $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'active' });
+            } catch (GMS::Exception::InvalidNamespace $e) {
+                $c->stash->{errors} = $e->message;
+                $c->stash->{prev_namespace} = $new_namespace;
+                $c->detach ('edit_channel_namespaces');
+            }
         }
     }
 
@@ -846,7 +857,13 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
                 $ns->change ($c->user->account, 'admin', { 'status' => 'active', 'group_id' => $group->id });
             }
         } else {
-            $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'active' });
+            try {
+                $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $new_namespace, 'status' => 'active' });
+            } catch (GMS::Exception::InvalidNamespace $e) {
+                $c->stash->{errors} = $e->message;
+                $c->stash->{prev_namespace} = $new_namespace;
+                $c->detach ('edit_cloak_namespaces');
+            }
         }
     }
 
@@ -932,6 +949,12 @@ sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
         $contact->change ($c->user->account->id, 'admin', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address, 'change_freetext' => $params->{freetext} });
     }
     catch (GMS::Exception::InvalidAddress $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$params );
+        $c->stash->{form_submitted} = 1;
+        $c->detach('edit_account');
+    }
+    catch (GMS::Exception::InvalidChange $e) {
         $c->stash->{errors} = $e->message;
         %{$c->stash} = ( %{$c->stash}, %$params );
         $c->stash->{form_submitted} = 1;

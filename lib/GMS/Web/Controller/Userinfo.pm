@@ -147,6 +147,12 @@ sub update :Path('update') :Args(0) :Local :VerifyToken {
             $c->stash->{form_submitted} = 1;
             $c->detach('edit');
         }
+        catch (GMS::Exception::InvalidChange $e) {
+            $c->stash->{errors} = $e->message;
+            %{$c->stash} = ( %{$c->stash}, %$params );
+            $c->stash->{form_submitted} = 1;
+            $c->detach('edit');
+        }
     } else {
         try {
             my $address = $c->model('DB::Address')->create({
@@ -170,6 +176,12 @@ sub update :Path('update') :Args(0) :Local :VerifyToken {
         catch (GMS::Exception::InvalidAddress $e) {
             $c->stash->{errors} = $e->message;
             %{$c->stash} = ( %{$c->stash}, %$params );
+            $c->detach('index');
+        }
+        catch (GMS::Exception::InvalidChange $e) {
+            $c->stash->{errors} = $e->message;
+            %{$c->stash} = ( %{$c->stash}, %$params );
+            $c->stash->{form_submitted} = 1;
             $c->detach('index');
         }
     }

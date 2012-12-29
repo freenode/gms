@@ -284,6 +284,15 @@ sub new {
         $valid = 0;
     }
 
+    if (length $args->{group_name} > 32) {
+        push @errors, "Group name must be up to 32 characters.";
+        $valid = 0;
+    }
+    if (length $args->{url} > 64) {
+        push @errors, "Group URL must be up to 64 characters.";
+        $valid = 0;
+    }
+
     if (!$valid) {
         die GMS::Exception::InvalidGroup->new(\@errors);
     }

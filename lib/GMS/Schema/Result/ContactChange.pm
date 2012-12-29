@@ -212,6 +212,44 @@ use GMS::Exception;
 
 =head1 METHODS
 
+=head2 new
+
+Constructor. Checks if the name and email on the given details are valid, and throws
+an exception if not.
+
+=cut
+
+sub new {
+    my ($class, $args) = @_;
+
+    my @errors;
+    my $valid=1;
+
+    if (!$args->{name}) {
+        push @errors, "Your name can't be empty.";
+        $valid = 0;
+    }
+    if (length $args->{name} > 255) {
+        push @errors, "Your name can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (!$args->{email}) {
+        push @errors, "Your email can't be empty.";
+        $valid = 0;
+    }
+    if (length $args->{email} > 255) {
+        push @errors, "Your email can be up to 255 characters.";
+        $valid = 0;
+    }
+
+    if (!$valid) {
+        die GMS::Exception::InvalidChange->new(\@errors);
+    }
+
+    return $class->next::method($args);
+}
+
+
 =head2 approve
 
     $change->approve ($approving_account, $freetext);
