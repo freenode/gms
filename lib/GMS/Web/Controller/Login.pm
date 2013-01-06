@@ -18,12 +18,32 @@ Catalyst Controller.
 
 =cut
 
-
-=head2 index
+=head2 base
 
 =cut
 
-sub index :Path :Args(0) :Local :GenerateToken :VerifyToken {
+sub base :Chained('/') :PathPart('login') :CaptureArgs {
+}
+
+=head2 index
+
+Displays the login form
+
+=cut
+
+sub index :Chained('base') :PathPart('') :Args(0) :Local :GenerateToken {
+    my ( $self, $c ) = @_;
+
+    $c->stash->{template} = 'login.tt';
+}
+
+=head2 do_login
+
+Processes the form, sees if we can log in with the provided credentials.
+
+=cut
+
+sub do_login :Chained('base') :PathPart('submit') :Args(0) :Local :VerifyToken {
     my ( $self, $c ) = @_;
 
     my $username = $c->request->params->{username} || "";
