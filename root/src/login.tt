@@ -11,7 +11,7 @@ before logging in again.</p>
 <h3>Login to GMS</h3>
 <p>Please log in using your services account credentials</p>
 
-<form method="post" action="[% c.uri_for('/login') %]">
+<form method="post" action="[% c.uri_for('/login/submit') %]">
 <table>
 <tr> <td>Username:</td><td><input type="text" name="username" size="40" /></td> </tr>
 <tr> <td>Password:</td><td><input type="password" name="password" size="40" /></td> </tr>

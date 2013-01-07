@@ -1,6 +1,8 @@
-[% matches = content.match ('(\<form .*\>)') -%]
+[% matches = content.match ('(\<form .*\>)', 1) -%]
 [% IF matches %]
-    [% content = content.replace (matches.0,matches.0 _ '<input type="hidden" name="_token" value="' _ c.controller.token(c) _ '" />' ); %]
+    [% FOREACH match IN matches %]
+        [% content = content.replace (match,match _ '<input type="hidden" name="_token" value="' _ c.controller.token(c) _ '" />' ); %]
+    [% END %]
 [%END -%]
 [% IF (!c.request.param ('ajax')) -%]
     <?xml version="1.0" encoding="UTF-8" ?>
