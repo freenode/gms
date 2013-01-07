@@ -38,7 +38,11 @@ $ua->get_ok("http://localhost/cloak", "Check cloak page works");
 $ua->content_contains("example2/test01", "Cloak is there");
 $ua->content_contains("example3/test01", "Cloak is there");
 
-$ua->get_ok("http://localhost/cloak/2/accept", "Cloak accept page works");
+$ua->form_name('example2/test01');
+$ua->click_button(
+    number => 1
+);
+
 $ua->content_contains("Successfully approved the cloak", "Approval worked");
 
 $change2->discard_changes;
@@ -47,7 +51,11 @@ ok $change2->accepted, "Approval worked.";
 
 $ua->content_lacks("example2/test01", "Approved cloak is no longer there.");
 
-$ua->get_ok("http://localhost/cloak/3/decline", "Cloak Rejection page works");
+$ua->form_name('example3/test01');
+$ua->click_button(
+    number => 2
+);
+
 $ua->content_contains("Successfully rejected the cloak", "Rejection worked.");
 
 $change3->discard_changes;
