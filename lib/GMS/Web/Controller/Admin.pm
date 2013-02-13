@@ -261,15 +261,15 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     my @to_approve;
     $c->stash->{change_item} = $change_item;
 
-    if ($change_item == 1) { #group contact change
+    if ($change_item && $change_item == 1) { #group contact change
         @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
-    } elsif ($change_item == 2) { #group change
+    } elsif ($change_item && $change_item == 2) { #group change
         @to_approve = $c->model ("DB::GroupChange")->active_requests();
-    } elsif ($change_item == 3) { #contact change
+    } elsif ($change_item && $change_item == 3) { #contact change
         @to_approve = $c->model ("DB::ContactChange")->active_requests();
-    } elsif ($change_item == 4) { #channel namespace change
+    } elsif ($change_item && $change_item == 4) { #channel namespace change
         @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
-    } elsif ($change_item == 5) { #cloak namespace change
+    } elsif ($change_item && $change_item == 5) { #cloak namespace change
         @to_approve = $c->model ("DB::CloakNameSpaceChange")->active_requests();
     }
 
@@ -281,15 +281,15 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
 
     $c->stash->{to_approve} = \@to_approve;
 
-    if ($change_item == 1) {
+    if ($change_item && $change_item == 1) {
         $c->stash->{template} = 'admin/approve_gcc.tt';
-    } elsif ($change_item == 2) {
+    } elsif ($change_item && $change_item == 2) {
         $c->stash->{template} = 'admin/approve_gc.tt';
-    } elsif ($change_item == 3) {
+    } elsif ($change_item && $change_item == 3) {
         $c->stash->{template} = 'admin/approve_cc.tt';
-    } elsif ($change_item == 4) {
+    } elsif ($change_item && $change_item == 4) {
         $c->stash->{template} = 'admin/approve_cnc.tt';
-    } elsif ($change_item == 5) {
+    } elsif ($change_item && $change_item == 5) {
         $c->stash->{template} = 'admin/approve_clnc.tt';
     } elsif (! $change_item) {
         $c->stash->{template} = 'admin/approve_change.tt';
@@ -355,7 +355,7 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                 }
             }
         });
-        $c->response->redirect($c->uri_for('approve_change', undef, { 'change_item' => $change_item }));
+        $c->response->redirect($c->uri_for('approve_change', '', { 'change_item' => $change_item }));
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;
@@ -442,9 +442,9 @@ sub approve_namespaces :Chained('base') :PathPart('approve_namespaces') :Args(0)
     my @to_approve;
     $c->stash->{approve_item} = $approve_item;
 
-    if ($approve_item == 1) { #channel namespaces
+    if ($approve_item && $approve_item == 1) { #channel namespaces
         @to_approve = $c->model ("DB::ChannelNamespace")->search_pending();
-    } elsif ($approve_item == 2) { #cloak namespces
+    } elsif ($approve_item && $approve_item == 2) { #cloak namespces
         @to_approve = $c->model ("DB::CloakNamespace")->search_pending();
     }
 
@@ -453,9 +453,9 @@ sub approve_namespaces :Chained('base') :PathPart('approve_namespaces') :Args(0)
     $c->stash->{pending_channel} = $c->model ("DB::ChannelNamespace")->search_pending->count;
     $c->stash->{pending_cloak} = $c->model ("DB::CloakNamespace")->search_pending->count;
 
-    if ($approve_item == 1) {
+    if ($approve_item && $approve_item == 1) {
         $c->stash->{template} = 'admin/approve_channel_namespaces.tt';
-    } elsif ($approve_item == 2) {
+    } elsif ($approve_item && $approve_item == 2) {
         $c->stash->{template} = 'admin/approve_cloak_namespaces.tt';
     }
 }
@@ -510,7 +510,7 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                 }
             }
         });
-        $c->response->redirect($c->uri_for('approve_namespaces', undef, { 'approve_item' => $approve_item }));
+        $c->response->redirect($c->uri_for('approve_namespaces', '', { 'approve_item' => $approve_item }));
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;

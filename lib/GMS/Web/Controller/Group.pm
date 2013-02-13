@@ -293,7 +293,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     my $address;
 
     try {
-        if ($p->{has_address} eq 'y' && $p->{update_address} eq 'y') {
+        if ( $p->{has_address} && $p->{update_address} && $p->{has_address} eq 'y' && $p->{update_address} eq 'y' ) {
             $address = $c->model('DB::Address')->create({
                     address_one => $p->{address_one},
                     address_two => $p->{address_two},
@@ -304,7 +304,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
                     phone => $p->{phone},
                     phone2 => $p->{phone2}
                 });
-        } elsif ($p->{has_address} eq 'n' && $p->{update_address} eq 'y') {
+        } elsif ( $p->{has_address} && $p->{update_address} &&  $p->{has_address} eq 'n' && $p->{update_address} eq 'y' ) {
             $address = -1;
         }
 

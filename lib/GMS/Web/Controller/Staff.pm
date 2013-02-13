@@ -118,13 +118,13 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
     my $current_page = $p->{current_page} || 1;
     my $next = $p->{next};
 
-    if ($next eq 'Next page') {
+    if ($next && $next eq 'Next page') {
         $page = $current_page + 1;
-    } elsif ($next eq 'Previous page') {
+    } elsif ($next && $next eq 'Previous page') {
         $page = $current_page - 1;
-    } elsif ($next eq 'First page') {
+    } elsif ($next && $next eq 'First page') {
         $page = 1;
-    } elsif ($next eq 'Last page') {
+    } elsif ($next && $next eq 'Last page') {
         $page = $p->{last_page};
     } else {
         $page = $p->{page} || $current_page;
@@ -211,13 +211,13 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
     my $current_page = $p->{current_page} || 1;
     my $next = $p->{next};
 
-    if ($next eq 'Next page') {
+    if ($next && $next eq 'Next page') {
         $page = $current_page + 1;
-    } elsif ($next eq 'Previous page') {
+    } elsif ($next && $next eq 'Previous page') {
         $page = $current_page - 1;
-    } elsif ($next eq 'First page') {
+    } elsif ($next && $next eq 'First page') {
         $page = 1;
-    } elsif ($next eq 'Last page') {
+    } elsif ($next && $next eq 'Last page') {
         $page = $p->{last_page};
     } else {
         $page = $p->{page} || $current_page;
@@ -301,13 +301,13 @@ sub do_search_namespaces :Chained('base') :PathPart('search_namespaces/submit') 
     my $current_page = $p->{current_page} || 1;
     my $next = $p->{next};
 
-    if ($next eq 'Next page') {
+    if ($next && $next eq 'Next page') {
         $page = $current_page + 1;
-    } elsif ($next eq 'Previous page') {
+    } elsif ($next && $next eq 'Previous page') {
         $page = $current_page - 1;
-    } elsif ($next eq 'First page') {
+    } elsif ($next && $next eq 'First page') {
         $page = 1;
-    } elsif ($next eq 'Last page') {
+    } elsif ($next && $next eq 'Last page') {
         $page = $p->{last_page};
     } else {
         $page = $p->{page} || $current_page;

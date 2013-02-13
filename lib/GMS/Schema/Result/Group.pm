@@ -273,7 +273,11 @@ sub new {
         push @errors, "Group name must contain only alphanumeric characters, space, " .
                        "underscores, hyphens and dots.";
         $valid = 0;
+    } elsif (length $args->{group_name} > 32) {
+        push @errors, "Group name must be up to 32 characters.";
+        $valid = 0;
     }
+
     if (!$args->{url}) {
         push @errors, "Group URL must be provided";
         $valid = 0;
@@ -282,23 +286,17 @@ sub new {
         push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
                        "0-9, :_+-/)";
         $valid = 0;
-    }
-
-    if (length $args->{group_name} > 32) {
-        push @errors, "Group name must be up to 32 characters.";
-        $valid = 0;
-    }
-    if (length $args->{url} > 64) {
+    } elsif (length $args->{url} > 64) {
         push @errors, "Group URL must be up to 64 characters.";
         $valid = 0;
+    } elsif ($args->{url} !~ m/^http:\/\// && $args->{url} !~ m/^https:\/\//) {
+        $args->{url} = "https://" . $args->{url};
     }
 
     if (!$valid) {
         die GMS::Exception::InvalidGroup->new(\@errors);
     }
-    if ($args->{url} !~ m/^http:\/\// && $args->{url} !~ m/^https:\/\//) {
-        $args->{url} = "https://" . $args->{url};
-    }
+
     $args->{verify_auto} = _use_automatic_verification($args->{group_name}, $args->{url});
 
     my @change_arg_names = (
@@ -347,12 +345,17 @@ sub insert {
         });
     my $url = URI->new ($self->url);
     my $domain = $url->host;
+
     my @parts = split (/\./, $domain);
-    $domain = $parts[-2] . "." . $parts[-1];
-    $self->add_to_group_verifications ({
+
+    if ($parts[-1] && $parts[-2]) {
+        $domain = $parts[-2] . "." . $parts[-1];
+        $self->add_to_group_verifications ({
             verification_type => "dns",
             verification_data => "freenode-" . random_string ("ccccccc") . "." . $domain
         });
+    }
+
     return $ret;
 }
 
@@ -390,7 +393,7 @@ sub change {
     if ( defined ( my $va = $args->{verify_auto} ) ) {
         $self->verify_auto ($va);
     }
-    if ($change_args{address} == -1) {
+    if ($change_args{address} && $change_args{address} == -1) {
         $change_args{address} = undef; #make it possible for groups to remove their address.
     }
 
@@ -547,16 +550,19 @@ sub auto_verify {
         return 1;
     }
 
-    my $packed = Socket::inet_aton($self->verify_dns);
+    if ($self->verify_dns) {
+        my $packed = Socket::inet_aton($self->verify_dns);
 
-    if ($packed) {
-        my $address = Socket::inet_ntoa($packed);
+        if ($packed) {
+            my $address = Socket::inet_ntoa($packed);
 
-        if ($address eq "5.9.244.117") {
-            $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
-            return 1;
+            if ($address eq "5.9.244.117") {
+                $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
+                return 1;
+            }
         }
     }
+
     if ( ( my $freetext = $args->{freetext} ) ) {
         $self->add_to_group_verifications ({ verification_type => 'freetext', verification_data => $freetext });
         $self->change ($account, 'workflow_change', { status => 'pending_staff'});

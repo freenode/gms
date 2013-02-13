@@ -159,57 +159,59 @@ sub new {
     if (! $args->{address_one}) {
         push @errors, "Address 1 is missing";
         $valid = 0;
+    } elsif (length $args->{address_one} > 255) {
+        push @errors, "Address 1 can be up to 255 characters.";
+        $valid = 0;
     }
+
+    if ($args->{addreess_two} && length $args->{address_two} > 255) {
+        push @errors, "Address 2 can be up to 255 characters.";
+        $valid = 0;
+    }
+
     if (! $args->{city}) {
         push @errors, "City is missing";
         $valid = 0;
+    } elsif (length $args->{city} > 255) {
+        push @errors, "City can be up to 255 characters.";
+        $valid = 0;
     }
+
     if (! $args->{country}) {
         push @errors, "Country is missing";
         $valid = 0;
     }
+
     if (! $args->{phone}) {
         push @errors, "Telephone number is missing";
         $valid = 0;
     } elsif ($args->{phone} =~ /[^0-9 \+-]/) {
         push @errors, "Telephone number contains non-digit characters";
         $valid = 0;
+    } elsif (length $args->{phone} > 32) {
+        push @errors, "Phone can be up to 32 characters.";
+        $valid = 0;
     }
+
     if ($args->{phone2} && $args->{phone2} =~ /[^0-9 \+-]/) {
         push @errors, "Alternate telephone number contains non-digit characters";
         $valid = 0;
     }
-    
-    if (length $args->{address_one} > 255) {
-        push @errors, "Address 1 can be up to 255 characters.";
+    if ($args->{phone2} && length $args->{phone2} > 32) {
+        push @errors, "Alternate Phone can be up to 32 characters.";
         $valid = 0;
     }
-    if (length $args->{address_two} > 255) {
-        push @errors, "Address 2 can be up to 255 characters.";
-        $valid = 0;
-    }
-    if (length $args->{city} > 255) {
-        push @errors, "City can be up to 255 characters.";
-        $valid = 0;
-    }
-    if (length $args->{state} > 255) {
+
+    if ($args->{state} && length $args->{state} > 255) {
         push @errors, "State can be up to 255 characters.";
         $valid = 0;
     }
-    if (length $args->{code} > 32) {
+    if ($args->{code} && length $args->{code} > 32) {
         push @errors, "Postcode can be up to 32 characters.";
         $valid = 0;
     }
-    if (length $args->{country} > 64) {
+    if ($args->{country} && length $args->{country} > 64) {
         push @errors, "Country can be up to 64 characters.";
-        $valid = 0;
-    }
-    if (length $args->{phone} > 32) {
-        push @errors, "Phone can be up to 32 characters.";
-        $valid = 0;
-    }
-    if (length $args->{phone2} > 32) {
-        push @errors, "Alternate Phone can be up to 32 characters.";
         $valid = 0;
     }
 

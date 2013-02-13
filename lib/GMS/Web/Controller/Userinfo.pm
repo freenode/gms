@@ -126,7 +126,7 @@ sub update :Path('update') :Args(0) :Local :VerifyToken {
 
     if ($contact) {
         try {
-            if ($params->{update_address} eq 'y') {
+            if ( $params->{update_address} && $params->{update_address} eq 'y' ) {
                 $address = $c->model('DB::Address')->create({
                         address_one => $params->{address_one},
                         address_two => $params->{address_two},
