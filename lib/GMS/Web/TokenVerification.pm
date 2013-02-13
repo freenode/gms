@@ -32,7 +32,7 @@ This method has been taken from Catalyst::Plugin::Session.
 
 =cut
 
-sub _find_digest () {
+sub _find_digest {
     unless ($usable) {
         foreach my $alg (qw/SHA-1 SHA-256 MD5/) {
             if ( eval { Digest->new($alg) } ) {
@@ -93,7 +93,7 @@ sub token {
     return ( $self->{_token} ? $self->{_token} : $c->session->{_token} );
 }
 
-=head2 is_vaid_token
+=head2 is_valid_token
 
 Checks if the token provided over POST is the same as the one in the
 session.
