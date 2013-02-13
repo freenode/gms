@@ -33,21 +33,21 @@ to help us verify your registration.</p>
 <tr>
   <td><label for="group_name">* Group Name</label></td>
   <td>
-    <input type="text" id="group_name" name="group_name" style="width:90%" value="[% group_name | html %]">
+    <input type="text" required id="group_name" name="group_name" style="width:90%" value="[% group_name | html %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 2)" onmouseout="untooltip()" />
   </td>
 </tr>
 <tr>
   <td><label for="group_url">* Group URL</label></td>
   <td>
-    <input type="text" id="group_url" name="group_url" style="width:90%" value="[% group_url | html %]">
+    <input type="url" id="group_url" name="group_url" style="width:90%" value="[% group_url | html %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 3)" onmouseout="untooltip()" />
   </td>
 </tr>
 <tr>
   <td><label for="group_cns">* Channel Namespace</label></td>
   <td>
-    <input type="text" id="group_cns" name="channel_namespace" style="width:90%" value="[% channel_namespace | html %]">
+    <input required type="text" id="group_cns" name="channel_namespace" style="width:90%" value="[% channel_namespace | html %]">
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 4)" onmouseout="untooltip()" />
   </td>
 
@@ -90,10 +90,10 @@ to help us verify your registration.</p>
   <td><label for="country">* Country</label></td><td><input id="country" type="text" name="country" style="width:90%" value="[% country | html %]"></td>
 </tr>
 <tr>
-  <td><label for="phone">* Telephone</label></td><td><input id="phone" type="text" name="phone" style="width:90%" value="[% phone | html %]"></td>
+  <td><label for="phone">* Telephone</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" type="text" name="phone" style="width:90%" value="[% phone | html %]"></td>
 </tr>
 <tr>
-  <td><label for="phone2">Telephone (alternate)</label></td><td><input id="phone2" type="text" name="phone2" style="width:90%" value="[% phone2 | html %]"></td>
+  <td><label for="phone2">Telephone (alternate)</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone2" style="width:90%" value="[% phone2 | html %]"></td>
 </tr>
 
 <tr>
@@ -111,7 +111,7 @@ to help us verify your registration.</p>
 </tr>
 <tr>
   <td><label for="gab_email">Email address for GAB mailing list</label></td>
-  <td><input type="text" id="gab_email" name="gab_email" style="width:90%" value="[% gab_email %]"></td>
+  <td><input type="email" id="gab_email" name="gab_email" style="width:90%" value="[% gab_email %]"></td>
 </tr>
 
 <tr>

@@ -16,7 +16,7 @@
   </td>
 </tr>
 <tr>
-  <td><label for="gurl">Group URL</label></td> <td><input id="gurl" type="text" name="url" value="[% url | html %]" /></td>
+  <td><label for="gurl">Group URL</label></td> <td><input id="gurl" type="url" name="url" value="[% url | html %]" /></td>
 </tr>
 <tr>
   <td>Does the group have a registered / postal address?</td>
@@ -51,10 +51,10 @@
   <td><label for="country">Country</label></td><td><input id="country" type="text" name="country" size="40" value="[% country | html %]"></td>
 </tr>
 <tr>
-  <td><label for="phone">Telephone</label></td><td><input id="phone" type="text" name="phone" size="40" value="[% phone | html %]"></td>
+  <td><label for="phone">Telephone</label></td><td><input id="phone" pattern="[0-9 \+-]+" title="Please enter a valid telephone!" type="text" name="phone" size="40" value="[% phone | html %]"></td>
 </tr>
 <tr>
-  <td><label for="phone2">Telephone (alternate)</label></td><td><input id="phone2" type="text" name="phone2" size="40" value="[% phone2 | html %]"></td>
+  <td><label for="phone2">Telephone (alternate)</label></td><td><input id="phone2" type="text" pattern="[0-9 \+-]+" title="Please enter a valid telephone!" name="phone2" size="40" value="[% phone2 | html %]"></td>
 </tr>
 </table>
 <input type="submit" value="Submit" />
