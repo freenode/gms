@@ -58,7 +58,7 @@ sub gms_uid {
         $source->success ($account->uid);
     }
     else {
-        $source->fail ($Atheme::error::nosuch_target, "No such account");
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
     }
 }
 
@@ -72,9 +72,9 @@ sub gms_drop {
     my $acc = $Atheme::Accounts{$nick};
 
     if (!$creg) {
-        $source->fail ($Atheme::Errors::nosuch_target, "The channel $channel is not registered");
+        $source->fail (Atheme::Fault::nosuch_target(), "The channel $channel is not registered");
     } elsif (!$acc) {
-        $source->fail ($Atheme::Errors::nosuch_target, "The nickname $nick is not registered");
+        $source->fail (Atheme::Fault::nosuch_target(), "The nickname $nick is not registered");
     } else {
         $creg->drop;
 
@@ -97,11 +97,11 @@ sub gms_transfer {
     my $caller_acc = $Atheme::Accounts{$command_caller};
 
     if (!$creg) {
-        $source->fail ($Atheme::Errors::nosuch_target, "The channel $channel is not registered");
+        $source->fail (Atheme::Fault::nosuch_target(), "The channel $channel is not registered");
     } elsif (!$nf_acc) {
-        $source->fail ($Atheme::Errors::nosuch_target, "The nickname $new_founder is not registered");
+        $source->fail (Atheme::Fault::nosuch_target(), "The nickname $new_founder is not registered");
     } elsif (!$caller_acc) {
-        $source->fail ($Atheme::Errors::nosuch_target, "The nickname $command_caller is not registered");
+        $source->fail (Atheme::Fault::nosuch_target(), "The nickname $command_caller is not registered");
     } else {
         $creg->transfer ($source, $nf_acc);
 
@@ -120,7 +120,7 @@ sub gms_cloak {
     my $acc = $Atheme::Accounts{$nick};
 
     if (!$acc) {
-        $source->fail ($Atheme::Error::nosuch_target, "No such account");
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
     }
 
     $acc->vhost ($cloak);
@@ -137,7 +137,7 @@ sub gms_metadata {
     my $acc = $Atheme::Accounts{$nick};
 
     if (!$acc) {
-        $source->fail ($Atheme::Error::nosuch_target, "No such account");
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
     } else {
         my $md = $acc->metadata->{$name};
 
@@ -145,7 +145,7 @@ sub gms_metadata {
             $source->success ($md);
         }
         else {
-            $source->fail ($Atheme::Error::nosuch_key, "No such metadata on the account");
+            $source->fail (Atheme::Fault::nosuch_key(), "No such metadata on the account");
         }
     }
 

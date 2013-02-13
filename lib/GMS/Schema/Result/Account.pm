@@ -154,7 +154,7 @@ sub metadata {
         return $data;
     }
     catch (RPC::Atheme::Error $e) {
-        die $e if ($e->code != $RPC::Atheme::Error::nosuch_key);
+        die $e if ( $e->code != RPC::Atheme::Error::nosuchkey() );
     }
 }
 
