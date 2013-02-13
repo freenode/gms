@@ -4,9 +4,11 @@
 <table>
 <tr>
   <td>Last Change Type</td> <td>[% group.last_change.change_type %]</td>
-  <td>Group Type</td>
+</tr>
+<tr>
+  <td><label for="gtype">Group Type</label></td>
   <td>
-    <select name='group_type'>
+    <select id="gtype" name='group_type'>
       <option value="informal" [% IF group_type.is_informal %] selected = "selected" [% END %]>Informal Group</option>
       <option value="corporation" [% IF group_type.is_corporation %] selected = "selected" [% END %]>Corporation / Business entity</option>
       <option value="education" [% IF group_type.is_education %] selected = "selected" [% END %]>Educational Institution</option>
@@ -16,9 +18,10 @@
     </select>
   </td>
 </tr>
-  <td>Group Status</td>
+<tr>
+  <td><label for="gstatus">Group Status</label></td>
   <td>
-    <select name='status'>
+    <select id="gstatus" name='status'>
       <option value="submitted" [% IF status.is_submitted %] selected="selected" [% END %]>submitted</option>
       <option value="verified" [% IF status.is_verified %] selected="selected" [% END %]>verified</option>
       <option value="active" [% IF status.is_active %] selected="active" [% END %]>active</option>
@@ -30,45 +33,45 @@
   </td>
 </tr>
 <tr>
-  <td>Group URL</td> <td><input type="text" name="url" value="[% url | html %]" /></td>
+  <td><label for="gurl">Group URL</label></td> <td><input id="gurl" type="text" name="url" value="[% url | html %]" /></td>
 </tr>
 <tr>
   <td>Does the group have a registered / postal address?</td>
-  <td><input type="radio" name="has_address" id="has_address_y" value="y" [% IF has_address == 'y' %] checked="checked" [% END %]> Yes <br />
-      <input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address == 'n' %] checked="checked" [% END %]> No
+  <td><label><input type="radio" name="has_address" id="has_address_y" value="y" [% IF has_address == 'y' %] checked="checked" [% END %]> Yes</label><br />
+      <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address == 'n' %] checked="checked" [% END %]> No</label>
   </td>
 </tr>
 <tr>
   <td>
-    <input type="checkbox" name="update_address" value="y" [% IF update_address %] checked="checked" [% END %] /> Update address information.
+    <label><input type="checkbox" name="update_address" value="y" [% IF update_address %] checked="checked" [% END %] /> Update address information.</label>
   </td>
 </tr>
 <tr>
   <td colspan="2"><strong>Group Address</strong> (if applicable)</td>
 </tr>
 <tr>
-  <td>Address 1:</td><td><input type="text" name="address_one" size="40" value="[% address_one | html %]"></td>
+  <td><label for="addr1">Address 1:</label></td><td><input id="addr1" type="text" name="address_one" size="40" value="[% address_one | html %]"></td>
 </tr>
 <tr>
-  <td>Address 2:</td><td><input type="text" name="address_two" size="40" value="[% address_two | html %]"></td>
+  <td><label for="addr2">Address 2:</label></td><td><input id="addr2" type="text" name="address_two" size="40" value="[% address_two | html %]"></td>
 </tr>
 <tr>
-  <td>City</td><td><input type="text" name="city" size="40" value="[% city | html %]"></td>
+  <td><label for="city">City</label></td><td><input id="city" type="text" name="city" size="40" value="[% city | html %]"></td>
 </tr>
 <tr>
-  <td>State</td><td><input type="text" name="state" size="40" value="[% state | html %]"></td>
+  <td><label for="state">State</label></td><td><input id="state" type="text" name="state" size="40" value="[% state | html %]"></td>
 </tr>
 <tr>
-  <td>Postal Code</td><td><input type="text" name="code" size="40" value="[% code | html %]"></td>
+  <td><label for="code">Postal Code</label></td><td><input id="code" type="text" name="code" size="40" value="[% code | html %]"></td>
 </tr>
 <tr>
-  <td>Country</td><td><input type="text" name="country" size="40" value="[% country | html %]"></td>
+  <td><label for="country">Country</label></td><td><input id="country" type="text" name="country" size="40" value="[% country | html %]"></td>
 </tr>
 <tr>
-  <td>Telephone</td><td><input type="text" name="phone" size="40" value="[% phone | html %]"></td>
+  <td><label for="phone">Telephone</label></td><td><input id="phone" type="text" name="phone" size="40" value="[% phone | html %]"></td>
 </tr>
 <tr>
-  <td>Telephone (alternate)</td><td><input type="text" name="phone2" size="40" value="[% phone2 | html %]"></td>
+  <td><label for="phone2">Telephone (alternate)</label></td><td><input id="phone2" type="text" name="phone2" size="40" value="[% phone2 | html %]"></td>
 </tr>
 </table>
 <p>

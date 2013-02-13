@@ -30,6 +30,6 @@ p,div,span {font-family:Arial, Helvetica; }
 
 .tooltip { background-color: #E2E7FF; border:1px solid #000; }
 
-
+label { cursor: pointer; }
 
 

@@ -35,7 +35,7 @@
     </select>
   </td>
   <td>
-    <input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change
+    <label><input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change</label>
   </td>
 </tr>
 [% END %]

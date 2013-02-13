@@ -8,17 +8,17 @@
 
 <table>
   <tr>
-    <td>Group Name</td>
-    <td><input type='text' name='group_name' /></td>
+    <td><label for="gname">Group Name</label></td>
+    <td><input id="gname" type='text' name='group_name' /></td>
   </tr>
   <tr>
-    <td>Group Contact Accountname</td>
-    <td><input type='text' name='gc_accname' /></td>
+    <td><label for="accname">Group Contact Accountname</label></td>
+    <td><input id="accname" type='text' name='gc_accname' /></td>
   </tr>
   <tr>
-    <td>Group Type</td>
+    <td><label for="type">Group Type</label></td>
     <td>
-      <select name='group_type'>
+      <select id="type" name='group_type'>
         <option value='' selected='selected'>Please select...</option>
         <option value='informal'>Informal Group</option>
         <option value='corporation'>Corporation - Business entity</option>
@@ -30,9 +30,9 @@
     </td>
   </tr>
   <tr>
-    <td>Group Status</td>
+    <td><label for="status">Group Status</label></td>
     <td>
-      <select name='group_status'>
+      <select id="status" name='group_status'>
         <option value='' selected='selected'>Please select...</option>
         <option value='pending_web'>pending_web</option>
         <option value='pending_staff'>pending_staff</option>
@@ -46,8 +46,8 @@
 </table>
 
 <p>
-<input type='radio' name='mode' value='1' checked='checked' /> Show groups that match any of the criteria
-<input type='radio' name='mode' value='2' /> Show groups that match all the criteria
+<label><input type='radio' name='mode' value='1' checked='checked' /> Show groups that match any of the criteria</label>
+<label><input type='radio' name='mode' value='2' /> Show groups that match all the criteria</label>
 </p>
 
 <p>

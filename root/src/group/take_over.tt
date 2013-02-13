@@ -14,7 +14,7 @@
     <p>What would you like to do?</p>
     <ul>
     <li>
-    <input type="radio" name="action"i value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a Group Contact.<br/><br/>
+    <label><input type="radio" name="action"i value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a Group Contact.</label><br/><br/>
     Which Group Contact should it be transferred to?<br/>
     <select name="group_contact">
       [% FOREACH gc IN group_contacts %]
@@ -24,7 +24,7 @@
     </li>
 
     <li>
-    <input type="radio" name="action" value="2" [% IF action == 2 %] checked [% END %] /> Drop the channel.<br/ >
+    <label><input type="radio" name="action" value="2" [% IF action == 2 %] checked [% END %] /> Drop the channel.</label><br/ >
     </li>
     </ul>
 

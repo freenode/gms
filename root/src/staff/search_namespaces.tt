@@ -6,11 +6,11 @@
 
 <table>
   <tr>
-    <td>Namespace Type</td>
-    <td><select name="search_item"><option value="1">Channel Namespaces</option><option value="2">Cloak Namespaces</option></select></td>
+    <td><label for="type">Namespace Type</label></td>
+    <td><select name="search_item" id="type"><option value="1">Channel Namespaces</option><option value="2">Cloak Namespaces</option></select></td>
   <tr>
-    <td>Namespace</td>
-    <td><input type='text' name='namespace' /></td>
+    <td><label for="ns">Namespace</label></td>
+    <td><input id="ns" type='text' name='namespace' /></td>
   </tr>
 </table>
 
