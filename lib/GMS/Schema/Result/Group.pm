@@ -312,32 +312,35 @@ sub insert {
     # Can't put this in the creation args, as we don't know the active change id
     # until the change has been created, and we can't create the change without knowing
     # the group id.
-    $self->result_source->storage->with_deferred_fk_checks(sub {
-            $ret = $self->$next_method();
-            $self->active_change($self->group_changes->single);
-            $self->update;
-        });
 
-    $self->add_to_group_verifications ({
-            verification_type => "web_url",
-            verification_data => $self->url . "/".random_string("cccccccc").".txt",
-        });
-    $self->add_to_group_verifications ({
-            verification_type => "web_token",
-            verification_data => random_string("cccccccccccc"),
-        });
-    my $url = URI->new ($self->url);
-    my $domain = $url->host;
+    $self->result_source->schema->txn_do( sub {
+        $self->result_source->storage->with_deferred_fk_checks(sub {
+                $ret = $self->$next_method();
+                $self->active_change($self->group_changes->single);
+                $self->update;
+            });
 
-    my @parts = split (/\./, $domain);
-
-    if ($parts[-1] && $parts[-2]) {
-        $domain = $parts[-2] . "." . $parts[-1];
         $self->add_to_group_verifications ({
-            verification_type => "dns",
-            verification_data => "freenode-" . random_string ("ccccccc") . "." . $domain
-        });
-    }
+                verification_type => "web_url",
+                verification_data => $self->url . "/".random_string("cccccccc").".txt",
+            });
+        $self->add_to_group_verifications ({
+                verification_type => "web_token",
+                verification_data => random_string("cccccccccccc"),
+            });
+        my $url = URI->new ($self->url);
+        my $domain = $url->host;
+
+        my @parts = split (/\./, $domain);
+
+        if ($parts[-1] && $parts[-2]) {
+            $domain = $parts[-2] . "." . $parts[-1];
+            $self->add_to_group_verifications ({
+                verification_type => "dns",
+                verification_data => "freenode-" . random_string ("ccccccc") . "." . $domain
+            });
+        }
+    });
 
     return $ret;
 }
