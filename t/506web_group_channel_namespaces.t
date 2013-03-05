@@ -48,8 +48,6 @@ $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel na
 
 $ua->content_contains("At least one of the group's namespaces has a change request pending", "Pending change recognised");
 
-diag $ua->content;
-
 $ua->content_contains("'deleted'  selected", 'Deleted option is selected, pending change status is shown');
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
