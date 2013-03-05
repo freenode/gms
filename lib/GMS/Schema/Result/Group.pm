@@ -98,34 +98,34 @@ __PACKAGE__->add_unique_constraint("unique_group_name", ["group_name", "deleted"
 
 =head1 RELATIONS
 
-=head2 channel_namespaces
+=head2 channel_namespace_changes
 
 Type: has_many
 
-Related object: L<GMS::Schema::Result::ChannelNamespace>
+Related object: L<GMS::Schema::Result::ChannelNamespaceChange>
 
 =cut
 
 __PACKAGE__->has_many(
-  "channel_namespaces",
-  "GMS::Schema::Result::ChannelNamespace",
-  { "foreign.active_change.group_id" => "self.id" },
-  { "join" => "active_change" },
+  "channel_namespace_changes",
+  "GMS::Schema::Result::ChannelNamespaceChange",
+  { "foreign.group_id" => "self.id" },
+  {},
 );
 
-=head2 cloak_namespaces
+=head2 cloak_namespace_changes
 
 Type: has_many
 
-Related object: L<GMS::Schema::Result::CloakNamespace>
+Related object: L<GMS::Schema::Result::CloakNamespaceChange>
 
 =cut
 
 __PACKAGE__->has_many(
-  "cloak_namespaces",
-  "GMS::Schema::Result::CloakNamespace",
-  { "foreign.active_change.group_id" => "self.id" },
-  { "join" => "active_change" },
+  "cloak_namespace_changes",
+  "GMS::Schema::Result::CloakNamespaceChange",
+  { "foreign.group_id" => "self.id" },
+  {},
 );
 
 =head2 group_changes
@@ -217,23 +217,6 @@ __PACKAGE__->has_many(
     }
 );
 
-__PACKAGE__->has_many(
-    "active_channel_namespaces",
-    "GMS::Schema::Result::ChannelNamespace",
-    { "foreign.active_change.group_id" => "self.id" },
-    { 'join' => 'active_change',
-      'where' => { 'active_change.status' => 'active' }
-    }
-);
-
-__PACKAGE__->has_many(
-    "active_cloak_namespaces",
-    "GMS::Schema::Result::CloakNamespace",
-    { "foreign.active_change.group_id" => "self.id" },
-    { 'join' => 'active_change',
-      'where' => { 'active_change.status' => 'active' }
-    }
-);
 
 use TryCatch;
 use String::Random qw/random_string/;
@@ -594,6 +577,80 @@ sub address {
     my ($self) = @_;
 
     return $self->active_change->address;
+}
+
+=head2 channel_namespaces
+
+Returns the channel namespaces that belong to the group.
+
+=cut
+
+sub channel_namespaces {
+    my ($self) = @_;
+
+    return $self->search_related ('channel_namespace_changes')->search_related ('namespace_where_active');
+}
+
+=head2 cloak_namespaces
+
+Returns the cloak namespaces that belong to the group.
+
+=cut
+
+sub cloak_namespaces {
+    my ($self) = @_;
+
+    return $self->search_related ('cloak_namespace_changes')->search_related ('namespace_where_active');
+}
+
+=head2 active_channel_namespaces
+
+Returns the channel namespaces that belong to the group, and that
+are currently active
+
+=cut
+
+sub active_channel_namespaces {
+    my ($self) = @_;
+
+    return $self->channel_namespaces->search({ status => 'active' });
+}
+
+=head2 active_cloak_namespaces
+
+Returns the cloak namespaces that belong to the group, and that
+are currently active
+
+=cut
+
+sub active_cloak_namespaces {
+    my ($self) = @_;
+
+    return $self->cloak_namespaces->search({ status => 'active' });
+}
+
+=head2 add_to_channel_namespaces
+
+Creates a channel namespace owned by the group.
+
+=cut
+
+sub add_to_channel_namespaces {
+    my ($self, $args) = @_;
+
+    return $self->channel_namespaces->create ($args);
+}
+
+=head2 add_to_cloak_namespaces
+
+Creates a cloak namespace owned by the group.
+
+=cut
+
+sub add_to_cloak_namespaces {
+    my ($self, $args) = @_;
+
+    return $self->cloak_namespaces->create ($args);
 }
 
 =head2 verify

@@ -182,6 +182,19 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 namespace_where_active
+
+Type: has_one
+
+Related object: L<GMS::Schema::Result::ChannelNamespace>
+
+=cut
+
+__PACKAGE__->has_one(
+  "namespace_where_active" =>
+  "GMS::Schema::Result::ChannelNamespace" => "active_change"
+);
+
 =head2 group
 
 Type: belongs_to
