@@ -22,7 +22,7 @@ Catalyst Controller.
 
 =cut
 
-sub base :Chained('/') :PathPart('login') :CaptureArgs {
+sub base :Chained('/') :PathPart('login') :CaptureArgs(0) {
 }
 
 =head2 index
