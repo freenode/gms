@@ -7,7 +7,7 @@ $HASH1 = {
                     => 'AAAAAAAAQ',
            cloak    => 'example/test02',
            contact_id
-                    => 2,
+                    => 1,
            id       => 4,
            offered  => '2012-08-08 14:29:52.418153',
            rejected => undef,

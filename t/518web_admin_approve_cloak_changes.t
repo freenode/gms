@@ -2,6 +2,29 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
+use Test::MockModule;
+
+my $module = new Test::MockModule('RPC::Atheme::Session');
+
+$module->mock ( 'login', sub {
+        return 1;
+    });
+
+$module->mock ( 'command', sub {
+        shift @_ for 1 .. 2;
+
+        my ($command, undef, $param) = ( @_ );
+
+        if ( $command eq 'metadata' ) {
+            if ($param eq 'private:mark:reason') {
+                return "test mark reason";
+            } elsif ($param eq 'private:mark:setter') {
+                return "admin";
+            } elsif ($param eq 'private:mark:timestamp') {
+                return "1362561337";
+            }
+        }
+    });
 
 need_database 'pending_changes';
 
@@ -35,17 +58,31 @@ $ua->content_contains("You are now logged in as admin01", "Check we can log in")
 
 $ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
 
+$ua->content_contains("<b>marked</b> by <b>admin</b>", "If there is a mark on the account, it is displayed in the page.");
+$ua->content_contains("test mark reason", "If there is a mark on the account, it is displayed in the page.");
+
 $ua->submit_form(
     fields => {
-        action_1 => 'approve',
-        action_4 => 'reject'
+        action_1 => 'approve'
     }
 );
 
 $change1->discard_changes;
-$change4->discard_changes;
 
 ok $change1->approved, 'change has been approved';
-ok $change4->rejected, 'change has been rejected.';
+
+$ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
+
+$ua->content_contains("Cloak: example/test01, approved on", "Recent cloak changes appear");
+
+$ua->submit_form(
+    fields => {
+        action_4 => 'reject'
+    }
+);
+
+$change4->discard_changes;
+
+ok $change4->rejected, 'change has been rejected';
 
 done_testing;
