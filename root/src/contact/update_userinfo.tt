@@ -13,7 +13,7 @@
 [% END %]
 <tr> <td colspan="2">Address:</td> </tr>
 <tr> <td><label for="addr1">Address 1:</label></td><td><input required id="addr1" type="text" name="address_one" size="40" value="[% address_one | html %]"></td> </tr>
-<tr> <td><label for="addr2">Address 2:</label></td><td><input required id="addr2" type="text" name="address_two" size="40" value="[% address_two | html %]"></td> </tr>
+<tr> <td><label for="addr2">Address 2:</label></td><td><input id="addr2" type="text" name="address_two" size="40" value="[% address_two | html %]"></td> </tr>
 <tr> <td><label for="city">City</label></td><td><input id="city" required type="text" name="city" size="40" value="[% city | html %]"></td> </tr>
 <tr> <td><label for="state">State</label></td><td><input id="state" required type="text" name="state" size="40" value="[% state | html %]"></td> </tr>
 <tr> <td><label for="pcode">Postal Code</label></td><td><input id="pcode" required type="text" name="postcode" size="40" value="[% postcode | html %]"></td> </tr>

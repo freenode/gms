@@ -16,7 +16,7 @@
       <a href="[% c.uri_for("/admin/${gc.group.id}/view") %]">[% gc.group.group_name | html %]</a>
     </td>
     <td>
-      <a href="[% c.uri_for("/admin/account/${gc.contact.account.id}/view") %]">[% gc.contact.account.accountname | html %]</a>
+      <a href="[% c.uri_for("/staff/account/${gc.contact.account.id}/view") %]">[% gc.contact.account.accountname | html %]</a>
     </td>
     <td><input type="radio" name="action_[% gc.id %]" value="approve" /></td>
     <td><input type="radio" name="action_[% gc.id %]" value="reject" /></td>

@@ -4,8 +4,18 @@ use strict;
 use warnings;
 use base qw (GMS::Web::TokenVerification);
 
+use GMS::Domain::ChannelNamespaceChange;
+use GMS::Domain::ContactChange;
+use GMS::Domain::CloakChangeChange;
+use GMS::Domain::CloakChange;
+use GMS::Domain::CloakNamespaceChange;
+use GMS::Domain::GroupContactChange;
+use GMS::Domain::GroupChange;
+use GMS::Domain::Group;
+
 use TryCatch;
 use GMS::Exception;
+use RPC::Atheme::Error;
 
 =head1 NAME
 
@@ -70,12 +80,25 @@ for which the user is a contact.
 sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
-    my $group = $c->model('DB::Group')->find({ id => $group_id });
+    my $group_row = $c->model('DB::Group')->find({ id => $group_id });
 
-    if ($group) {
-        $c->stash->{group} = $group;
-    } else {
-        $c->detach('/default');
+    try {
+        my $session = $c->model('Atheme')->session;
+
+        if ($group_row) {
+            my $group = GMS::Domain::Group->new ( $session, $group_row );
+            $c->stash->{group} = $group;
+        } else {
+            $c->detach('/default');
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        if ($group_row) {
+            $c->stash->{group} = $group_row;
+        } else {
+            $c->detach('/default');
+        }
     }
 }
 
@@ -107,7 +130,19 @@ Chained method to select an account.
 sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
     my ($self, $c, $account_id) = @_;
 
-    my $account = $c->model('DB::Account')->find ({ id => $account_id });
+    my $account;
+
+    try {
+        $account = $c->model('Accounts')->find_by_uid ( $account_id );
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->message . ". Data displayed below may not be current.";
+        $account = $c->model('DB::Account')->find({ id => $account_id });
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        $account = $c->model('DB::Account')->find({ id => $account_id });
+    }
 
     if ($account) {
         $c->stash->{account} = $account;
@@ -125,8 +160,20 @@ Presents the group approval form.
 sub approve :Chained('base') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
-    my @to_approve = $c->model('DB::Group')->search_verified_groups;
-    my @to_verify  = $c->model('DB::Group')->search_submitted_groups;
+    my @approve_groups = $c->model('DB::Group')->search_verified_groups;
+    my @verify_groups  = $c->model('DB::Group')->search_submitted_groups;
+    my (@to_approve, @to_verify);
+    my $session = $c->model('Atheme')->session;
+
+    foreach my $group_row (@approve_groups) {
+        my $group = GMS::Domain::Group->new ( $session, $group_row );
+        push @to_approve, $group;
+    }
+
+    foreach my $group_row (@verify_groups) {
+        my $group = GMS::Domain::Group->new ( $session, $group_row );
+        push @to_verify, $group;
+    }
 
     $c->stash->{to_approve} = \@to_approve;
     $c->stash->{to_verify} = \@to_verify;
@@ -149,6 +196,7 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
 
     my @approve_groups = split / /, $params->{approve_groups};
     my @verify_groups  = split / /, $params->{verify_groups};
+
     try {
         $c->model('DB')->schema->txn_do(sub {
             foreach my $group_id (@approve_groups, @verify_groups) {
@@ -176,6 +224,7 @@ sub do_approve :Chained('base') :PathPart('approve/submit') :Args(0) {
                 }
             }
         });
+
         $c->response->redirect($c->uri_for('approve'));
     }
     catch (GMS::Exception $e) {
@@ -194,7 +243,29 @@ Presents the form to approve new contact additions.
 sub approve_new_gc :Chained('base') :PathPart('approve_new_gc') :Args(0) {
     my ($self, $c) = @_;
 
-    my @to_approve = $c->model('DB::GroupContact')->search_pending;
+    my @approve_rows = $c->model('DB::GroupContact')->search_pending;
+    my @to_approve;
+
+    try {
+        my $session = $c->model('Atheme')->session;
+
+        foreach my $row ( @approve_rows ) {
+            my $gc = GMS::Domain::GroupContact->new (
+                $session,
+                $row
+            );
+
+            push @to_approve, $gc;
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        @to_approve = @approve_rows;
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+    }
+    catch (GMS::Exception $e) {
+        @to_approve = @approve_rows;
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->message . ". Data displayed below may not be current.";
+    }
 
     $c->stash->{to_approve} = \@to_approve;
     $c->stash->{template} = 'admin/approve_new_gc.tt';
@@ -215,6 +286,7 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
     my $account = $c->user->account;
 
     my @approve_contacts = split / /, $params->{approve_contacts};
+
     try {
         $c->model('DB')->schema->txn_do(sub {
             foreach my $contact_id (@approve_contacts) {
@@ -258,19 +330,65 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     my ($self, $c) = @_;
 
     my $change_item = $c->request->params->{change_item};
-    my @to_approve;
     $c->stash->{change_item} = $change_item;
 
-    if ($change_item && $change_item == 1) { #group contact change
-        @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
-    } elsif ($change_item && $change_item == 2) { #group change
-        @to_approve = $c->model ("DB::GroupChange")->active_requests();
-    } elsif ($change_item && $change_item == 3) { #contact change
-        @to_approve = $c->model ("DB::ContactChange")->active_requests();
-    } elsif ($change_item && $change_item == 4) { #channel namespace change
-        @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
-    } elsif ($change_item && $change_item == 5) { #cloak namespace change
-        @to_approve = $c->model ("DB::CloakNameSpaceChange")->active_requests();
+    my @approve_changes;
+    my @to_approve;
+
+    try {
+        my $session = $c->model('Atheme')->session;
+
+        if ($change_item && $change_item == 1) { #group contact change
+            @approve_changes = $c->model ("DB::GroupContactChange")->active_requests();
+
+            foreach my $change_row (@approve_changes) {
+                my $change = GMS::Domain::GroupContactChange->new ($session, $change_row);
+                push @to_approve, $change;
+            }
+        } elsif ($change_item && $change_item == 2) { #group change
+            @approve_changes = $c->model ("DB::GroupChange")->active_requests();
+
+            foreach my $change_row (@approve_changes) {
+                my $change = GMS::Domain::GroupChange->new ($session, $change_row);
+                push @to_approve, $change;
+            }
+        } elsif ($change_item && $change_item == 3) { #contact change
+            @approve_changes = $c->model ("DB::ContactChange")->active_requests();
+
+            foreach my $change_row (@approve_changes) {
+                $c->log->debug ('omg');
+                my $change = GMS::Domain::ContactChange->new ($session, $change_row);
+                push @to_approve, $change;
+            }
+        } elsif ($change_item && $change_item == 4) { #channel namespace change
+            @approve_changes = $c->model ("DB::ChannelNamespaceChange")->active_requests();
+
+            foreach my $change_row (@approve_changes) {
+                my $change = GMS::Domain::ChannelNamespaceChange->new ($session, $change_row);
+                push @to_approve, $change;
+            }
+        } elsif ($change_item && $change_item == 5) { #cloak namespace change
+            @approve_changes = $c->model ("DB::CloakNamespaceChange")->active_requests();
+
+            foreach my $change_row (@approve_changes) {
+                my $change = GMS::Domain::CloakNamespaceChange->new ($session, $change_row);
+                push @to_approve, $change;
+            }
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        if ($change_item && $change_item == 1) { #group contact change
+            @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
+        } elsif ($change_item && $change_item == 2) { #group change
+            @to_approve = $c->model ("DB::GroupChange")->active_requests();
+        } elsif ($change_item && $change_item == 3) { #contact change
+            @to_approve = $c->model ("DB::ContactChange")->active_requests();
+        } elsif ($change_item && $change_item == 4) { #channel namespace change
+            @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
+        } elsif ($change_item && $change_item == 5) { #cloak namespace change
+            @to_approve = $c->model ("DB::CloakNamespaceChange")->active_requests();
+        }
     }
 
     $c->stash->{pending_groupcontact} = $c->model("DB::GroupContactChange")->active_requests->count;
@@ -292,6 +410,9 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     } elsif ($change_item && $change_item == 5) {
         $c->stash->{template} = 'admin/approve_clnc.tt';
     } elsif (! $change_item) {
+        $c->stash->{template} = 'admin/approve_change.tt';
+    } else {
+        $c->stash->{error_msg} = 'Invalid change item';
         $c->stash->{template} = 'admin/approve_change.tt';
     }
 }
@@ -332,6 +453,7 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     my $account = $c->user->account;
 
     my @approve_changes = split / /, $params->{approve_changes};
+
     try {
         $c->model('DB')->schema->txn_do(sub {
             foreach my $change_id (@approve_changes) {
@@ -355,7 +477,10 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                 }
             }
         });
-        $c->response->redirect($c->uri_for('approve_change', '', { 'change_item' => $change_item }));
+
+        $c->response->redirect(
+            $c->uri_for('approve_change', '', { 'change_item' => $change_item })
+        );
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;
@@ -373,10 +498,37 @@ sub approve_cloak :Chained('base') :PathPart('approve_cloak') :Args(0) {
     my ($self, $c) = @_;
 
     my $change_rs = $c->model('DB::CloakChange');
+    my $schema = $c->model('DB')->schema;
 
-    my @to_approve = $change_rs->search_pending;
+    my @approve_rows = $change_rs->search_pending;
+    my @failed_rows = $change_rs->search_failed;
+    my (@to_approve, @failed);
+
+    try {
+        my $session = $c->model('Atheme')->session;
+        foreach my $row (@approve_rows) {
+            my $change = GMS::Domain::CloakChange->new ($session, $row);
+            push @to_approve, $change;
+        }
+
+        foreach my $row (@failed_rows) {
+            my $change = GMS::Domain::CloakChange->new ($session, $row);
+             push @failed, $change;
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        @to_approve = @approve_rows;
+        @failed = @failed_rows;
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+    }
+    catch (GMS::Exception $e) {
+        @to_approve = @approve_rows;
+        @failed = @failed_rows;
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->message . ". Data displayed below may not be current.";
+    }
 
     $c->stash->{to_approve} = \@to_approve;
+    $c->stash->{failed_changes} = \@failed;
 
     $c->stash->{template} = 'admin/approve_cloak.tt';
 }
@@ -396,11 +548,13 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
     my $account = $c->user->account;
 
     my $change_rs = $c->model('DB::CloakChange');
+    my $session = $c->model('Atheme')->session;
     my @approve_changes = split / /, $params->{approve_changes};
+    my @failed_changes = split / /, $params->{failed_changes};
 
     try {
         $c->model('DB')->schema->txn_do(sub {
-            foreach my $change_id (@approve_changes) {
+            foreach my $change_id (@approve_changes, @failed_changes) {
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"};
                 my $freetext = $params->{"freetext_$change_id"};
@@ -408,11 +562,15 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                 if ($action eq 'approve') {
                     $c->log->info("Approving CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->approve ($c, $freetext);
+                    $change->approve ($session, $c->user->account, $freetext);
+                } elsif ($action eq 'apply') {
+                    $c->log->info ("Marking cloakChange id $change_id as applied" .
+                        " by " . $c->user->username . "\n");
+                    $change->apply ($c->user->account, $freetext);
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
-                    $change->reject ($freetext);
+                    $change->reject ($c->user->account, $freetext);
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -457,6 +615,11 @@ sub approve_namespaces :Chained('base') :PathPart('approve_namespaces') :Args(0)
         $c->stash->{template} = 'admin/approve_channel_namespaces.tt';
     } elsif ($approve_item && $approve_item == 2) {
         $c->stash->{template} = 'admin/approve_cloak_namespaces.tt';
+    } elsif (! $approve_item) {
+        $c->stash->{template} = 'admin/approve_namespaces.tt';
+    } else {
+        $c->stash->{error_msg} = 'Invalid option.';
+        $c->stash->{template} = 'admin/approve_namespaces.tt';
     }
 }
 
@@ -510,7 +673,10 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                 }
             }
         });
-        $c->response->redirect($c->uri_for('approve_namespaces', '', { 'approve_item' => $approve_item }));
+
+        $c->response->redirect(
+            $c->uri_for('approve_namespaces', '', { 'approve_item' => $approve_item })
+        );
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = $e->message;
@@ -648,7 +814,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     my $address;
 
     try {
-        if ($p->{has_address} eq 'y' && $p->{update_address} eq 'y') {
+        if ($p->{has_address} && $p->{update_address} && $p->{has_address} eq 'y' && $p->{update_address} eq 'y') {
             $address = $c->model('DB::Address')->create({
                     address_one => $p->{address_one},
                     address_two => $p->{address_two},
@@ -712,7 +878,9 @@ GroupContactChange with 'admin' as the change type.
 sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     my ($self, $c) = @_;
 
-    my $group = $c->stash->{group};
+    my $group_obj = $c->stash->{group};
+    my $group = $group_obj->group_row;
+
     my $params = $c->request->params;
     my @group_contacts = split / /, $params->{group_contacts};
 
@@ -986,13 +1154,13 @@ and displays the results.
 
 sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(0) {
     my ($self, $c) = @_;
-    my ($change_rs, $rs, $page);
+    my ($change_rs, $rs, $page, @results);
 
     my $p = $c->request->params;
     my $change_item = $p->{change_item};
 
     my $current_page = $p->{current_page} || 1;
-    my $next = $p->{next};
+    my $next = $p->{next} || '';
 
     if ($next eq 'Next page') {
         $page = $current_page + 1;
@@ -1010,29 +1178,74 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         $change_rs = $c->model('DB::GroupContactChange');
 
         my $accname = $p->{gc_accname};
-        my $groupname = $p->{gc_groupname};
+        my $groupname = $p->{gc_groupname} || '%';
+        my $account_search;
 
-        $accname =~ s#_#\\_#g; #escape _ so it's not used as a wildcard.
-        $groupname =~ s#_#\\_#g;
+        if ($accname) {
+            try {
+                my $accounts = $c->model('Accounts');
+                my $account = $accounts->find_by_name ( $accname );
+                my $uid = $account->id;
+
+                $account_search = $uid;
+            }
+            catch (RPC::Atheme::Error $e) {
+                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+
+                my $account_rs = $c->model('DB::Account');
+                my $account = $account_rs->find ({ accountname => $accname });
+
+                if (!$account) {
+                    $c->stash->{error_msg} = "Could not find an account with that account name.";
+                    $c->detach ('search_changes');
+                }
+
+                my $uid = $account->id;
+                $account_search = $uid;
+            }
+            catch (GMS::Exception $e) {
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
+            }
+        } else {
+            $account_search = { 'ilike', '%' };
+        }
+
+        $groupname =~ s#_#\\_#g; #escape _ so it's not used as a wildcard.
 
         $rs = $change_rs -> search(
             {
-                'account.accountname' => { 'ilike', $accname },
+                'contact.account_id' => $account_search,
                 'group.group_name' => { 'ilike', $groupname }
             },
             {
-                join => { 'group_contact' => [ { 'contact' => 'account' }, 'group' ] },
+                join => { 'group_contact' => [ 'contact', 'group' ] },
                 order_by => 'id',
                 page => $page,
                 rows => 15
             },
         );
 
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::GroupContactChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
+
         $c->stash->{template} = 'admin/search_gcc_results.tt';
     } elsif ($change_item == 2) { #GroupChanges
         $change_rs = $c->model('DB::GroupChange');
 
-        my $groupname = $p->{group_name};
+        my $groupname = $p->{group_name} || '%';
         $groupname =~ s#_#\\_#g;
 
         $rs = $change_rs -> search(
@@ -1045,29 +1258,89 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
             },
         );
 
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::GroupChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
+
         $c->stash->{template} = 'admin/search_gc_results.tt';
     } elsif ($change_item == 3) { #ContactChanges
         $change_rs = $c->model('DB::ContactChange');
 
         my $accname = $p->{accname};
-        $accname =~ s#_#\\_#g;
+        my $account_search;
+
+        if ($accname) {
+            try {
+                my $accounts = $c->model('Accounts');
+                my $account = $accounts->find_by_name ( $accname );
+                my $uid = $account->id;
+
+                $account_search = $uid;
+            }
+            catch (RPC::Atheme::Error $e) {
+                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+
+                my $account_rs = $c->model('DB::Account');
+                my $account = $account_rs->find ({ accountname => $accname });
+
+                if (!$account) {
+                    $c->stash->{error_msg} = "Could not find an account with that account name.";
+                    $c->detach ('search_changes');
+                }
+
+                my $uid = $account->id;
+                $account_search = $uid;
+            }
+            catch (GMS::Exception $e) {
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
+            }
+        } else {
+            $account_search = { 'ilike', '%' };
+        }
 
         $rs = $change_rs -> search(
-            { 'account.accountname' => { 'ilike', $accname } },
+            { 'contact.account_id' => $account_search },
             {
-                join => { contact => 'account' },
+                join => 'contact',
                 order_by => 'id',
                 page => $page,
                 rows => 15
             }
         );
+
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::ContactChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
 
         $c->stash->{template} = 'admin/search_cc_results.tt';
     } elsif ($change_item == 4) { #ChannelNamespaceChanges
         $change_rs = $c->model('DB::ChannelNamespaceChange');
 
-        my $namespace = $p->{namespace};
-        my $groupname = $p->{groupname};
+        my $namespace = $p->{namespace} || '%';
+        my $groupname = $p->{groupname} || '%';
 
         $namespace =~ s#_#\\_#g;
         $groupname =~ s#_#\\_#g;
@@ -1084,13 +1357,28 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
                 rows => 15
             },
         );
+
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::ChannelNamespaceChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
 
         $c->stash->{template} = 'admin/search_cnc_results.tt';
     } elsif ($change_item == 5) { #CloakNamespaceChanges
         $change_rs = $c->model('DB::CloakNamespaceChange');
 
-        my $namespace = $p->{cloak_namespace};
-        my $groupname = $p->{cloak_groupname};
+        my $namespace = $p->{cloak_namespace} || '%';
+        my $groupname = $p->{cloak_groupname} || '%';
 
         $namespace =~ s#_#\\_#g;
         $groupname =~ s#_#\\_#g;
@@ -1108,32 +1396,95 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
             },
         );
 
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::CloakNamespaceChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
+
         $c->stash->{template} = 'admin/search_clnc_results.tt';
     } elsif ($change_item == 6) { #CloakChanges
-        $change_rs = $c->model('DB::CloakChange');
+        $change_rs = $c->model('DB::CloakChangeChange');
 
         my $cloak = $p->{cloak};
         my $accountname = $p->{cloak_accountname};
+        my $account_search;
 
-        $accountname =~ s#_#\\_#g;
+        if ($accountname) {
+            try {
+                my $accounts = $c->model('Accounts');
+                my $account = $accounts->find_by_name ( $accountname );
+                my $uid = $account->id;
+
+                $account_search = $uid;
+            }
+            catch (RPC::Atheme::Error $e) {
+                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+
+                my $account_rs = $c->model('DB::Account');
+                my $account = $account_rs->find ({ accountname => $accountname });
+
+                if (!$account) {
+                    $c->stash->{error_msg} = "Could not find an account with that account name.";
+                    $c->detach ('search_changes');
+                }
+
+                my $uid = $account->id;
+                $account_search = $uid;
+            }
+            catch (GMS::Exception $e) {
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
+            }
+        } else {
+            $account_search = { 'ilike', '%' };
+        }
 
         $rs = $change_rs -> search(
             {
-                'account.accountname' => { 'ilike', $accountname }
+                'target' => $account_search
             },
             {
-                join => { contact => 'account' },
+                join => { cloak_change => 'target' },
                 order_by => 'id',
                 page => $page,
                 rows => 15
             }
         );
 
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::CloakChangeChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
+
         $c->stash->{template} = 'admin/search_clc_results.tt';
+    } elsif (! $change_item ) {
+        $c->detach ('search_changes');
+    } else {
+        $c->stash->{error_msg} = 'Invalid option';
+        $c->detach ('search_changes');
     }
 
     my $pager = $rs->pager;
-    my @results = $rs->all;
 
     %{$c->stash} = ( %{$c->stash}, %$p );
     $c->stash->{current_page} = $page;

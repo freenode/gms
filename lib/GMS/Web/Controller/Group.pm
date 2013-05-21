@@ -180,8 +180,20 @@ as having been invited.
 
 sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
     my ($self, $c) = @_;
+    my $account;
 
-    my $account = $c->model("DB")->resultset("Account")->find ({ "accountname" => $c->request->params->{contact} });
+    try {
+        $account = $c->model("Accounts")->find_by_name ( $c->request->params->{contact} );
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
+        $c->detach ('invite');
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e->message;
+        $c->detach ('invite');
+    }
+
     if (! $account || ! $account->contact) {
         $c->stash->{error_msg} = "This user does not exist or has no contact information defined.";
         $c->detach ('invite');
@@ -404,8 +416,8 @@ sub take_over :Chained('single_group') :PathPart('take_over') :Args(0) {
 
 =head2 do_take_over
 
-Processes the form to take over channels and transfers channel
-ownership to the new founder.
+Processes the form to take over channels and requests
+the change to staff.
 
 =cut
 
@@ -415,38 +427,76 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     my $p = $c->request->params;
 
     my $channel = $p->{channel};
-    my $gc = $p->{group_contact};
     my $namespace = $p->{channel_namespace};
     my $group = $c->stash->{group};
     my $action = $p->{action};
 
-    my $group_contact = $group->group_contacts->find({ contact_id => $gc });
-    my $gc_name = $group_contact->contact->account->accountname;
+    my $change_rs = $c->model("DB::ChannelRequest");
+    my $account_rs = $c->model("DB::Account");
 
     try {
+        my $session = $c->model('Atheme')->session;
+
         if ($action == 1) {
-            $group->take_over ($c, $channel, $namespace, $gc_name);
+            my $target = $p->{target};
+            my $account;
+
+            try {
+                $account = $c->model('Accounts')->find_by_name ( $target );
+            }
+            catch (GMS::Exception $e) {
+                $c->stash->{error_msg} = $e->message;
+                %{$c->stash} = ( %{$c->stash}, %$p );
+                $c->detach ('take_over');
+            }
+            catch (RPC::Atheme::Error $e) {
+                $c->stash->{error_msg} = $e->description;
+                %{$c->stash} = ( %{$c->stash}, %$p );
+                $c->detach ('take_over');
+            }
+
+            $change_rs->create ({
+                    requestor => $c->user->account->contact->id,
+                    channel => $channel,
+                    namespace => $namespace,
+                    group => $group,
+                    request_type => 'transfer',
+                    target => $account->id,
+                    changed_by => $c->user->account->id,
+                    session => $session,
+                });
         } elsif ($action == 2) {
-            $group->drop ($c, $channel, $namespace);
+            $change_rs->create ({
+                    requestor => $c->user->account->contact->id,
+                    channel => $channel,
+                    namespace => $namespace,
+                    group => $group,
+                    request_type => 'drop',
+                    changed_by => $c->user->account,
+                    session => $session
+                });
         }
+    }
+    catch (GMS::Exception::InvalidChannelRequest $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('take_over');
+    }
+    catch (GMS::Exception::InvalidChange $e) {
+        $c->stash->{errors} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('take_over');
     }
     catch (RPC::Atheme::Error $e) {
         $c->stash->{error_msg} = $e->description;
         %{$c->stash} = ( %{$c->stash}, %$p );
-
-        $c->detach ('take_over');
-    }
-    catch (GMS::Exception $e) {
-        $c->stash->{error_msg} = $e;
-        %{$c->stash} = ( %{$c->stash}, %$p );
-
         $c->detach ('take_over');
     }
 
     if ($action == 1) {
-        $c->stash->{msg} = "Successfully transferred the channel to $gc_name.";
+        $c->stash->{msg} = "Successfully requested the channel take over. Please wait for staff to approve your request.";
     } elsif ($action == 2) {
-        $c->stash->{msg} = "Successfully dropped the channel.";
+        $c->stash->{msg} = "Successfully requested the channel drop. Please wait for staff to approve your request.";
     }
 
     $c->stash->{template} = 'group/action_done.tt';
@@ -497,37 +547,33 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
 
     $cloak = "$namespace/$cloak";
 
-    my $account_rs = $c->model("DB::Account");
     my $change_rs = $c->model("DB::CloakChange");
+    my $account;
 
-    my $account = $account_rs->find({ accountname => $accountname });
-
-    if (!$account || !$account->contact) {
-        $c->stash->{error_msg} = "This user does not exist or has no contact information defiend.";
+    try {
+        $account = $c->model('Accounts')->find_by_name ($accountname);
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e->message;
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->detach ('cloak');
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach ('cloak');
     }
 
-    if ($cloak =~ /[^a-zA-Z0-9\-\/]/) {
-        $c->stash->{error_msg} = "The cloak contains invalid characters.";
-
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach ('cloak');
+    try {
+        $change_rs->create ({ target => $account->id, cloak => "$cloak", changed_by => $c->user->account });
     }
-
-    if (length $cloak > 63) {
-        $c->stash->{error_msg} = "The cloak is too long.";
-
+    catch (GMS::Exception::InvalidCloakChange $e) {
+        $c->stash->{errors} = $e->message;
         %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach ('cloak');
+        $c->detach('cloak');
     }
-
-    my $contact_id = $account->contact->id;
-
-    $change_rs->create ({ contact_id => $contact_id, cloak => "$cloak", changed_by => $c->user->account, offered => \"NOW()" });
 
     $c->stash->{msg} = "Successfully requested $cloak cloak for $accountname";
-
     $c->stash->{template} = 'group/action_done.tt';
 }
 

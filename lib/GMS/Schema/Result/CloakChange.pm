@@ -5,6 +5,8 @@ package GMS::Schema::Result::CloakChange;
 
 use strict;
 use warnings;
+use GMS::Atheme::Client;
+use RPC::Atheme::Error;
 
 use base 'DBIx::Class::Core';
 
@@ -229,6 +231,18 @@ sub change {
     return $ret;
 }
 
+=head2 accept
+
+Marks the cloak change as accepted from the user.
+
+=cut
+
+sub accept {
+    my ($self, $account) = @_;
+
+    $self->change ($account, { status => "accepted" });
+}
+
 =head2 approve
 
 Marks the cloak change as approved by staff, and cloaks the user.
@@ -236,29 +250,10 @@ Marks the cloak change as approved by staff, and cloaks the user.
 =cut
 
 sub approve {
-    my ($self, $c, $freetext) = @_;
+    my ($self, $session, $account, $freetext) = @_;
 
-    $self->approved (\"NOW()");
-    $self->change_freetext ($freetext);
-    $self->update;
-
-    my $cloak = $self->cloak;
-    my $contact_id = $self->contact_id;
-
-    my $controlsession = $c->model('Atheme')->session;
-
-    my $schema = $self->result_source->schema;
-    my $contact_rs = $schema->resultset ('Contact');
-
-    my $contact = $contact_rs->find({ 'id' => $contact_id });
-    my $accountname = $contact->account->accountname;
-
-    try {
-        return $controlsession->command('GMSServ', 'cloak', $accountname, $cloak);
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    $self->change ($account, { status => "approved", change_freetext => $freetext });
+    $self->sync_to_atheme($session);
 }
 
 =head2 reject
@@ -269,11 +264,69 @@ by either the user or staff.
 =cut
 
 sub reject {
-    my ($self, $freetext) = @_;
+    my ($self, $account, $freetext) = @_;
 
-    $self->rejected(\"NOW()");
-    $self->change_freetext($freetext);
-    $self->update;
+    $self->change ($account, { status => "rejected", change_freetext => $freetext });
+}
+
+=head2 apply
+
+Marks the cloak change as applied
+
+=cut
+
+sub apply {
+    my ($self, $account, $freetext) = @_;
+
+    $self->change ( $account, { status => "applied", change_freetext => $freetext } );
+}
+
+=sub sync_to_atheme
+
+Attempts to apply any changes that have been approved by staff but not yet
+applied in Atheme
+
+=cut
+
+sub sync_to_atheme {
+    my ($self, $session) = @_;
+
+    my $change_rs = $self->result_source->schema->resultset('CloakChange');
+    my @unapplied = $change_rs->search_unapplied;
+
+    my $client;
+
+    try {
+        $client = GMS::Atheme::Client->new ($session);
+    }
+    catch (RPC::Atheme::Error $e) {
+        foreach my $cloakChange (@unapplied) {
+            $cloakChange->change (
+                $cloakChange->active_change->changed_by,
+                { status => "error", change_freetext => $e }
+            );
+        }
+
+        return;
+    }
+
+    foreach my $cloakChange (@unapplied) {
+        my $cloak = $cloakChange->cloak;
+        my $uid = $cloakChange->target->id;
+
+        try {
+            $client->cloak ( $uid, $cloak );
+            $cloakChange->apply (
+                $cloakChange->active_change->changed_by
+            );
+        }
+        catch (RPC::Atheme::Error $e) {
+            $cloakChange->change (
+                $cloakChange->active_change->changed_by,
+                { status => "error", change_freetext => $e }
+            );
+        }
+    }
 }
 
 1;

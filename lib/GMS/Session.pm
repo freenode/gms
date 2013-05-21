@@ -8,6 +8,7 @@ use GMS::Schema;
 
 use RPC::Atheme;
 use RPC::Atheme::Session;
+use GMS::Domain::Accounts;
 
 use TryCatch;
 
@@ -48,42 +49,29 @@ sub new {
     $self->{_source} = "GMS:$user";
     $self->{_source} .= "(" . $config{source} . ")" if $config{source};
 
+    use Data::Dumper;
+
     $self->{_rpcsession} = RPC::Atheme::Session->new(
         $config->{hostname},
-        $config->{port}
+        $config->{port},
+        $config->{service}
     );
 
     $self->{_rpcsession}->login($user, $pass, $self->{_source});
 
     $self->{_db} = GMS::Schema->do_connect;
-    my $account_rs = $self->{_db}->resultset('Account');
+
+    my $accounts = GMS::Domain::Accounts->new (
+        $controlsession,
+        $self->{_db}
+    );
 
     my $account = undef;
 
-    my $accountid;
-
     try {
-        $accountid = $self->{_control_session}->command($config->{service}, 'uid', $user);
-        $account = $account_rs->find({ id => $accountid });
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e if $e->code != RPC::Atheme::Error::nosuchkey;
-        $account = undef;
-    };
-
-    if (!$account) {
-        $account = $self->{_db}->txn_do( sub {
-                my $result = $account_rs->create({
-                        accountname => $user,
-                        id => $accountid
-                    });
-                $result;
-            });
-    };
-
-    if ($account->accountname ne $user) {
-        $account->accountname($user);
-        $account->update;
+        $account = $accounts->find_by_name ( $user );
+    } catch (GMS::Exception $e) {
+        die $e;
     }
 
     $self->{_account} = $account;

@@ -32,7 +32,7 @@
 <ul>
 [% FOREACH gc = group.group_contacts %]
   [% IF gc.status != 'active' -%]
-    <li> [% gc.contact.name | html %] ([% gc.contact.account.accountname | html %])</li>
+    <li> [% gc.contact.name | html %] ([% gc.contact.account.accountname | html %]) [% gc.status %]</li>
   [% END %]
 [% END %]
 </ul>

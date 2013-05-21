@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use base qw (GMS::Web::TokenVerification);
 
+use GMS::Domain::Group;
+
 use TryCatch;
 use GMS::Exception;
 
@@ -61,9 +63,12 @@ for which the user is a contact.
 sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
-    my $group = $c->model('DB::Group')->find({ id => $group_id });
+    my $group_row = $c->model('DB::Group')->find({ id => $group_id });
+    my $session = $c->model('Atheme')->session;
 
-    if ($group) {
+    if ($group_row) {
+        my $group = GMS::Domain::Group->new ( $session, $group_row );
+
         $c->stash->{group} = $group;
     } else {
         $c->detach('/default');
@@ -79,7 +84,19 @@ Chained method to select an account.
 sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
     my ($self, $c, $account_id) = @_;
 
-    my $account = $c->model('DB::Account')->find({ id => $account_id });
+    my $account;
+
+    try {
+        $account = $c->model('Accounts')->find_by_uid ( $account_id );
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->message . ". Data displayed below may not be current.";
+        $account = $c->model('DB::Account')->find({ id => $account_id });
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        $account = $c->model('DB::Account')->find({ id => $account_id });
+    }
 
     if ($account) {
         $c->stash->{account} = $account;
@@ -139,9 +156,27 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
 
     if ($p->{gc_accname}) {
         my $accname = $p->{gc_accname};
-        $accname =~ s#_#\\_#g;
+        my $account_search;
 
-        push @search, 'account.accountname' => { 'ilike', $accname };
+        try {
+            my $accounts = $c->model('Accounts');
+            my $account = $accounts->find_by_name ( $accname );
+            my $uid = $account->id;
+
+            $account_search = { 'account.id' => $uid };
+        }
+        catch (RPC::Atheme::Error $e) {
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+            $accname =~ s#_#\\_#g;
+            $account_search = { 'account.accountname' => { 'ilike', $accname } };
+        }
+        catch (GMS::Exception $e) {
+            # Prevent returning results if we're doing AND search,
+            # since the account did not exist.
+            $account_search = { "account.accountname" => 0 };
+        }
+
+        push @search, $account_search;
         push @join, { 'group_contacts' => [ { 'contact' => 'account' } ] };
     }
 
@@ -224,10 +259,27 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
     }
 
     if ($p->{accountname}) {
-        my $accountname = $p->{accountname};
-        $accountname =~ s#_#\\_#g;
+        my $accname = $p->{accountname};
+        my $account_search;
 
-        push @search, { accountname => { ilike => $accountname } };
+        try {
+            my $accounts = $c->model('Accounts');
+            my $account = $accounts->find_by_name ( $accname );
+            my $uid = $account->id;
+
+            $account_search = { 'me.id' => $uid };
+        }
+        catch (RPC::Atheme::Error $e) {
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+            $accname =~ s#_#\\_#g;
+            $account_search = { 'accountname' => { 'ilike', $accname } };
+        }
+        catch (GMS::Exception $e) {
+            $c->stash->{error_msg} = $e->message;
+            $account_search = { 'accountname' => 0 };
+        }
+
+        push @search, $account_search if ($account_search);
     }
 
     if ($p->{fullname}) {
@@ -239,7 +291,7 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
     }
 
     my $rs = $account_rs -> search(
-        { -or => \@search },
+        { -and => \@search },
         {
             join => \@join,
             page => $page,
@@ -248,15 +300,29 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
     );
 
     my $pager = $rs->pager;
-    my @results = $rs->all;
+    my @rows = $rs->all;
 
     %{$c->stash} = ( %{$c->stash}, %$p );
     $c->stash->{current_page} = $page;
     $c->stash->{last_page} = $pager->last_page;
 
-    if ( scalar (@results) == 0 ) {
+    if ( scalar (@rows) == 0 ) {
         $c->stash->{error_msg} = "Unable to find any users that match your search criteria. Please try again.";
         $c->detach ('search_users');
+    }
+
+    my @rows = $rs->all;
+    my @results;
+
+    try {
+        foreach my $row (@rows) {
+            my $account = $c->model('Accounts')->find_by_uid ( $row->id );
+            push @results, $account;
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        @results = @rows;
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
     }
 
     $c->stash->{results} = \@results;

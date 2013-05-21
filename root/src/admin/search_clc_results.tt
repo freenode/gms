@@ -3,35 +3,34 @@
 <table>
 <tr>
   <th>ID</th>
+  <th>Target</th>
   <th>Cloak</th>
-  <th>Account Name</th>
+  <th>Status</th>
   <th>Expand</th>
 </tr>
 
 [% FOREACH change = results -%]
-[% contact = change.contact %]
 <tr>
   <td>
     [% change.id %]
   </td>
   <td>
-    [% change.cloak %]
-  <td>
-    <a href='[% c.uri_for ("/staff/account/${contact.account.id}/view") %]'>[% contact.name | html %] ([% contact.account.accountname | html %])</a>
+    [% change.cloak_change.target.accountname | html %]
   </td>
+  <td>
+    [% change.cloak_change.cloak %]
+  </td>
+  <td>
+    [% change.status %]
   <td>
     <a href='javascript:;' onclick='show([% change.id %])' id='link_[% change.id %]'>Expand</a>
   </td>
 </tr>
 <tr id='hidden_[% change.id %]' class='hidden'>
-  <td colspan='6' class='wide'>
+  <td colspan='5'>
     <ul>
-      <li>Time offered: [% IF change.offered; change.offered; ELSE; %] not offered [% END %]</li>
-      <li>Time accepted: [% IF change.accepted; change.accepted; ELSE; %] not accepted [% END %]</li>
-      <li>Time approved: [% IF change.approved; change.approved; ELSE %] not approved [% END %]</li>
-      <li>Time rejected: [% IF change.rejected; change.rejected; ELSE %] not rejected [% END %]</li>
       <li>Changed By: [% change.changed_by.accountname | html %]</li>
-      <li>Change Time: [% change.time %]</li>
+      <li>Change time: [% change.time %]</li>
       <li>
         Change FreeText:<br />
         [% change.change_freetext | html %]

@@ -14,13 +14,9 @@
     <p>What would you like to do?</p>
     <ul>
     <li>
-    <label><input type="radio" name="action"i value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a Group Contact.</label><br/><br/>
-    Which Group Contact should it be transferred to?<br/>
-    <select name="group_contact">
-      [% FOREACH gc IN group_contacts %]
-        <option value="[% gc.contact.id %]" [% IF group_contact == gc.contact.id %] selected [% END %]>[% gc.contact.account.accountname | html %]</option>
-      [% END %]
-    </select><br/><br/>
+    <label><input type="radio" name="action" value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a Group Contact.</label><br/><br/>
+    Which user should it be transferred to?<br/>
+    <input name="target" value="[% target | html %]" type="text" />
     </li>
 
     <li>

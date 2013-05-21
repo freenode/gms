@@ -220,7 +220,6 @@ __PACKAGE__->has_many(
 
 use TryCatch;
 use String::Random qw/random_string/;
-use Text::Glob qw/match_glob/;
 
 use GMS::Exception;
 
@@ -776,63 +775,6 @@ sub add_contact {
             account => $inviter,
             %$args
         });
-}
-
-=head2 take_over
-
-Takes three arguements, a channel name, a channel namespace and the account name
-of a group contact. If the channel name matches the given namespace, which must
-belong to the group, try to transfer the channel to the given group contact and
-throw an error on failure. If not, an error is thrown.
-
-=cut
-
-sub take_over {
-    my ($self, $c, $channel, $namespace, $gc_name) = @_;
-
-    my $controlsession = $c->model('Atheme')->session;
-
-    if (! $self->active_channel_namespaces->find({ 'namespace' => $namespace }) ) {
-        die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
-    }
-
-    if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
-        try {
-            return $controlsession->command('GMSServ', 'transfer', $channel, $gc_name, $c->user->account->accountname);
-        }
-        catch (RPC::Atheme::Error $e) {
-            die $e;
-        }
-    } else {
-        die GMS::Exception->new ("This channel does not belong in that namespace.");
-    }
-}
-
-=head2 drop
-
-Similar to take_over, but drops the channel instead of transferring it.
-
-=cut
-
-sub drop {
-    my ($self, $c, $channel, $namespace) = @_;
-
-    my $controlsession = $c->model('Atheme')->session;
-
-    if (! $self->active_channel_namespaces->find({ 'namespace' => $namespace }) ) {
-        die GMS::Exception->new ("This namespace does not belong in your Group's namespaces.");
-    }
-
-    if ( $channel eq "#$namespace" || match_glob ("#$namespace-*", $channel) ) {
-        try {
-            return $controlsession->command('GMSServ', 'drop', $channel, $c->user->account->accountname);
-        }
-        catch (RPC::Atheme::Error $e) {
-            die $e;
-        }
-    } else {
-        die GMS::Exception->new ("This channel does not belong in that namespace.");
-    }
 }
 
 =head1 INTERNAL METHODS

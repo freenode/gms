@@ -38,7 +38,7 @@ commands. Throws L<RPC::Atheme::Error> on failure.
 =cut
 
 sub new {
-    my ($class, $host, $port, %attrs) = @_;
+    my ($class, $host, $port, $service, %attrs) = @_;
 
     $class = ref $class || $class;
 
@@ -46,6 +46,8 @@ sub new {
     return "${class}::new: Missing port number" unless $port;
 
     my $self = { };
+
+    $self->{_service} = $service;
 
     $self->{__url} = "http://" . $host . ":" . $port . "/xmlrpc";
 
@@ -80,10 +82,10 @@ sub login {
 
     $self->{__username} = $user if $user;
     $self->{__password} = $pass if $pass;
-    $self->{__source} = $source ? defined $source : '::0';
+    $self->{__source} = $source || $self->{__source} || "::0";
 
     my $response = $self->{__client}->simple_request(
-        'atheme.login', $user, $pass, $source
+        'atheme.login', $self->{__username}, $self->{__password}, $self->{__source}
     );
 
     if (! defined $response) {
@@ -175,6 +177,18 @@ sub logout {
     delete $self->{__authcookie};
 
     return $result;
+}
+
+=head2 service
+
+Returns the name of the GMS service.
+
+=cut
+
+sub service {
+    my ($self) = @_;
+
+    $self->{_service};
 }
 
 1;
