@@ -25,8 +25,9 @@ is $schema->resultset('CloakNamespace')->search_pending->count, 1, 'Find pending
 
 is $group->active_cloak_namespaces->count, 0, 'Namespace isn\'t active';
 
-ok $namespace->approve ($admin);
+is $namespace->group->id, $group->id, 'The namespace belongs to the correct group.';
 
+ok $namespace->approve ($admin);
 
 throws_ok {
     $namespace->approve ($admin)
@@ -55,5 +56,72 @@ throws_ok {
 is $group->active_cloak_namespaces->count, 1, 'Only the first namespace is active.';
 
 ok $namespace2->status->is_deleted, 'Namespace active change is deleted';
+
+my $namespace3 = $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $user, "namespace" => "test3", "status" => "active" });
+ok $namespace3;
+
+is $namespace3->status, 'active', 'We can create a new namespace to be already active';
+is $group->active_cloak_namespaces->count, 2, 'Group now has 2 active namespaces.';
+
+my $change = $namespace3->change ($admin, 'admin', { 'group_id' => 3 });
+ok $change;
+
+throws_ok { $change->approve ($admin) } qr /Can't approve a change that isn't a request/, 'We can only approve changes that are requests';
+throws_ok { $change->reject ($admin) } qr /Can't reject a change that isn't a request/, 'We can only reject changes that are requests';
+
+is $namespace3->group->id, 3, "We can change a namespace's group";
+
+$namespace3->change ($user, 'request', { 'status' => 'deleted' });
+$change = $namespace3->change ($user, 'request', { 'group_id' => 2 });
+ok $change;
+
+is $namespace3->status, 'active', 'Requesting a status change does not make it happen unless approved.';
+is $namespace3->group->id, 3, 'Requesting a status change does not make it happen unless approved.';
+
+throws_ok { $change->approve } qr /Need an account to approve a change/, "We can't approve a change without providing the account approving it";
+throws_ok { $change->reject } qr /Need an account to reject a change/, "We can't reject a change without providing the account rejecting it";
+
+ok $change->approve ($admin);
+
+$namespace3->discard_changes;
+
+is $namespace3->status, 'deleted', 'Approving a status change makes it happen.';
+is $namespace3->group->id, 2, 'Both changes have been applied by approving one of them - changes inherit previous changes';
+
+eval {
+    $group->add_to_cloak_namespaces ({
+            'group_id' => $group->id,
+            'account' => $user,
+            'namespace' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit volutpat!"
+        });
+};
+my $error = $@;
+ok $error;
+
+is_deeply $error->message, [
+    "Cloak namespaces must contain only alphanumeric characters and dots.",
+    "Cloak namespaces must be up to 63 characters."
+], 'Test field validation';
+
+$change = $namespace3->change ($user, 'request', { 'status' => 'deleted' });
+ok $change->reject ($admin);
+
+is $schema->resultset("CloakNamespaceChange")->active_requests->count, 0, 'No active requests at the moment.';
+
+$change = $namespace3->change ($user, 'request', { 'status' => 'deleted' });
+
+is $schema->resultset("CloakNamespaceChange")->active_requests->count, 1, 'There is now an active request.';
+is $schema->resultset("CloakNamespaceChange")->active_requests->single->namespace->namespace, $namespace3->namespace, 'The active request belongs to the correct namespace.';
+
+eval {
+    GMS::Schema::Result::CloakNamespaceChange->new({ });
+};
+$error = $@;
+ok $error;
+
+is_deeply $error->message, [
+    "Group id cannot be empty",
+    "Namespace status cannot be empty"
+], "We can't create a CloakNamespaceChange without the necessary arguments";
 
 done_testing;

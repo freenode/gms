@@ -21,6 +21,37 @@ $ua->get_ok("http://localhost/", "Check root page");
 $ua->get_ok("http://localhost/login", "Check login page works");
 $ua->content_contains("Login to GMS", "Check login page works");
 
+$ua->submit_form;
+
+$ua->content_contains("Please log in", "Need to fill in user and password to log in");
+
+$ua->submit_form(
+    fields => {
+        username => 'username',
+        password => ''
+    }
+);
+
+$ua->content_contains("Please log in", "Need to fill in user and password to log in");
+
+$ua->submit_form(
+    fields => {
+        username => '',
+        password => 'password'
+    }
+);
+
+$ua->content_contains("Please log in", "Need to fill in user and password to log in");
+
+$ua->submit_form(
+    fields => {
+        username => 'invalid',
+        password => 'invalid'
+    }
+);
+
+$ua->content_contains("Invalid username or password", "We need to provide valid details");
+
 $ua->submit_form(
     fields => {
         username => 'test01',

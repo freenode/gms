@@ -25,6 +25,8 @@ $ua->content_contains("You are now logged in as test01", "Check we can log in");
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
+diag $ua->content;
+
 $ua->content_contains("example", "namespace is in the page");
 
 my $schema = GMS::Schema->do_connect;
@@ -32,7 +34,10 @@ my $schema = GMS::Schema->do_connect;
 my $ns = $schema->resultset('ChannelNamespace')->find({ namespace => 'example' });
 ok($ns, "Check NS exists");
 
-$ns->discard_changes;
+my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
+ok($group, "Check group exists");
+
+is $group->channel_namespaces, 2, "Group initially has 2 namespaces";
 
 $ua->submit_form(
     fields => {
@@ -70,13 +75,43 @@ $ua->submit_form(
 
 $ua->content_contains("Namespace updates requested successfully", "Adding a new namespace succeeds");
 
-my $schema = GMS::Schema->do_connect;
-
-my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
-ok($group, "Check group exists");
-
-is $group->channel_namespaces, 2, "Group now has two namespaces";
+is $group->channel_namespaces, 3, "Group now has 3 namespaces";
 
 is $group->active_channel_namespaces, 1, "Group still has one active namespace, since requested namespace isn't active";
+
+$ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
+
+$ua->submit_form(
+    fields => {
+        namespace => 'test'
+    }
+);
+$ua->content_contains("Namespace updates requested successfully", "We can re-add previously deleted namespace");
+
+$ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
+
+$ua->submit_form(
+    fields => {
+        namespace => 'test'
+    }
+);
+$ua->content_contains("Another group has requested that namespace. Are you sure you want to create a conflicting request?", "We get a warning now that we have already requested revivng the namespace");
+
+$ua->submit_form(
+    fields => {
+        namespace => 'test',
+        do_confirm => 1
+    }
+);
+$ua->content_contains("Namespace updates requested successfully", "We can request the namespace if we confirm we want to");
+
+$ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
+
+$ua->submit_form(
+    fields => {
+        namespace => '#@!~'
+    }
+);
+$ua->content_contains("Channel namespaces must contain only alphanumeric characters, underscores, and dots", "Errors are shown");
 
 done_testing;

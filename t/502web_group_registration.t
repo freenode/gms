@@ -67,4 +67,48 @@ $ua->get_ok ("http://localhost/group", "Group page works");
 
 $ua->content_contains ("Group test", "Group is in the user's group list");
 
+$ua->get_ok("http://localhost/group/new", "Check new group page works");
+
+$ua->submit_form(
+    fields => {
+        group_type => 'informal',
+        group_name => 'Group test',
+        group_url  => 'http://www.example.com/',
+        channel_namespace => 'example',
+        has_address => 'n'
+    }
+);
+
+$ua->content_contains ("This group name is already taken.", "Can't register a group that already exists");
+
+$ua->get_ok("http://localhost/group/new", "Check new group page works");
+
+$ua->submit_form(
+    fields => {
+        group_type => 'informal',
+        group_name => 'Another test',
+        group_url  => 'http://www.example.com/',
+        channel_namespace => 'example2',
+        has_address => 'y',
+        address_one => 'Addr 1',
+        city => 'City',
+        state => 'state',
+        country => 'Country',
+        postcode => '001',
+        phone => '01234567'
+    }
+);
+
+$ua->content_contains ("successfully added", "Submitting a group with an address works");
+
+$group = $schema->resultset('Group')->find({ group_name => 'Another test' });
+ok($group, "Check group exists");
+
+is $group->address->address_one, 'Addr 1', 'Address is correct';
+is $group->address->city, 'City', 'Address is correct';
+is $group->address->state, 'state', 'Address is correct';
+is $group->address->country, 'Country', 'Address is correct';
+is $group->address->code, '001', 'Address is correct';
+is $group->address->phone, '01234567', 'Address is correct';
+
 done_testing;

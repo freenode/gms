@@ -34,6 +34,19 @@ $ua->submit_form(
 $ua->submit_form(
     fields => {
         action_6 => 'approve',
+    }
+);
+
+$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
+
+$ua->submit_form(
+    fields => {
+        approve_item => 1
+    }
+);
+
+$ua->submit_form(
+    fields => {
         action_7 => 'reject'
     }
 );
@@ -50,5 +63,39 @@ ok $ns7->status->is_deleted;
 
 ok $ns6->active_change->change_type->is_admin;
 ok $ns7->active_change->change_type->is_admin;
+
+$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
+
+$ua->submit_form(
+    fields => {
+        approve_item => 1
+    }
+);
+
+$ua->submit_form(
+    fields => {
+        approve_namespaces => 6,
+        action_6 => 'approve'
+    }
+);
+
+$ua->content_contains ("Can't approve a namespace that isn't pending approval", "Can't approve a namespace that isn't pending approval");
+
+$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
+
+$ua->submit_form(
+    fields => {
+        approve_item => 1
+    }
+);
+
+$ua->submit_form(
+    fields => {
+        approve_namespaces => 6,
+        action_6 => 'reject'
+    }
+);
+
+$ua->content_contains ("Can't reject a namespace not pending approval", "Can't reject a namespace not pending approval");
 
 done_testing;

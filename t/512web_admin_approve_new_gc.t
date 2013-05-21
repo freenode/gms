@@ -36,8 +36,15 @@ $ua->get_ok("http://localhost/admin/approve_new_gc", "Group Contact approval pag
 
 $ua->submit_form(
     fields => {
-        action_2_1 => 'approve',
         action_2_4 => 'reject'
+    }
+);
+
+$ua->get_ok("http://localhost/admin/approve_new_gc", "Group Contact approval page works");
+
+$ua->submit_form(
+    fields => {
+        action_2_1 => 'approve'
     }
 );
 
@@ -46,5 +53,27 @@ $gc2_4->discard_changes;
 
 ok $gc2_1->active_change->status->is_active, 'approved contact is active';
 ok $gc2_4->active_change->status->is_deleted, 'rejected contact is deleted';
+
+$ua->get_ok("http://localhost/admin/approve_new_gc", "Group Contact approval page works");
+
+$ua->submit_form(
+    fields => {
+        approve_contacts => '2_1',
+        action_2_1 => 'approve'
+    }
+);
+
+$ua->content_contains ("Can't approve a group contact not pending approval");
+
+$ua->get_ok("http://localhost/admin/approve_new_gc", "Group Contact approval page works");
+
+$ua->submit_form(
+    fields => {
+        approve_contacts => '2_1',
+        action_2_1 => 'reject'
+    }
+);
+
+$ua->content_contains ("Can't reject a group contact not pending approval");
 
 done_testing;

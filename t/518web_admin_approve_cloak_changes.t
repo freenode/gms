@@ -36,13 +36,13 @@ my $schema = GMS::Schema->do_connect;
 my $change_rs = $schema->resultset('CloakChange');
 
 my $change1 = $change_rs->find({ 'id' => 1 });
-my $change4 = $change_rs->find({ 'id' => 4 });
+my $change5 = $change_rs->find({ 'id' => 5 });
 
 ok !$change1->approved, 'change has not been approved yet.';
 ok !$change1->rejected, 'change has not been rejected yet.';
 
-ok !$change4->approved, 'change has not been approved yet.';
-ok !$change4->rejected, 'change has not been rejected yet.';
+ok !$change5->approved, 'change has not been approved yet.';
+ok !$change5->rejected, 'change has not been rejected yet.';
 
 $ua->get_ok("http://localhost/login", "Check login page works");
 $ua->content_contains("Login to GMS", "Check login page works");
@@ -61,6 +61,8 @@ $ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works"
 $ua->content_contains("<b>marked</b> by <b>admin</b>", "If there is a mark on the account, it is displayed in the page.");
 $ua->content_contains("test mark reason", "If there is a mark on the account, it is displayed in the page.");
 
+$ua->content_contains("Cloak: example/test02, approved on", "Recent cloak changes appear");
+
 $ua->submit_form(
     fields => {
         action_1 => 'approve'
@@ -73,16 +75,14 @@ ok $change1->approved, 'change has been approved';
 
 $ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
 
-$ua->content_contains("Cloak: example/test01, approved on", "Recent cloak changes appear");
-
 $ua->submit_form(
     fields => {
-        action_4 => 'reject'
+        action_5 => 'reject'
     }
 );
 
-$change4->discard_changes;
+$change5->discard_changes;
 
-ok $change4->rejected, 'change has been rejected';
+ok $change5->rejected, 'change has been rejected';
 
 done_testing;

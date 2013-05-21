@@ -38,7 +38,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as test01", "Check we can log in");
 
-$ua->get_ok("http://localhost/group/1/edit_cloak_namespaces", "Check channel namespace page works");
+$ua->get_ok("http://localhost/group/4/edit_cloak_namespaces", "Check channel namespace page works");
 
 $ua->submit_form(
     fields => {

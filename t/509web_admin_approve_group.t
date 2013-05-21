@@ -27,8 +27,15 @@ $ua->get_ok("http://localhost/admin/approve", "Group approval page works");
 
 $ua->submit_form(
     fields => {
-        action_2 => 'verify',
         action_3 => 'approve',
+    }
+);
+
+$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
+
+$ua->submit_form(
+    fields => {
+        action_2 => 'verify',
     }
 );
 
@@ -52,5 +59,27 @@ $ua->submit_form(
 
 $group2->discard_changes;
 ok $group2->status->is_deleted, 'group is now deleted';
+
+$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
+
+$ua->submit_form(
+    fields => {
+        action_3 => 'approve',
+        approve_groups => '3'
+    }
+);
+
+$ua->content_contains ("Can't approve a group that isn't verified or pending verification", "Can't approve a group that isn't verified or pending verification");
+
+$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
+
+$ua->submit_form(
+    fields => {
+        action_3 => 'reject',
+        approve_groups => '3'
+    }
+);
+
+$ua->content_contains ("Can't reject a group not pending approval", "Can't reject a group not pending approval");
 
 done_testing;

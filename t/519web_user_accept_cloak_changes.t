@@ -65,4 +65,13 @@ ok $change3->rejected, "Rejection worked.";
 $ua->content_lacks("example2/test01", "Approved cloak is no longer there.");
 $ua->content_lacks("example3/test01", "Rejected cloak is no longer there.");
 
+$ua->get ("http://localhost/cloak/99/approve");
+$ua->content_contains ("That cloak doesn't exist or hasn't been assigned to you.", "Can't approve cloak change that does not exist");
+
+$ua->get ("http://localhost/cloak/4/approve");
+$ua->content_contains ("That cloak doesn't exist or hasn't been assigned to you.", "Can't approve cloak change that belongs to someone else");
+
+$ua->post ('http://localhost/cloak/1/approve');
+$ua->content_contains ('Invalid action', 'invalid action errors');
+
 done_testing;

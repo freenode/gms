@@ -27,10 +27,11 @@ $ua->get_ok("http://localhost/group/1/invite", "Invitation page works");
 
 $ua->submit_form (
     fields => {
-        contact => 'test02'
+        contact => 'test03'
     }
 );
 
+diag $ua->content;
 $ua->content_contains("Successfully invited the contact", "Invitation works");
 
 my $schema = GMS::Schema->do_connect;
@@ -38,14 +39,14 @@ my $schema = GMS::Schema->do_connect;
 my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
 ok($group, "Check group exists");
 
-is $group->group_contacts->count, 2, "Group has two contacts";
-is $group->active_group_contacts->count, 1, "Group has one active contact - invited contact isn't active";
+is $group->group_contacts->count, 3, "Group has three contacts";
+is $group->active_group_contacts->count, 2, "Group has two active contacts - invited contact isn't active";
 
 $ua->get_ok("http://localhost/group/1/invite", "Invitation page works");
 
 $ua->submit_form (
     fields => {
-        contact => 'test03'
+        contact => 'test04'
     }
 );
 

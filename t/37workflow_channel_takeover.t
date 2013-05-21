@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use RPC::Atheme::Error;
 use Test::Most;
 use Test::MockObject;
 
@@ -90,5 +91,29 @@ throws_ok {
 throws_ok {
     $group->drop ($mock, "#test2", "test");
 } qr/This channel does not belong in that namespace/, 'Dropping a channel not in the namespace fails';
+
+$mock->mock ( 'command', sub {
+        die new RPC::Atheme::Error;
+    });
+
+throws_ok {
+    $group->take_over ($mock, "#test-$random", "test", $user->accountname);
+} "RPC::Atheme::Error", "Atheme errors are thrown back";
+
+throws_ok {
+    $group->drop ($mock, "#test-$random", "test");
+} "RPC::Atheme::Error", "Atheme errors are thrown back";
+
+$mock->mock ( 'command', sub {
+        die "Test Error";
+    });
+
+throws_ok {
+    $group->take_over ($mock, "#test-$random", "test", $user->accountname);
+} qr/Test Error/, "Other errors are also thrown back";
+
+throws_ok {
+    $group->drop ($mock, "#test-$random", "test");
+} qr/Test Error/, "Other errors are also thrown back";
 
 done_testing;

@@ -48,7 +48,20 @@ $ua->submit_form(
 $ua->submit_form(
     fields => {
         action_20 => 'reject',
-        action_21 => 'approve'
+    }
+);
+
+$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
+
+$ua->submit_form(
+    fields => {
+        change_item => 1
+    }
+);
+
+$ua->submit_form(
+    fields => {
+        action_21 => 'approve',
     }
 );
 
@@ -64,5 +77,22 @@ ok !$gc2->is_primary, 'according to the change, group contact is no longer prima
 
 is $gc1->last_change->affected_change->id, 20, 'affected change is correct';
 is $gc2->last_change->affected_change->id, 21, 'affected change is correct';
+
+$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
+
+$ua->submit_form(
+    fields => {
+        change_item => 1
+    }
+);
+
+$ua->submit_form(
+    fields => {
+        approve_changes => $gc1->last_change->id,
+        'action_' . $gc1->last_change->id => 'approve',
+    }
+);
+
+$ua->content_contains ("Can't approve a change that isn't a request", "Can't approve a change that isn't a request");
 
 done_testing;
