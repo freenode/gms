@@ -587,6 +587,83 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
     }
 }
 
+=head2 approve_channel_requests
+
+Presents the form to approve channel requests.
+
+=cut
+
+sub approve_channel_requests :Chained('base') :PathPart('approve_channel_requests') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $req_rs = $c->model('DB::ChannelRequest');
+
+    my @to_approve = $req_rs->search_pending;
+    my @failed = $req_rs->search_failed;
+
+    $c->stash->{to_approve} = \@to_approve;
+    $c->stash->{failed_requests} = \@failed;
+
+    $c->stash->{template} = 'admin/approve_channel_requests.tt';
+}
+
+=head2 do_approve_channel_requests
+
+Processes the form to approve channel requests
+and attempts to carry out the changes in Atheme.
+
+=cut
+
+sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requests/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $params = $c->request->params;
+    my $change_item = $params->{change_item};
+
+    my $account = $c->user->account;
+
+    my $req_rs = $c->model('DB::ChannelRequest');
+    my @approve_requests = split / /, $params->{approve_requests};
+    my @failed_requests = split / /, $params->{failed_requests};
+
+    try {
+        my $session = $c->model('Atheme')->session;
+
+        $c->model('DB')->schema->txn_do(sub {
+            foreach my $req_id (@approve_requests, @failed_requests) {
+                my $request = $req_rs->find({ id => $req_id });
+                my $action = $params->{"action_$req_id"};
+                my $freetext = $params->{"freetext_$req_id"};
+
+                if ($action eq 'approve') {
+                    $c->log->info("Approving ChannelRequest id $req_id" .
+                        " by " . $c->user->username . "\n");
+                    $request->approve ($session, $account, $freetext);
+                } elsif ($action eq 'apply') {
+                    $c->log->info ("Marking ChannelRequest id $req_id as applied" .
+                        " by " . $c->user->username . "\n");
+                    $request->apply ($c->user->account, $freetext);
+                } elsif ($action eq 'reject') {
+                    $c->log->info("Rejecting ChannelRequest id $req_id" .
+                        " by " . $c->user->username . "\n");
+                    $request->reject ($c->user->account, $freetext);
+                } elsif ($action eq 'hold') {
+                    next;
+                } else {
+                    $c->log->error("Got unknown action $action for ChannelRequest id
+                        $req_id in Admin::do_approve_channel_requests");
+                }
+            }
+        });
+        $c->response->redirect($c->uri_for('approve_channel_requests'));
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
+        $c->detach ("/admin/approve_channel_requests");
+    }
+}
+
+
 =head2 approve_namespaces
 
 Presents the form to accept channel and cloak namespaces.
