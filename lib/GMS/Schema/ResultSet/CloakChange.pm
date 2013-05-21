@@ -24,12 +24,7 @@ or rejected.
 sub search_offered {
     my ($self) = @_;
 
-    return $self->search(
-        {
-            'accepted' => undef,
-            'rejected' => undef
-        }
-    );
+    return $self->_search_cloak_change_status ('offered');
 }
 
 =head2 search_pending
@@ -42,12 +37,69 @@ but not approved or rejected by staff.
 sub search_pending {
     my ($self) = @_;
 
+    return $self->_search_cloak_change_status ('accepted');
+}
+
+=head2 search_unapplied
+
+Returns a ResultSet of cloak changes that have been approved ( by staff ),
+but not applied in Atheme.
+
+=cut
+
+sub search_unapplied {
+    my ($self) = @_;
+
+    return $self->_search_cloak_change_status ('approved');
+}
+
+=head2 search_failed
+
+Returns a ResultSet of cloak changes that failed to be applied in
+Atheme.
+
+=cut
+
+sub search_failed {
+    my ($self) = @_;
+
+    return $self->_search_cloak_change_status ('error');
+}
+
+=head2 last_change
+
+Returns the newest change for the cloak change
+
+=cut
+
+sub last_change {
+    my $self = shift;
+
+    return $self->search({
+        'me.id' => {
+            '=' => $self->search ({
+                  'cloak_change.id' => {  -ident => 'me.cloak_change_id' }
+                },
+                { alias => 'inner' }
+            )->get_column('id')->max_rs->as_query
+        },
+    });
+}
+
+=head1 INTERNAL METHODS
+
+=head2 _search_cloak_change_status
+
+Returns a ResultSet of cloak changes with the given current status.
+
+=cut
+
+sub _search_cloak_change_status {
+    my ($self, $status) = @_;
+
     return $self->search(
-        {
-            'accepted' => { '!=', undef },
-            'approved' => undef,
-            'rejected' => undef
-        }
+        { 'active_change.status' => $status },
+        { join => 'active_change' }
     );
 }
 
