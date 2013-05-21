@@ -164,7 +164,7 @@ sub new {
         $valid = 0;
     }
 
-    if ($args->{addreess_two} && length $args->{address_two} > 255) {
+    if ($args->{address_two} && length $args->{address_two} > 255) {
         push @errors, "Address 2 can be up to 255 characters.";
         $valid = 0;
     }
