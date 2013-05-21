@@ -1,8 +1,34 @@
 package GMS::Exception;
 
-use overload ('""' => \&message,
-              'cmp' => \&compare);
+use Moose;
+with 'Throwable';
 
+use overload
+    '""' => \&as_string,
+    fallback => 1;
+
+with('MooseX::OneArgNew' => {
+    type     => 'ArrayRef',
+    init_arg => 'errors',
+    required => 0,
+    lazy => 1,
+});
+
+with('MooseX::OneArgNew' => {
+    type     => 'Str',
+    init_arg => 'msg',
+});
+
+has msg => (
+    is   => 'ro',
+    isa  => 'Str',
+
+);
+
+has errors => (
+    is => 'ro',
+    isa => 'ArrayRef',
+);
 
 =head1 NAME
 
@@ -11,71 +37,70 @@ GMS::Exception
 =head1 DESCRIPTION
 
 Base class for exceptions thrown in GMS.
-
-=head1 METHODS
-
-=head2 new
-
-    GMS::Exception->new("some message here");
-
-Constructor. Takes a message argument.
+Extends Throwable::Error.
 
 =cut
 
-sub new {
-    my ($class, $message) = @_;
-    $class = ref $class || $class;
+=head1 METHODS
 
-    my $self = { message => $message };
+=head2 as_string
 
-    bless $self, $class;
+Return a stringified version of the error messages
+
+=cut
+
+sub as_string {
+    my ($self) = @_;
+
+    if ( $self->errors ) {
+        my $errors = $self->errors;
+        my @err = @$errors;
+
+        return join ( "\n", @err );
+    } else {
+        return $self->msg;
+    }
 }
 
 =head2 message
 
-Returns the message given during construction.
+Returns either the string or array of errors,
+depending on which is present.
 
 =cut
 
 sub message {
     my ($self) = @_;
-    return $self->{message};
-}
 
-=head2 compare
-
-Overloads the comparison operation.
-Compares the string representation of the Exception
-object with the string representation of the object
-provided
-
-=cut
-
-sub compare {
-    my ($self, $other) = @_;
-
-    return "$self" <=> "$other";
+    ( $self->msg ? $self->msg : $self->errors );
 }
 
 package GMS::Exception::InvalidGroup;
 
-use base GMS::Exception;
+use base 'GMS::Exception';
 
 package GMS::Exception::InvalidAddress;
 
-use base GMS::Exception;
+use base 'GMS::Exception';
 
 package GMS::Exception::InvalidChange;
 
-use base GMS::Exception;
+use base 'GMS::Exception';
 
 package GMS::Exception::InvalidNamespace;
 
-use base GMS::Exception;
+use base 'GMS::Exception';
+
+package GMS::Exception::InvalidCloakChange;
+
+use base 'GMS::Exception';
+
+package GMS::Exception::InvalidChannelRequest;
+
+use base 'GMS::Exception';
 
 package GMS::Exception::InvalidChange;
 
-use base GMS::Exception;
+use base 'GMS::Exception';
 
 1;
-
