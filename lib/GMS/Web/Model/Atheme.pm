@@ -39,7 +39,7 @@ sub start_session {
     }
 
     my $session = RPC::Atheme::Session->new(
-        $self->{hostname}, $self->{port}
+        $self->{hostname}, $self->{port}, $self->{service}
     );
 
     $session->login(
