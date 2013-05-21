@@ -94,7 +94,7 @@ sub address :Chained('base') :PathPart('address') :CaptureArgs(1) {
     if ($address) {
         $c->stash->{address} = $address;
     } else {
-        $c->detach('default');
+        $c->detach('/default');
     }
 }
 
