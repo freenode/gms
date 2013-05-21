@@ -1,0 +1,143 @@
+[% META title = 'Channel requests awaiting approval' %]
+[% USE date %]
+
+<form method="post" action="[% c.uri_for('/admin/approve_channel_requests/submit') %]">
+
+<p>The following requests are pending staff approval:</p>
+
+<input type="hidden" name="approve_requests"
+    value="[% FOREACH cr IN to_approve %][% cr.id %] [% END %]" />
+<table>
+<tr>
+ <th>Account Name</th> <th>Request Type</th> <th>Channel</th> <th>Target</th> <th>Additional Data</th> <th>Expand</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+</tr>
+[% FOREACH cr IN to_approve -%]
+  <tr>
+    <td>
+      [% cr.contact.account.accountname | html %]
+    </td>
+    <td>
+      [% cr.request_type %]
+    </th>
+    <td>
+      [% cr.channel %]
+    </td>
+    <td>
+      [% IF (cr.target); cr.target.accountname; END %]
+    </td>
+    <td>
+      [% cr.request_data %]
+    </td>
+    <td>
+      <a href='javascript:;' onclick='show([% cr.id %])' id='link_[% cr.id %]'>Expand</a>
+    <td>
+        <input type="radio" name="action_[% cr.id %]" value="approve" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% cr.id %]" value="reject" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% cr.id %]" value="hold" checked="checked" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Free text:
+    </td>
+    <td colspan="6">
+      <textarea name="freetext_[% cr.id %]" style="width:100%;height:100px;"></textarea>
+   </td>
+  </tr>
+  <tr id="hidden_[% cr.id %]" class="hidden">
+    <td colspan="6" class="wide">
+
+      [% #data = cr.contact.account.mark (c) %]
+      [% #mark = data.0; #mark_setter = data.1; time = data.2; %]
+
+      [% #IF mark %]
+        <p>
+          <b>Note:</b> The account has been <b>marked</b> by <b>[% mark_setter | html %]</b> on [% date.format(time); %]:<br/>
+          [% mark | html %]
+        </p>
+      [% #END %]
+
+
+      <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
+    </td>
+  </tr>
+[% END -%]
+</table>
+
+<p>The following changes failed to apply in Atheme and need manual action:</p>
+
+<input type="hidden" name="failed_requests"
+    value="[% FOREACH cr IN failed_requests %][% cr.id %] [% END %]" />
+<table>
+<tr>
+ <th>Account Name</th> <th>Request Type</th> <th>Channel</th> <th>Target</th> <th>Additional Data</th> <th>Expand</th> <th>Retry with Atheme</th> <th>Mark Done</th> <th>Hold</th>
+</tr>
+[% FOREACH cr IN failed_requests -%]
+  <tr>
+    <td>
+      [% cr.contact.account.accountname | html %]
+    </td>
+    <td>
+      [% cr.request_type %]
+    </th>
+    <td>
+      [% cr.channel %]
+    </td>
+    <td>
+      [% IF (cr.target); cr.target.accountname; END; %]
+    </td>
+    <td>
+      [% cr.request_data %]
+    </td>
+    <td>
+      <a href='javascript:;' onclick='show([% cr.id %])' id='link_[% cr.id %]'>Expand</a>
+    <td>
+        <input type="radio" name="action_[% cr.id %]" value="approve" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% cr.id %]" value="apply" />
+    </td>
+    <td>
+        <input type="radio" name="action_[% cr.id %]" value="hold" checked="checked" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Free text:
+    </td>
+    <td colspan="6">
+      <textarea name="freetext_[% cr.id %]" style="width:100%;height:100px;"></textarea>
+   </td>
+  </tr>
+  <tr id="hidden_[% cr.id %]" class="hidden">
+    <td colspan="6" class="wide">
+
+      [% #data = cr.contact.account.mark (c) %]
+      [% #mark = data.0; mark_setter = data.1; time = data.2; %]
+
+      [% #IF mark %]
+        <p>
+          <b>Note:</b> The account has been <b>marked</b> by <b>[% mark_setter | html %]</b> on [% date.format(time); %]:<br/>
+          [% mark | html %]
+        </p>
+      [% #END %]
+
+      <p>
+        <b>Previous failure reason:</b><br/>
+        [% cr.active_change.change_freetext %]
+      </p>
+
+      <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
+    </td>
+  </tr>
+[% END -%]
+</table>
+
+
+
+<input type="submit" value="Submit" />
+</form>
