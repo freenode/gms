@@ -239,7 +239,7 @@ use GMS::Exception;
 
 =head2 new
 
-Constructor. Checks if the URL in the change object is valid,
+Constructor. Checks if the arguments in the change object are valid,
 and throws an error if not.
 
 =cut
@@ -250,14 +250,29 @@ sub new {
     my @errors;
     my $valid=1;
 
-    if ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
-        push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
-                       "0-9, :_+-/)";
+    if (!$args->{group_type}) {
+        push @errors, "Group type cannot be empty";
         $valid = 0;
     }
-    if (length $args->{url} > 64) {
-        push @errors, "Group URL must be up to 64 characters.";
+
+    if (!$args->{status}) {
+        push @errors, "Group status cannot be empty";
         $valid = 0;
+    }
+
+    if (!$args->{url}) {
+        push @errors, "URL cannot be empty";
+        $valid = 0;
+    } else {
+        if ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
+            push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
+                       "0-9, :_+-/)";
+            $valid = 0;
+        }
+        if (length $args->{url} > 64) {
+            push @errors, "Group URL must be up to 64 characters.";
+            $valid = 0;
+        }
     }
 
     if (!$valid) {

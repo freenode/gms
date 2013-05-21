@@ -223,6 +223,36 @@ use GMS::Exception;
 
 =head1 METHODS
 
+=head2 new
+
+Constructor. Checks if the arguments in the change object are valid,
+and throws an error if not.
+
+=cut
+
+sub new {
+    my ($class, $args) = @_;
+
+    my @errors;
+    my $valid=1;
+
+    if (!$args->{group_id}) {
+        push @errors, "Group id cannot be empty";
+        $valid = 0;
+    }
+
+    if (!$args->{status}) {
+        push @errors, "Namespace status cannot be empty";
+        $valid = 0;
+    }
+
+    if (!$valid) {
+        die GMS::Exception::InvalidChange->new(\@errors);
+    }
+
+    return $class->next::method($args);
+}
+
 =head2 approve
 
     $change->approve ($approving_account, $freetext);

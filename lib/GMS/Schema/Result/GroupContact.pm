@@ -335,7 +335,7 @@ sub approve {
     my ($self, $account, $freetext) = @_;
 
     if (!$self->status->is_pending_staff) {
-        die GMS::Exception->new ("Can't approve a group contact not pending"
+        die GMS::Exception->new ("Can't approve a group contact not pending "
             . "approval");
     }
 
@@ -354,7 +354,7 @@ sub reject {
     my ($self, $account, $freetext) = @_;
 
     if (!$self->status->is_pending_staff) {
-        die GMS::Exception->new ("Can't reject a group contact not pending"
+        die GMS::Exception->new ("Can't reject a group contact not pending "
             . "approval");
     }
 

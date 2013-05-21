@@ -329,7 +329,7 @@ sub insert {
                 verification_data => random_string("cccccccccccc"),
             });
         my $url = URI->new ($self->url);
-        my $domain = $url->host;
+        my $domain = $url->host || '';
 
         my @parts = split (/\./, $domain);
 
@@ -442,8 +442,11 @@ Returns the URL that can be used to verify affiliation to the group.
 sub verify_url {
     my ($self) = @_;
     my ($res) = $self->group_verifications->find({verification_type => "web_url"});
-    my ($data) = $res->verification_data;
-    return $data;
+
+    if ($res) {
+        my ($data) = $res->verification_data;
+        return $data;
+    }
 }
 
 =head2 verify_token
@@ -511,7 +514,7 @@ sub last_change {
 
 Checks if the group ownership can automatically be verified.
 First, it checks if the verification document exists in the
-domain. Failing that, it checks if the subdomain provided 
+domain. Failing that, it checks if the subdomain provided
 for verification resolves to the same IP as freenode.net.
 Finally, it takes the text the user has given that explains
 why the group hasn't been verified, if provided, or asks the

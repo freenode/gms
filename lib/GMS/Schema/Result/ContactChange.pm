@@ -228,17 +228,19 @@ sub new {
     if (!$args->{name}) {
         push @errors, "Your name can't be empty.";
         $valid = 0;
-    }
-    if (length $args->{name} > 255) {
+    } elsif (length $args->{name} > 255) {
         push @errors, "Your name can be up to 255 characters.";
         $valid = 0;
     }
     if (!$args->{email}) {
         push @errors, "Your email can't be empty.";
         $valid = 0;
-    }
-    if (length $args->{email} > 255) {
+    } elsif (length $args->{email} > 255) {
         push @errors, "Your email can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (!$args->{address}) {
+        push @errors, "Your address can't be empty.";
         $valid = 0;
     }
 
