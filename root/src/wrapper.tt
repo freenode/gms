@@ -38,6 +38,8 @@
               <ul>
                   [% IF  c.check_user_roles('admin')  %]
                   <li><a href="[% c.uri_for('/admin/') %]">Admin</a></li>
+                  [% ELSIF c.check_user_roles ('staff') %]
+                  <li><a href="[% c.uri_for('/staff/') %]">Staff</a></li>
                   [% END %]
                   <li><a href="[% c.uri_for('/group/') %]">Your groups</a></li>
                   <li><a href="[% c.uri_for('/userinfo') %]">Your contact info</a></li>
