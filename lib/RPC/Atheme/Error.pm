@@ -8,7 +8,8 @@ use warnings;
 use subs qw/new code describe stringify succeeded/;
 
 #use overload '""' => \&stringify, 'bool' => \&succeeded;
-use overload '""' => \&stringify;
+use overload '""' => \&stringify,
+             fallback => 1;
 
 =head1 NAME
 
