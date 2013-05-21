@@ -16,12 +16,18 @@ Catalyst Controller.
 
 =cut
 
+=head2 base
+
+=cut
+
+sub base :Chained('/') :PathPart('logout') :CaptureArgs(0) :DestroyToken {
+}
 
 =head2 index
 
 =cut
 
-sub index :Path :Args(0) :DestroyToken {
+sub index :Chained('base') :PathPart('') :Args(0){
     my ( $self, $c ) = @_;
 
     $c->logout;

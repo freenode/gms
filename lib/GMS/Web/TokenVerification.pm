@@ -59,11 +59,12 @@ This method has been taken from Catalyst::Controller::RequestToken.
 sub generate_token {
     my ($self, $c) = @_;
 
+    return if ( $c->session->{_token} );
+
     my $digest = _find_digest();
     my $seed = join( time, rand(10000), $$, {} );
     $digest->add($seed);
     my $token = $digest->hexdigest;
-    $self->{_token} = $token;
     $c->session->{_token} = $token;
 }
 
@@ -76,7 +77,6 @@ Removes the token from the session.
 sub destroy_token {
     my ($self, $c) = @_;
 
-    undef $self->{_token};
     undef $c->session->{_token};
 }
 
@@ -90,7 +90,7 @@ where it will be stored.
 
 sub token {
     my ($self, $c) = @_;
-    return ( $self->{_token} ? $self->{_token} : $c->session->{_token} );
+    return ( $c->session->{_token} );
 }
 
 =head2 is_valid_token
