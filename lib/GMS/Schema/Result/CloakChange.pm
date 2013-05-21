@@ -25,9 +25,10 @@ __PACKAGE__->table("cloak_changes");
   is_nullable: 0
   sequence: 'cloak_changes_id_seq'
 
-=head2 contact_id
+=head2 target
 
-  data_type: 'integer'
+  data_type: 'varchar'
+  size: 32
   is_foreign_key: 1
   is_nullable: 0
 
@@ -37,57 +38,12 @@ __PACKAGE__->table("cloak_changes");
   size: 63
   is_nullable: 0
 
-=cut
+=head2 active_change
 
-=head2 time
-
-  data_type: 'timestamp'
-  default_value: current_timestamp
-  is_nullable: 0
-  original: {default_value => \"now()"}
-
-=head2 changed_by
-
-  data_type: 'varchar'
+  data_type: 'integer'
+  default_value: -1
   is_foreign_key: 1
   is_nullable: 0
-
-=head2 offered
-
-  data_type: 'timestamp'
-  default_value: '\NULL'
-  is_nullable: 1
-
-=cut
-
-=head2 accepted
-
-  data_type: 'timestamp'
-  default_value: \'NULL'
-  is_nullable: 1
-
-=cut
-
-=head2 approved
-
-  data_type: 'timestamp'
-  default_value: \'NULL'
-  is_nullable: 1
-
-=cut
-
-=head2 rejected
-
-  data_type: 'tmestamp'
-  default_value: \'NULL'
-  is_nullable: 1
-
-=cut
-
-=head2 change_freetext
-
-  data_type: 'text'
-  is_nullable: 1
 
 =cut
 
@@ -99,36 +55,40 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "cloak_changes_id_seq",
   },
-  "contact_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "target",
+  { data_type => "varchar", size => 32, is_foreign_key => 1, is_nullable => 0 },
   "cloak",
   { data_type => "varchar", size => 63, is_nullable => 0 },
-  "time",
+  "active_change",
   {
-    data_type     => "timestamp",
-    default_value => \"current_timestamp",
-    is_nullable   => 0,
-    original      => { default_value => \"now()" },
+    data_type      => "integer",
+    default_value  => -1,
+    is_foreign_key => 1,
+    is_nullable    => 0,
   },
-  "changed_by",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
-  "offered",
-  { data_type => "timestamp", default_value => \"NULL", is_nullable => 1},
-  "accepted",
-  { data_type => "timestamp", default_value => \"NULL", is_nullable => 1},
-  "approved",
-  { data_type => "timestamp", default_value => \"NULL", is_nullable => 1},
-  "rejected",
-  { data_type => "timestamp", default_value => \"NULL", is_nullable => 1},
-  "change_freetext",
-  { data_type => "text", is_nullable => 1},
 );
 
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("unique_cloak_active_change", ["active_change"]);
 
 =head1 RELATIONS
 
-=head2 changed_by
+=head2 active_change
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::CloakChangeChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "active_change",
+  "GMS::Schema::Result::CloakChangeChange",
+  { id => "active_change" },
+  {},
+);
+
+=head2 target
 
 Type: belongs_to
 
@@ -137,49 +97,136 @@ Related object: L<GMS::Schema::Result::Account>
 =cut
 
 __PACKAGE__->belongs_to(
-  "changed_by",
+  "target",
   "GMS::Schema::Result::Account",
-  { id => "changed_by" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { id => "target" },
+  { join_type => 'left' },
 );
 
-=head2 contact
+=head2 cloak_change_changes
 
-Type: belongs_to
+Type: has_many
 
-Related object: L<GMS::Schema::Result::Contact>
+Related object: L<GMS::Schema::Result::CloakChangeChange>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "contact",
-  "GMS::Schema::Result::Contact",
-  { id => "contact_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+__PACKAGE__->has_many(
+  "cloak_change_changes",
+  "GMS::Schema::Result::CloakChangeChange",
+  { "foreign.cloak_change_id" => "self.id" },
+  {},
 );
 
 use TryCatch;
 
 =head1 METHODS
 
-=head2 accept
+=head2 new
 
-Marks the cloak change as accepted from the user.
-Any previous pending (accepted by user but not
-staff) cloak changes the user had will be marked 
-as not accepted.
+Constructor. A CloakChange is constructed with all of the required fields from both
+CloakChange and CloakChangeChange, and will implicitly create a change record for
+the cloak change with its initial state.
+
+The only argument is status, which defaults to 'offered'
 
 =cut
 
-sub accept {
+sub new {
+    my $class = shift;
+    my $args = shift;
+
+    my @errors;
+    my $valid=1;
+
+    if (!$args->{target}) {
+        push @errors, "target must be specified";
+        $valid = 0;
+    }
+    if (!$args->{cloak}) {
+        push @errors, "Cloak must be provided";
+        $valid = 0;
+    } elsif ($args->{cloak} =~ /[^a-zA-Z0-9\-\/]/) {
+        push @errors, "The cloak contains invalid characters.";
+        $valid = 0;
+    } elsif (length $args->{cloak} > 63) {
+        push @errors, "The cloak is too long.";
+        $valid = 0;
+    }
+
+    if (!$args->{changed_by}) {
+        push @errors, "Changed by must be provided";
+        $valid = 0;
+    }
+
+    if (!$valid) {
+        die GMS::Exception::InvalidCloakChange->new(\@errors);
+    }
+
+    my @change_arg_names = (
+        'changed_by',
+        'status',
+    );
+    my %change_args;
+    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
+    $change_args{status} ||= 'offered';
+
+    $args->{cloak_change_changes} = [ \%change_args ];
+
+    return $class->next::method($args);
+}
+
+=head2 insert
+
+Overloaded to support the implicit CloakChangeChange creation.
+
+=cut
+
+sub insert {
     my ($self) = @_;
-    my $changes_rs = $self->result_source->schema->resultset('CloakChange');
+    my $ret;
 
-    my $pending = $changes_rs->search_pending->search({ 'contact_id' => $self->contact_id });
-    $pending->update ({ 'accepted' => \"NULL" });
+    my $next_method = $self->next::can;
+    # Can't put this in the creation args, as we don't know the active change id
+    # until the change has been created, and we can't create the change without knowing
+    # the cloakChange id.
 
-    $self->accepted (\"NOW()");
+    $self->result_source->schema->txn_do( sub {
+        $self->result_source->storage->with_deferred_fk_checks(sub {
+                $ret = $self->$next_method();
+                $self->active_change($self->cloak_change_changes->single);
+                $self->update;
+            });
+    });
+
+    return $ret;
+}
+
+=head2 change
+
+    $cloakChange->change($account, \%args);
+
+Creates a related CloakChangeChange with the modifications specified in %args.
+Unchanged fields are populated based on the CloakChange's current state.
+
+=cut
+
+sub change {
+    my ($self, $account, $args) = @_;
+
+    my $active_change = $self->active_change;
+
+    my %change_args = (
+        changed_by => $account,
+        status => $args->{status} || $active_change->status,
+        change_freetext => $args->{change_freetext}
+    );
+
+    my $ret = $self->add_to_cloak_change_changes(\%change_args);
+    $self->active_change($ret);
+
     $self->update;
+    return $ret;
 }
 
 =head2 approve

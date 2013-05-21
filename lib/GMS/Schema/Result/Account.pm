@@ -152,6 +152,13 @@ sub metadata {
         my $data = $controlsession->command('GMSServ', 'metadata', $self->accountname, $name);
 
         return $data;
+__PACKAGE__->has_many(
+    "recent_cloak_changes",
+    "GMS::Schema::Result::CloakChange",
+    { "foreign.target" => "self.id" },
+    {
+        "join" => "active_change",
+        "where" => { "active_change.status" => [ "approved", "applied" ] }
     }
     catch (RPC::Atheme::Error $e) {
         die $e if ( $e->code != RPC::Atheme::Error::nosuchkey() );
