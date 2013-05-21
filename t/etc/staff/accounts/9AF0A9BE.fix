@@ -1,0 +1,5 @@
+$HASH1 = {
+           accountname
+                   => 'test12',
+           id      => '9AF0A9BE'
+         };

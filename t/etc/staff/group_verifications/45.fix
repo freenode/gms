@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 14,
+           id          => 45,
+           verification_data
+                       => 'freenode-tgosmss.group6.example',
+           verification_type
+                       => 'dns'
+         };

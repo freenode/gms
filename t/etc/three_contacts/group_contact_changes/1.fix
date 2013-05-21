@@ -1,0 +1,9 @@
+$HASH1 = {
+           change_type => 'create',
+           changed_by  => 1,
+           contact_id  => 1,
+           group_id    => 1,
+           id          => 1,
+           primary     => 1,
+           status      => 'active'
+         };

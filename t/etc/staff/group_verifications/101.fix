@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 34,
+           id          => 101,
+           verification_data
+                       => 'npjuajascowd',
+           verification_type
+                       => 'web_token'
+         };

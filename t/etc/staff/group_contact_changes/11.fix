@@ -1,0 +1,16 @@
+$HASH1 = {
+           affected_change
+                     => undef,
+           change_freetext
+                     => undef,
+           change_type
+                     => 'create',
+           changed_by
+                     => 'AAAAAAAAP',
+           contact_id
+                     => 2,
+           group_id  => 8,
+           id        => 11,
+           primary   => 1,
+           status    => 'invited'
+         };

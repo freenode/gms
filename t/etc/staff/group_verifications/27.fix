@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 8,
+           id          => 27,
+           verification_data
+                       => 'freenode-tjjkpsm.group0.example',
+           verification_type
+                       => 'dns'
+         };

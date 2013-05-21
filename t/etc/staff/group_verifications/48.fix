@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 16,
+           id          => 48,
+           verification_data
+                       => 'freenode-yrynmkl.group100.example',
+           verification_type
+                       => 'dns'
+         };

@@ -8,14 +8,6 @@
             {
                 "rel": "group_verifications",
                 "quantity": "all"
-            },
-            {
-                "rel": "channel_namespaces",
-                "quantity": "all"
-            },
-            {
-                "rel": "cloak_namespaces",
-                "quantity": "all"
             }  ]
         },
         "Contact": {

@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 30,
+           id          => 88,
+           verification_data
+                       => 'http://group114.example/bjfraihr.txt',
+           verification_type
+                       => 'web_url'
+         };

@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 27,
+           id          => 81,
+           verification_data
+                       => 'freenode-hyfkaxa.group111.example',
+           verification_type
+                       => 'dns'
+         };

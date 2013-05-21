@@ -1,0 +1,7 @@
+$HASH1 = {
+           active_change
+                    => 20,
+           id       => 20,
+           namespace
+                    => 'test119'
+         };

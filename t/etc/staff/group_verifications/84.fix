@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 28,
+           id          => 84,
+           verification_data
+                       => 'freenode-rpkmxmr.group112.example',
+           verification_type
+                       => 'dns'
+         };

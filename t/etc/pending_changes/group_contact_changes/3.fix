@@ -4,7 +4,7 @@ $HASH1 = {
            change_freetext
                      => undef,
            change_type
-                     => 'admin',
+                     => 'create',
            changed_by
                      => 'AAAAAAAAS',
            contact_id
@@ -12,5 +12,5 @@ $HASH1 = {
            group_id  => 1,
            id        => 3,
            primary   => 1,
-           status    => 'active'
+           status    => 'invited'
          };

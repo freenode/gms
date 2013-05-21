@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 37,
+           id          => 110,
+           verification_data
+                       => 'pdfktoinboes',
+           verification_type
+                       => 'web_token'
+         };

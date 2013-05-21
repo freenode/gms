@@ -1,0 +1,7 @@
+$HASH1 = {
+           account_id
+                    => '9AF5C048',
+           active_change
+                    => 9,
+           id       => 9
+         };

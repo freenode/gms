@@ -2,7 +2,7 @@ $HASH1 = {
            affected_change
                      => 6,
            change_freetext
-                     => '',
+                     => 'Test freetext',
            change_type
                      => 'approve',
            changed_by

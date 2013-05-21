@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 16,
+           id          => 47,
+           verification_data
+                       => 'ovfetmeofjca',
+           verification_type
+                       => 'web_token'
+         };

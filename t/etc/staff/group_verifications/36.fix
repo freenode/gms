@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 11,
+           id          => 36,
+           verification_data
+                       => 'freenode-pghzvoi.group3.example',
+           verification_type
+                       => 'dns'
+         };

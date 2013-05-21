@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 9,
+           id          => 30,
+           verification_data
+                       => 'freenode-oprapjm.group1.example',
+           verification_type
+                       => 'dns'
+         };

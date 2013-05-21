@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 7,
+           id          => 23,
+           verification_data
+                       => 'uhphasofjnsb',
+           verification_type
+                       => 'web_token'
+         };

@@ -1,0 +1,59 @@
+{
+    "sets": [
+        {
+            "class": "Account",
+            "quantity": "all"
+        },
+        {
+            "class": "Contact",
+            "quantity": "all"
+        },
+        {
+            "class": "GroupContact",
+            "quantity": "all"
+        },
+        {
+            "class": "Group",
+            "quantity": "all"
+        },
+        {
+            "class": "GroupChange",
+            "quantity": "all"
+        },
+        {
+            "class": "Role",
+            "quantity": "all"
+        },
+        {
+            "class": "UserRole",
+            "quantity": "all"
+        },
+        {
+            "class": "GroupVerification",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelNamespace",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelNamespaceChange",
+            "quantity": "all"
+        },
+        {
+            "class": "CloakNamespace",
+            "quantity": "all"
+        },
+        {
+            "class": "CloakNamespaceChange",
+            "quantity": "all"
+        },
+        {
+	     "class": "CloakChange",
+	     "quantity": "all"
+	}
+    ],
+    "includes": [
+        { "file": "common_rules.json" }
+    ]
+}

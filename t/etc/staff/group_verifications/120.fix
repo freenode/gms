@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 40,
+           id          => 120,
+           verification_data
+                       => 'freenode-dvgpmqh.group124.example',
+           verification_type
+                       => 'dns'
+         };

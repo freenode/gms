@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 34,
+           id          => 102,
+           verification_data
+                       => 'freenode-tmamonx.group118.example',
+           verification_type
+                       => 'dns'
+         };

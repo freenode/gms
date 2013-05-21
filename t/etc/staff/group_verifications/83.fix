@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 28,
+           id          => 83,
+           verification_data
+                       => 'czysthnnileg',
+           verification_type
+                       => 'web_token'
+         };
