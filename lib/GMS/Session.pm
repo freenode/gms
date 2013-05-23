@@ -49,7 +49,6 @@ sub new {
     $self->{_source} = "GMS:$user";
     $self->{_source} .= "(" . $config{source} . ")" if $config{source};
 
-    use Data::Dumper;
 
     $self->{_rpcsession} = RPC::Atheme::Session->new(
         $config->{hostname},

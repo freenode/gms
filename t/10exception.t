@@ -22,7 +22,6 @@ throws_ok {
 } qr/^Invalid group test$/;
 
 
-use Data::Dumper;
 
 eval {
     my @arr = ('Error1', 'Error2');
