@@ -376,22 +376,20 @@ sub sync_to_atheme {
     foreach my $channelRequest (@unapplied) {
         my $type = $channelRequest->request_type;
         my $channel = $channelRequest->channel;
-        my $contact_id = $channelRequest->requestor;
+        my $contact_id = $channelRequest->requestor->id;
 
         my $contact = $contact_rs->find({ 'id' => $contact_id });
-        my $requestor = $contact->account->id;
+        my $requestor_id = $contact->account->id;
 
         my $request_type = $channelRequest->request_type;
 
         try {
             if ( $request_type->is_transfer) {
-
                 my $target = $channelRequest->target;
-                #my $targetAccount = $account_rs->find({ 'id' => $target->id });
 
-                $client->take_over ( $channel, $target->id, $requestor );
+                $client->take_over ( $channel, $target->id, $requestor_id );
             } elsif ( $request_type->is_drop ) {
-                $client->drop ( $channel, $requestor );
+                $client->drop ( $channel, $requestor_id );
             }
 
             $channelRequest->apply (
