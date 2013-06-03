@@ -5,6 +5,7 @@ use warnings;
 use base qw (GMS::Web::TokenVerification);
 use TryCatch;
 use GMS::Exception;
+use GMS::Domain::ChannelRequest;
 
 =head1 NAME
 
@@ -431,11 +432,10 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     my $group = $c->stash->{group};
     my $action = $p->{action};
 
-    my $change_rs = $c->model("DB::ChannelRequest");
     my $account_rs = $c->model("DB::Account");
 
     try {
-        my $session = $c->model('Atheme')->session;
+        my $channels = $c->model('Channels');
 
         if ($action == 1) {
             my $target = $p->{target};
@@ -455,7 +455,7 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
                 $c->detach ('take_over');
             }
 
-            $change_rs->create ({
+            $channels->request ({
                     requestor => $c->user->account->contact->id,
                     channel => $channel,
                     namespace => $namespace,
@@ -463,17 +463,15 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
                     request_type => 'transfer',
                     target => $account->id,
                     changed_by => $c->user->account->id,
-                    session => $session,
                 });
         } elsif ($action == 2) {
-            $change_rs->create ({
+            $channels->request ({
                     requestor => $c->user->account->contact->id,
                     channel => $channel,
                     namespace => $namespace,
                     group => $group,
                     request_type => 'drop',
                     changed_by => $c->user->account,
-                    session => $session
                 });
         }
     }

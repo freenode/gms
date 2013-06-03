@@ -5,7 +5,6 @@ package GMS::Schema::Result::ChannelRequest;
 
 use strict;
 use warnings;
-use GMS::Atheme::Client;
 use RPC::Atheme::Error;
 
 use base 'DBIx::Class::Core';
@@ -204,13 +203,12 @@ sub new {
         push @errors, "Request Type must be provided";
         $valid = 0;
     }
-    if (!$args->{channel} || !$args->{namespace} || !$args->{group} || !$args->{session}) {
-        push @errors, "Channel, session, namespace and group must be provided.";
+    if (!$args->{channel} || !$args->{namespace} || !$args->{group} ) {
+        push @errors, "Channel,  namespace and group must be provided.";
         $valid = 0;
     } else {
         my $namespace = delete $args->{namespace};
         my $group = delete $args->{group};
-        my $session = delete $args->{session};
         my $channel = $args->{channel};
 
         if ( !$group->active_channel_namespaces->find ({ 'namespace' => $namespace }) ) {
@@ -219,13 +217,6 @@ sub new {
         }
         if ( $channel ne "#$namespace" && !match_glob ("#$namespace-*", $channel) ) {
             push @errors, "This channel does not belong in that namespace.";
-            $valid = 0;
-        }
-
-        my $client = GMS::Atheme::Client->new($session);
-
-        if ( !$client->chanexists ( $channel ) ) {
-            push @errors, "$channel isn't registered!";
             $valid = 0;
         }
     }
