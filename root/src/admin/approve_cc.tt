@@ -11,6 +11,9 @@
   <tr>
     <td>
       [% cc.contact.account.accountname | html %]
+      [% IF cc.contact.account.dropped %]
+        ( dropped )
+      [% END %]
     </td>
     <td>
       [% cc.contact.name | html %]<br/>[% cc.name | html %]

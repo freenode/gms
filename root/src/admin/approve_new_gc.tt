@@ -17,6 +17,9 @@
     </td>
     <td>
       <a href="[% c.uri_for("/staff/account/${gc.contact.account.id}/view") %]">[% gc.contact.account.accountname | html %]</a>
+      [% IF gc.contact.account.dropped %]
+        ( dropped )
+      [% END %]
     </td>
     <td><input type="radio" name="action_[% gc.id %]" value="approve" /></td>
     <td><input type="radio" name="action_[% gc.id %]" value="reject" /></td>

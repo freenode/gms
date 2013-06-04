@@ -15,6 +15,9 @@
   <tr>
     <td>
       [% cc.target.accountname | html %]
+      [% IF cc.target.dropped %]
+        ( dropped )
+      [% END %]
     </td>
     <td>
       [% cc.cloak %]

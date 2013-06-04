@@ -15,6 +15,9 @@
   <tr>
     <td>
       [% cr.contact.account.accountname | html %]
+      [% IF gc.contact.account.dropped %]
+        ( dropped )
+      [% END %]
     </td>
     <td>
       [% cr.request_type %]

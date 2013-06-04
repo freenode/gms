@@ -1,5 +1,9 @@
 [% META title = 'User View' %]
 
+[% IF account.dropped %]
+<p><b>Note:</b> The account is no longer registered. Below is the most recent information:</p>
+[% END %]
+
 <p>[% account.accountname %]'s contact information:</p>
 
 <table>

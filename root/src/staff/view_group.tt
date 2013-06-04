@@ -23,7 +23,13 @@
 <h3>Contacts:</h3>
 <ul>
 [% FOREACH contact = group.active_contacts %]
-<li>[% contact.name | html %] ([% contact.account.accountname | html %])</li>
+<li>
+  [% contact.name | html %] ([% contact.account.accountname | html %])
+
+  [% IF contact.account.dropped %]
+    ( dropped )
+  [% END %]
+</li>
 [% END %]
 </ul>
 
@@ -32,7 +38,12 @@
 <ul>
 [% FOREACH gc = group.group_contacts %]
   [% IF gc.status != 'active' -%]
-    <li> [% gc.contact.name | html %] ([% gc.contact.account.accountname | html %]) [% gc.status %]</li>
+    <li>
+      [% gc.contact.name | html %] ([% gc.contact.account.accountname | html %]) [% gc.status %]
+      [% IF gc.contact.account.dropped %]
+        ( dropped )
+      [% END %]
+    </li>
   [% END %]
 [% END %]
 </ul>

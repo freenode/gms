@@ -8,7 +8,7 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum","InflateColumn::Boolean","Core");
 
 =head1 NAME
 
@@ -32,6 +32,13 @@ __PACKAGE__->table("accounts");
   is_nullable: 1
   size: 32
 
+=head2 dropped
+
+  data_type: 'int'
+  is_nullable: 0
+  is_boolean:  1
+  default_value: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -43,6 +50,13 @@ __PACKAGE__->add_columns(
   },
   "accountname",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "dropped",
+  {
+    data_type         => "int",
+    is_nullable       => 0,
+    is_boolean        => 1,
+    default_value     => 0
+  }
 );
 __PACKAGE__->set_primary_key("id");
 

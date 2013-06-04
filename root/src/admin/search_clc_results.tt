@@ -16,6 +16,9 @@
   </td>
   <td>
     [% change.cloak_change.target.accountname | html %]
+    [% IF change.cloak_change.target.dropped %]
+        ( dropped )
+    [% END %]
   </td>
   <td>
     [% change.cloak_change.cloak %]

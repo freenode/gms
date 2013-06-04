@@ -1,5 +1,9 @@
 [% META title = 'User Information' -%]
 
+[% IF account.dropped %]
+<p><b>Note</b> The account has been dropped.
+[% END %]
+
 <p>Use this form to update [% account.accountname | html %]'s personal information</p>
 
 <form method="post" action="[% c.uri_for("/admin/account/${account.id}/edit/submit") %]">

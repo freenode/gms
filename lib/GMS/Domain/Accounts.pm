@@ -57,12 +57,17 @@ sub find_by_uid {
         die GMS::Exception->new ("Please provide a user id");
     }
 
+    my $schema = $self->{_schema};
+    my $account_rs = $schema->resultset('Account');
+    my $account = $account_rs->find ({ 'id' => $uid });
+
+    return $account if $account && $account->dropped;
+
     try {
         my $session = $self->{_session};
-        my $schema = $self->{_schema};
         my $name = $session->command ($session->service, 'accountname', $uid);
 
-        my $row = $schema->resultset('Account')->find_or_new (
+        my $row = $account_rs->find_or_new (
             {
                 'id' => $uid
             }
@@ -74,7 +79,15 @@ sub find_by_uid {
         return GMS::Domain::Account->new ($uid, $name, $session, $result);
     } catch (RPC::Atheme::Error $e) {
         if ($e->code == RPC::Atheme::Error::nosuchtarget) {
-            die GMS::Exception->new ("Could not find an account with that UID.");
+            if ( $account ) {
+                $account->dropped(1);
+                $account->update;
+                return $account;
+            }
+
+            else {
+                die GMS::Exception->new ("Could not find an account with that UID.");
+            }
         } else {
             die $e;
         }

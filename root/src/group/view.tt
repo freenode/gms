@@ -22,7 +22,12 @@
 <h3>Contacts:</h3>
 <ul>
 [% FOREACH contact = group.active_contacts %]
-<li>[% contact.name | html %] ([% contact.account.accountname | html %])</li>
+<li>
+   [% contact.name | html %] ([% contact.account.accountname | html %])
+   [% IF contact.account.dropped %]
+     ( dropped )
+   [% END %]
+ </li>
 [% END %]
 </ul>
 <h3>Actions:</h3>
