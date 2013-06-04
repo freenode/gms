@@ -311,7 +311,6 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
         $c->detach ('search_users');
     }
 
-    my @rows = $rs->all;
     my @results;
 
     try {
