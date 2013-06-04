@@ -133,7 +133,7 @@
 
       <p>
         <b>Previous failure reason:</b><br/>
-        [% cc.change_freetext %]
+        [% cc.active_change.change_freetext %]
       </p>
 
       <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>
