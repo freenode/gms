@@ -46,7 +46,7 @@ sub cloak {
     my $session = $self->{_session};
 
     try {
-        $session->command($session->service, 'cloak', $accountname, $cloak);
+        return $session->command($session->service, 'cloak', $accountname, $cloak);
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
@@ -67,7 +67,7 @@ sub take_over {
     my $session = $self->{_session};
 
     try {
-        $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
+        return $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
@@ -85,7 +85,7 @@ sub drop {
     my $session = $self->{_session};
 
     try {
-        $session->command($session->service, 'drop', $channel, $requestor);
+        return $session->command($session->service, 'drop', $channel, $requestor);
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
