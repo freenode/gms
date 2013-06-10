@@ -61,7 +61,7 @@ sub cloak :Chained('base') :PathPart('') :CaptureArgs(1) {
 
     my $cloak = $change_rs->find ({ id => $cloak_id });
 
-    if (!$cloak || $cloak->target->id != $account->id) {
+    if (!$cloak || $cloak->target->id ne $account->id) {
         $c->stash->{error_msg} = "That cloak doesn't exist or hasn't been assigned to you.";
         $c->detach('index');
     }
