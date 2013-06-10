@@ -1,0 +1,5 @@
+$HASH1 = {
+           active_change => 184,
+           contact_id    => 42,
+           group_id      => 122
+         };

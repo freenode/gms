@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 96,
+           id          => 296,
+           verification_data
+                       => 'freenode-vcxmslu.example.com',
+           verification_type
+                       => 'dns'
+         };

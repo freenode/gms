@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 26,
+           id          => 80,
+           verification_data
+                       => 'freenode-xamjeit.example.com',
+           verification_type
+                       => 'dns'
+         };

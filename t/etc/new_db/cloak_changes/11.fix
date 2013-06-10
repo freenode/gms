@@ -1,0 +1,7 @@
+$HASH1 = {
+           active_change
+                   => 21,
+           cloak   => 'group10/user10',
+           id      => 11,
+           target  => '43C4FEA0'
+         };

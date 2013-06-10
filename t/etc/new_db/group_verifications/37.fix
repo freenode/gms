@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 12,
+           id          => 37,
+           verification_data
+                       => 'freenode-fpagobi.example.com',
+           verification_type
+                       => 'dns'
+         };

@@ -1,0 +1,6 @@
+$HASH1 = {
+           accountname
+                   => 'account4',
+           dropped => 1,
+           id      => '40BBC888'
+         };

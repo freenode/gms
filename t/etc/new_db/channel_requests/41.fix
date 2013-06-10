@@ -1,0 +1,9 @@
+$HASH1 = {
+           active_change => 69,
+           channel       => '#group40',
+           id            => 41,
+           request_data  => undef,
+           request_type  => 'transfer',
+           requestor     => 42,
+           target        => '53153FF0'
+         };

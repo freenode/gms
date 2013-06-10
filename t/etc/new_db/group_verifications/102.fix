@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 33,
+           id          => 102,
+           verification_data
+                       => 'freenode-jgisjnl.example.com',
+           verification_type
+                       => 'dns'
+         };

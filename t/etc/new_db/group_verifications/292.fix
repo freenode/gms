@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 95,
+           id          => 292,
+           verification_data
+                       => 'dobopguhbsdd',
+           verification_type
+                       => 'web_token'
+         };

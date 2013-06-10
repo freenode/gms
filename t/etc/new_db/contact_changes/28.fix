@@ -1,0 +1,17 @@
+$HASH1 = {
+           address  => 22,
+           affected_change
+                    => undef,
+           change_freetext
+                    => undef,
+           change_type
+                    => 'create',
+           changed_by
+                    => '43C4FEA0',
+           contact_id
+                    => 12,
+           email    => 'user10@example.com',
+           id       => 28,
+           name     => 'Name10',
+           time     => '2013-06-15 19:27:41.596742'
+         };

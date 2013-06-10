@@ -1,0 +1,18 @@
+$HASH1 = {
+           address  => undef,
+           affected_change
+                    => undef,
+           change_freetext
+                    => undef,
+           change_type
+                    => 'admin',
+           changed_by
+                    => 'AAAAAAAAH',
+           group_id => 101,
+           group_type
+                    => 'government',
+           id       => 321,
+           status   => 'active',
+           time     => '2013-06-15 19:28:01.602009',
+           url      => 'http://group0233.example.com'
+         };

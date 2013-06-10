@@ -1,0 +1,8 @@
+$HASH1 = {
+           active_change => 323,
+           deleted       => 0,
+           group_name    => 'group0333',
+           id            => 102,
+           submitted     => '2013-06-15 19:28:01.437966',
+           verify_auto   => 0
+         };

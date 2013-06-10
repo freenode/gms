@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 64,
+           id          => 196,
+           verification_data
+                       => 'htadefxivbiu',
+           verification_type
+                       => 'web_token'
+         };

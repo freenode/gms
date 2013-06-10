@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 123,
+           id          => 378,
+           verification_data
+                       => 'mrdlibdllyfs',
+           verification_type
+                       => 'web_token'
+         };

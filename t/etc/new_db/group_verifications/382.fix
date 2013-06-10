@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 124,
+           id          => 382,
+           verification_data
+                       => 'freenode-sopctfo.example.com',
+           verification_type
+                       => 'dns'
+         };

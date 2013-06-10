@@ -1,0 +1,16 @@
+$HASH1 = {
+           affected_change
+                     => undef,
+           change_freetext
+                     => undef,
+           change_type
+                     => 'workflow_change',
+           changed_by
+                     => 'AAAAAAAAH',
+           contact_id
+                     => 1,
+           group_id  => 62,
+           id        => 92,
+           primary   => 0,
+           status    => 'pending_staff'
+         };

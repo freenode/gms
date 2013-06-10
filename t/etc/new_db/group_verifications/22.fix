@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 7,
+           id          => 22,
+           verification_data
+                       => 'freenode-viurexa.example.com',
+           verification_type
+                       => 'dns'
+         };

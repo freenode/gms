@@ -1,0 +1,18 @@
+$HASH1 = {
+           address  => undef,
+           affected_change
+                    => undef,
+           change_freetext
+                    => 'Freetext24',
+           change_type
+                    => 'admin',
+           changed_by
+                    => 'AAAAAAAAH',
+           group_id => 73,
+           group_type
+                    => 'informal',
+           id       => 233,
+           status   => 'active',
+           time     => '2013-06-15 19:27:53.613412',
+           url      => 'http://group24.example.com'
+         };

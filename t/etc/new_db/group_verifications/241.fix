@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 76,
+           id          => 241,
+           verification_data
+                       => 'freetext25',
+           verification_type
+                       => 'freetext'
+         };

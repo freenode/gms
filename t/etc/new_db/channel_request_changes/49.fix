@@ -1,0 +1,11 @@
+$HASH1 = {
+           change_freetext
+                     => 'Freetext28',
+           changed_by
+                     => 'AAAAAAAAH',
+           channel_request_id
+                     => 29,
+           id        => 49,
+           status    => 'rejected',
+           time      => '2013-06-15 19:27:57.790409'
+         };

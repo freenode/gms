@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 114,
+           id          => 350,
+           verification_data
+                       => 'fleboxxvqrsj',
+           verification_type
+                       => 'web_token'
+         };

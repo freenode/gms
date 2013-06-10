@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 104,
+           id          => 321,
+           verification_data
+                       => 'freenode-siekrtm.example.com',
+           verification_type
+                       => 'dns'
+         };

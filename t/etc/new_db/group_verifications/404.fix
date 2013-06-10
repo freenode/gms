@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 131,
+           id          => 404,
+           verification_data
+                       => 'freenode-nqocrpa.example.com',
+           verification_type
+                       => 'dns'
+         };

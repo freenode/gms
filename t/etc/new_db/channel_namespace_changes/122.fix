@@ -1,0 +1,16 @@
+$HASH1 = {
+           affected_change
+                     => undef,
+           change_freetext
+                     => '',
+           change_type
+                     => 'admin',
+           changed_by
+                     => 'AAAAAAAAH',
+           group_id  => 113,
+           id        => 122,
+           namespace_id
+                     => 76,
+           status    => 'active',
+           time      => '2013-06-15 19:28:05.173025'
+         };

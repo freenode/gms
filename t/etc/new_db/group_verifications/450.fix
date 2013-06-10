@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 146,
+           id          => 450,
+           verification_data
+                       => 'freenode-amarbdx.example.com',
+           verification_type
+                       => 'dns'
+         };

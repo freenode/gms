@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 83,
+           id          => 256,
+           verification_data
+                       => 'freenode-hdirdmc.example.com',
+           verification_type
+                       => 'dns'
+         };

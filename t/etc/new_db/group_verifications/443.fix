@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 144,
+           id          => 443,
+           verification_data
+                       => 'cemfaofiawmj',
+           verification_type
+                       => 'web_token'
+         };

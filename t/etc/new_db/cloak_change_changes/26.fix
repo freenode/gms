@@ -1,0 +1,11 @@
+$HASH1 = {
+           change_freetext
+                     => '',
+           changed_by
+                     => 'AAAAAAAAH',
+           cloak_change_id
+                     => 14,
+           id        => 26,
+           status    => 'applied',
+           time      => '2013-06-15 19:27:45.001167'
+         };

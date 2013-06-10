@@ -1,0 +1,8 @@
+$HASH1 = {
+           group_id    => 10,
+           id          => 31,
+           verification_data
+                       => 'freenode-kmqbbql.example.com',
+           verification_type
+                       => 'dns'
+         };
