@@ -203,10 +203,20 @@ sub new {
         push @errors, "Request Type must be provided";
         $valid = 0;
     }
-    if (!$args->{channel} || !$args->{namespace} || !$args->{group} ) {
-        push @errors, "Channel,  namespace and group must be provided.";
+    if (!$args->{channel}) {
+        push @errors, "Channel must be provided";
         $valid = 0;
-    } else {
+    }
+    if (!$args->{namespace}) {
+        push @errors, "Namespace must be provided";
+        $valid = 0;
+    }
+    if (!$args->{group}) {
+        push @errors, "Group must be provided";
+        $valid = 0;
+    }
+
+    if ($valid) {
         my $namespace = delete $args->{namespace};
         my $group = delete $args->{group};
         my $channel = $args->{channel};
@@ -220,7 +230,8 @@ sub new {
             $valid = 0;
         }
     }
-    if (!$args->{target} && $args->{request_type} eq 'transfer' ) {
+
+    if ( !$args->{target} && $args->{request_type} && $args->{request_type} eq 'transfer' ) {
         push @errors, "Target must be provided";
         $valid = 0;
     }

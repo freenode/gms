@@ -47,7 +47,7 @@ sub new {
     bless $self, $class;
 }
 
-=head2 uid
+=head2 id
 
 Returns the account's uid.
 

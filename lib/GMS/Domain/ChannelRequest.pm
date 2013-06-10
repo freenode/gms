@@ -45,6 +45,7 @@ sub new {
 
     $self->{_session} = $session;
     $self->{_dbic_channel_request_row} = $row;
+    $self->{_target} = undef;
 
     my $schema = $row->result_source->schema;
 
@@ -53,18 +54,20 @@ sub new {
         $schema
     );
 
-    try {
-        my $account = $accounts->find_by_uid (
-            $row->target->id
-        );
+    if ( $row->target ) {
+        try {
+            my $account = $accounts->find_by_uid (
+                $row->target->id
+            );
 
-        $self->{_target} = $account;
-    }
-    catch (GMS::Exception $e) {
-        die $e;
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
+            $self->{_target} = $account;
+        }
+        catch (GMS::Exception $e) {
+            die $e;
+        }
+        catch (RPC::Atheme::Error $e) {
+            die $e;
+        }
     }
 
     bless $self, $class;

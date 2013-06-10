@@ -51,7 +51,7 @@ __PACKAGE__->table("channel_request_changes");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 channel_request_status
+=head2 status
 
   data_type: 'enum'
   extra: {custom_type_name => "channel_request_status",list => ["pending_staff","approved","rejected","applied","error"]}
@@ -91,7 +91,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-      custom_type_name => "status",
+      custom_type_name => "channel_request_status",
       list => ["pending_staff", "approved", "rejected", "applied", "error"],
     },
     is_nullable => 0,
@@ -171,15 +171,6 @@ sub new {
 
     my @errors;
     my $valid=1;
-
-    if (!$args->{status}) {
-        push @errors, "Status cannot be empty";
-        $valid = 0;
-    }
-
-    if (!$valid) {
-        die GMS::Exception::InvalidChange->new(\@errors);
-    }
 
     return $class->next::method($args);
 }

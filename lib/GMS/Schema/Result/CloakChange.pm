@@ -327,6 +327,8 @@ sub sync_to_atheme {
             );
         }
     }
+
+    1;
 }
 
 1;
