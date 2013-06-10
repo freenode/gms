@@ -2,14 +2,28 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
+use Test::More;
+use Test::MockModule;
+use Test::MockObject;
 
-use Carp::Always;
-
-need_database 'staff';
+our $schema = need_database 'staff';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
+
+my $mockAccounts = new Test::MockModule ('GMS::Domain::Accounts');
+
+$mockAccounts->mock ('find_by_uid', sub {
+        my ( $self, $uid ) = @_;
+
+        return $schema->resultset('Account')->find ({ id => $uid });
+    });
+
+my $mockAtheme = new Test::MockObject;
+
+my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
+$mockModel->mock ('session' => sub { $mockAtheme });
 
 $ua->get_ok("http://localhost/", "Check root page");
 
@@ -34,13 +48,13 @@ $ua->content_contains ("<tr> <td>Status</td>            <td>active</td> </tr>");
 $ua->content_contains ("<tr> <td>Verification URL</td>  <td>http://www.example.com//dhxtohuj.txt</td> </tr>");
 $ua->content_contains ("<tr> <td>Verification token</td><td>yficqfvmxpra</td> </tr>");
 $ua->content_contains ("<tr> <td>DNS pointing to freenode.net</td> <td>freenode-odwnvkm.example.com</td> </tr>");
-$ua->content_contains ("<li>Tester 1 (test01)</li>", "Contacts are displayed");
+$ua->content_contains ("Tester 1 (test01)", "Contacts are displayed");
 
 $ua->get_ok("http://localhost/admin/38/view", "View group page works");
 
 $ua->content_contains ("<h2>group122</h2>");
 $ua->content_contains ("Historical/Inactive Contacts", "Inactive Contacts are displayed");
-$ua->content_contains("<li> Test 2 (test02)</li>", "Inactive Contacts are displayed");
+$ua->content_contains("Test 2 (test02)", "Inactive Contacts are displayed");
 
 $ua->get_ok("http://localhost/admin/1/edit", "Edit group page works");
 
@@ -92,8 +106,6 @@ $ua->get_ok("http://localhost/admin/1/edit", "Edit page works");
 
 $ua->content_contains ("http://example.org", "New URL is shown");
 $ua->content_contains ("new_address", "New Address is shown");
-
-my $schema = GMS::Schema->do_connect;
 
 my $group = $schema->resultset('Group')->find({ group_name => 'Group01' });
 ok($group, "Check group exists");

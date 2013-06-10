@@ -86,7 +86,7 @@ $ua->click_button(
     value => 'Next page'
 );
 
-$ua->content_contains("test6", "paging works");
+$ua->content_contains("test101", "paging works");
 
 $ua->content_contains("Next page", "We can go to next page");
 $ua->content_contains("Previous page", "We can go to previous page");
@@ -121,7 +121,7 @@ $ua->click_button(
     value => 'Go'
 );
 
-$ua->content_contains("test6", "paging works");
+$ua->content_contains("test101", "paging works");
 $ua->content_contains("name='current_page' value='2'", "We're at 2nd page");
 
 done_testing;

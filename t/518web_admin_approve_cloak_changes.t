@@ -3,86 +3,101 @@ use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
 use Test::MockModule;
+use Test::MockObject;
 
-my $module = new Test::MockModule('RPC::Atheme::Session');
-
-$module->mock ( 'login', sub {
-        return 1;
-    });
-
-$module->mock ( 'command', sub {
-        shift @_ for 1 .. 2;
-
-        my ($command, undef, $param) = ( @_ );
-
-        if ( $command eq 'metadata' ) {
-            if ($param eq 'private:mark:reason') {
-                return "test mark reason";
-            } elsif ($param eq 'private:mark:setter') {
-                return "admin";
-            } elsif ($param eq 'private:mark:timestamp') {
-                return "1362561337";
-            }
-        }
-    });
-
-need_database 'pending_changes';
+our $schema = need_database 'new_db';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
+
+my $ua = Test::WWW::Mechanize::Catalyst->new;
+
+my $mockAtheme = new Test::MockObject;
+
+$mockAtheme->mock ( 'command', sub {
+    shift @_ for 1 .. 2;
+
+    my ($command, $param1, $param2) = ( @_ );
+
+    if ( $command eq 'metadata' ) {
+        if ($param2 eq 'private:mark:reason') {
+            return "test mark reason";
+        } elsif ($param2 eq 'private:mark:setter') {
+            return "admin";
+        } elsif ($param2 eq 'private:mark:timestamp') {
+            return "1362561337";
+        }
+    } elsif ( $command eq 'accountname' ) {
+        my $account = $schema->resultset('Account')->find ({
+                id => $param1
+            });
+        return $account->accountname;
+    } elsif ( $command eq 'uid' ) {
+        my $account = $schema->resultset('Account')->find ({
+                accountname => $param1
+            });
+        return $account->id;
+    }
+});
+
+$mockAtheme->mock ( 'service', sub { 'GMSServ' } );
+
+my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
+$mockModel->mock ('session' => sub { $mockAtheme });
+
+my $mockAccount = new Test::MockModule ('GMS::Schema::Result::Account');
+$mockAccount->mock ('dropped' => sub { 0; } );
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
 my $schema = GMS::Schema->do_connect;
 
 my $change_rs = $schema->resultset('CloakChange');
 
-my $change1 = $change_rs->find({ 'id' => 1 });
 my $change5 = $change_rs->find({ 'id' => 5 });
+my $change10 = $change_rs->find({ 'id' => 10 });
 
-ok !$change1->approved, 'change has not been approved yet.';
-ok !$change1->rejected, 'change has not been rejected yet.';
+ok !$change5->active_change->status->is_approved, 'change has not been approved yet.';
+ok !$change5->active_change->status->is_rejected, 'change has not been rejected yet.';
 
-ok !$change5->approved, 'change has not been approved yet.';
-ok !$change5->rejected, 'change has not been rejected yet.';
+ok !$change10->active_change->status->is_approved, 'change has not been approved yet.';
+ok !$change10->active_change->status->is_rejected, 'change has not been rejected yet.';
 
 $ua->get_ok("http://localhost/login", "Check login page works");
 $ua->content_contains("Login to GMS", "Check login page works");
 
 $ua->submit_form(
     fields => {
-        username => 'admin01',
+        username => 'admin',
         password => 'admin001'
     }
 );
 
-$ua->content_contains("You are now logged in as admin01", "Check we can log in");
+$ua->content_contains("You are now logged in as admin", "Check we can log in");
 
 $ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
 
 $ua->content_contains("<b>marked</b> by <b>admin</b>", "If there is a mark on the account, it is displayed in the page.");
 $ua->content_contains("test mark reason", "If there is a mark on the account, it is displayed in the page.");
 
-$ua->content_contains("Cloak: example/test02, approved on", "Recent cloak changes appear");
-
 $ua->submit_form(
     fields => {
-        action_1 => 'approve'
-    }
-);
-
-$change1->discard_changes;
-
-ok $change1->approved, 'change has been approved';
-
-$ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
-        action_5 => 'reject'
+        action_5 => 'approve'
     }
 );
 
 $change5->discard_changes;
 
-ok $change5->rejected, 'change has been rejected';
+ok $change5->active_change->status->is_applied, 'change has been applid';
+
+$ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
+
+$ua->submit_form(
+    fields => {
+        action_10 => 'reject'
+    }
+);
+
+$change10->discard_changes;
+
+ok $change10->active_change->status->is_rejected, 'change has been rejected';
 
 done_testing;

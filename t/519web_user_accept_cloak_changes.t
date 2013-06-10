@@ -2,76 +2,104 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
+use Test::More;
+use Test::MockModule;
+use Test::MockObject;
 
-need_database 'pending_changes';
+our $schema = need_database 'new_db';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
-my $schema = GMS::Schema->do_connect;
+
+my $mockAccounts = new Test::MockModule ('GMS::Domain::Accounts');
+
+$mockAccounts->mock ('find_by_uid', sub {
+        my ( $self, $uid ) = @_;
+
+        return $schema->resultset('Account')->find ({ id => $uid });
+    });
+
+my $mockAtheme = new Test::MockObject;
+
+my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
+$mockModel->mock ('session' => sub { $mockAtheme });
 
 my $change_rs = $schema->resultset('CloakChange');
 
-my $change2 = $change_rs->find({ 'id' => 2 });
-my $change3 = $change_rs->find({ 'id' => 3 });
+my $change6 = $change_rs->find({ 'id' => 6 });
+my $change12 = $change_rs->find({ 'id' => 12 });
 
-ok !$change2->accepted, 'change has not been accepted yet.';
-ok !$change2->rejected, 'change has not been rejected yet.';
-
-ok !$change3->accepted, 'change has not been accepted yet.';
-ok !$change3->rejected, 'change has not been rejected yet.';
+ok $change6->active_change->status->is_offered, 'status is offered';
+ok $change12->active_change->status->is_offered, 'status is offered';
 
 $ua->get_ok("http://localhost/login", "Check login page works");
 $ua->content_contains("Login to GMS", "Check login page works");
 
 $ua->submit_form(
     fields => {
-        username => 'test01',
-        password => 'tester01'
+        username => 'account5',
+        password => 'tester05'
     }
 );
 
-$ua->content_contains("You are now logged in as test01", "Check we can log in");
+$ua->content_contains("You are now logged in as account5", "Check we can log in");
 
 $ua->get_ok("http://localhost/cloak", "Check cloak page works");
 
-$ua->content_contains("example2/test01", "Cloak is there");
-$ua->content_contains("example3/test01", "Cloak is there");
+$ua->content_contains("group5/user5", "Cloak is there");
 
-$ua->form_name('example2/test01');
+$ua->post ('http://localhost/cloak/6/approve');
+$ua->content_contains ('Invalid action', 'invalid action errors');
+
+$ua->form_name('group5/user5');
 $ua->click_button(
     number => 1
 );
 
 $ua->content_contains("Successfully approved the cloak", "Approval worked");
 
-$change2->discard_changes;
+$change6->discard_changes;
 
-ok $change2->accepted, "Approval worked.";
+ok $change6->active_change->status->is_accepted, "Approval worked.";
 
-$ua->content_lacks("example2/test01", "Approved cloak is no longer there.");
+$ua->content_lacks("group5/user5", "Approved cloak is no longer there.");
 
-$ua->form_name('example3/test01');
+$ua->get("http://localhost/logout");
+
+$ua->get_ok("http://localhost/login", "Check login page works");
+$ua->content_contains("Login to GMS", "Check login page works");
+
+$ua->submit_form(
+    fields => {
+        username => 'account11',
+        password => 'tester11'
+    }
+);
+
+$ua->content_contains("You are now logged in as account11", "Check we can log in");
+
+$ua->get_ok("http://localhost/cloak", "Check cloak page works");
+
+$ua->content_contains("group11/user11", "Cloak is there");
+
+$ua->form_name('group11/test11');
 $ua->click_button(
     number => 2
 );
 
 $ua->content_contains("Successfully rejected the cloak", "Rejection worked.");
 
-$change3->discard_changes;
+$change12->discard_changes;
 
-ok $change3->rejected, "Rejection worked.";
+ok $change12->active_change->status->is_rejected, "Rejection worked.";
 
-$ua->content_lacks("example2/test01", "Approved cloak is no longer there.");
-$ua->content_lacks("example3/test01", "Rejected cloak is no longer there.");
+$ua->content_lacks("group11/user11", "Rejected cloak is no longer there.");
 
-$ua->get ("http://localhost/cloak/99/approve");
+$ua->get ("http://localhost/cloak/999/approve");
 $ua->content_contains ("That cloak doesn't exist or hasn't been assigned to you.", "Can't approve cloak change that does not exist");
 
 $ua->get ("http://localhost/cloak/4/approve");
 $ua->content_contains ("That cloak doesn't exist or hasn't been assigned to you.", "Can't approve cloak change that belongs to someone else");
-
-$ua->post ('http://localhost/cloak/1/approve');
-$ua->content_contains ('Invalid action', 'invalid action errors');
 
 done_testing;

@@ -2,8 +2,8 @@
 
 use strict;
 use warnings;
+
 use Test::Most;
-use Test::MockObject;
 use Test::MockModule;
 
 use lib qw(t/lib);
@@ -11,57 +11,49 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
-my $schema = need_database 'pending_changes';
+my $schema = need_database 'new_db';
 
-my $cloakchange = $schema->resultset('CloakChange')->find({ 'id' => 2 });
-my $user = $schema->resultset('Account')->find ({ 'accountname' => 'test01' });
-my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin01' });
+my $cloakchange = $schema->resultset('CloakChange')->find({ 'id' => 1 });
+my $user = $schema->resultset('Account')->find ({ 'accountname' => 'account0' });
+my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin' });
 
-is $schema->resultset('CloakChange')->search_offered->count, 2;
-is $schema->resultset('CloakChange')->search_pending->count, 2;
+is $schema->resultset('CloakChange')->search_offered->count, 25;
+is $schema->resultset('CloakChange')->search_pending->count, 50;
 
-my $mock = Test::MockObject->new;
+my $mock = new Test::MockModule('GMS::Atheme::Client');
 
-$mock->mock ( 'model' => sub { $mock } );
-$mock->mock ( 'session' => sub { $mock });
-$mock->mock ( 'command', sub {
-        shift @_; #we don't need the first element, which is a Test::MockObject
-        return @_;
+$mock->mock ( 'cloak', sub {
+        return 1;
     });
 
-ok $cloakchange->accept;
+ok $cloakchange->accept ( $user );
 $cloakchange->discard_changes;
 
-is $schema->resultset('CloakChange')->search_offered->count, 2, 'An older cloak request is overwritten';
-is $schema->resultset('CloakChange')->search_pending->count, 2, 'An older cloak request is overwritten';
+is $schema->resultset('CloakChange')->search_offered->count, 25, 'An older cloak request is overwritten';
+is $schema->resultset('CloakChange')->search_pending->count, 51, 'Cloaks pending staff approval increase';
 
-ok $cloakchange->approve ($mock);
+ok $cloakchange->approve ( undef, $admin );
 
-is $schema->resultset('CloakChange')->search_offered->count, 2, 'Cloaks pending user approval still the same';
-is $schema->resultset('CloakChange')->search_pending->count, 1, 'Cloaks pending staff aproval decrease';
+is $schema->resultset('CloakChange')->search_offered->count, 25, 'Cloaks pending user approval still the same';
+is $schema->resultset('CloakChange')->search_pending->count, 50, 'Cloaks pending staff aproval decrease';
 
 $cloakchange = $schema->resultset('CloakChange')->find({ 'id' => 2 });
 
-ok $cloakchange->accept;
-ok $cloakchange->reject;
+ok $cloakchange->accept($user);
+ok $cloakchange->reject($admin);
 
-my $error = new Test::MockModule('RPC::Atheme::Error');
-
-$error->mock ( 'PROPAGATE', sub { } );
-
-$mock->mock ( 'command', sub {
-    die new RPC::Atheme::Error;
+$mock->mock ( 'new', sub {
+    die RPC::Atheme::Error->new(1, 'Test error');
 });
+
+$mock->unmock ('cloak');
 
 $cloakchange = $schema->resultset('CloakChange')->find({ 'id' => 3 });
-$cloakchange->accept;
+$cloakchange->accept ( $user );
 
-throws_ok { $cloakchange->approve ($mock) } "RPC::Atheme::Error", "Errors are thrown back";
+$cloakchange->approve ( undef, $admin );
+$cloakchange->discard_changes;
 
-$mock->mock ( 'command' => sub {
-    die 'test';
-});
-
-throws_ok { $cloakchange->approve ($mock) } qr/test/, "Errors are thrown back";
+ok $cloakchange->active_change->status->is_error, "Status is changed to error";
 
 done_testing;
