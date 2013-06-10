@@ -170,20 +170,8 @@ Presents the group approval form.
 sub approve :Chained('base') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
-    my @approve_groups = $c->model('DB::Group')->search_verified_groups;
-    my @verify_groups  = $c->model('DB::Group')->search_submitted_groups;
-    my (@to_approve, @to_verify);
-    my $session = $c->model('Atheme')->session;
-
-    foreach my $group_row (@approve_groups) {
-        my $group = GMS::Domain::Group->new ( $session, $group_row );
-        push @to_approve, $group;
-    }
-
-    foreach my $group_row (@verify_groups) {
-        my $group = GMS::Domain::Group->new ( $session, $group_row );
-        push @to_verify, $group;
-    }
+    my @to_approve = $c->model('DB::Group')->search_verified_groups;
+    my @to_verify  = $c->model('DB::Group')->search_submitted_groups;
 
     $c->stash->{to_approve} = \@to_approve;
     $c->stash->{to_verify} = \@to_verify;
