@@ -9,13 +9,13 @@
     value="[% FOREACH cr IN to_approve %][% cr.id %] [% END %]" />
 <table>
 <tr>
- <th>Account Name</th> <th>Request Type</th> <th>Channel</th> <th>Target</th> <th>Additional Data</th> <th>Expand</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
+ <th>Requestor</th> <th>Request Type</th> <th>Channel</th> <th>Target</th> <th>Additional Data</th> <th>Expand</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
 </tr>
 [% FOREACH cr IN to_approve -%]
   <tr>
     <td>
-      [% cr.contact.account.accountname | html %]
-      [% IF gc.contact.account.dropped %]
+      [% cr.requestor.account.accountname | html %]
+      [% IF cr.requestor.account.dropped %]
         ( dropped )
       [% END %]
     </td>
@@ -26,8 +26,14 @@
       [% cr.channel %]
     </td>
     <td>
-      [% IF (cr.target); cr.target.accountname; END %]
-    </td>
+      [% IF (cr.target) %]
+        [% cr.target.accountname %]
+
+        [% IF (cr.target.dropped) %]
+            ( dropped )
+        [% END %]
+      [% END %]
+   </td>
     <td>
       [% cr.request_data %]
     </td>

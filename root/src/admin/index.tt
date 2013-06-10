@@ -17,6 +17,9 @@
   <a href="[% c.uri_for('/admin/approve_cloak') %]">Review and Approve Cloak Changes</a> ([% pending_cloaks %] pending)
 </li>
 <li>
+  <a href="[% c.uri_for('/admin/approve_channel_requests') %]">Review and Approve Channel takeover & drop requests</a> ([% pending_channels %] pending)
+</li>
+<li>
   <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
 </li>
 <li>

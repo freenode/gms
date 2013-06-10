@@ -12,6 +12,8 @@ use GMS::Domain::CloakNamespaceChange;
 use GMS::Domain::GroupContactChange;
 use GMS::Domain::GroupChange;
 use GMS::Domain::Group;
+use GMS::Domain::ChannelRequest;
+use GMS::Domain::ChannelRequestChange;
 
 use TryCatch;
 use GMS::Exception;
@@ -64,7 +66,15 @@ sub index :Chained('base') :PathPart('') :Args(0) {
       + $c->model('DB::ChannelNamespaceChange')->active_requests->count
       + $c->model('DB::CloakNamespaceChange')->active_requests->count;
 
-    $c->stash->{pending_cloaks} = $c->model('DB::CloakChange')->search_pending->count;
+    $c->stash->{pending_cloaks} =
+    $c->model('DB::CloakChange')->search_pending->count
+    + $c->model('DB::CloakChange')->search_unapplied->count
+    + $c->model('DB::CloakChange')->search_failed->count;
+
+    $c->stash->{pending_channels} =
+    $c->model('DB::ChannelRequest')->search_pending->count
+    + $c->model('DB::ChannelRequest')->search_unapplied->count
+    + $c->model('DB::ChannelRequest')->search_failed->count;
 
     $c->stash->{template} = 'admin/index.tt';
 }
@@ -598,8 +608,28 @@ sub approve_channel_requests :Chained('base') :PathPart('approve_channel_request
 
     my $req_rs = $c->model('DB::ChannelRequest');
 
-    my @to_approve = $req_rs->search_pending;
-    my @failed = $req_rs->search_failed;
+    my @approve_requests = $req_rs->search_pending;
+    my @failed_requests = $req_rs->search_failed;
+    my (@to_approve, @failed);
+
+    try {
+        my $session = $c->model('Atheme')->session;
+
+        foreach my $row (@approve_requests) {
+            my $req = GMS::Domain::ChannelRequest->new ( $session, $row );
+            push @to_approve, $req;
+        }
+
+        foreach my $row (@failed_requests) {
+            my $req = GMS::Domain::ChannelRequest->new ( $session, $row );
+            push @failed, $req;
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        @to_approve = @approve_requests;
+        @failed = @failed_requests;
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+    }
 
     $c->stash->{to_approve} = \@to_approve;
     $c->stash->{failed_requests} = \@failed;
