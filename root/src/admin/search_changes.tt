@@ -68,6 +68,22 @@
     <td><label for="cl_accname">Account name:</label></td>
     <td><input id="cl_accname" type='text' name='cloak_accountname' /></td>
   </tr>
+  <tr>
+    <td colspan="2"><input name="change_item" value="7" type="radio" id="radio7"/> <label for="radio7">Channel Request Changes</label></td>
+  </tr>
+  <tr>
+    <td><label for="channel">Channel:</label></td>
+    <td><input id="channel" type='text' name='channel' /></td>
+  </tr>
+  <tr>
+    <td><label for="channel">Requestor:</label></td>
+    <td><input id="channel" type='text' name='requestor' /></td>
+  </tr>
+  <tr>
+    <td><label for="channel">Target:</label></td>
+    <td><input id="channel" type='text' name='target' /></td>
+  </tr>
+
 </table>
 
 <p>

@@ -1252,7 +1252,7 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
     my ($change_rs, $rs, $page, @results);
 
     my $p = $c->request->params;
-    my $change_item = $p->{change_item};
+    my $change_item = $p->{change_item} || 0;
 
     my $current_page = $p->{current_page} || 1;
     my $next = $p->{next} || '';
@@ -1572,6 +1572,104 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         }
 
         $c->stash->{template} = 'admin/search_clc_results.tt';
+    } elsif ($change_item == 7) { #ChannelRequestChanges
+        $change_rs = $c->model('DB::ChannelRequestChange');
+
+        my $channel = $p->{channel};
+        my $target = $p->{target};
+        my $requestor = $p->{requestor};
+
+        my ($target_search, $requestor_search);
+
+        if ($target) {
+            try {
+                my $accounts = $c->model('Accounts');
+                my $account = $accounts->find_by_name ( $target );
+                my $uid = $account->id;
+
+                $target_search = $uid;
+            }
+            catch (RPC::Atheme::Error $e) {
+                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+
+                my $account_rs = $c->model('DB::Account');
+                my $account = $account_rs->find ({ accountname => $target });
+
+                if (!$account) {
+                    $c->stash->{error_msg} = "Could not find an account with that account name.";
+                    $c->detach ('search_changes');
+                }
+
+                my $uid = $account->id;
+                $target_search = $uid;
+            }
+            catch (GMS::Exception $e) {
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
+            }
+        } else {
+            $target_search = { 'ilike', '%' };
+        }
+
+        if ($requestor) {
+            try {
+                my $accounts = $c->model('Accounts');
+                my $account = $accounts->find_by_name ( $requestor );
+                my $uid = $account->id;
+
+                $requestor_search = $uid;
+            }
+            catch (RPC::Atheme::Error $e) {
+                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+
+                my $account_rs = $c->model('DB::Account');
+                my $account = $account_rs->find ({ accountname => $requestor });
+
+                if (!$account || !$account->contact) {
+                    $c->stash->{error_msg} = "Could not find an account with that account name.";
+                    $c->detach ('search_changes');
+                }
+
+                my $uid = $account->id;
+                $requestor_search = $uid;
+            }
+            catch (GMS::Exception $e) {
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
+            }
+        } else {
+            $requestor_search = { 'ilike', '%' };
+        }
+
+        $rs = $change_rs -> search(
+            {
+                'target' => $target_search,
+                'requestor.account_id' => $requestor_search
+            },
+            {
+                join => { channel_request => [ 'target', 'requestor' ] },
+                order_by => 'id',
+                page => $page,
+                rows => 15
+            }
+        );
+
+        my @rows = $rs->all;
+
+        try {
+            my $session = $c->model('Atheme')->session;
+
+            foreach my $row (@rows) {
+                my $gc_change = GMS::Domain::ChannelRequestChange->new ( $session, $row );
+                push @results, $gc_change;
+            }
+        }
+        catch (RPC::Atheme::Error $e) {
+            @results = @rows;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
+
+        $c->stash->{template} = 'admin/search_crc_results.tt';
     } elsif (! $change_item ) {
         $c->detach ('search_changes');
     } else {
