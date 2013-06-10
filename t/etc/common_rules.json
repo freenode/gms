@@ -28,5 +28,11 @@
                 "quantity": "all"
             } ]
         },
+        "ChanelRequest": {
+            "fetch": [ {
+                "rel": "channel_request_changes",
+                "quantity": "all"
+            } ]
+        },
     }
 }
