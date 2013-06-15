@@ -198,7 +198,8 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
             join => \@join,
             distinct => 1,
             page => $page,
-            rows => 15
+            rows => 15,
+            order_by => 'id'
         }
     );
 
@@ -272,11 +273,17 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
         catch (RPC::Atheme::Error $e) {
             $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
             $accname =~ s#_#\\_#g;
-            $account_search = { 'accountname' => { 'ilike', $accname } };
+            $account_search = {
+                'accountname' => { 'ilike', $accname },
+                order_by => 'id'
+            };
         }
         catch (GMS::Exception $e) {
             $c->stash->{error_msg} = $e->message;
-            $account_search = { 'accountname' => 0 };
+            $account_search = {
+                'accountname' => 0,
+                order_by => 'id'
+            };
         }
 
         push @search, $account_search if ($account_search);
@@ -286,7 +293,9 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
         my $name = $p->{fullname};
         $name =~ s#_#\\_#g;
 
-        push @search, { 'active_change.name' => { ilike => $name } };
+        push @search, {
+            'active_change.name' => { ilike => $name },
+        };
         push @join, { 'contact' => 'active_change' };
     }
 
@@ -294,8 +303,9 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
         { -and => \@search },
         {
             join => \@join,
+            order_by => 'id',
             page => $page,
-            rows => 15
+            rows => 15,
         }
     );
 
@@ -385,7 +395,8 @@ sub do_search_namespaces :Chained('base') :PathPart('search_namespaces/submit') 
         { 'namespace' => { 'ilike' => $namespace } },
         {
             page => $page,
-            rows => 15
+            rows => 15,
+            order_by => 'id'
         }
     );
 
