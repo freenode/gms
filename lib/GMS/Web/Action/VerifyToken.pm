@@ -30,7 +30,7 @@ sub execute {
     my $self = shift;
     my ( $controller, $c, @args ) = @_;
 
-    if (scalar keys $c->request->body_params && !$controller->is_valid_token ($c)) {
+    if (scalar ( keys ( $c->request->body_params ) ) && !$controller->is_valid_token ($c)) {
         $c->detach ("/bad_request");
     }
 
