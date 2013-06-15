@@ -71,6 +71,8 @@ sub new {
         $account = $accounts->find_by_name ( $user );
     } catch (GMS::Exception $e) {
         die $e;
+    } catch (RPC::Atheme::Error $e) {
+        die $e;
     }
 
     $self->{_account} = $account;
