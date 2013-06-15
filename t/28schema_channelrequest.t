@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use Test::Most;
 use Test::MockModule;
-use Carp::Always;
-
 use lib qw(t/lib);
 
 use GMSTest::Common;

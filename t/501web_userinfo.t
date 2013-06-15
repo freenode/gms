@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-use Carp::Always;
-
 use strict;
 use warnings;
 use Test::More;
