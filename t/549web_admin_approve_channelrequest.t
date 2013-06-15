@@ -64,7 +64,7 @@ $ua->content_contains ('#group0', 'Request exists');
 
 $ua->submit_form(
     fields => {
-        action_151 => 'hold',
+        action_51 => 'hold',
     }
 );
 
@@ -76,7 +76,7 @@ $ua->content_contains ('#group0', 'Request is still there');
 
 $ua->submit_form(
     fields => {
-        action_151 => 'reject',
+        action_51 => 'reject',
     }
 );
 
@@ -88,7 +88,7 @@ $ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request 
 
 $ua->submit_form(
     fields => {
-        action_151 => 'approve',
+        action_51 => 'approve',
     }
 );
 
@@ -104,7 +104,7 @@ $ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request 
 
 $ua->submit_form(
     fields => {
-        action_151 => 'approve',
+        action_51 => 'approve',
     }
 );
 
@@ -116,7 +116,7 @@ $ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request 
 
 $ua->submit_form(
     fields => {
-        action_151 => 'apply',
+        action_51 => 'apply',
     }
 );
 

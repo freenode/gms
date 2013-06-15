@@ -17,7 +17,7 @@ my $group = $schema->resultset('Group')->find({ 'group_name' => 'group020' });
 my $user = $schema->resultset('Account')->find ({ 'accountname' => 'account0' });
 my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin' });
 
-is $schema->resultset('ChannelRequest')->search_pending->count, 48, '48  pending requests at first.';
+is $schema->resultset('ChannelRequest')->search_pending->count, 16, '16  pending requests at first.';
 
 ok $admin;
 
@@ -81,7 +81,7 @@ throws_ok {
         });
 } qr/This channel does not belong in that namespace/, 'Cannot use the wrong namespace';
 
-is $schema->resultset('ChannelRequest')->search_pending->count, 49, '49 pending requests';
+is $schema->resultset('ChannelRequest')->search_pending->count, 17, '17 pending requests';
 
 ok $request->reject($admin), "Rejecting a request works";
 ok $request->active_change->status->is_rejected, "Rejecting works";
@@ -113,7 +113,7 @@ ok $request->active_change->status->is_applied, "Approving syncs to atheme, and 
 
 is_deeply \@data, [
     '#group0',
-    '129C4A5A'
+    '3EAB67EC'
 ];
 
 $mockClient->mock ('take_over', sub {
@@ -138,8 +138,8 @@ ok $request->active_change->status->is_applied, "Approving syncs to atheme, and 
 
 is_deeply \@data, [
     '#group0',
-    '129C4A5A',
-    '129C4A5A'
+    '3EAB67EC',
+    '3EAB67EC'
 ];
 
 ok $request->change ($admin, { status => 'pending_staff' });
@@ -164,6 +164,6 @@ $request->discard_changes;
 ok $request->active_change->status->is_error, "Approving syncs to atheme, if we cannot construct a client record the error";
 ok $request->active_change->change_freetext =~ 'Test error 2', 'Error message is recorded';
 
-is $schema->resultset('ChannelRequest')->search_failed->count, 2, ' 2 failed requests';
+is $schema->resultset('ChannelRequest')->search_failed->count, 1, ' 1 failed request';
 
 done_testing;

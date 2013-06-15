@@ -129,7 +129,6 @@ $ua->submit_form (
 );
 
 $ua->content_contains ('group6/user6', 'Change is there');
-$ua->content_contains ('offered', 'Change is there');
 $ua->content_contains ('applied', 'Change is there');
 
 $ua->get_ok("http://localhost/admin/search_changes", "Search changes page works");

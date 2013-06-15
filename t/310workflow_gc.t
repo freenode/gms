@@ -26,11 +26,13 @@ foreach (@invitations) {
     push @groups, $_->group_id;
 }
 
+@groups = sort { $a <=> $b } @groups;
+
 is_deeply \@groups, [
-    3,
+    1,
     2,
-    5,
-    1
+    3,
+    5
 ], 'Retrieving group invitations works';
 
 my $gc = $schema->resultset('GroupContact')->search({
