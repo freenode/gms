@@ -6,9 +6,6 @@ use base qw (GMS::Web::TokenVerification);
 
 use TryCatch;
 
-use Carp;
-$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
-
 =head1 NAME
 
 GMS::Web::Controller::Userinfo - Controller for GMS::Web
