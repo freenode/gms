@@ -21,12 +21,15 @@ requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 
+requires 'MooseX::OneArgNew';
+requires 'Test::MockModule';
 requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class' => '0.08124';
 requires 'DBIx::Class::Fixtures';
 requires 'DBIx::Class::InflateColumn::Object::Enum';
 requires 'DBIx::Class::InflateColumn::DateTime';
+requires 'DBIx::Class::InflateColumn::Boolean';
 requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
