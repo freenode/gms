@@ -3,6 +3,7 @@ use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
 use Test::MockObject;
+use Test::MockModule;
 
 use HTTP::Server::Simple::CGI;
 use base qw(HTTP::Server::Simple::CGI);
@@ -61,11 +62,12 @@ $ua->content_contains ("successfully verified", "Web verification worked");
 
 my $mock = Test::MockObject->new;
 
-$mock->fake_module (
-    'Socket',
-    'inet_ntoa' => sub { '5.9.244.117' },
-    'inet_aton' => sub { 1 }, # since we're also faking inet_ntoa a nonzero value will suffice.
-);
+$mock->mock ('answer' => sub { $mock });
+$mock->mock ('type'   => sub { 'CNAME' });
+$mock->mock ('cname'  => sub { 'freenode.net' });
+
+my $mockDNS = Test::MockModule->new ('Net::DNS::Resolver');
+$mockDNS->mock ('search', sub { $mock });
 
 $ua->get_ok ("http://localhost/group/7/verify", "Verification page works");
 $ua->submit_form;

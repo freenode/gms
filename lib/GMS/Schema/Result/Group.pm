@@ -7,9 +7,9 @@ use strict;
 use warnings;
 
 use LWP::UserAgent;
-use Socket;
 use HTTP::Request;
 use base 'DBIx::Class::Core';
+use Net::DNS qw();
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
@@ -539,14 +539,27 @@ sub auto_verify {
     }
 
     if ($self->verify_dns) {
-        my $packed = Socket::inet_aton($self->verify_dns);
+        my $dns_query = Net::DNS::Resolver->new->search ( $self->verify_dns );
 
-        if ($packed) {
-            my $address = Socket::inet_ntoa($packed);
+        if ($dns_query) {
+            foreach my $result ($dns_query->answer) {
+                if ( $result->type ne 'CNAME' ) {
+                    next;
+                }
 
-            if ($address eq "5.9.244.117") {
-                $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
-                return 1;
+                my @parts = split (/\./, $result->cname);
+                my $domain;
+
+                if ($parts[-1] && $parts[-2]) {
+                    $domain = $parts[-2] . "." . $parts[-1];
+                } else {
+                    return -1;
+                }
+
+                if ($domain eq "freenode.net") {
+                    $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
+                    return 1;
+                }
             }
         }
     }

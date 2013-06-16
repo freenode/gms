@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Test::Most;
 use Test::MockObject;
+use Test::MockModule;
 
 use lib qw(t/lib);
 use GMSTest::Common;
@@ -28,11 +29,12 @@ isa_ok $group, "GMS::Schema::Result::Group";
 
 my $mock = Test::MockObject->new;
 
-$mock->fake_module (
-    'Socket',
-    'inet_ntoa' => sub { '5.9.244.117' },
-    'inet_aton' => sub { 1 }, # since we're also faking inet_ntoa a nonzero value will suffice.
-);
+$mock->mock ('answer' => sub { $mock });
+$mock->mock ('type'   => sub { 'CNAME' });
+$mock->mock ('cname'  => sub { 'anything.freenode.net' });
+
+my $mockDNS = Test::MockModule->new ('Net::DNS::Resolver');
+$mockDNS->mock ('search', sub { $mock });
 
 is $group->auto_verify ($user), 1, 'Verifying group via DNS works';
 
@@ -48,12 +50,15 @@ $group = $schema->resultset('Group')->create({
 
 isa_ok $group, "GMS::Schema::Result::Group";
 
+$mock->mock ('answer' => sub { $mock });
+$mock->mock ('type'   => sub { 'CNAME' });
+$mock->mock ('cname'  => sub { 'wrong.invalid' });
 
-$mock->fake_module (
-    'Socket',
-    'inet_ntoa' => sub { '0.0.0.1' },
-    'inet_aton' => sub { 1 }, # since we're also faking inet_ntoa a nonzero value will suffice.
-);
+is $group->auto_verify ($user), -1, 'Wrong DNS returns -1';
+
+$mock->mock ('answer' => sub { $mock });
+$mock->mock ('type'   => sub { 'CNAME' });
+$mock->mock ('cname'  => sub { 'wrong' });
 
 is $group->auto_verify ($user), -1, 'Wrong DNS returns -1';
 

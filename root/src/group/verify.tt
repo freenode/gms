@@ -9,7 +9,7 @@
             Create a file called [% group.verify_url | html %] with content [% group.verify_token %]
         </li><br/>
         <li>
-            Point [% group.verify_dns | html %] to freenode.net (5.9.244.117)
+            CNAME [% group.verify_dns | html %] to freenode.net
         </li><br/>
         <li>
             Enter free text in the area below explaining why you can't do the above:<br/><br/>
