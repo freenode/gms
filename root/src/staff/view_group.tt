@@ -53,13 +53,13 @@
 <ul>
 [%IF admin -%]
   <li>
-    <a href="[% c.uri_for ("/admin/${group.id}/add_gc"); %]">Add Group Contact</a>
+    <a href="[% c.uri_for ("/admin/group/${group.id}/add_gc"); %]">Add Group Contact</a>
   </li>
   <li>
-    <a href="[% c.uri_for ("/admin/${group.id}/edit"); %]">Edit Group Information</a>
+    <a href="[% c.uri_for ("/admin/group/${group.id}/edit"); %]">Edit Group Information</a>
   </li>
   <li>
-    <a href="[% c.uri_for ("/admin/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
+    <a href="[% c.uri_for ("/admin/group/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
   </li>
   [% IF group.address %]
     <li>
@@ -67,10 +67,10 @@
     </li>
   [% END %]
   <li>
-      <a href="[% c.uri_for ("/admin/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or add a new namespace for the group</a>
+      <a href="[% c.uri_for ("/admin/group/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or add a new namespace for the group</a>
   </li>
   <li>
-      <a href="[% c.uri_for ("/admin/${group.id}/edit_cloak_namespaces"); %]">View the group's cloak namespaces or add a new namespace for the group</a>
+      <a href="[% c.uri_for ("/admin/group/${group.id}/edit_cloak_namespaces"); %]">View the group's cloak namespaces or add a new namespace for the group</a>
   </li>
 [% END %]
 </ul>
