@@ -21,9 +21,19 @@ Returns a ResultSet of channel namespaces pending approval.
 
 sub search_pending {
     my ($self) = @_;
+    my $group_rs = $self->result_source->schema->resultset('Group');
 
     return $self->search(
-        { 'active_change.status' => 'pending_staff' },
+        {
+            'active_change.group_id' => {
+                'in' => $group_rs->search({
+                        'active_change.status' => 'active',
+                    },
+                    { join => 'active_change' }
+                )->get_column('me.id')->as_query,
+            },
+            'active_change.status' => 'pending_staff'
+        },
         { join => 'active_change' }
     );
 }

@@ -16,6 +16,7 @@ my $user = $schema->resultset('Account')->find ({ 'accountname' => 'test02' });
 my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin01' });
 
 ok $group;
+ok $group->change ($admin, 'admin', { 'status' => 'active' });
 
 my $namespace = $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $user, 'namespace' => "test" });
 
