@@ -61,7 +61,6 @@ $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 $ua->submit_form(
     fields => {
         channel => '#example-test',
-        channel_namespace => 'example',
         action => 1,
         target => 'admin',
     }
@@ -72,25 +71,11 @@ $ua->content_contains ("Successfully requested the channel take over", "Transfer
 
 $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 
-$ua->submit_form(
-    fields => {
-        channel => '#another-thing',
-        channel_namespace => 'example',
-        action => 1,
-        target => 'admin'
-    }
-);
-
-diag $ua->content;
-
-$ua->content_contains ("This channel does not belong in that namespace", "Errors are shown");
-
 $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 
 $ua->submit_form(
     fields => {
         channel => '#another-thing',
-        channel_namespace => 'another',
         action => 1,
         target => 'admin'
     }
@@ -103,7 +88,6 @@ $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 $ua->submit_form(
     fields => {
         channel => '#example-test',
-        channel_namespace => 'example',
         action => 2,
         target => 'admin',
     }
@@ -116,20 +100,6 @@ $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 $ua->submit_form(
     fields => {
         channel => '#another-thing',
-        channel_namespace => 'example',
-        action => 2,
-        target => 'admin'
-    }
-);
-
-$ua->content_contains ("This channel does not belong in that namespace", "Errors are shown");
-
-$ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
-
-$ua->submit_form(
-    fields => {
-        channel => '#another-thing',
-        channel_namespace => 'another',
         action => 2,
         target => 'admin'
     }

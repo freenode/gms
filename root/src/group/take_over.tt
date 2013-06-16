@@ -4,13 +4,6 @@
     Enter the channel name:<br/>
     <input type="text" name="channel" value="[% channel | html %]" /><br/><br />
 
-    Which namespace does the channel belong to?<br />
-
-    <select name="channel_namespace">
-      [% FOREACH namespace IN channel_namespaces %]
-        <option value="[% namespace.namespace | html %]" [% IF channel_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace | html %]</option>
-      [% END %]
-    </select><br /><br />
     <p>What would you like to do?</p>
     <ul>
     <li>

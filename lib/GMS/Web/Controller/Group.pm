@@ -435,7 +435,10 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
     my $p = $c->request->params;
 
     my $channel = $p->{channel};
-    my $namespace = $p->{channel_namespace};
+
+    $channel =~ /#([A-Za-z0-9_\.]+)-?/;
+    my $namespace = $1;
+
     my $group = $c->stash->{group};
     my $action = $p->{action};
 
