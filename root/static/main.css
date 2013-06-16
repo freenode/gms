@@ -3,7 +3,7 @@ body {background-color: #ccc; padding:0px 0px 0px 0px; }
 
 body div {overflow:auto; background-color: #aaa; }
 
-#header  {padding:3px 3px 3px 3px; margin:0 0 5px 0; }
+#header  {padding:3px 3px 3px 3px; margin:0 0 5px 0; background-color: #5C5F72; }
 #sidebar {padding:3px 3px 0px 3px; margin:0 5px 0 0; float:left; width:300px; }
 #main    {padding:3px 3px 0px 3px; margin:0 0 0 0;   }
 #footer  {padding:3px 3px 3px 3px; margin:5px 0 0 0; }
@@ -29,6 +29,8 @@ p,div,span {font-family:Arial, Helvetica; }
 .wide {line-height: 180%; }
 
 .tooltip { background-color: #E2E7FF; border:1px solid #000; }
+
+.logo { background: transparent; }
 
 label { cursor: pointer; }
 
