@@ -1,6 +1,6 @@
 [% META title = 'Add Contact' %]
 
-<form method="post" action="[% c.uri_for ("/admin/${group.id}/add_gc/submit") %]">
+<form method="post" action="[% c.uri_for ("/admin/group/${group.id}/add_gc/submit") %]">
     <p>Enter the user name:</p>
     <p><input type="text" name="contact" /></p>
     <p>Enter optional free text about this change:</p>

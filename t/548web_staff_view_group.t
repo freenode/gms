@@ -39,7 +39,7 @@ $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
 $ua->get_ok("http://localhost/staff", "Staff page works");
 
-$ua->get_ok("http://localhost/staff/38/view");
+$ua->get_ok("http://localhost/staff/group/38/view");
 
 $ua->content_contains ("<h2>group122</h2>", "View group page works");
 $ua->content_contains ("<tr> <td>Type</td>              <td>informal</td> </tr>");

@@ -1,6 +1,6 @@
 [% META title = 'Edit group contact information' %]
 
-<form method="post" action="[% c.uri_for("/admin/${group.id}/edit_gc/submit") %]">
+<form method="post" action="[% c.uri_for("/admin/group/${group.id}/edit_gc/submit") %]">
 <input type="hidden" name="group_contacts"
     value="[% FOREACH gc IN group_contacts %][% gc.contact.id %] [% END %]" />
 

@@ -38,7 +38,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->content_contains("example", "namespace is in the page");
 
@@ -52,7 +52,7 @@ ok($group, "Check group exists");
 
 is $group->channel_namespaces, 4, "Group initially has 4 namespaces";
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -62,7 +62,7 @@ $ua->submit_form(
 
 $ua->content_contains("Namespaces updated successfully", "Adding a new namespace succeeds");
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -74,7 +74,7 @@ $ua->content_contains("already taken", "Trying to add a currently active namespa
 
 is $group->active_cloak_namespaces, 2, "Group has 2 active namespaces";
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -90,11 +90,11 @@ $ns->discard_changes;
 
 is $ns->status->is_deleted, 1, 'Admin changes are applied.';
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->content_contains("'deleted'  selected", 'Deleted option is selected, pending change status is shown');
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -104,7 +104,7 @@ $ua->submit_form(
     }
 );
 
-$ua->get_ok("http://localhost/admin/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
 $ua->submit_form(
     fields => {

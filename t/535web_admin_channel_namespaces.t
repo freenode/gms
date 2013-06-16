@@ -38,7 +38,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/1/edit_channel_namespaces", "Edit channel namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
 $ua->content_contains("example", "namespace is in the page");
 
@@ -61,11 +61,11 @@ $ns->discard_changes;
 
 is $ns->status->is_deleted, 1, 'Admin changes are applied.';
 
-$ua->get_ok("http://localhost/admin/1/edit_channel_namespaces", "Edit channel namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
 $ua->content_contains("'deleted'  selected", 'Deleted option is selected, pending change status is shown');
 
-$ua->get_ok("http://localhost/admin/1/edit_channel_namespaces", "Edit channel namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
 my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
 ok($group, "Check group exists");
@@ -79,7 +79,7 @@ $ua->submit_form(
 
 $ua->content_contains("Namespaces updated successfully", "We can revive a deleted namespace");
 
-$ua->get_ok("http://localhost/admin/1/edit_channel_namespaces", "Edit channel namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -89,7 +89,7 @@ $ua->submit_form(
 
 $ua->content_contains("Namespaces updated successfully", "Adding a new namespace succeeds");
 
-$ua->get_ok("http://localhost/admin/1/edit_channel_namespaces", "Edit channel namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -102,6 +102,6 @@ $ua->content_contains("already taken", "Trying to add a currently active namespa
 is $group->channel_namespaces, 5, "Group now has 5 namespaces";
 is $group->active_channel_namespaces, 2, "Group has 2 active namespace";
 
-$ua->get_ok("http://localhost/admin/1/edit_channel_namespaces", "Edit channel namespaces page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
 done_testing;

@@ -4,7 +4,7 @@
 
 [% group.group_name | html %]'s current active namespaces are:<br/>
 
-<form method="post" action="[% c.uri_for("/admin/${group.id}/edit_channel_namespaces/submit") %]">
+<form method="post" action="[% c.uri_for("/admin/group/${group.id}/edit_channel_namespaces/submit") %]">
 
 <table>
 <tr>

@@ -38,7 +38,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/1/add_gc", "GC addition page works");
+$ua->get_ok("http://localhost/admin/group/1/add_gc", "GC addition page works");
 
 $ua->submit_form (
     fields => {
@@ -49,7 +49,7 @@ $ua->submit_form (
 diag $ua->content;
 $ua->content_contains("Successfully added the group contact", "Adding a GC works");
 
-$ua->get_ok("http://localhost/admin/1/add_gc", "GC addition page works");
+$ua->get_ok("http://localhost/admin/group/1/add_gc", "GC addition page works");
 
 $ua->submit_form (
     fields => {
@@ -67,7 +67,7 @@ ok($group, "Check group exists");
 is $group->group_contacts->count, 3, "Group has 3 contacts";
 is $group->active_group_contacts->count, 3, "Group has 3 active contacts";
 
-$ua->get_ok("http://localhost/admin/1/add_gc", "GC addition page works");
+$ua->get_ok("http://localhost/admin/group/1/add_gc", "GC addition page works");
 
 $ua->submit_form (
     fields => {
@@ -77,7 +77,7 @@ $ua->submit_form (
 
 $ua->content_contains("This user doesn't exist or has no contact information defined", "Adding a user with no contact info fails");
 
-$ua->get_ok("http://localhost/admin/1/add_gc", "GC addition page works");
+$ua->get_ok("http://localhost/admin/group/1/add_gc", "GC addition page works");
 
 $ua->submit_form (
     fields => {

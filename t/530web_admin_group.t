@@ -39,7 +39,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/1/view", "View group page works");
+$ua->get_ok("http://localhost/admin/group/1/view", "View group page works");
 
 $ua->content_contains ("<h2>Group01</h2>", "View group page works");
 $ua->content_contains ("<tr> <td>Type</td>              <td>informal</td> </tr>");
@@ -50,13 +50,13 @@ $ua->content_contains ("<tr> <td>Verification token</td><td>yficqfvmxpra</td> </
 $ua->content_contains ("<tr> <td>DNS pointing to freenode.net</td> <td>freenode-odwnvkm.example.com</td> </tr>");
 $ua->content_contains ("Tester 1 (test01)", "Contacts are displayed");
 
-$ua->get_ok("http://localhost/admin/38/view", "View group page works");
+$ua->get_ok("http://localhost/admin/group/38/view", "View group page works");
 
 $ua->content_contains ("<h2>group122</h2>");
 $ua->content_contains ("Historical/Inactive Contacts", "Inactive Contacts are displayed");
 $ua->content_contains("Test 2 (test02)", "Inactive Contacts are displayed");
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit group page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit group page works");
 
 $ua->submit_form(
     fields => {
@@ -66,7 +66,7 @@ $ua->submit_form(
 
 $ua->content_contains ("Group URL contains invalid characters", "Invalid change errors are shown");
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit group page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit group page works");
 
 $ua->submit_form(
     fields => {
@@ -84,7 +84,7 @@ $ua->submit_form(
 $ua->content_contains ("If the group has its own address, then a valid address must be specified.", "Invalid address errors are shown");
 $ua->content_contains ("Telephone number contains non-digit characters", "Invalid address errors are shown");
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit group page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit group page works");
 
 $ua->submit_form(
     fields => {
@@ -102,7 +102,7 @@ $ua->submit_form(
 
 $ua->content_contains ("Successfully edited the group's information.", "Editing works");
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit page works");
 
 $ua->content_contains ("http://example.org", "New URL is shown");
 $ua->content_contains ("new_address", "New Address is shown");
@@ -125,7 +125,7 @@ $ua->submit_form(
 $group->discard_changes;
 is $group->address->address_one, 'new_address', 'update_address => n will not update address';
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit page works");
 
 $ua->submit_form(
     fields => {
@@ -138,7 +138,7 @@ $ua->submit_form(
 $group->discard_changes;
 is $group->address->address_one, 'new_address', 'update_address => n will not update address';
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit page works");
 
 $ua->submit_form(
     fields => {
@@ -155,7 +155,7 @@ my $user = $schema->resultset('Account')->search({accountname => 'test01'})->sin
 ok $user;
 ok $group->change ( $user, 'request', { url => 'http://example.net' });
 
-$ua->get_ok("http://localhost/admin/1/edit", "Edit page works");
+$ua->get_ok("http://localhost/admin/group/1/edit", "Edit page works");
 
 $ua->content_contains ( "Warning: There is already a change request pending for this group.", "Request is recognised");
 $ua->content_contains ( "http://example.net", "Request is recognised");

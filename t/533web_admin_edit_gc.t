@@ -39,7 +39,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/1/edit_gc", "Edit group contacts page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_gc", "Edit group contacts page works");
 
 $ua->submit_form(
     fields => {
@@ -51,7 +51,7 @@ $ua->submit_form(
 
 ok $ua->content_contains ("Successfully edited the Group Contacts' information.", "Submitting changes works");
 
-$ua->get_ok("http://localhost/admin/1/edit_gc", "Edit group contacts page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_gc", "Edit group contacts page works");
 
 ok $ua->content_contains ('name="primary_1" value="1"  />', "Primary checkbox isn't checked.");
 
@@ -73,7 +73,7 @@ $ua->submit_form(
 
 ok $ua->content_contains ("Successfully edited the Group Contacts' information.", "Submitting changes works");
 
-$ua->get_ok("http://localhost/admin/1/edit_gc", "Edit group contacts page works");
+$ua->get_ok("http://localhost/admin/group/1/edit_gc", "Edit group contacts page works");
 
 ok $ua->content_contains ('name="primary_6" value="1"  checked  />', "Primary checkbox is checked.");
 
