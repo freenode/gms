@@ -46,15 +46,6 @@ $ua->content_contains ("<tr> <td>Account name:</td> <td>test01</td> </tr>", "Acc
 $ua->content_contains ("<tr> <td>Real name:</td> <td>test01</td> </tr>", "Account viewing page works");
 $ua->content_contains ("<tr> <td>E-mail Address:</td> <td>test01\@example.com</td> </tr>", "Account viewing page works");
 
-$ua->content_contains("<tr> <td>Address 1:</td> <td>Address</td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>Address 2:</td> <td></td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>City:</td> <td>City</td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>State:</td> <td>State</td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>Postal Code:</td> <td>92482</td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>Country:</td> <td>Country</td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>Telephone:</td> <td>0123456789</td> </tr>", "Account viewing works");
-$ua->content_contains("<tr> <td>Telephone (Alternative):</td><td></td> </tr>", "Account viewing works");
-
 $ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
 
 $ua->submit_form(fields => {
@@ -91,21 +82,13 @@ $ua->content_contains ("already a change request pending", "Pending request is r
 $ua->content_contains ("Another Test", "Pending change is recognised");
 
 $ua->submit_form(fields => {
-        update_address => 'y',
-        phone_one => 9876543210
+        phone => 9876543210
     });
 
 $account->contact->discard_changes;
 
-is $account->contact->address->phone, 9876543210, 'Updating contact info works';
+is $account->contact->phone, 9876543210, 'Updating contact info works';
 
 $ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
-
-$ua->submit_form(fields => {
-        update_address => 'y',
-        phone_one => 'invalid'
-    });
-
-$ua->content_contains('Telephone number contains non-digit characters', 'Errors are shown');
 
 done_testing;

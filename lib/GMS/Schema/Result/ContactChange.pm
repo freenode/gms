@@ -52,11 +52,12 @@ __PACKAGE__->table("contact_changes");
   is_nullable: 0
   size: 255
 
-=head2 address
+=head2 phone
 
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
+  data_type: 'varchar'
+  is_foreign_key: 0
+  is_nullable: 1
+  size: 32
 
 =head2 email
 
@@ -108,8 +109,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
-  "address",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "phone",
+  { data_type => "varchar", is_foreign_key => 0, is_nullable => 1, size => 32 },
   "email",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "change_type",
@@ -157,21 +158,6 @@ __PACKAGE__->belongs_to(
   "changed_by",
   "GMS::Schema::Result::Account",
   { id => "changed_by" },
-  {},
-);
-
-=head2 address
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Address>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "address",
-  "GMS::Schema::Result::Address",
-  { id => "address" },
   {},
 );
 
@@ -225,6 +211,8 @@ sub new {
     my @errors;
     my $valid=1;
 
+    $args->{phone} ||= undef;
+
     if (!$args->{name}) {
         push @errors, "Your name can't be empty.";
         $valid = 0;
@@ -237,10 +225,6 @@ sub new {
         $valid = 0;
     } elsif (length $args->{email} > 255) {
         push @errors, "Your email can be up to 255 characters.";
-        $valid = 0;
-    }
-    if (!$args->{address}) {
-        push @errors, "Your address can't be empty.";
         $valid = 0;
     }
 

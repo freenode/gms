@@ -21,6 +21,11 @@ $mockGroup->mock ('new',
 
 my $mockAccounts = new Test::MockModule ('GMS::Domain::Accounts');
 
+my $mockSession = new Test::MockModule ('GMS::Web::Model::Atheme');
+
+$mockSession->mock ('session', sub {
+    });
+
 $mockAccounts->mock ('find_by_uid', sub {
         my ( $self, $uid ) = @_;
 

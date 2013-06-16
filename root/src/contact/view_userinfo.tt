@@ -5,15 +5,7 @@
 <table>
 <tr> <td>Name:</td><td>[% user_name | html %]</td> </tr>
 <tr> <td>Email:</td><td>[% user_email | html %]</td> </tr>
-<tr> <td colspan="2">Address:</td> </tr>
-<tr> <td>Address 1:</td><td>[% address_one | html %]</td> </tr>
-<tr> <td>Address 2:</td><td>[% address_two | html %]</td> </tr>
-<tr> <td>City</td><td>[% city | html %]</td> </tr>
-<tr> <td>State</td><td>[% state | html %]</td> </tr>
-<tr> <td>Postal Code</td><td>[% postcode | html %]</td> </tr>
-<tr> <td>Country</td><td>[% country | html%]</td> </tr>
-<tr> <td>Telephone</td><td>[% phone_one |html %]</td> </tr>
-<tr> <td>Telephone (alternate)</td><td>[% phone_two | html %]</td> </tr>
+<tr> <td>Telephone</td><td>[% phone |html %]</td> </tr>
 </table>
 
 <p><a href="[% c.uri_for ("/userinfo/edit/") %]">Edit Contact Information</a></p>

@@ -39,33 +39,13 @@ ok !$account->contact, "Account doesn't yet have contact info";
 
 $ua->submit_form;
 
-$ua->content_contains("Address 1 is missing", "Errors are shown");
-
-$ua->submit_form(fields => {
-        address_one => '2 Test Road',
-        address_two => '',
-        city => 'Testville',
-        state => '',
-        postcode => '12345',
-        country => 'Testland',
-        phone_one => '123 4567890',
-        phone_two => '',
-    });
-
 $ua->content_contains("Your name can't be empty", "Errors are shown");
 $ua->content_contains("Your email can't be empty", "Errors are shown");
 
 $ua->submit_form(fields => {
         user_name => 'Contact Test',
         user_email => 'test01@example.com',
-        address_one => '2 Test Road',
-        address_two => '',
-        city => 'Testville',
-        state => '',
-        postcode => '12345',
-        country => 'Testland',
-        phone_one => '123 4567890',
-        phone_two => '',
+        phone => '1234',
     });
 
 $ua->content_contains("Your contact information has been updated", "Check defining contact info");
@@ -73,20 +53,9 @@ $ua->content_contains("Your contact information has been updated", "Check defini
 my $contact = $account->contact;
 ok($contact, "Check contact exists");
 
-my $address = $contact->address;
-ok($address, "Check contact has an address");
-
 ok($contact->name eq 'Contact Test', "Check contact has the right name");
 ok($contact->email eq 'test01@example.com', "Check contact has the right email");
-
-ok($address->address_one eq '2 Test Road', "Check address is correct");
-ok($address->address_two eq '', "Check address is correct");
-ok($address->city eq 'Testville', "Check address is correct");
-ok($address->state eq '', "Check address is correct");
-ok($address->code eq '12345', "Check address is correct");
-ok($address->country eq 'Testland', "Check address is correct");
-ok($address->phone eq '123 4567890', "Check address is correct");
-ok($address->phone2 eq '', "Check address is correct");
+ok($contact->active_change->phone eq '1234', "Check phone is correct");
 
 $ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
 
@@ -107,71 +76,9 @@ $ua->content_contains('test03@example.com', "The input fields have the new infor
 
 $ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
 
-$ua->submit_form(fields => {
-        address_one => 'Another test address',
-        address_two => '',
-        city => 'City',
-        state => '',
-        postcode => '001',
-        country => 'Country',
-        phone_one => '123 4567890',
-        phone_two => '',
-        update_address => 'n'
-    });
-
-# We want the last change, not the active change, since it's a request.
-$address = $contact->last_change->address;
-
-ok($address->address_one eq '2 Test Road', "Address hasn't changed since we didn't provide update_address => y");
-ok($address->address_two eq '', "Address hasn't changed since we didn't provide update_address => y");
-ok($address->city eq 'Testville',  "Address hasn't changed since we didn't provide update_address => y");
-ok($address->state eq '',  "Address hasn't changed since we didn't provide update_address => y");
-ok($address->code eq '12345',  "Address hasn't changed since we didn't provide update_address => y");
-ok($address->country eq 'Testland',  "Address hasn't changed since we didn't provide update_address => y");
-ok($address->phone eq '123 4567890',  "Address hasn't changed since we didn't provide update_address => y");
-ok($address->phone2 eq '',  "Address hasn't changed since we didn't provide update_address => y");
-
 $ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
 
 $ua->submit_form(fields => {
-        address_one => 'Another test address',
-        address_two => '',
-        city => 'City',
-        state => '',
-        postcode => '001',
-        country => 'Country',
-        phone_one => '123 4567890',
-        phone_two => '',
-        update_address => 'y'
-    });
-
-$address = $contact->last_change->address;
-
-ok($address->address_one eq 'Another test address', "The change request has now been recorded");
-ok($address->city eq 'City', "The change request has now been recorded");
-ok($address->code eq '001', "The change request has now been recorded");
-ok($address->country eq 'Country', "The change request has now been recorded");
-
-$ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
-
-$ua->submit_form(fields => {
-        update_address => 'y',
-        address_one => undef
-    });
-
-$ua->content_contains("Address 1 is missing", "Errors are shown");
-
-$ua->submit_form(fields => {
-        address_one => 'Another test address',
-        address_two => '',
-        city => 'City',
-        state => '',
-        postcode => '001',
-        country => 'Country',
-        phone_one => '123 4567890',
-        phone_two => '',
-        update_address => 'y',
-
         user_name => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna risus, commodo vitae tempor vitae, sodales quis odio. Maecenas vehicula fermentum libero, sed molestie ipsum cursus in. Vivamus dignissim, velit et tristique ornare, ipsum nisi sodales amet.',
         user_email => 'test@email.com'
     });

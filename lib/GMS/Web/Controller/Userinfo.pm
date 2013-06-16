@@ -39,22 +39,7 @@ sub index :Path :Args(0) :Local :VerifyToken {
 
         $c->stash->{user_name} = $contact->name;
         $c->stash->{user_email} = $contact->email;
-
-        my $address = $contact->address;
-
-        if (! $address) {
-            $c->stash->{status_msg} = "You don't currently have an address defined.\n" .
-                                      "Use the form below to define it.";
-        } else {
-            $c->stash->{address_one} = $address->address_one;
-            $c->stash->{address_two} = $address->address_two;
-            $c->stash->{city} = $address->city;
-            $c->stash->{state} = $address->state;
-            $c->stash->{postcode} = $address->code;
-            $c->stash->{country} = $address->country;
-            $c->stash->{phone_one} = $address->phone;
-            $c->stash->{phone_two} = $address->phone2;
-        }
+        $c->stash->{phone} = $contact->phone;
 
         $c->stash->{template} = 'contact/view_userinfo.tt';
     }
@@ -85,20 +70,10 @@ sub edit :Path('edit') :Args(0) :Local :VerifyToken {
         $change = $active_change;
     }
 
-    my $address = $change->address;
-
     if (!$c->stash->{form_submitted}) {
         $c->stash->{user_name} = $change->name;
         $c->stash->{user_email} = $change->email;
-
-        $c->stash->{address_one} = $address->address_one;
-        $c->stash->{address_two} = $address->address_two;
-        $c->stash->{city} = $address->city;
-        $c->stash->{state} = $address->state;
-        $c->stash->{postcode} = $address->code;
-        $c->stash->{country} = $address->country;
-        $c->stash->{phone_one} = $address->phone;
-        $c->stash->{phone_two} = $address->phone2;
+        $c->stash->{phone} = $change->phone;
     }
 
     $c->stash->{edit} = 1;
@@ -119,30 +94,12 @@ sub update :Path('update') :Args(0) :Local :VerifyToken {
 
     my $account = $c->user->account;
     my $contact = $account->contact;
-    my ($msg, $address);
+    my ($msg);
 
     if ($contact) {
         try {
-            if ( $params->{update_address} && $params->{update_address} eq 'y' ) {
-                $address = $c->model('DB::Address')->create({
-                        address_one => $params->{address_one},
-                        address_two => $params->{address_two},
-                        city => $params->{city},
-                        state => $params->{state},
-                        code => $params->{postcode},
-                        country => $params->{country},
-                        phone => $params->{phone_one},
-                        phone2 => $params->{phone_two}
-                    });
-            }
-            $contact->change ($account->id, 'request', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, address => $address });
+            $contact->change ($account->id, 'request', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, phone => $params->{phone} });
             $msg = "Successfully submitted the change request. Please wait for staff to approve the change.";
-        }
-        catch (GMS::Exception::InvalidAddress $e) {
-            $c->stash->{errors} = $e->message;
-            %{$c->stash} = ( %{$c->stash}, %$params );
-            $c->stash->{form_submitted} = 1;
-            $c->detach('edit');
         }
         catch (GMS::Exception::InvalidChange $e) {
             $c->stash->{errors} = $e->message;
@@ -152,28 +109,13 @@ sub update :Path('update') :Args(0) :Local :VerifyToken {
         }
     } else {
         try {
-            my $address = $c->model('DB::Address')->create({
-                address_one => $params->{address_one},
-                address_two => $params->{address_two},
-                city => $params->{city},
-                state => $params->{state},
-                code => $params->{postcode},
-                country => $params->{country},
-                phone => $params->{phone_one},
-                phone2 => $params->{phone_two}
-            });
             $contact = $c->model('DB::Contact')->create({
                 account_id => $account->id,
                 name => $params->{user_name},
                 email => $params->{user_email},
-                address => $address->id
+                phone => $params->{phone}
             });
             $msg = "Your contact information has been updated.";
-        }
-        catch (GMS::Exception::InvalidAddress $e) {
-            $c->stash->{errors} = $e->message;
-            %{$c->stash} = ( %{$c->stash}, %$params );
-            $c->detach('index');
         }
         catch (GMS::Exception::InvalidChange $e) {
             $c->stash->{errors} = $e->message;

@@ -18,6 +18,11 @@ $mockGroup->mock ('new',
         $group;
     });
 
+my $mockSession = new Test::MockModule ('GMS::Web::Model::Atheme');
+
+$mockSession->mock ('session', sub {
+    });
+
 my $rs = $schema->resultset('GroupContact');
 my $group_contact1 = $rs->find_by_id ("5_1");
 my $group_contact2 = $rs->find_by_id ("5_4");

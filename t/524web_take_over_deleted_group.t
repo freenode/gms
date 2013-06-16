@@ -18,6 +18,11 @@ $mockGroup->mock ('new',
         $group;
     });
 
+my $mockSession = new Test::MockModule ('GMS::Web::Model::Atheme');
+
+$mockSession->mock ('session', sub {
+    });
+
 my $rs = $schema->resultset('Group');
 
 my $group = $rs->find({ group_name => 'deleted_group' });

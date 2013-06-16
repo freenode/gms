@@ -26,6 +26,11 @@ $mockGroup->mock ('new',
         $group;
     });
 
+my $mockSession = new Test::MockModule ('GMS::Web::Model::Atheme');
+
+$mockSession->mock ('session', sub {
+    });
+
 my $rs = $schema->resultset('ChannelNamespace');
 
 my $ns = $rs->find({ namespace => 'new_namespace_3' });

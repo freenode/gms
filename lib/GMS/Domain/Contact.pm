@@ -13,7 +13,7 @@ use TryCatch;
 has _dbic_contact_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (id account_id active_change name email address) ]
+    handles => [ qw (id account_id active_change name email phone) ]
 );
 
 =head1 PACKAGE

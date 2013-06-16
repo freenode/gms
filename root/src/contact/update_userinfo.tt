@@ -6,20 +6,7 @@
 <table>
 <tr> <td><label for="username">Name:</label></td><td><input required id="username" type="text" name="user_name" size="40" value="[% user_name | html %]" /></td> </tr>
 <tr> <td><label for="email">Email address:</label></td><td><input required id="email" type="email" name="user_email" size="40" value="[% user_email | html %]" /></td> </tr>
-[% IF edit -%]
-<tr>
-  <td> <label><input type="checkbox" name="update_address" value="y" [% IF update_address %] checked="checked" [% END %] /> Update address information.</label></td>
-</tr>
-[% END %]
-<tr> <td colspan="2">Address:</td> </tr>
-<tr> <td><label for="addr1">Address 1:</label></td><td><input required id="addr1" type="text" name="address_one" size="40" value="[% address_one | html %]"></td> </tr>
-<tr> <td><label for="addr2">Address 2:</label></td><td><input id="addr2" type="text" name="address_two" size="40" value="[% address_two | html %]"></td> </tr>
-<tr> <td><label for="city">City</label></td><td><input id="city" required type="text" name="city" size="40" value="[% city | html %]"></td> </tr>
-<tr> <td><label for="state">State</label></td><td><input id="state" required type="text" name="state" size="40" value="[% state | html %]"></td> </tr>
-<tr> <td><label for="pcode">Postal Code</label></td><td><input id="pcode" required type="text" name="postcode" size="40" value="[% postcode | html %]"></td> </tr>
-<tr> <td><label for="country">Country</label></td><td><input id="country" required type="text" name="country" size="40" value="[% country | html %]"></td> </tr>
-<tr> <td><label for="phone">Telephone</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" required type="text" name="phone_one" size="40" value="[% phone_one | html %]"></td> </tr>
-<tr> <td><label for="phone2">Telephone (alternate)</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone_two" size="40" value="[% phone_two | html %]"></td> </tr>
+<tr> <td><label for="phone">Telephone</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone"  type="text" name="phone" size="40" value="[% phone | html %]"></td> </tr>
 <tr> <td colspan="2"><input type="submit" name="submit" value="Submit" /></td> </tr>
 </table>
 </form>

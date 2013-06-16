@@ -11,15 +11,7 @@
   <tr> <td>Real name:</td> <td>[% account.contact.name | html %]</td> </tr>
   <tr> <td>E-mail Address:</td> <td>[% account.contact.email | html %]</td> </tr>
   [% IF admin -%]
-  <tr> <td colspan="2">Address:</td> </tr>
-  <tr> <td>Address 1:</td> <td>[% account.contact.address.address_one | html %]</td> </tr>
-  <tr> <td>Address 2:</td> <td>[% account.contact.address.address_two | html %]</td> </tr>
-  <tr> <td>City:</td> <td>[% account.contact.address.city | html %]</td> </tr>
-  <tr> <td>State:</td> <td>[% account.contact.address.state | html %]</td> </tr>
-  <tr> <td>Postal Code:</td> <td>[% account.contact.address.code | html %]</td> </tr>
-  <tr> <td>Country:</td> <td>[% account.contact.address.country | html %]</td> </tr>
-  <tr> <td>Telephone:</td> <td>[% account.contact.address.phone | html %]</td> </tr>
-  <tr> <td>Telephone (Alternative):</td><td>[% account.contact.address.phone2 | html %]</td> </tr>
+  <tr> <td>Telephone:</td> <td>[% account.contact.active_change.phone | html %]</td> </tr>
   [% END %]
 </table>
 

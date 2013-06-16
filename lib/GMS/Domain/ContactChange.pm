@@ -14,7 +14,7 @@ use TryCatch;
 has _dbic_contact_change_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (id contact_id time name address email change_type affected_change change_freetext) ]
+    handles => [ qw (id contact_id time name phone email change_type affected_change change_freetext) ]
 );
 
 =head1 PACKAGE

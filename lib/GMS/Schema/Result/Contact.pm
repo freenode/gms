@@ -146,7 +146,7 @@ sub new {
     my ($class, $args) = @_;
 
     my @change_arg_names = (
-        'name', 'email', 'address'
+        'name', 'email', 'phone'
     );
 
     my %change_args;
@@ -202,15 +202,15 @@ sub email {
     return $self->active_change->email;
 }
 
-=head2 address
+=head2 phone
 
-Returns the contact's address, as retrieved from the active_change.
+Returns the contact's phone, as retrieved from the active_change.
 
 =cut
 
-sub address {
+sub phone {
     my ($self) = @_;
-    return $self->active_change->address;
+    return $self->active_change->phone;
 }
 
 =head2 change
@@ -242,7 +242,7 @@ sub change {
         changed_by => $account,
         change_type => $change_type,
         name => $args->{name} || $change->name,
-        address => $args->{address} || $change->address,
+        phone => $args->{phone} || $change->phone,
         email => $args->{email} || $change->email,
         change_freetext => $args->{change_freetext}
     );

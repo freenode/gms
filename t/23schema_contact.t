@@ -47,51 +47,22 @@ is $contact->active_change->email, $new_email, "Approving change updates active 
 $account = $schema->resultset('Account')->find({ accountname => 'test02' });
 isa_ok $account, 'GMS::Schema::Result::Account';
 
-my $address = $schema->resultset('Address')->create({
-    address_one => 'Test address',
-    city => 'Test city',
-    state => 'Test state',
-    code => 'Test001',
-    country => 'Test country',
-    phone => '0123456789'
-});
-isa_ok $address, 'GMS::Schema::Result::Address';
-
 $contact = $schema->resultset('Contact')->create({
     account_id => $account->id,
     name => 'Test name',
     email => 'test@example.com',
-    address => $address->id
+    phone => '1234'
 });
 
 ok $contact, 'We can create a new contact';
-is $contact->address->id, $address->id, 'The address is correct';
 
 ok $contact->change ( $adminaccount, 'admin', { } );
 
 is $contact->name, 'Test name', 'Details we do not change stay the same';
 is $contact->email, 'test@example.com', 'Details we do not change stay the same';
-is $contact->address->id, $address->id, 'Details we do not change stay the same';
+is $contact->phone, '1234', 'Details we do not change stay the same';
 
-$address = $schema->resultset('Address')->create({
-    address_one => 'Test address 2',
-    city => 'Test city 2',
-    state => 'Test state 2',
-    code => 'Test002',
-    country => 'Test country 2',
-    phone => '0123456789'
-});
-isa_ok $address, 'GMS::Schema::Result::Address';
-
-$change = $contact->change ( $adminaccount, 'admin', { 'address' => $address->id } );
-
-ok $change;
-is $contact->address->id, $address->id, 'Changing address works';
-
-throws_ok { $change->approve ($adminaccount) } qr/Can't approve a change that isn't a request/, "Can't approve a change that isn't a request";
-throws_ok { $change->reject ($adminaccount) } qr/Can't reject a change that isn't a request/, "Can't reject a change that isn't a request";
-
-$change =$contact->change ( $account, 'request', { 'name' => 'New name' } );
+$change = $contact->change ( $account, 'request', { 'name' => 'New name' } );
 
 ok $change;
 is $contact->name, 'Test name', 'Unapproved requests do not take effect';
@@ -126,7 +97,6 @@ ok $error;
 is_deeply $error->message, [
     "Your name can't be empty.",
     "Your email can't be empty.",
-    "Your address can't be empty."
 ], 'Test field validation';
 
 eval {
@@ -143,7 +113,6 @@ ok $error;
 is_deeply $error->message, [
     "Your name can be up to 255 characters.",
     "Your email can be up to 255 characters.",
-    "Your address can't be empty."
 ], 'Test field validation';
 
 eval {
@@ -156,7 +125,6 @@ ok $error;
 is_deeply $error->message, [
     "Your name can't be empty.",
     "Your email can't be empty.",
-    "Your address can't be empty."
 ], "We can't create a ContactChange without the necessary arguments";
 
 done_testing;

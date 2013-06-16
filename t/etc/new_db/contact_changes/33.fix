@@ -1,5 +1,4 @@
 $HASH1 = {
-           address  => 24,
            affected_change
                     => 32,
            change_freetext

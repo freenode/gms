@@ -16,6 +16,11 @@ $mockGroup->mock ('new',
         $group;
     });
 
+my $mockSession = new Test::MockModule ('GMS::Web::Model::Atheme');
+
+$mockSession->mock ('session', sub {
+    });
+
 $ua->get_ok("http://localhost/", "Check root page");
 
 $ua->get_ok("http://localhost/login", "Check login page works");
