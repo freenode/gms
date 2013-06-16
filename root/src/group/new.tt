@@ -61,8 +61,8 @@ to help us verify your registration.</p>
 [% END %]
 <tr>
   <td>Does the group have a registered / postal address?</td>
-  <td><label><input type="radio" [% IF has_address %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label><br />
-      <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF !has_address %] checked="checked" [% END %]> No</label>
+  <td><label><input type="radio" [% IF has_address=="y" %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label><br />
+      <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address=="n" || !has_address %] checked="checked" [% END %]> No</label>
   </td>
 </tr>
 <tr>
@@ -103,10 +103,10 @@ to help us verify your registration.</p>
 <tr>
   <td>Join the Groups Advisory Board?</td>
   <td>
-    <label><input type="radio" name="join_gab" id="join_gab_y" value="Yes" checked="checked"> Yes</label>
+    <label><input type="radio" name="join_gab" id="join_gab_y" value="Yes" [% IF join_gab == "Yes" || !join_gab %] checked="checked" [% END %]> Yes</label>
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 6)" onmouseout="untooltip()" />
     <br />
-    <label><input type="radio" name="join_gab" id="join_gab_n" value="No"> No</label>
+    <label><input type="radio" name="join_gab" id="join_gab_n" value="No" [% IF join_gab == "No" %] checked="checked" [% END %] > No</label>
   </td>
 </tr>
 <tr>
@@ -117,10 +117,10 @@ to help us verify your registration.</p>
 <tr>
   <td>Include project on Primary Groups listing?</td>
   <td>
-    <label><input type="radio" name="include_listing" id="include_listing_y" value="y" checked="checked"> Yes</label>
+    <label><input type="radio" name="include_listing" id="include_listing_y" value="y" [% IF include_listing=="y" || !include_listing  %] checked="checked" [% END %] > Yes</label>
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 7)" onmouseout="untooltip()" />
     <br />
-    <label><input type="radio" name="include_listing" id="include_listing_n" value="n"> No</label>
+    <label><input type="radio" name="include_listing" id="include_listing_n" value="n" [% IF include_listing=="n" %] checked="checked" [% END %]> No</label>
   </td>
 </tr>
 <tr>
