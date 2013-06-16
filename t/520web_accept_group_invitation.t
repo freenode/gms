@@ -2,6 +2,7 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
+use Test::MockModule;
 
 need_database 'pending_changes';
 
@@ -9,6 +10,13 @@ use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
 my $schema = GMS::Schema->do_connect;
+
+my $mockGroup = new Test::MockModule('GMS::Domain::Group');
+$mockGroup->mock ('new',
+    sub {
+        my (undef, undef, $group) = @_;
+        $group;
+    });
 
 my $rs = $schema->resultset('GroupContact');
 my $group_contact1 = $rs->find_by_id ("5_1");

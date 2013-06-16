@@ -5,7 +5,7 @@ use warnings;
 use base qw (GMS::Web::TokenVerification);
 use TryCatch;
 use GMS::Exception;
-use GMS::Domain::ChannelRequest;
+use GMS::Domain::Group;
 
 =head1 NAME
 
@@ -93,12 +93,21 @@ contact. Groups for which the user is not a contact are treated as non-existent.
 sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
-    my $group = $c->user->account->contact->groups->find({ id => $group_id });
-
+    my $group_row = $c->user->account->contact->groups->find({ id => $group_id });
     my $gc = $c->user->account->contact->group_contacts->find ({ 'group_id' => $group_id });
+    $c->stash->{gc} = $gc;
 
-    if ( $group && $gc->can_access ($group, $c->request->path) ) {
-        $c->stash->{group} = $group;
+    if ( $group_row && $gc->can_access ($group_row, $c->request->path) ) {
+        try {
+            my $session = $c->model('Atheme')->session;
+            my $group = GMS::Domain::Group->new ( $session, $group_row );
+            $c->stash->{group} = $group;
+        }
+        catch (RPC::Atheme::Error $e) {
+            $c->stash->{group} = $group_row;
+            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        }
+
     } else {
         $c->stash->{error_msg} = "That group doesn't exist or you can't access it.";
         $c->detach('index');
@@ -115,8 +124,6 @@ sub view :Chained('single_group') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
-    $c->stash->{gc} = $group->group_contacts->find ({ contact_id => $c->user->account->contact->id });
-
     $c->stash->{template} = 'group/view.tt';
 }
 
@@ -438,7 +445,7 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
         my $channels = $c->model('Channels');
 
         if ($action == 1) {
-            my $target = $p->{target};
+            my $target = $p->{target} || $p->{target_gc};
             my $account;
 
             try {

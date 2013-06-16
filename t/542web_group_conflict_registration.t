@@ -7,12 +7,20 @@ use Test::More;
 use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
+use Test::MockModule;
 
 need_database 'approved_group';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
+
+my $mockGroup = new Test::MockModule('GMS::Domain::Group');
+$mockGroup->mock ('new',
+    sub {
+        my (undef, undef, $group) = @_;
+        $group;
+    });
 
 $ua->get_ok("http://localhost/", "Check root page");
 

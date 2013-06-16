@@ -11,6 +11,13 @@ use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
 
+my $mockGroup = new Test::MockModule('GMS::Domain::Group');
+$mockGroup->mock ('new',
+    sub {
+        my (undef, undef, $group) = @_;
+        $group;
+    });
+
 $ua->get_ok("http://localhost/", "Check root page");
 
 $ua->get_ok("http://localhost/login", "Check login page works");

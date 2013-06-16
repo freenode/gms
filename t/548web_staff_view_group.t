@@ -12,6 +12,13 @@ use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
 
+my $mockGroup = new Test::MockModule('GMS::Domain::Group');
+$mockGroup->mock ('new',
+    sub {
+        my (undef, undef, $group) = @_;
+        $group;
+    });
+
 my $mockAccounts = new Test::MockModule ('GMS::Domain::Accounts');
 
 $mockAccounts->mock ('find_by_uid', sub {
