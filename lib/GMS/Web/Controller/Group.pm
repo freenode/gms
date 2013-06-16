@@ -620,6 +620,7 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
     }
 
     if ($new_namespace) {
+        $new_namespace =~ s/^\#//;
         $new_namespace =~ s/-\*//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
@@ -768,7 +769,8 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     my @channels = split /, */, $p->{channel_namespace};
 
     foreach my $channel_ns ( @channels ) {
-        $channel_ns =~ s/-\*//;
+        $channel_ns =~ s/^\#//;
+        $channel_ns =~ s/-\*$//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
             if (!$ns->status->is_deleted) {
@@ -815,6 +817,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 });
 
             foreach my $channel_ns ( @channels ) {
+                $channel_ns =~ s/^\#//;
                 $channel_ns =~ s/-\*//;
 
                 if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
