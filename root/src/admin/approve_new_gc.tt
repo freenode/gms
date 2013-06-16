@@ -13,7 +13,7 @@
 [% FOREACH gc IN to_approve -%]
   <tr>
     <td>
-      <a href="[% c.uri_for("/admin/${gc.group.id}/view") %]">[% gc.group.group_name | html %]</a>
+      <a href="[% c.uri_for("/admin/group/${gc.group.id}/view") %]">[% gc.group.group_name | html %]</a>
     </td>
     <td>
       <a href="[% c.uri_for("/staff/account/${gc.contact.account.id}/view") %]">[% gc.contact.account.accountname | html %]</a>

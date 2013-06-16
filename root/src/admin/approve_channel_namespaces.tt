@@ -15,7 +15,7 @@
     <td>
       [% namespace.namespace | html %]
     <td>
-      <a href="[% c.uri_for("/admin/${namespace.group.id}/view") %]">[% namespace.group.group_name | html %]</a>
+      <a href="[% c.uri_for("/admin/group/${namespace.group.id}/view") %]">[% namespace.group.group_name | html %]</a>
     </td>
     <td><input type="radio" name="action_[% namespace.id %]" value="approve" /></td>
     <td><input type="radio" name="action_[% namespace.id %]" value="reject" /></td>

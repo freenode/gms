@@ -87,7 +87,7 @@ for which the user is a contact.
 
 =cut
 
-sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
+sub single_group :Chained('base') :PathPart('group') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
     my $group_row = $c->model('DB::Group')->find({ id => $group_id });

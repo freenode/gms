@@ -19,7 +19,7 @@
   <td>
     [% change.namespace.namespace |html %]
   <td>
-    <a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name | html %]</a>
+    <a href='[% c.uri_for ("/staff/group/${group.id}/view") %]'>[% group.group_name | html %]</a>
   </td>
   <td>
     [% change.change_type %]

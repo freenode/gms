@@ -20,7 +20,7 @@
     [% change.id %]
   </td>
   <td>
-    <a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name | html %]</a>
+    <a href='[% c.uri_for ("/staff/group/${group.id}/view") %]'>[% group.group_name | html %]</a>
   </td>
   <td>
     <a href='[% c.uri_for ("/staff/account/${account.id}/view") %]'>[% account.accountname | html %]</a>
