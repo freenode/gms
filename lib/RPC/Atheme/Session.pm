@@ -151,7 +151,7 @@ sub do_command {
         @args
     );
 
-    die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless $result;
+    die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR) unless defined $result;
     die RPC::Atheme::Error->new($result) if ref $result eq 'HASH';
     return $result;
 }
