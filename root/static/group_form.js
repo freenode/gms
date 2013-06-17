@@ -11,7 +11,7 @@ function IE() {
     return parseInt (version, 10);
 }
 
-if ( IE() < 10 ) {
+if ( IE() !== false && IE() < 10 ) {
     document.getElementsByName = function(name) {
         var ret = [];
         var elems = document.getElementsByTagName("*");
