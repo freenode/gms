@@ -281,7 +281,7 @@ sub apply {
     $self->change ( $account, { status => "applied", change_freetext => $freetext } );
 }
 
-=sub sync_to_atheme
+=head2 sync_to_atheme
 
 Attempts to apply any changes that have been approved by staff but not yet
 applied in Atheme

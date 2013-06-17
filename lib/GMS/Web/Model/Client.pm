@@ -32,6 +32,10 @@ sub client {
     }
 }
 
+=head2 ACCEPT_CONTEXT
+
+=cut
+
 sub ACCEPT_CONTEXT {
     my ($class, $c) = @_;
 
