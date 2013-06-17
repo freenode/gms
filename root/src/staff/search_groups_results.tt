@@ -9,7 +9,7 @@
 
 [% FOREACH group = results -%]
 <tr>
-  <td><a href='[% c.uri_for ("/staff/${group.id}/view") %]'>[% group.group_name | html %]</a></td>
+  <td><a href='[% c.uri_for ("/staff/group/${group.id}/view") %]'>[% group.group_name | html %]</a></td>
   <td>[% group.group_type %]</td>
   <td>[% group.status %]</td>
 </tr>
