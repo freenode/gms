@@ -66,7 +66,7 @@ my $group = $schema->resultset('Group')->create({
 is $group->url, 'http://example.com';
 is $group->group_type, 'informal';
 
-my $change = $group->change($useraccount, 'request', { url => 'http://example.org', group_type => 'nfp' });
+my $change = $group->change($useraccount, 'request', { url => 'http://example.org' });
 
 is $schema->resultset('GroupChange')->active_requests->count, 1, 'Requesting a change increases active_requests';
 
@@ -88,7 +88,6 @@ $group->discard_changes;
 is $group->active_change->id, $approval->id, "Approval updates active_change";
 is $group->active_change->url, 'http://example.org', "Approving a change updates group state";
 is $group->url, 'http://example.org', "Approving a change updates group state";
-is $group->group_type, 'nfp', "Approving a change updates group state";
 
 $group->auto_verify ($useraccount->id, { freetext => 'text here' });
 
@@ -422,5 +421,87 @@ is $group->verify_dns, undef, "Returning empty dns works";
 is $group->verify_freetext, undef, "Returning empty freetext works";
 
 $mock->unmock_all;
+
+throws_ok {
+    $schema->resultset('Group')->create({
+        account => $useraccount,
+        group_name => 'no_address',
+        group_type => 'corporation',
+        url => 'http://localhost/',
+    });
+} qr/Corporation, education, NFP and government groups must have an address/, "This type of group requires an address";
+
+throws_ok {
+    $schema->resultset('Group')->create({
+        account => $useraccount,
+        group_name => 'no_address',
+        group_type => 'education',
+        url => 'http://localhost/',
+    });
+} qr/Corporation, education, NFP and government groups must have an address/, "This type of group requires an address";
+
+throws_ok {
+    $schema->resultset('Group')->create({
+        account => $useraccount,
+        group_name => 'no_address',
+        group_type => 'nfp',
+        url => 'http://localhost/',
+    });
+} qr/Corporation, education, NFP and government groups must have an address/, "This type of group requires an address";
+
+throws_ok {
+    $schema->resultset('Group')->create({
+        account => $useraccount,
+        group_name => 'no_address',
+        group_type => 'government',
+        url => 'http://localhost/',
+    });
+} qr/Corporation, education, NFP and government groups must have an address/, "This type of group requires an address";
+
+$address = $schema->resultset('Address')->create({
+    address_one => 'Test address',
+    city => 'Test city',
+    state => 'Test state',
+    code => 'Test001',
+    country => 'Test country',
+    phone => '0123456789'
+});
+isa_ok $address, 'GMS::Schema::Result::Address';
+
+$group = $schema->resultset('Group')->create({
+    account => $useraccount,
+    group_name => 'addr_group',
+    group_type => 'corporation',
+    url => 'http://localhost/',
+    address => $address->id
+});
+ok $group, "group creation works if we give an address";
+
+$group = $schema->resultset('Group')->create({
+    account => $useraccount,
+    group_name => 'addr_group_2',
+    group_type => 'education',
+    url => 'http://localhost/',
+    address => $address->id
+});
+ok $group, "group creation works if we give an address";
+
+$group = $schema->resultset('Group')->create({
+    account => $useraccount,
+    group_name => 'addr_group_3',
+    group_type => 'nfp',
+    url => 'http://localhost/',
+    address => $address->id
+});
+ok $group, "group creation works if we give an address";
+
+$group = $schema->resultset('Group')->create({
+    account => $useraccount,
+    group_name => 'addr_group_4',
+    group_type => 'government',
+    url => 'http://localhost/',
+    address => $address->id
+});
+ok $group, "group creation works if we give an address";
 
 done_testing;

@@ -3,59 +3,63 @@
 <form method="post" action="[% c.uri_for("/group/${group.id}/edit/submit") %]">
 <table>
 <tr>
-  <td><label for="gtype">Group Type</label></td>
+  <td><label for="group_type">Group Type</label></td>
   <td>
-    <select id="gtype" name='group_type'>
-      <option value="informal" [% IF group_type.is_informal %] selected = "selected" [% END %]>Informal Group</option>
-      <option value="corporation" [% IF group_type.is_corporation %] selected = "selected" [% END %]>Corporation / Business entity</option>
-      <option value="education" [% IF group_type.is_education %] selected = "selected" [% END %]>Educational Institution</option>
-      <option value="government" [% IF group_type.is_government %] selected = "selected" [% END %]>Governmental Entity</option>
-      <option value="nfp" [% IF group_type.is_nfp %] selected = "selected" [% END %]>Not for profit / Charitable Organisation</option>
-      <option value="internal" [% IF group_type.is_internal %] selected = "selected" [% END %]>Internal Group</option>
-    </select>
+      <select name="group_type" id="group_type">
+        <option [% IF group_type == "informal" || !group_type %] selected [% END %] value="informal" >Informal Group</option>
+        <option [% IF group_type == "corporation" %] selected [%END%] value="corporation">Corporation / Business entity</option>
+        <option [% IF group_type == "education" %] selected [%END%] value="education">Educational Institution</option>
+        <option  [% IF group_type == "government" %] selected [%END%] value="government">Governmental Entity</option>
+        <option  [% IF group_type == "nfp" %] selected [%END%] value="nfp">Not for profit / Charitable Organisation</option>
+        <option [% IF group_type == "internal" %] selected [%END%] value="internal">Internal Group</option>
+      </select>
   </td>
 </tr>
 <tr>
   <td><label for="gurl">Group URL</label></td> <td><input id="gurl" type="url" name="url" value="[% url | html %]" /></td>
 </tr>
-<tr>
+<tr id="address_input">
   <td>Does the group have a registered / postal address?</td>
   <td><label><input type="radio" name="has_address" id="has_address_y" value="y" [% IF has_address == 'y' %] checked="checked" [% END %]> Yes</label><br />
       <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address == 'n' %] checked="checked" [% END %]> No</label>
   </td>
 </tr>
-<tr>
+<!--- Give address elements name="addr_hide", so that they are hidden with JS properly. !-->
+<tr name="addr_hide">
   <td>
-    <label><input type="checkbox" name="update_address" value="y" [% IF update_address %] checked="checked" [% END %] /> Update address information.</label>
+    <label><input type="checkbox" id="update_address" name="update_address" value="y" [% IF update_address %] checked="checked" [% END %] /> Update address information.</label>
   </td>
 </tr>
-<tr>
-  <td colspan="2"><strong>Group Address</strong> (if applicable)</td>
+<tr name="addr_hide">
+  <td colspan="2"><strong>Group Address</strong></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="addr1">Address 1:</label></td><td><input id="addr1" type="text" name="address_one" size="40" value="[% address_one | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="addr2">Address 2:</label></td><td><input type="text" id="addr2" name="address_two" size="40" value="[% address_two | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="city">City</label></td><td><input id="city" type="text" name="city" size="40" value="[% city | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="state">State</label></td><td><input id="state" type="text" name="state" size="40" value="[% state | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="pcode">Postal Code</label></td><td><input id="pcode" type="text" name="code" size="40" value="[% code | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="country">Country</label></td><td><input id="country" type="text" name="country" size="40" value="[% country | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="phone">Telephone</label></td><td><input id="phone" pattern="[0-9 \+-]+" title="Please enter a valid telephone!" type="text" name="phone" size="40" value="[% phone | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="phone2">Telephone (alternate)</label></td><td><input id="phone2" type="text" pattern="[0-9 \+-]+" title="Please enter a valid telephone!" name="phone2" size="40" value="[% phone2 | html %]"></td>
 </tr>
 </table>
 <input type="submit" value="Submit" />
 </form>
+
+<script src="[% c.uri_for ('/static/group_form.js') %]" type="text/javascript">
+</script>

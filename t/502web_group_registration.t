@@ -85,7 +85,7 @@ $ua->get_ok("http://localhost/group/new", "Check new group page works");
 
 $ua->submit_form(
     fields => {
-        group_type => 'informal',
+        group_type => 'corporation',
         group_name => 'Another test',
         group_url  => 'http://www.example.com/',
         channel_namespace => 'example2',
@@ -110,5 +110,31 @@ is $group->address->state, 'state', 'Address is correct';
 is $group->address->country, 'Country', 'Address is correct';
 is $group->address->code, '001', 'Address is correct';
 is $group->address->phone, '01234567', 'Address is correct';
+
+$ua->get_ok("http://localhost/group/new", "Check new group page works");
+
+$ua->submit_form(
+    fields => {
+        group_type => 'corporation',
+        group_name => 'This should fail',
+        group_url  => 'http://www.example.com/',
+        channel_namespace => 'example10',
+        has_address => 'n',
+    }
+);
+
+$ua->content_contains ("Corporation, education, NFP and government groups must have an address.", "Errors are shown");
+
+$ua->submit_form(
+    fields => {
+        group_type => 'corporation',
+        group_name => 'This should fail',
+        group_url  => 'http://www.example.com/',
+        channel_namespace => 'example10',
+        has_address => 'y',
+    }
+);
+
+$ua->content_contains ("If the group has its own address, then a valid address must be specified.", "Errors are shown");
 
 done_testing;

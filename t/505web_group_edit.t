@@ -134,4 +134,14 @@ $ua->submit_form(
 $ua->content_contains ("If the group has its own address, then a valid address must be specified.", "Invalid address errors are shown");
 $ua->content_contains ("Telephone number contains non-digit characters", "Invalid address errors are shown");
 
+$ua->submit_form(
+    fields => {
+        has_address => 'n',
+        update_address => 'y',
+        group_type     => 'corporation'
+    }
+);
+
+$ua->content_contains ("Corporation, education, NFP and government groups must have an address.", "Errors are shown");
+
 done_testing;

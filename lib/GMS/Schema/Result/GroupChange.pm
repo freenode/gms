@@ -250,6 +250,13 @@ sub new {
     if (!$args->{group_type}) {
         push @errors, "Group type cannot be empty";
         $valid = 0;
+    } else {
+        my $type = $args->{group_type};
+
+        if ( ( $type eq 'corporation' || $type eq 'education' || $type eq 'nfp' || $type eq 'government' ) && !$args->{address} ) {
+            push @errors, "Corporation, education, NFP and government groups must have an address.";
+            $valid = 0;
+        }
     }
 
     if (!$args->{status}) {

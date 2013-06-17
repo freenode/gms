@@ -19,12 +19,12 @@ to help us verify your registration.</p>
   <td><label for="group_type">* Group Type</label></td>
   <td>
       <select name="group_type" id="group_type">
-        <option value="informal" selected="selected">Informal Group</option>
-        <option value="corporation">Corporation / Business entity</option>
-        <option value="education">Educational Institution</option>
-        <option value="government">Governmental Entity</option>
-        <option value="nfp">Not for profit / Charitable Organisation</option>
-        <option value="internal">Internal Group</option>
+        <option [% IF group_type == "informal" || !group_type %] selected [% END %] value="informal" >Informal Group</option>
+        <option [% IF group_type == "corporation" %] selected [%END%] value="corporation">Corporation / Business entity</option>
+        <option [% IF group_type == "education" %] selected [%END%] value="education">Educational Institution</option>
+        <option  [% IF group_type == "government" %] selected [%END%] value="government">Governmental Entity</option>
+        <option  [% IF group_type == "nfp" %] selected [%END%] value="nfp">Not for profit / Charitable Organisation</option>
+        <option [% IF group_type == "internal" %] selected [%END%] value="internal">Internal Group</option>
       </select>
 
       <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 1)" onmouseout="untooltip()" />
@@ -59,40 +59,41 @@ to help us verify your registration.</p>
     </td>
   </tr>
 [% END %]
-<tr>
+<tr id="address_input">
   <td>Does the group have a registered / postal address?</td>
   <td><label><input type="radio" [% IF has_address=="y" %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label><br />
       <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address=="n" || !has_address %] checked="checked" [% END %]> No</label>
   </td>
 </tr>
-<tr>
+<!--- Give address elements name="addr_hide", so that they are hidden with JS properly. !-->
+<tr name="addr_hide">
   <td colspan="2">
-    <strong>Group Address</strong> (if applicable)
+    <strong>Group Address</strong>
     <img src="[% c.uri_for('/static/info.gif') %]" onmouseover="tooltip(this, 5)" onmouseout="untooltip()" />
   </td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="addr1">* Address 1:</label></td><td><input id="addr1" type="text" name="address_one" style="width:90%" value="[% address_one | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="addr2">Address 2:</label></td><td><input id="addr2" type="text" name="address_two" style="width:90%" value="[% address_two | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="city">* City</label></td><td><input id="city" type="text" name="city" style="width:90%" value="[% city | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="state">State</label></td><td><input id="state" type="text" name="state" style="width:90%" value="[% state | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="pcode">Postal Code</label></td><td><input id="pcode" type="text" name="postcode" style="width:90%" value="[% postcode | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="country">* Country</label></td><td><input id="country" type="text" name="country" style="width:90%" value="[% country | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="phone">* Telephone</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" type="text" name="phone" style="width:90%" value="[% phone | html %]"></td>
 </tr>
-<tr>
+<tr name="addr_hide">
   <td><label for="phone2">Telephone (alternate)</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone2" style="width:90%" value="[% phone2 | html %]"></td>
 </tr>
 
@@ -195,3 +196,5 @@ to help us verify your registration.</p>
 
 </form>
 
+<script src="[% c.uri_for ('/static/group_form.js') %]" type="text/javascript">
+</script>

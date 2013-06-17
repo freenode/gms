@@ -172,4 +172,14 @@ $ua->get_ok("http://localhost/admin/group/1/edit", "Edit page works");
 $ua->content_contains ( "Warning: There is already a change request pending for this group.", "Request is recognised");
 $ua->content_contains ( "http://example.net", "Request is recognised");
 
+$ua->submit_form(
+    fields => {
+        has_address => 'n',
+        update_address => 'y',
+        group_type     => 'corporation'
+    }
+);
+
+$ua->content_contains ("Corporation, education, NFP and government groups must have an address.", "Errors are shown");
+
 done_testing;
