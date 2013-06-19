@@ -57,9 +57,17 @@ $Services{GMSServ}->bind_command(
 
 $Services{GMSServ}->bind_command(
     name => "CHANEXISTS",
-    desc => "Returns 1 if a channel is registered, -1 if not.",
+    desc => "Returns 1 if a channel exists, -1 if not.",
     help_path => "gmsserv/chanexists",
     handler => \&gms_chanexists,
+    access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
+    name => "CHANREGISTERED",
+    desc => "Returns 1 if a channel has been registered, -1 if not.",
+    help_path => "gmsserv/chanregistered",
+    handler => \&gms_chanregistered,
     access => "special:gms"
 );
 
@@ -185,11 +193,25 @@ sub gms_chanexists {
     my ($source, @parv) = @_;
     my $channel = shift @parv;
 
-    my $creg = $Atheme::ChannelRegistrations{$channel};
+    my $chan = $Atheme::Channels{$channel};
 
-    if ($creg) {
+    if ($chan) {
         $source->success (1);
     } else {
         $source->success (-1);
     }
 }
+
+sub gms_chanregistered {
+    my ($source, @parv) = @_;
+    my $channel = shift @parv;
+
+    my $chan = $Atheme::ChannelRegistrations{$channel};
+
+    if ($chan) {
+        $source->success (1);
+    } else {
+        $source->success (-1);
+    }
+}
+

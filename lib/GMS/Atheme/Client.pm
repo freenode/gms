@@ -135,7 +135,7 @@ sub mark {
 
 =head2 chanexists
 
-Returns if a channel is registered
+Returns if a channel has been created
 
 =cut
 
@@ -147,7 +147,25 @@ sub chanexists {
         return $session->command ($session->service, 'chanexists', $channel) == 1;
     }
     catch (RPC::Atheme::Error $e) {
-        die 'wtf' .$e;
+        die $e;
+    }
+}
+
+=head2 chanregistered
+
+Returns if a channel is registered
+
+=cut
+
+sub chanregistered {
+    my ($self, $channel) = @_;
+    my $session = $self->{_session};
+
+    try {
+        return $session->command ($session->service, 'chanregistered', $channel) == 1;
+    }
+    catch (RPC::Atheme::Error $e) {
+        die $e;
     }
 }
 
