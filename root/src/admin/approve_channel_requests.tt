@@ -60,15 +60,15 @@
   <tr id="hidden_[% cr.id %]" class="hidden">
     <td colspan="6" class="wide">
 
-      [% #data = cr.contact.account.mark (c) %]
-      [% #mark = data.0; #mark_setter = data.1; time = data.2; %]
+      [% data = cr.target.mark (c) %]
+      [% mark = data.0; mark_setter = data.1; time = data.2; %]
 
-      [% #IF mark %]
+      [% IF mark %]
         <p>
-          <b>Note:</b> The account has been <b>marked</b> by <b>[% mark_setter | html %]</b> on [% date.format(time); %]:<br/>
+          <b>Note:</b> The account [% cr.target.accountname %] has been <b>marked</b> by <b>[% mark_setter | html %]</b> on [% date.format(time); %]:<br/>
           [% mark | html %]
         </p>
-      [% #END %]
+      [% END %]
 
 
       <a href='javascript:;' onclick='hide([% change.id %])'>Hide Info</a>

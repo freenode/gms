@@ -32,6 +32,12 @@ $mockAccounts->mock ('find_by_uid', sub {
         return $schema->resultset('Account')->find ({ id => $uid });
     });
 
+$mockAccounts->mock ('find_by_name', sub {
+        my ( $self, $name  ) = @_;
+
+        return $schema->resultset('Account')->find ({ accountname => $name });
+    });
+
 my $mockAtheme = new Test::MockObject;
 $mockAtheme->mock ( 'user' => sub { $mock } );
 $mockAtheme->mock ( 'model' => sub { $mock } );
@@ -67,7 +73,7 @@ $ua->submit_form(
     fields => {
         channel => '#example-test',
         action => 1,
-        target => 'admin',
+        target_gc => 'AAAAAAAAP',
     }
 );
 
@@ -82,7 +88,7 @@ $ua->submit_form(
     fields => {
         channel => '#another-thing',
         action => 1,
-        target => 'admin'
+        target_gc => 'AAAAAAAAP'
     }
 );
 
@@ -94,7 +100,7 @@ $ua->submit_form(
     fields => {
         channel => '#example-test',
         action => 2,
-        target => 'admin',
+        target_gc => 'AAAAAAAAP',
     }
 );
 
@@ -106,10 +112,33 @@ $ua->submit_form(
     fields => {
         channel => '#another-thing',
         action => 2,
-        target => 'admin'
+        target_gc => 'AAAAAAAAP'
     }
 );
 
 $ua->content_contains ("This namespace does not belong in your Group's namespaces.", "Errors are shown");
+
+$ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
+
+$ua->submit_form(
+    fields => {
+        channel => '#example',
+        action => 1,
+        target => 'admin01'
+    }
+);
+
+$ua->content_contains ("Please confirm that this is the user that you think it is", "Users are asked to confirm when transferring to an arbitary user");
+
+$ua->submit_form(
+    fields => {
+        channel => '#example',
+        action => 1,
+        target => 'admin01',
+        confirm => 1
+    }
+);
+
+$ua->content_contains ("Successfully requested the channel take over", "Transfer works");
 
 done_testing;

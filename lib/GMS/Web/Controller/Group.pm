@@ -449,11 +449,18 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
         my $channels = $c->model('Channels');
 
         if ($action == 1) {
-            my $target = $p->{target} || $p->{target_gc};
             my $account;
 
             try {
-                $account = $c->model('Accounts')->find_by_name ( $target );
+                if ( $p->{target} ) {
+                    $account = $c->model('Accounts')->find_by_name ( $p->{target} );
+                } elsif ( $p->{target_gc} ) {
+                    $account = $c->model('Accounts')->find_by_uid ( $p->{target_gc} );
+                } else {
+                    $c->stash->{error_msg} = "Please provide a target";
+                    %{$c->stash} = ( %{$c->stash}, %$p );
+                    $c->detach ('take_over');
+                }
             }
             catch (GMS::Exception $e) {
                 $c->stash->{error_msg} = $e->message;
@@ -463,6 +470,23 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
             catch (RPC::Atheme::Error $e) {
                 $c->stash->{error_msg} = $e->description;
                 %{$c->stash} = ( %{$c->stash}, %$p );
+                $c->detach ('take_over');
+            }
+
+            if ($p->{target} && !$p->{confirm}) {
+                my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+                %{$c->stash} = ( %{$c->stash}, %$p );
+                my $reg = scalar localtime $client->registered($account->id);
+                my $login = $client->lastseen ($account->id);
+
+                $c->stash->{info} = "Nick: " . $p->{target} . "<br/>"
+                .                   "Account: " . $account->accountname . "<br/>"
+                .                   "Registered: " . $reg . "<br/>";
+
+                if (!$client->private ($account->id)) {
+                    $c->stash->{info} .= "Last seen: " . $login . "<br/>";
+                }
+
                 $c->detach ('take_over');
             }
 
