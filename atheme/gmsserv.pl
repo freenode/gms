@@ -96,6 +96,14 @@ $Services{GMSServ}->bind_command(
 );
 
 $Services{GMSServ}->bind_command(
+    name => "FREGISTER",
+    desc => "Forcibly registers a channel to a user",
+    help_path => "gmsserv/fregister",
+    handler => \&gms_fregister,
+    access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
     name => "private",
     desc => "Returns if an account is private",
     help_path => "gmsserv/private",
@@ -165,6 +173,57 @@ sub gms_transfer {
 
         Atheme::Log::command(__PACKAGE__, $source, Atheme::Log::admin | Atheme::Log::register, "The channel $channel has been transferred to " . $nf_acc->name . " through GMS by " . $requestor_acc->name);
         Atheme::wallops("The channel $channel has been transferred to " . $nf_acc->name . " through GMS by " . $requestor_acc->name);
+    }
+}
+
+sub gms_fregister {
+    my ($source, @parv) = @_;
+
+    my ($channel, $new_founder, $requestor) = @parv;
+
+    my $chan = $Atheme::Channels{$channel};
+
+    my $nf_acc = $Atheme::Accounts{'?' . $new_founder};
+    my $requestor_acc = $Atheme::Accounts{'?' . $requestor};
+
+    if (!$chan) {
+        $source->fail (Atheme::Fault::nosuch_target(), "The channel $channel must exist in order to register it");
+    } elsif (!$nf_acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "The account with uid $new_founder is not registered");
+    } elsif (!$requestor_acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "The account with uid $requestor is not registered");
+    } else {
+        my %hook_data = {
+            'name'     => $channel,
+            'chan'     => $chan,
+            'approved' => 0
+        };
+
+        Atheme::Hooks::call_hooks ('channel_can_register', \%hook_data);
+
+        if ($hook_data{approved} != 0) {
+            return;
+        }
+
+        my $creg = $chan->register ($source, $nf_acc);
+
+        if ( $chan->ts > 0 ) {
+            $creg->metadata->{'private::channelts'} = $chan->ts;
+        }
+
+        my $templates = Atheme::ChanServ::Config::default_templates;
+        if ( $templates ) {
+            $creg->metadata->{'private::templates'} = $templates;
+        }
+
+        $hook_data{si} = $source;
+        $hook_data{mc} = $creg;
+
+        Atheme::Hooks::call_hooks ('channel_register', \%hook_data);
+
+        $source->success ("The channel " . $channel . " has been registered to " . $nf_acc->name);
+        Atheme::Log::command(__PACKAGE__, $source, Atheme::Log::admin | Atheme::Log::register, "The channel $channel has been registered to " . $nf_acc->name . " through GMS by " . $requestor_acc->name);
+        Atheme::wallops("The channel $channel has been registered to " . $nf_acc->name . " through GMS by " . $requestor_acc->name);
     }
 }
 
