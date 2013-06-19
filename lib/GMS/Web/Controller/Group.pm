@@ -381,9 +381,10 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     my $group = $c->stash->{group};
     my $params = $c->request->params;
     my @group_contacts = split / /, $params->{group_contacts};
+    my $group_row = $group->group_row;
 
     foreach my $contact_id (@group_contacts) {
-        my $contact = $group->group_contacts->find ({ contact_id => $contact_id });
+        my $contact = $group_row->group_contacts->find ({ contact_id => $contact_id });
         my $action = $params->{"action_$contact_id"};
         if ($action eq 'change') {
             my $status = $params->{"status_$contact_id"};
