@@ -81,12 +81,11 @@ function groupTypeChange() {
     }
 }
 
-
-window.onload = function() {
+addEventHandler ( window, 'load', function() {
     setTimeout (
             function() {
                 groupPage();
                 groupTypeChange();
             },
     1);
-}
+});

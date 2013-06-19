@@ -105,7 +105,7 @@ function sendAjaxRequest (url, method, params, func) {
         }
 
     if (method == "POST") {
-		xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlHttp.send (params);
     } else {
         xmlHttp.send (null);
@@ -118,4 +118,13 @@ function approveCloak (id, action, token) {
             document.getElementsByClassName ("content")[0].innerHTML = xmlHttp.responseText;
         }
     );
+}
+
+function addEventHandler (elem, eventType, handler) {
+
+    if ( elem.addEventListener ) {
+        elem.addEventListener ( eventType, handler, false );
+    } else if (elem.attachEvent) {
+        elem.attachEvent ( 'on'+ eventType, handler );
+    }
 }
