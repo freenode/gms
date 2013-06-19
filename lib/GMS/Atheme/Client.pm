@@ -67,7 +67,11 @@ sub take_over {
     my $session = $self->{_session};
 
     try {
-        return $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
+        if ( $self->chanregistered ( $channel ) ) {
+            return $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
+        } else {
+            return $session->command($session->service, 'fregister', $channel, $gc_name, $requestor);
+        }
     }
     catch (RPC::Atheme::Error $e) {
         die $e;

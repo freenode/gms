@@ -19,6 +19,13 @@ $mock->mock ( 'session' => sub { $mock });
 $mock->mock ( 'service' => sub { 'GMSServ' } );
 $mock->mock ( 'command', sub {
         shift @_; #we don't need the first element, which is a Test::MockObject
+
+        my ( undef, $command ) = @_;
+
+        if ( $command eq 'chanregistered' ) {
+            return 1;
+        }
+
         return @_;
     });
 
@@ -29,6 +36,30 @@ my @result = $client->take_over ("#test", 'AAAAAAAAP', 'AAAAAAAAP');
 is_deeply ( \@result, [
     "GMSServ",
     "transfer",
+    "#test",
+    "AAAAAAAAP",
+    "AAAAAAAAP"
+], "Test taking over channels" );
+
+$mock->mock ( 'command', sub {
+        shift @_; #we don't need the first element, which is a Test::MockObject
+
+        my ( undef, $command ) = @_;
+
+        if ( $command eq 'chanregistered' ) {
+            return 0;
+        }
+
+        return @_;
+    });
+
+
+$client = GMS::Atheme::Client->new ( $mock );
+@result = $client->take_over ("#test", 'AAAAAAAAP', 'AAAAAAAAP');
+
+is_deeply ( \@result, [
+    "GMSServ",
+    "fregister",
     "#test",
     "AAAAAAAAP",
     "AAAAAAAAP"

@@ -59,8 +59,10 @@ sub request {
         my $client = GMS::Atheme::Client->new($session);
         my $channel = $args->{channel};
 
-        if ( !$client->chanexists ( $channel ) ) {
+        if ( $args->{request_type} eq 'drop' && !$client->chanregistered ( $channel ) ) {
             die GMS::Exception::InvalidChannelRequest->new ("$channel isn't registered!");
+        } elsif ( $args->{request_type} eq 'transfer' && !$client->chanexists ( $channel ) ) {
+            die GMS::Exception::InvalidChannelRequest->new ("$channel must exist in order to register it (join it)");
         }
 
         return $rs->create ($args);
