@@ -169,4 +169,73 @@ sub chanregistered {
     }
 }
 
+=head2 registered
+
+Returns the UNIX timestamp when an account was registered
+
+=cut
+
+sub registered {
+    my ($self, $uid) = @_;
+    my $session = $self->{_session};
+
+    try {
+        return $session->command ($session->service, 'registered', $uid);
+    } catch (RPC::Atheme::Error $e) {
+        die $e;
+    }
+}
+
+=head2 lastlogin
+
+Returns the UNIX timestamp when a user was last logged in.
+
+=cut
+
+sub lastlogin {
+    my ($self, $uid) = @_;
+    my $session = $self->{_session};
+
+    try {
+        return $session->command ($session->service, 'lastlogin', $uid);
+    } catch (RPC::Atheme::Error $e) {
+        die $e;
+    }
+}
+
+=head2 lastseen
+
+Returns a human-readable date of when the user was last logged in.
+
+=cut
+
+sub lastseen {
+    my ($self, $uid) = @_;
+    my $session = $self->{_session};
+
+    try {
+        return $session->command ($session->service, 'lastseen', $uid);
+    } catch (RPC::Atheme::Error $e) {
+        die $e;
+    }
+}
+
+=head2 private
+
+Returns if the account is private.
+
+=cut
+
+sub private {
+    my ($self, $uid) = @_;
+    my $session = $self->{_session};
+
+    try {
+        my $private = $session->command ( $session->service, 'private', $uid);
+        return ( $private == 1 );
+    } catch (RPC::Atheme::Error $e) {
+        die $e;
+    }
+}
+
 1;

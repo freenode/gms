@@ -71,6 +71,38 @@ $Services{GMSServ}->bind_command(
     access => "special:gms"
 );
 
+$Services{GMSServ}->bind_command(
+    name => "REGISTERED",
+    desc => "Returns a user's registration time",
+    help_path => "gmsserv/registered",
+    handler => \&gms_registered,
+    access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
+    name => "LASTLOGIN",
+    desc => "Returns a user's last login time",
+    help_path => "gmsserv/lastlogin",
+    handler => \&gms_lastlogin,
+    access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
+    name => "LASTSEEN",
+    desc => "Returns a user's last login time",
+    help_path => "gmsserv/lastseen",
+    handler => \&gms_lastseen,
+    access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
+    name => "private",
+    desc => "Returns if an account is private",
+    help_path => "gmsserv/private",
+    handler => \&gms_private,
+    access => "special:gms"
+);
+
 sub gms_uid {
     my ($source, @parv) = @_;
 
@@ -215,3 +247,63 @@ sub gms_chanregistered {
     }
 }
 
+sub gms_registered {
+    my ($source, @argv) = @_;
+
+    my $uid = shift @argv;
+
+    my $acc = $Atheme::Accounts{'?' . $uid};
+
+    if (!$acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
+    } else {
+        $source->success ($acc->registered);
+    }
+}
+
+sub gms_lastlogin {
+    my ($source, @argv) = @_;
+
+    my $uid = shift @argv;
+
+    my $acc = $Atheme::Accounts{'?' . $uid};
+
+    if (!$acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
+    } else {
+        $source->success ($acc->last_login);
+    }
+}
+
+sub gms_lastseen {
+    my ($source, @argv) = @_;
+
+    my $uid = shift @argv;
+
+    my $acc = $Atheme::Accounts{'?' . $uid};
+
+    if (!$acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
+    } else {
+        $source->success ($acc->last_seen);
+    }
+}
+
+sub gms_private {
+    my ($source, @argv) = @_;
+
+    my $uid = shift @argv;
+    my $acc = $Atheme::Accounts{'?' . $uid};
+
+    if (!$acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
+    } else {
+        my $flags = $acc->flags;
+
+        if ( $flags & Atheme::Account::private() ) {
+            $source->success (1);
+        } else {
+            $source->success (-1);
+        }
+    }
+}
