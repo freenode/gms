@@ -61,7 +61,7 @@ sub request {
 
         if ( $args->{request_type} eq 'drop' && !$client->chanregistered ( $channel ) ) {
             die GMS::Exception::InvalidChannelRequest->new ("$channel isn't registered!");
-        } elsif ( $args->{request_type} eq 'transfer' && !$client->chanexists ( $channel ) ) {
+        } elsif ( $args->{request_type} eq 'transfer' &&  !$client->chanregistered ( $channel ) && !$client->chanexists ( $channel ) ) {
             die GMS::Exception::InvalidChannelRequest->new ("$channel must exist in order to register it (join it)");
         }
 
