@@ -216,11 +216,6 @@ sub gms_fregister {
             $creg->metadata->{'private::templates'} = $templates;
         }
 
-        $hook_data{si} = $source;
-        $hook_data{mc} = $creg;
-
-        Atheme::Hooks::call_hooks ('channel_register', \%hook_data);
-
         $source->success ("The channel " . $channel . " has been registered to " . $nf_acc->name);
         Atheme::Log::command(__PACKAGE__, $source, Atheme::Log::admin | Atheme::Log::register, "The channel $channel has been registered to " . $nf_acc->name . " through GMS by " . $requestor_acc->name);
         Atheme::wallops("The channel $channel has been registered to " . $nf_acc->name . " through GMS by " . $requestor_acc->name);
