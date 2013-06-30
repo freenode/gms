@@ -86,7 +86,7 @@ sub find_by_uid {
             }
 
             else {
-                die GMS::Exception->new ("Could not find an account with that UID.");
+                die GMS::Exception->new ("Could not find an account with the UID $uid.");
             }
         } else {
             die $e;
@@ -134,7 +134,7 @@ sub find_by_name {
         return GMS::Domain::Account->new ($uid, $name, $session, $result);
     } catch (RPC::Atheme::Error $e) {
         if ($e->code == RPC::Atheme::Error::nosuchtarget) {
-            die GMS::Exception->new ("Could not find an account with that account name.");
+            die GMS::Exception->new ("Could not find an account with the account name $name.");
         } else {
             die $e;
         }

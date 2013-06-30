@@ -8,7 +8,7 @@ use GMS::Atheme::Client;
 has _dbic_account_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (contact_changes contact recent_cloak_changes group_changes group_contact_changes user_roles) ],
+    handles => [ qw (contact_changes contact recent_cloak_changes group_changes group_contact_changes user_roles dropped) ],
 );
 
 =head1 PACKAGE
