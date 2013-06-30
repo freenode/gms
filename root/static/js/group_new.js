@@ -33,7 +33,11 @@ function toggleGAB() {
 }
 
 function showGAB(show) {
-    document.getElementById('gab').style.display = ( show ? '' : 'none' );
+    if (show) {
+        $("#gab").show(400);
+    } else {
+        $("#gab").hide(400);
+    }
 }
 
 function toggleList() {
@@ -48,13 +52,17 @@ function toggleList() {
 }
 
 function showList(show) {
-    document.getElementById('listing').style.display = ( show ? '' : 'none' );
+    if ( show ) {
+        $("#listing").show(400);
+    } else {
+        $("#listing").hide(400);
+    }
 }
 
 addEventHandler ( window, 'load', function() {
     setTimeout (
-            function() {
-                groupNewPage();
-            },
+        function() {
+            groupNewPage();
+        },
     1);
 });

@@ -1,3 +1,55 @@
+HTMLElement.prototype.getElementById = function(id) {
+    var children = this.getElementsByTagName('*');
+    var len = children.length;
+
+    for ( var i = 0; i < len; i++ ) {
+        if ( children[i].getAttribute('id') === id ) {
+            return children[i];
+        }
+    }
+
+    return false;
+}
+
+function IE() {
+    var matches = navigator.userAgent.match (/MSIE ([0-9]+)/);
+
+    if (!matches || matches.length < 2) {
+        return false;
+    }
+
+    var version = matches[1];
+    return parseInt (version, 10);
+}
+
+if ( IE() !== false && IE() < 10 ) {
+    document.getElementsByName = function(name) {
+        var ret = [];
+        var elems = document.getElementsByTagName("*");
+
+        for ( var i = 0; i < elems.length; i++ ) {
+            if ( elems[i].name === name || elems[i].getAttribute('name') === name ) {
+                ret.push (elems[i]);
+            }
+        }
+
+        return ret;
+    }
+
+    document.getElementsByClassName = function(name) {
+        var ret = [];
+        var elems = document.getElementsByTagName("*");
+
+        for ( var i = 0; i < elems.length; i++ ) {
+            if ( elems[i].className === name || elems[i].getAttribute('class') === name ) {
+                ret.push (elems[i]);
+            }
+        }
+
+        return ret;
+    }
+}
+
 function show(elem_id) {
     var elem = document.getElementById("hidden_" + elem_id);
     var link = document.getElementById("link_" + elem_id); //'expand' link
@@ -23,7 +75,7 @@ function hide(elem_id) {
 function tooltip (elem, id) {
     untooltip();
     var div = document.createElement ("div");
-    div.className = "tooltip";
+    div.className = "gtooltip";
     div.id = "tooltip";
 
     var parent = elem.parentNode;
@@ -80,13 +132,26 @@ function sendAjaxRequest (url, method, params, func) {
     /*
         url - the URL to load
         method - GET or POST
-        params - the body parameters for POST
+        params - An object representing the body post parameters, e.g.:
+        {
+            'name': 'erry',
+            'age':  12,
+        }
         func - the function to be called when the AJAX request is done
         It should accept a parameter so that it gets the xmlHttp response
         and does something with it.
 
-        sendAjaxRequest ("/group/1/edit", "POST", "name=group1&address=Address here",
-        function (xmlHttp) { document.getElementById('response').innerHTML = xmlHttp.responseText; });
+        sendAjaxRequest (
+            "/group/1/edit",
+            "POST",
+            {
+                'name':'group1',
+                'address':Address here"
+            },
+            function (xmlHttp) {
+                document.getElementById('response').innerHTML = xmlHttp.responseText;
+            }
+        );
     */
 
     var xmlHttp = getXmlHttpObject();
@@ -105,19 +170,38 @@ function sendAjaxRequest (url, method, params, func) {
         }
 
     if (method == "POST") {
+        if ( ( tokenElem = document.getElementById('token') ) ) { //there should be a hidden input#token with the token
+            token = tokenElem.value;
+        } else {
+            return;
+        }
+
+        var paramString = '';
+
+        for ( var key in params ) {
+            paramString += ( paramString === '' ? '' : '&' ) + key + '=' + encodeURIComponent (params[key]);
+        }
+
+        paramString += ( paramString === '' ? '' : '&' ) + "_token=" + token;
+        paramString += "&ajax=1";
+
         xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlHttp.send (params);
+        xmlHttp.send (paramString);
     } else {
         xmlHttp.send (null);
     }
 }
 
-function approveCloak (id, action, token) {
-    sendAjaxRequest ("/cloak/" + id + "/approve", "POST", "action=" + action + "&ajax=1" + "&_token=" + token,
+function approveCloak (id, action) {
+    sendAjaxRequest (
+        "/cloak/" + id + "/approve",
+        "POST",
+        {
+            'action': action
+        },
         function( xmlHttp ) {
             document.getElementsByClassName ("content")[0].innerHTML = xmlHttp.responseText;
-        }
-    );
+        });
 }
 
 function addEventHandler (elem, eventType, handler) {
@@ -128,3 +212,4 @@ function addEventHandler (elem, eventType, handler) {
         elem.attachEvent ( 'on'+ eventType, handler );
     }
 }
+
