@@ -322,7 +322,8 @@ sub approve {
     my ($self, $session, $account, $freetext) = @_;
 
     $self->change ($account, { status => "approved", change_freetext => $freetext });
-    $self->sync_to_atheme($session);
+
+    return $self->sync_to_atheme($session);
 }
 
 
@@ -381,8 +382,10 @@ sub sync_to_atheme {
             );
         }
 
-        return;
+        return $e;
     }
+
+    my $error = undef;
 
     foreach my $channelRequest (@unapplied) {
         my $type = $channelRequest->request_type;
@@ -412,8 +415,14 @@ sub sync_to_atheme {
                 $channelRequest->active_change->changed_by,
                 { status => "error", change_freetext => $e }
             );
+
+            $error = $e;
         }
     }
+
+    return $error;
+}
+
 =head2 TO_JSON
 
 Returns a representative object for the JSON parser.

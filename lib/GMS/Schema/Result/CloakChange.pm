@@ -271,7 +271,7 @@ sub approve {
     my ($self, $session, $account, $freetext) = @_;
 
     $self->change ($account, { status => "approved", change_freetext => $freetext });
-    $self->sync_to_atheme($session);
+    return $self->sync_to_atheme($session);
 }
 
 =head2 reject
@@ -325,8 +325,10 @@ sub sync_to_atheme {
             );
         }
 
-        return;
+        return $e;
     }
+
+    my $error = undef;
 
     foreach my $cloakChange (@unapplied) {
         my $cloak = $cloakChange->cloak;
@@ -343,6 +345,14 @@ sub sync_to_atheme {
                 $cloakChange->active_change->changed_by,
                 { status => "error", change_freetext => $e }
             );
+
+            $error = $e;
+        }
+    }
+
+    return $error;
+}
+
 =head2 TO_JSON
 
 Returns a representative object for the JSON parser.
