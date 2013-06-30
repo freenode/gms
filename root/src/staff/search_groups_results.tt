@@ -1,6 +1,8 @@
 [% META title = 'Search Results' %]
 
-<table>
+<h1>Search Results</h1>
+
+<table class='fullwidth'>
 <tr>
   <th>Group Name</th>
   <th>Group Type</th>
@@ -17,6 +19,7 @@
 </table>
 
 <p>
+  <p><b>Navigation:</b></p>
   <form action='[% c.uri_for ("/staff/search_groups/submit") %]' method='post'>
     <input type='hidden' name='group_name' value='[% group_name | html %]' />
     <input type='hidden' name='gc_accname' value='[% gc_accname | html %]' />
@@ -36,7 +39,8 @@
       <input type='submit' name='next' value='Next page' />
     [% END %]
     <input type='submit' name='next' value='Last page' /><br />
-
+    <br/>
+    Or jump to page:<br/>
     <select name='page'>
       <option value=''>Select a page...</option>
       [%
@@ -46,7 +50,7 @@
       [%
         END
       %]
-    </select>
+    </select><br/>
     <input type='submit' value='Go' />
   </form>
   <a href='[% c.uri_for ("/staff/search_groups") %]'>Back to search</a>

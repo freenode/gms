@@ -1,6 +1,6 @@
 [% META title = 'Search Results' %]
 
-<table>
+<table class='fullwidth'>
 <tr>
   <th>ID</th>
   <th>Group Name</th>
@@ -63,6 +63,7 @@
 [% END -%]
 </table>
 
+<p><b>Navigation</b></p>
 <p>
   <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
     <input type='hidden' name='gc_accname' value='[% gc_accname | html %]' />
@@ -79,7 +80,8 @@
       <input type='submit' name='next' value='Next page' />
     [% END %]
     <input type='submit' name='next' value='Last page' /><br />
-
+    <br/>
+    Or, jump to page:<br/>
     <select name='page'>
       <option value=''>Select a page...</option>
       [%
@@ -89,7 +91,7 @@
       [%
         END
       %]
-    </select>
+    </select><br/>
     <input type='submit' value='Go' />
   </form>
   <a href='[% c.uri_for ("/admin/search_changes") %]'>Back to search</a>

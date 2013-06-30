@@ -3,85 +3,85 @@
 <form method="post" action="[% c.uri_for('/admin/search_changes/submit') %]">
 
 <p>
-  Enter the search criteria. Wildcard: '%'
+  Enter the search criteria. Empty box matches errything.
 </p>
 
-<table>
+<table class='fullwidth'>
   <tr>
-    <td colspan="2"><input name="change_item" value="1" type="radio" checked="checked" id="radio1" /> <label for="radio1">Group Contact Changes</label></td>
+    <td colspan="2"><input name="change_item" value="1" type="radio" checked="checked" id="radio1" /> <label  class='inline' for="radio1">Group Contact Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="gc_accname">Group Contact Account name:</label></td>
-    <td><input type='text' id="gc_accname" name='gc_accname' /></td>
+    <td><label class='inline' for="gc_accname">Group Contact Account name:</label class='inline'></td>
+    <td><input class='accname' type='text' id="gc_accname" name='gc_accname' /></td>
   </tr>
   <tr>
-    <td><label for="gc_gname">Group Name:</label></td>
-    <td><input type='text' id="gc_gname" name='gc_groupname' /></td>
+    <td><label class='inline' for="gc_gname">Group Name:</label class='inline'></td>
+    <td><input class='gname' type='text' id="gc_gname" name='gc_groupname' /></td>
   </td>
   </tr>
   <tr>
     <td></td>
   </tr>
   <tr>
-    <td colspan="2"><input name="change_item" value="2" type="radio" id="radio2" /> <label for="radio2">Group Changes</label></td>
+    <td colspan="2"><input name="change_item" value="2" type="radio" id="radio2" /> <label class='inline' for="radio2">Group Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="gname">Group name:</label></td>
-    <td><input id="gname" type='text' name='group_name' /></td>
+    <td><label class='inline' for="gname">Group name:</label class='inline'></td>
+    <td><input class='gname' id="gname" type='text' name='group_name' /></td>
   </tr>
   <tr>
     <td></td>
   </tr>
   <tr>
-    <td colspan="2"><input name="change_item" value="3" type="radio" id="radio3"/> <label for="radio3">Contact Changes</label></td>
+    <td colspan="2"><input name="change_item" value="3" type="radio" id="radio3"/> <label class='inline' for="radio3">Contact Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="cname">Contact name:</label></td>
-    <td><input type='text' id="cname" name='accname' /></td>
+    <td><label class='inline' for="cname">Contact name:</label class='inline'></td>
+    <td><input class='accname' type='text' id="cname" name='accname' /></td>
   </tr>
   <tr>
-    <td colspan="2"><input name="change_item" value="4" type="radio" id="radio4"/> <label for="radio4">Channel Namespace Changes</label></td>
+    <td colspan="2"><input name="change_item" value="4" type="radio" id="radio4"/> <label class='inline' for="radio4">Channel Namespace Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="cns">Namespace name:</label></td>
-    <td><input type='text' id="cns" name='namespace' /></td>
+    <td><label class='inline' for="cns">Namespace name:</label class='inline'></td>
+    <td><input class='ns' type='text' id="cns" name='namespace' /></td>
   </tr>
   <tr>
-    <td><label for="cn_gname">Group name:</label></td>
-    <td><input id="cn_gname" type='text' name='groupname' /></td>
+    <td><label class='inline' for="cn_gname">Group name:</label class='inline'></td>
+    <td><input class='gname' id="cn_gname" type='text' name='groupname' /></td>
   </tr>
   <tr>
-    <td colspan="2"><input name="change_item" value="5" type="radio" id="radio5"/> <label for="radio5">Cloak Namespace Changes</label></td>
+    <td colspan="2"><input name="change_item" value="5" type="radio" id="radio5"/> <label class='inline' for="radio5">Cloak Namespace Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="clns">Namespace name:</label></td>
-    <td><input id="clns" type='text' name='cloak_namespace' /></td>
+    <td><label class='inline' for="clns">Namespace name:</label class='inline'></td>
+    <td><input  class='ns' id="clns" type='text' name='cloak_namespace' /></td>
   </tr>
   <tr>
-    <td><label for="cl_gname">Group name:</label></td>
-    <td><input id="cl_gname" type='text' name='cloak_groupname' /></td>
+    <td><label class='inline' for="cl_gname">Group name:</label class='inline'></td>
+    <td><input class='gname' id="cl_gname" type='text' name='cloak_groupname' /></td>
   </tr>
   <tr>
-    <td colspan="2"><input name="change_item" value="6" type="radio" id="radio6"/> <label for="radio6">Cloak Changes</label></td>
+    <td colspan="2"><input name="change_item" value="6" type="radio" id="radio6"/> <label class='inline' for="radio6">Cloak Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="cl_accname">Account name:</label></td>
-    <td><input id="cl_accname" type='text' name='cloak_accountname' /></td>
+    <td><label class='inline' for="cl_accname">Account name:</label class='inline'></td>
+    <td><input class='accname' id="cl_accname" type='text' name='cloak_accountname' /></td>
   </tr>
   <tr>
-    <td colspan="2"><input name="change_item" value="7" type="radio" id="radio7"/> <label for="radio7">Channel Request Changes</label></td>
+    <td colspan="2"><input name="change_item" value="7" type="radio" id="radio7"/> <label class='inline' for="radio7">Channel Request Changes</label class='inline'></td>
   </tr>
   <tr>
-    <td><label for="channel">Channel:</label></td>
+    <td><label class='inline' for="channel">Channel:</label class='inline'></td>
     <td><input id="channel" type='text' name='channel' /></td>
   </tr>
   <tr>
-    <td><label for="channel">Requestor:</label></td>
-    <td><input id="channel" type='text' name='requestor' /></td>
+    <td><label class='inline' for="req">Requestor:</label class='inline'></td>
+    <td><input class='accname' id="req" type='text' name='requestor' /></td>
   </tr>
   <tr>
-    <td><label for="channel">Target:</label></td>
-    <td><input id="channel" type='text' name='target' /></td>
+    <td><label class='inline' for="target">Target:</label class='inline'></td>
+    <td><input class='accname' id="target" type='text' name='target' /></td>
   </tr>
 
 </table>
@@ -91,3 +91,4 @@
 </p>
 
 </form>
+<script src="[% c.uri_for ('/static/js/admin_search.js') %]" type="text/javascript"></script>

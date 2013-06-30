@@ -2,54 +2,55 @@
 
 <h2>Channel Namespaces for [% group.group_name | html %]</h2>
 
-[% group.group_name | html %]'s current active namespaces are:<br/>
+[% group.group_name | html %]'s current active namespaces are:<br/><br/>
 
 <form method="post" action="[% c.uri_for("/admin/group/${group.id}/edit_channel_namespaces/submit") %]">
 
-<table>
-<tr>
-<th>Namespace</th>
-<th>Status</th>
-<th>Last change type</th>
-<th>Change?</th>
-</tr>
+[% IF channel_namespaces.size != 0 %]
+    <table class="fullwidth">
+    <tr>
+    <th class="td33">Namespace</th>
+    <th class="td33">Status</th>
+    <th class="td33">Change?</th>
+    </tr>
 
-[% FOREACH namespace IN channel_namespaces %]
-[%
-  IF namespace.last_change.change_type.is_request;
-    change = namespace.last_change;
-    status_msg = "At least one of the group's namespaces has a change request pending. As a result, information from the current request is used instead of the active change for those namespaces.";
-  ELSE;
-    change = namespace.active_change;
-  END;
-%]
-<tr>
-  <td>
-    [% namespace.namespace | html %]
-  </td>
-  <td>
-    <select name='status_[% namespace.id %]'>
-      <option value='active' [% IF change.status.is_active %] selected [% END %]>active</option>
-      <option value='pending_staff' [% IF change.status.is_pending_staff %] selected [% END %]>pending_staff</option>
-      <option value='deleted' [% IF change.status.is_deleted %] selected [% END %]>deleted</option>
-    </select>
-  </td>
-  <td>
-    [% namespace.last_change.change_type %]
-  </td>
-  <td>
-    <label><input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change</label>
-  </td>
-</tr>
+    [% FOREACH namespace IN channel_namespaces %]
+
+    [%
+    IF namespace.last_change.change_type.is_request;
+        change = namespace.last_change;
+        status_msg = "At least one of the group's namespaces has a change request pending. As a result, information from the current request is used instead of the active change for those namespaces.";
+    ELSE;
+        change = namespace.active_change;
+    END;
+    %]
+
+    <tr>
+    <td>
+        [% namespace.namespace | html %]
+    </td>
+    <td>
+        <select name='status_[% namespace.id %]'>
+        <option value='active' [% IF change.status.is_active %] selected [% END %]>active</option>
+        <option value='deleted' [% IF change.status.is_deleted %] selected [% END %]>deleted</option>
+        </select>
+    </td>
+    <td>
+        <label><input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change</label>
+    </td>
+    </tr>
+    [% END %]
+
+    </table>
+    <br/>
+[% ELSE %]
+    This group currently has no channel namespaces, but you can add another.
 [% END %]
-
-</table>
-
 <p>
-  Add a new namespace:
-  Namespace: <input type='text' name='namespace' value="[% prev_namespace | html %]" /><br />
+  Add a new namespace:<br/>
+  <input type='text' name='namespace' value="[% prev_namespace | html %]" /><br />
   [% IF confirm %]
-    <input type="checkbox" name="do_confirm" value="1" /> Confirm Creating Conflicting Change<br/>
+    <input type="checkbox" name="do_confirm" value="1" /> Confirm Create Conflicting Change<br/>
   [% END %]
   <input type='submit' value='Submit' />
 </p>

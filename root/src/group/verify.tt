@@ -4,18 +4,18 @@
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/verify/submit") %]">
     Here are the possible verification methods:<br/><br/>
-    <ul>
+    <ul >
         <li>
             Create a file called [% group.verify_url | html %] with content [% group.verify_token %]
-        </li><br/>
+        </li>
         <li>
             CNAME [% group.verify_dns | html %] to freenode.net
-        </li><br/>
+        </li>
         <li>
             Enter free text in the area below explaining why you can't do the above:<br/><br/>
-            <textarea style="height:200px;width:90%" name="freetext"></textarea><br/>
-        </li><br/>
+            <textarea style="height:200px;width:90%" name="freetext"></textarea>
+        </li>
     </ul>
-    Once you've completed one of the verification methods below, submit this form:<br/><br/>
-    <input type="submit" value="Submit" />
+    Once you've completed one of the verification methods above, submit this form:<br/><br/>
+    <input type="submit" class='btn btn-primary' value="Submit" />
 </form>

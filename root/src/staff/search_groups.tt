@@ -3,17 +3,17 @@
 <form method="post" action="[% c.uri_for('/staff/search_groups/submit') %]">
 
 <p>
-  Enter the search criteria. Wildcard: '%'
+  Enter the search criteria. Empty box matches errything.
 </p>
 
-<table>
+<table class='fullwidth'>
   <tr>
     <td><label for="gname">Group Name</label></td>
-    <td><input id="gname" type='text' name='group_name' /></td>
+    <td><input class='gname' id="gname"  type='text' name='group_name' /></td>
   </tr>
   <tr>
     <td><label for="accname">Group Contact Accountname</label></td>
-    <td><input id="accname" type='text' name='gc_accname' /></td>
+    <td><input class='accname' id="accname"  type='text' name='gc_accname' /></td>
   </tr>
   <tr>
     <td><label for="type">Group Type</label></td>

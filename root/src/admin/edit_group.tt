@@ -82,5 +82,5 @@
 </p>
 </form>
 
-<script src="[% c.uri_for ('/static/group_form.js') %]" type="text/javascript">
+<script src="[% c.uri_for ('/static/js/group_form.js') %]" type="text/javascript">
 </script>

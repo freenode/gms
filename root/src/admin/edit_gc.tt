@@ -6,9 +6,14 @@
 
 <p>Group Contacts:</p>
 
-<table>
+<table class='fullwidth'>
 <tr>
-  <th>Contact</th> <th>Status</th> <th>Primary?</th> <th>Last Change Type</th> <th>Change</th> <th>Hold</th>
+  <th class="td16">Contact</th>
+  <th class="td16">Status</th>
+  <th class="td16">Primary?</th>
+  <th class="td16">Last Change Type</th>
+  <th class="td16">Change</th>
+  <th class="td16">Hold</th>
 </tr>
 
 [% FOREACH group_contact IN group_contacts -%]
@@ -29,7 +34,7 @@
     [% END %]
     </td>
     <td>
-    <select name="status_[% group_contact.contact.id %]">
+    <select style="width:80%" name="status_[% group_contact.contact.id %]">
       <option value="active" [% IF change.status.is_active %] selected [% END %]>active</option>
       <option value="retired" [% IF change.status.is_retired %] selected [% END %]>retired</option>
       <option value="invited" [% IF change.status.is_invited %] selected [% END %]>invited</option>
@@ -45,7 +50,7 @@
       Free text:
     </td>
     <td colspan="4">
-      <textarea name="freetext_[% group_contact.contact.id %]" style="width:350px;height:100px;"></textarea>
+      <textarea class="fullwidth" name="freetext_[% group_contact.contact.id %]" style="height:100px;"></textarea>
    </td>
   </tr>
 [% END -%]
