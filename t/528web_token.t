@@ -10,15 +10,14 @@ use GMSTest::Database;
 
 need_database 'basic_db';
 
-$SIG{__DIE__} = sub { Carp::confess @_ };
-
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;
 
 $ua->get_ok("http://localhost/login", "Check login page works");
 
-$ua->content =~ /name="\_token" value="([a-z0-9]+)"/;
+$ua->content =~ /name="\_token" id="token" value="([a-z0-9]+)"/;
+
 my $token = $1;
 
 ok $token, 'Token is generated';
@@ -71,7 +70,7 @@ $ua->get("http://localhost/logout");
 
 $ua->get_ok("http://localhost/login", "Check login page works");
 
-$ua->content =~ /name="\_token" value="([a-z0-9]+)"/;
+$ua->content =~ /name="\_token" id="token" value="([a-z0-9]+)"/;
 $token2 = $1;
 
 isnt $token, $token2, 'We get a new token now.';

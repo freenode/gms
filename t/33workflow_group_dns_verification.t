@@ -9,9 +9,6 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
-use Carp;
-$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
-
 our ($file, $content);
 
 my $schema = need_database 'basic_db';

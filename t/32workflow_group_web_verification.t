@@ -10,9 +10,6 @@ use GMSTest::Database;
 use HTTP::Server::Simple::CGI;
 use base qw(HTTP::Server::Simple::CGI);
 
-use Carp;
-$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
-
 our ($file, $content);
 
 my $schema = need_database 'basic_db';

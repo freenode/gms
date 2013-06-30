@@ -134,11 +134,11 @@ $accounts = GMS::Domain::Accounts->new ( $mockSession, $mockSchema );
 
 throws_ok {
     $accounts->find_by_uid ('AAAAAAAAH');
-} qr /Could not find an account with that UID/, 'Exceptions are thrown if the account could not be found';
+} qr /Could not find an account with the UID AAAAAAAAH/, 'Exceptions are thrown if the account could not be found';
 
 throws_ok {
     $accounts->find_by_name ('erry');
-} qr /Could not find an account with that account name/, 'Exceptions are thrown if the account could not be found';
+} qr /Could not find an account with the account name erry/, 'Exceptions are thrown if the account could not be found';
 
 
 $mockSession->mock ('command', sub {

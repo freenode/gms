@@ -59,7 +59,6 @@ $ua->submit_form (
     }
 );
 
-diag $ua->content;
 $ua->content_contains("Successfully invited the contact", "Invitation works");
 
 my $schema = GMS::Schema->do_connect;

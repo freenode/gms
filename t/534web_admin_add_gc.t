@@ -46,7 +46,6 @@ $ua->submit_form (
     }
 );
 
-diag $ua->content;
 $ua->content_contains("Successfully added the group contact", "Adding a GC works");
 
 $ua->get_ok("http://localhost/admin/group/1/add_gc", "GC addition page works");

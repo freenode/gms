@@ -51,30 +51,18 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
-        change_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_change/submit',
+    {
+        approve_changes => '20 21',
+        change_item => 'gcc',
         action_20 => 'reject',
     }
 );
 
-$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
-        change_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_change/submit',
+    {
+        approve_changes => '21',
+        change_item => 'gcc',
         action_21 => 'approve',
     }
 );
@@ -92,16 +80,9 @@ ok !$gc2->is_primary, 'according to the change, group contact is no longer prima
 is $gc1->last_change->affected_change->id, 20, 'affected change is correct';
 is $gc2->last_change->affected_change->id, 21, 'affected change is correct';
 
-$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
-        change_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_change/submit',
+    {
+        change_item => 'gcc',
         approve_changes => $gc1->last_change->id,
         'action_' . $gc1->last_change->id => 'approve',
     }

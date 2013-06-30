@@ -61,16 +61,10 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
-        change_item => 2
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_change/submit',
+    {
+        change_item => 'gc',
+        approve_changes => '5 14',
         action_5 => 'approve',
         action_14 => 'approve'
     }

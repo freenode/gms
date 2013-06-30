@@ -69,49 +69,43 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as account0", "Check we can log in");
 
-$ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
+$ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
 
 $ua->submit_form(
     fields => {
-        accountname => 'account0',
-        'cloak_namespace' => 'namespace0',
-        'cloak' => 'test'
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => 'test'
     }
 );
 
-$ua->content_contains("Successfully requested namespace0/test cloak for account0", "Requesting cloak wokrs");
+$ua->content_contains("Successfully requested 1 cloak(s)", "Requesting cloak wokrs");
 
 $ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
 
 $ua->submit_form(
     fields => {
-        accountname => 'invalid',
-        'cloak_namespace' => 'namespace0',
-        'cloak' => 'invalid'
+        'num_cloaks' => 1,
+        'accountname_0' => 'invalid',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => 'invalid'
     }
 );
 
-$ua->content_contains("Could not find an account with that account name.", "Can't cloak user that does not exist");
+$ua->content_contains("Could not find an account with that account name", "Can't cloak user that does not exist");
+
+$ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
+
 
 $ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
 
 $ua->submit_form(
     fields => {
-        accountname => 'account0',
-        'cloak_namespace' => 'namespace0',
-        'cloak' => undef
-    }
-);
-
-$ua->content_contains("The cloak cannot be empty", "Can't have empty cloak");
-
-$ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
-
-$ua->submit_form(
-    fields => {
-        accountname => 'account0',
-        'cloak_namespace' => 'namespace0',
-        'cloak' => '!!@#'
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => '!!@#'
     }
 );
 
@@ -121,12 +115,26 @@ $ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
 
 $ua->submit_form(
     fields => {
-        accountname => 'account0',
-        'cloak_namespace' => 'namespace0',
-        'cloak' => 'LoremipsumdolorsitametconsecteturadipiscingelitMaurisegetrutrumm'
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => 'LoremipsumdolorsitametconsecteturadipiscingelitMaurisegetrutrummf'
     }
 );
 
 $ua->content_contains("The cloak is too long", "Can't have invalid cloak");
+
+$ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
+
+$ua->submit_form(
+    fields => {
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'invalid',
+        'cloak_0' => 'test'
+    }
+);
+
+$ua->content_contains("The namespace invalid does not belong in your Group's namespaces.", "Can't have a cloak in a namespace you don't own");
 
 done_testing;

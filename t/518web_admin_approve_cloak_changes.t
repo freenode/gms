@@ -73,13 +73,9 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
-
-$ua->content_contains("<b>marked</b> by <b>admin</b>", "If there is a mark on the account, it is displayed in the page.");
-$ua->content_contains("test mark reason", "If there is a mark on the account, it is displayed in the page.");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok('http://localhost/json/admin/approve_cloak/submit',
+    {
+        approve_changes => '5 10',
         action_5 => 'approve'
     }
 );
@@ -88,10 +84,9 @@ $change5->discard_changes;
 
 ok $change5->active_change->status->is_applied, 'change has been applid';
 
-$ua->get_ok("http://localhost/admin/approve_cloak", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok('http://localhost/json/admin/approve_cloak/submit',
+    {
+        approve_changes => '5 10',
         action_10 => 'reject'
     }
 );

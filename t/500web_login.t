@@ -10,8 +10,6 @@ use GMSTest::Database;
 
 need_database 'basic_db';
 
-$SIG{__DIE__} = sub { Carp::confess @_ };
-
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
 my $ua = Test::WWW::Mechanize::Catalyst->new;

@@ -39,8 +39,6 @@ $ua->get_ok("http://localhost/group/1/edit_gc", "Edit group contacts page works"
 
 $ua->content_contains("test01", "group contact is in the page");
 
-diag $ua->content;
-
 $ua->submit_form(
     fields => {
         action_1 => 'change',

@@ -50,18 +50,16 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
+    {
+        approve_groups  => '2 3',
         action_3 => 'approve',
     }
 );
 
-$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
+    {
+        approve_groups => '2',
         action_2 => 'verify',
     }
 );
@@ -76,10 +74,9 @@ my $group3 = $rs->find({ id => 3 });
 ok $group2->status->is_verified, 'verified group is verified';
 ok $group3->status->is_active, 'approved group is active';
 
-$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
+    {
+        approve_groups => '2',
         action_2 => 'reject',
     }
 );
@@ -87,10 +84,8 @@ $ua->submit_form(
 $group2->discard_changes;
 ok $group2->status->is_deleted, 'group is now deleted';
 
-$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
+    {
         action_3 => 'approve',
         approve_groups => '3'
     }
@@ -98,10 +93,9 @@ $ua->submit_form(
 
 $ua->content_contains ("Can't approve a group that isn't verified or pending verification", "Can't approve a group that isn't verified or pending verification");
 
-$ua->get_ok("http://localhost/admin/approve", "Group approval page works");
 
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
+    {
         action_3 => 'reject',
         approve_groups => '3'
     }

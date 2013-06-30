@@ -56,26 +56,18 @@ my $req = $schema->resultset('ChannelRequest')->create({
         changed_by   => $user,
     });
 
-$ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request approval page works");
-
-$ua->content_contains ('account0', 'Request exists');
-$ua->content_contains ('drop', 'Request exists');
-$ua->content_contains ('#group0', 'Request exists');
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok(
+    'http://localhost/json/admin/approve_channel_requests/submit',
+    {
+        approve_requests => '51',
         action_51 => 'hold',
     }
 );
 
-$ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request approval page works");
-
-$ua->content_contains ('account0', 'Request is still there');
-$ua->content_contains ('drop', 'Request is still there');
-$ua->content_contains ('#group0', 'Request is still there');
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok(
+    'http://localhost/json/admin/approve_channel_requests/submit',
+    {
+        approve_requests => '51',
         action_51 => 'reject',
     }
 );
@@ -84,10 +76,10 @@ $req->discard_changes;
 ok $req->active_change->status->is_rejected, 'request is now rejected';
 ok $req->change ($admin, { status => 'pending_staff' });
 
-$ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok(
+    'http://localhost/json/admin/approve_channel_requests/submit',
+    {
+        approve_requests => '51',
         action_51 => 'approve',
     }
 );
@@ -100,10 +92,10 @@ $mockClient->mock ('drop', sub {
         die RPC::Atheme::Error->new (1, 'Test error');
     });
 
-$ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok(
+    'http://localhost/json/admin/approve_channel_requests/submit',
+    {
+        approve_requests => '51',
         action_51 => 'approve',
     }
 );
@@ -112,10 +104,10 @@ $req->discard_changes;
 ok $req->active_change->status->is_error, 'request status is now error';
 is $req->active_change->change_freetext, 'Test error (fault_needmoreparams)', 'Error message is shown';
 
-$ua->get_ok("http://localhost/admin/approve_channel_requests", "Channel request approval page works");
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok(
+    'http://localhost/json/admin/approve_channel_requests/submit',
+    {
+        approve_requests => '51',
         action_51 => 'apply',
     }
 );

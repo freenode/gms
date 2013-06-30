@@ -7,9 +7,6 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
-use Carp;
-$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
-
 my $schema = need_database 'three_groups';
 my $user = $schema->resultset('Account')->find({ accountname => 'test01' });
 my $admin = $schema->resultset('Account')->find({ accountname => 'admin01' });

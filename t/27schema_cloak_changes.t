@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::Exception;
 use Test::Most;
 use Test::MockModule;
 
@@ -32,7 +33,7 @@ $cloakchange->discard_changes;
 is $schema->resultset('CloakChange')->search_offered->count, 8, 'An older cloak request is overwritten';
 is $schema->resultset('CloakChange')->search_pending->count, 17, 'Cloaks pending staff approval increase';
 
-ok $cloakchange->approve ( undef, $admin );
+lives_ok  { $cloakchange->approve ( undef, $admin ); };
 
 is $schema->resultset('CloakChange')->search_offered->count, 8, 'Cloaks pending user approval still the same';
 is $schema->resultset('CloakChange')->search_pending->count, 16, 'Cloaks pending staff aproval decrease';

@@ -23,31 +23,19 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
-
-$ua->submit_form(
-    fields => {
-        approve_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_namespaces/submit',
+    {
+        approve_item => 'cns',
+        approve_namespaces => '6 7',
         action_6 => 'approve',
     }
 );
 
-$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
-
-$ua->submit_form(
-    fields => {
-        approve_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
-        action_7 => 'reject'
+$ua->post_ok ('http://localhost/json/admin/approve_namespaces/submit',
+    {
+        approve_item => 'cns',
+        approve_namespaces => '7',
+        action_7 => 'reject',
     }
 );
 
@@ -64,16 +52,10 @@ ok $ns7->status->is_deleted;
 ok $ns6->active_change->change_type->is_admin;
 ok $ns7->active_change->change_type->is_admin;
 
-$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
 
-$ua->submit_form(
-    fields => {
-        approve_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_namespaces/submit',
+    {
+        approve_item => 'cns',
         approve_namespaces => 6,
         action_6 => 'approve'
     }
@@ -81,16 +63,9 @@ $ua->submit_form(
 
 $ua->content_contains ("Can't approve a namespace that isn't pending approval", "Can't approve a namespace that isn't pending approval");
 
-$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
-
-$ua->submit_form(
-    fields => {
-        approve_item => 1
-    }
-);
-
-$ua->submit_form(
-    fields => {
+$ua->post_ok ('http://localhost/json/admin/approve_namespaces/submit',
+    {
+        approve_item => 'cns',
         approve_namespaces => 6,
         action_6 => 'reject'
     }

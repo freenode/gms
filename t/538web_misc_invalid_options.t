@@ -36,42 +36,6 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/approve_change", "Change approval page works");
-
-$ua->submit_form(
-    fields => {
-        change_item => 6
-    }
-);
-
-$ua->content_contains("Invalid change item", "Providing an invalid change item errors");
-
-$ua->submit_form(
-    fields => {
-        change_item => undef
-    }
-);
-
-$ua->content_lacks("Invalid change item", "Providing no change item is ok");
-
-$ua->get_ok("http://localhost/admin/approve_namespaces", "Namespace approval page works");
-
-$ua->submit_form(
-    fields => {
-        approve_item => 3
-    }
-);
-
-$ua->content_contains("Invalid option", "Providing an invalid namespace item errors");
-
-$ua->submit_form(
-    fields => {
-        approve_item => undef
-    }
-);
-
-$ua->content_lacks("Invalid option", "Providing no namespace item is ok");
-
 $ua->get_ok("http://localhost/admin/search_changes", "Change search page works");
 
 $ua->submit_form(

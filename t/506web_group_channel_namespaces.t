@@ -38,8 +38,6 @@ $ua->content_contains("You are now logged in as test01", "Check we can log in");
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
-diag $ua->content;
-
 $ua->content_contains("example", "namespace is in the page");
 
 my $schema = GMS::Schema->do_connect;
