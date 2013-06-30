@@ -18,11 +18,5 @@ clean:
 .PHONY: install
 
 install: $(MODULES)
-	install -d $(PREFIX)/modules/$(SRVNAME)
-	install -t $(PREFIX)/modules/$(SRVNAME) $(MODULES)
-#	install -d $(PREFIX)/help/$(SRVNAME)
-#	install -t $(PREFIX)/help/$(SRVNAME) help/*
-
-
-
-
+	mkdir -p $(PREFIX)/modules/scripting/lib/gms/
+	install -t $(PREFIX)/modules/scripting/lib/gms/ $(MODULES)
