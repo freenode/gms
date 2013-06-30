@@ -13,7 +13,7 @@ use TryCatch;
 has _dbic_group_contact_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (id group_id contact_id status active_change group) ]
+    handles => [ qw (id group_id contact_id last_change status active_change group) ]
 );
 
 =head1 PACKAGE
@@ -70,6 +70,26 @@ sub contact {
     my ($self) = @_;
 
     return $self->{_contact};
+}
+
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        'id'                      => $self->id,
+        'group_id'                => $self->group_id,
+        'contact_id'              => $self->contact_id,
+        'group_name'              => $self->group->group_name,
+        'contact_account_name'    => $self->contact->account->accountname,
+        'contact_account_id'      => $self->contact->account->id,
+        'contact_account_dropped' => $self->contact->account->dropped,
+    };
 }
 
 1;

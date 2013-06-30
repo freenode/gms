@@ -154,6 +154,24 @@ sub new {
     } elsif (length $args->{cloak} > 63) {
         push @errors, "The cloak is too long.";
         $valid = 0;
+    } else {
+        my $cloak = $args->{cloak};
+        my ($ns, $role) = split qr|/|, $cloak;
+
+        if (!$ns || !$role) {
+            push @errors, "The cloak provided is invalid; it should be in the format of group/(role/)user";
+            $valid = 0;
+        }
+
+        my $group = delete $args->{group};
+
+        if (!$group) {
+            push @errors, "You need to provide a group";
+            $valid = 0;
+        } elsif ( !$group->active_cloak_namespaces->find ({ 'namespace' => $ns }) ) {
+                push @errors, "The namespace $ns does not belong in your Group's namespaces.";
+                $valid = 0;
+        }
     }
 
     if (!$args->{changed_by}) {
@@ -325,10 +343,37 @@ sub sync_to_atheme {
                 $cloakChange->active_change->changed_by,
                 { status => "error", change_freetext => $e }
             );
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    my @changes = $self->target->recent_cloak_changes->all;
+    my @recent;
+
+    #We can't directly use @changes, as it'll cause an infinite recursion,
+    #but we don't want all the change data anyway.
+    foreach my $change (@changes) {
+        push @recent, {
+            'cloak'       => $change->cloak,
+            'change_time' => $change->active_change->time,
         }
     }
 
-    1;
+    return {
+        'id'                          => $self->id,
+        'cloak'                       => $self->cloak,
+        'target_id'                   => $self->target->id,
+        'target_name'                 => $self->target->accountname,
+        'target_recent_cloak_changes' => \@recent,
+        'status'                      => $self->active_change->status->value,
+        'change_freetext'             => $self->active_change->change_freetext,
+        'change_time' => $self->active_change->time
+    }
 }
 
 1;

@@ -333,4 +333,27 @@ sub reject {
     return $ret;
 }
 
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        'id'                      => $self->id,
+        'group_id'                => $self->group->id,
+        'group_name'              => $self->group->group_name,
+        'url'                     => $self->url,
+        'group_url'               => $self->group->url,
+        'type'                    => $self->group_type->value,
+        'group_type'              => $self->group->group_type->value,
+        'address'                 => $self->address,
+        'group_address'           => $self->group->address,
+        'changed_by_account_name' => $self->changed_by->accountname,
+    }
+}
+
 1;

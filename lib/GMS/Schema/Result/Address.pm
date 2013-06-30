@@ -236,4 +236,20 @@ sub new {
 #}
 
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        accountname => $self->accountname,
+        id          => $self->id,
+    };
+}
+
 1;

@@ -104,4 +104,29 @@ sub group_contact {
     return $self->{_group_contact};
 }
 
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        'id'                      => $self->id,
+        'group_id'                => $self->group_contact->group_id,
+        'group_name'              => $self->group_contact->group->group_name,
+        'group_url'               => $self->group_contact->group->url,
+        'contact_account_id'      => $self->group_contact->contact->account->id,
+        'contact_account_name'    => $self->group_contact->contact->account->accountname,
+        'contact_account_dropped' => $self->group_contact->contact->account->dropped,
+        'status'                  => $self->status->value,
+        'gc_status'               => $self->group_contact->status->value,
+        'primary'                 => $self->primary,
+        'gc_primary'              => $self->group_contact->active_change->primary,
+        'changed_by_account_name' => $self->changed_by->accountname,
+    }
+}
+
 1;

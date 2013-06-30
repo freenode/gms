@@ -414,6 +414,37 @@ sub sync_to_atheme {
             );
         }
     }
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    my $target_name    = undef;
+    my $target_dropped = undef;
+    my $target_id      = undef;
+
+    if ( $self->target ) {
+        $target_name     = $self->target->accountname;
+        $target_dropped  = $self->target->dropped;
+        $target_id       = $self->target->id;
+    }
+
+    return {
+        'id'                => $self->id,
+        'request_type'      => $self->request_type->value,
+        'channel'           => $self->channel,
+        'request_data'      => $self->request_data,
+        'status'            => $self->active_change->status->value,
+        'change_freetext'   => $self->active_change->change_freetext,
+        'requestor_name'    => $self->requestor->account->accountname,
+        'target_id'         => $target_id,
+        'target_name'       => $target_name,
+        'target_dropped'    => $target_dropped,
+    }
 }
 
 1;

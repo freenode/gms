@@ -105,4 +105,27 @@ sub contact {
     return $self->{_contact};
 }
 
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        'id'                      => $self->id,
+        'contact_account_id'      => $self->contact->account->id,
+        'contact_account_name'    => $self->contact->account->accountname,
+        'name'                    => $self->name,
+        'contact_name'            => $self->contact->name,
+        'email'                   => $self->email,
+        'contact_email'           => $self->contact->email,
+        'phone'                   => $self->phone,
+        'contact_phone'           => $self->contact->phone,
+        'changed_by_account_name' => $self->changed_by->accountname,
+    }
+}
+
 1;

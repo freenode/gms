@@ -5,6 +5,7 @@ use warnings;
 use Moose;
 
 use GMS::Domain::Account;
+use GMS::Domain::Accounts;
 
 use GMS::Exception;
 use RPC::Atheme::Error;

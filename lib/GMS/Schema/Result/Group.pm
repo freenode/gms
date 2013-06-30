@@ -812,4 +812,37 @@ sub _use_automatic_verification {
 }
 
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    my @gcs = $self->group_contacts;
+    my $first = shift @gcs;
+
+    my $accountname = undef;
+    my $dropped = undef;
+
+    if ($first) {
+        $accountname = $first->contact->account->accountname;
+        $dropped = $first->contact->account->dropped;
+    }
+
+    return {
+        'id'                              => $self->id,
+        'name'                            => $self->group_name,
+        'url'                             => $self->url,
+        'type'                            => $self->group_type->value,
+        'status'                          => $self->status->value,
+        'initial_contact_account_name'    => $accountname,
+        'initial_contact_account_dropped' => $dropped,
+        'initial_namespace_name'          => $self->channel_namespaces->first->namespace,
+    }
+}
+
 1;

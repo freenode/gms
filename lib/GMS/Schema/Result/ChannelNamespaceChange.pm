@@ -305,4 +305,32 @@ __PACKAGE__->add_columns(
     '+status' => { is_enum => 1 },
 );
 
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        'id'                      => $self->id,
+        'namespace_name'          => $self->namespace->namespace,
+        'status'                  => $self->status->value,
+        'namespace_status'        => $self->namespace->active_change->status->value,
+        'changed_by_account_name' => $self->changed_by->accountname,
+        'group'                   =>
+        {
+            'id'    => $self->group->id,
+            'name'  => $self->group->group_name
+        },
+        'namespace_group'        =>
+        {
+            'id'    => $self->namespace->group->id,
+            'name'  => $self->namespace->group->group_name
+        }
+    }
+}
+
 1;

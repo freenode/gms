@@ -85,4 +85,38 @@ sub target {
     return $self->{_target};
 }
 
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    my @changes = $self->target->recent_cloak_changes->all;
+    my @recent;
+
+    #We can't directly use @changes, as it'll cause an infinite recursion,
+    #but we don't want all the change data anyway.
+    foreach my $change (@changes) {
+        push @recent, {
+            'cloak'       => $change->cloak,
+            'change_time' => $change->active_change->time,
+        }
+    }
+
+    return {
+        'id'                          => $self->id,
+        'cloak'                       => $self->cloak,
+        'target_id'                   => $self->target->id,
+        'target_name'                 => $self->target->accountname,
+        'target_mark'                 => $self->target->mark,
+        'target_recent_cloak_changes' => \@recent,
+        'status'                      => $self->active_change->status->value,
+        'change_freetext'             => $self->active_change->change_freetext,
+        'change_time' => $self->active_change->time
+    }
+}
+
 1;

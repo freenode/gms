@@ -282,4 +282,25 @@ sub last_change {
 
     return $changes[0];
 }
+
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        'id'                     => $self->id,
+        'namespace_name'         => $self->namespace,
+        'group_id'               => $self->group->id,
+        'group_name'             => $self->group->group_name,
+        'group_url'              => $self->group->url,
+        'requestor_account_name' => $self->active_change->changed_by->accountname,
+        'requestor_account_id' => $self->active_change->changed_by->id,
+    }
+}
+
 1;
