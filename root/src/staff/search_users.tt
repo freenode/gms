@@ -3,22 +3,23 @@
 <form method="post" action="[% c.uri_for('/staff/search_users/submit') %]">
 
 <p>
-  Enter the search criteria. Wildcard: '%'
+  Enter the search criteria. Empty box matches errything.
 </p>
 
-<table>
+<table class='fullwidth'>
   <tr>
     <td><label for="accname">Account name</label></td>
-    <td><input type='text' id="accname" name='accountname' /></td>
+    <td><input type='text' id="accname" class='accname' name='accountname' /></td>
   </tr>
   <tr>
     <td><label for="fullname">Full name</label></td>
-    <td><input id="fullname" type='text' name='fullname' /></td>
+    <td><input id="fullname" class='fullname' type='text' name='fullname' /></td>
   </tr>
 </table>
 
 <p>
-  <input type='submit' value='Submit' />
+  <input class='btn btn-primary btn-large' type='submit' value='Submit' />
 </p>
 
 </form>
+<script src="[% c.uri_for('/static/js/admin_search.js') %]"></script>

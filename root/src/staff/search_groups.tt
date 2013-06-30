@@ -49,9 +49,10 @@
 <label><input type='radio' name='mode' value='1' checked='checked' /> Show groups that match any of the criteria</label>
 <label><input type='radio' name='mode' value='2' /> Show groups that match all the criteria</label>
 </p>
-
+<br/>
 <p>
-  <input type='submit' value='Submit' />
+  <input type='submit' class='btn btn-primary btn-large' value='Submit' />
 </p>
 
 </form>
+<script src="[% c.uri_for ('/static/js/admin_search.js') %]" type="text/javascript"></script>
