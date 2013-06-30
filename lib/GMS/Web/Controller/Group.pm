@@ -98,6 +98,8 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     $c->stash->{gc} = $gc;
 
     if ( $group_row && $gc->can_access ($group_row, $c->request->path) ) {
+        $c->stash->{group_row} = $group_row;
+
         try {
             my $session = $c->model('Atheme')->session;
             my $group = GMS::Domain::Group->new ( $session, $group_row );
@@ -379,9 +381,9 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
+    my $group_row = $c->stash->{group_row};
     my $params = $c->request->params;
     my @group_contacts = split / /, $params->{group_contacts};
-    my $group_row = $group->group_row;
 
     foreach my $contact_id (@group_contacts) {
         my $contact = $group_row->group_contacts->find ({ contact_id => $contact_id });
@@ -566,50 +568,116 @@ Processes the form to request a group cloak for a user.
 sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
     my ($self, $c) = @_;
 
+    my $group = $c->stash->{group_row};
+    my $change_rs = $c->model('DB::CloakChange');
+
     my $p = $c->request->params;
+    my $num = $p->{num_cloaks};
 
-    my $accountname = $p->{accountname};
-    my $namespace = $p->{cloak_namespace};
-    my $cloak = $p->{cloak};
+    my @errors;
+    my $error_count = 0;
+    my $success_count = 0;
 
-    if (!$cloak) {
-        $c->stash->{error_msg} = "The cloak cannot be empty!";
-        %{$c->stash} = ( %{$c->stash}, %$p );
+    my @reqs;
+
+    for ( my $i = 0; $i < $num; $i++ ) {
+        my $accountname = $p->{'accountname_' . $i};
+        my $namespace = $p->{'cloak_namespace_' . $i};
+        my $cloak = $p->{'cloak_' . $i};
+
+        my $req = {
+            accountname => $accountname,
+            cloak       => $cloak,
+            namespace   => $namespace
+        };
+
+        my $account;
+
+        if ( !$accountname || !$namespace || !$cloak ) {
+            next;
+        }
+
+        try {
+            $account = $c->model('Accounts')->find_by_name ($accountname);
+        }
+        catch (GMS::Exception $e) {
+            push (@errors, $e->message);
+            push @reqs, $req;
+            next;
+        }
+        catch (RPC::Atheme::Error $e) {
+            push (@errors, $e->description);
+            push @reqs, $req;
+            next;
+        }
+
+        try {
+            $change_rs->create ({ target => $account->id, cloak => "$namespace/$cloak", changed_by => $c->user->account, group => $group });
+            ++$success_count;
+        }
+        catch (GMS::Exception::InvalidCloakChange $e) {
+            push (@errors, @{$e->message});
+            push @reqs, $req;
+            next;
+        }
+    }
+
+    my $reqstr = $p->{cloaks};
+    my $cloaks = '';
+
+    if ( $reqstr ) {
+        my @reqs = split /\r\n/, $reqstr;
+
+        foreach my $req ( @reqs ) {
+            my ( $accountname, $cloak ) = split / /, $req;
+            my $account;
+
+            if ( !$accountname || !$cloak ) {
+                next;
+            }
+
+            try {
+                $account = $c->model('Accounts')->find_by_name ($accountname);
+            }
+            catch (GMS::Exception $e) {
+                push (@errors, $e->message);
+                $cloaks .= "$req\n";
+                next;
+            }
+            catch (RPC::Atheme::Error $e) {
+                push (@errors, $e->description);
+                $cloaks .= "$req\n";
+                next;
+            }
+
+            try {
+                $change_rs->create ({ target => $account->id, cloak => $cloak, changed_by => $c->user->account, group => $group });
+                ++$success_count;
+            }
+            catch (GMS::Exception::InvalidCloakChange $e) {
+                push (@errors, @{$e->message});
+                $cloaks .= "$req\n";
+                next;
+            }
+        }
+    }
+
+    if (!@errors) {
+        $c->stash->{msg} = "Successfully requested $success_count cloak(s).";
+        $c->stash->{template} = 'group/action_done.tt';
+    }
+    else {
+        $error_count = scalar @errors;
+
+        $c->stash->{cloaks} = $cloaks;
+        $c->stash->{num_cloaks} = $error_count;
+        $c->stash->{reqs} = \@reqs;
+        $c->stash->{errors} = \@errors;
+
+        $c->stash->{status_msg} = "Success: $success_count request(s). Failure: $error_count request(s).";
         $c->detach ('cloak');
     }
-
-    $cloak = "$namespace/$cloak";
-
-    my $change_rs = $c->model("DB::CloakChange");
-    my $account;
-
-    try {
-        $account = $c->model('Accounts')->find_by_name ($accountname);
-    }
-    catch (GMS::Exception $e) {
-        $c->stash->{error_msg} = $e->message;
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach ('cloak');
-    }
-    catch (RPC::Atheme::Error $e) {
-        $c->stash->{error_msg} = $e->description;
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach ('cloak');
-    }
-
-    try {
-        $change_rs->create ({ target => $account->id, cloak => "$cloak", changed_by => $c->user->account });
-    }
-    catch (GMS::Exception::InvalidCloakChange $e) {
-        $c->stash->{errors} = $e->message;
-        %{$c->stash} = ( %{$c->stash}, %$p );
-        $c->detach('cloak');
-    }
-
-    $c->stash->{msg} = "Successfully requested $cloak cloak for $accountname";
-    $c->stash->{template} = 'group/action_done.tt';
 }
-
 
 =head2 edit_channel_namespaces
 

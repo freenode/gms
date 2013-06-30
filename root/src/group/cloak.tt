@@ -2,19 +2,72 @@
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/cloak/submit") %]">
 
-Which user to cloak?<br/>
+[% IF reqs.size == 0 || !reqs %]
+    <input id="num_cloaks" value="1" name="num_cloaks" type="hidden" />
+    <div id="cloak_container" class='margin0'>
+        <div id="cloak" class='margin0'>
+            <div class='div75'>
+                Which user to cloak?<br/>
+                <input type="text" id='accountname' name="accountname_0"  /><br/>
+                Enter the cloak:<br/>
+                <select id='cloakns' name="cloak_namespace_0">
+                    [% FOREACH namespace IN cloak_namespaces %]
+                        <option value="[% namespace.namespace | html %]" >[% namespace.namespace | html %]</option>
+                    [% END %]
+                </select> /
+                <input type="text" id='usercloak' onblur='addAnother()'  name="cloak_0" />
+            </div>
+            <div class='div25'>
+                <i class='icon-remove hand' onclick='removeBox(this)'></i>
+            </div>
+        </div>
+    </div>
+[% ELSE %]
+    <input id="num_cloaks" value="[% num_cloaks %]" name="num_cloaks" type="hidden" />
+    <div id="cloak_container" class='margin0'>
+    [% i = 0 %]
+    [% FOREACH req IN reqs %]
+        <div [% IF i == 0 %] id="cloak" [% END %] class='margin0'>
+            <div class='div75'>
+                Which user to cloak?<br/>
+                <input type='text' [% IF i == 0 %] id='accountname' [% END %] name='accountname_[% i %]' value='[% req.accountname | html %]' /><br/>
+                Enter the cloak?<br/>
+                <select id='cloakns' name="cloak_namespace_[% i %]">
+                    [% FOREACH namespace IN cloak_namespaces %]
+                        <option value="[% namespace.namespace | html %]" [% IF req.namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace | html %]</option>
+                    [% END %]
+                </select> /
+                <input type="text" id='usercloak' name="cloak_[% i %]" value="[% req.cloak %]" />
+            </div>
+            <div class='div25'>
+                <i class='icon-remove hand' onclick='removeBox(this)'></i>
+            </div>
+        </div>
+        [% i = i + 1 %]
+    [% END %]
+    </div>
+[% END %]
 
-<input type="text" name="accountname" value="[% accountname | html %]" /><br/>
+<p>
+    <input type="button" id="btn_add" value="Add another" class='btn btn-primary btn-large' /><br/>
+</p>
 
-Enter the cloak:<br/>
+<p class='m50'>
+    Alternatively, you can input user cloaks here in the format of "user cloak". Separate the entries with new lines<br/>
+    Example: spb freenode/slavedriver/spb <br/><br/>
+    <textarea class="div90 h300" name='cloaks' placeholder='user user/cloak/here'>[% cloaks %]</textarea>
+</p>
 
-<select name="cloak_namespace">
-  [% FOREACH namespace IN cloak_namespaces %]
-    <option value="[% namespace.namespace | html %]" [% IF cloak_namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace | html %]</option>
-  [% END %]
-</select>/
-<input type="text" name="cloak" value="[% cloak | html %]" />
-
-<p><input type="submit" /></p>
-
+<p class='m50'>
+    <input type="submit" class='btn btn-success btn-large' value='Submit requests'/>
+</p>
 </form>
+
+<script type="text/javascript" src="[% c.uri_for('/static/js/group_cloak.js') %]"></script>
+
+[% IF num_cloaks %]
+<script type="text/javascript">
+count = [% num_cloaks %];
+numElems = count-1;
+</script>
+[% END %]
