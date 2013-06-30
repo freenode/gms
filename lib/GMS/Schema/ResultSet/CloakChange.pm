@@ -27,14 +27,14 @@ sub search_offered {
     return $self->_search_cloak_change_status ('offered');
 }
 
-=head2 search_pending
+=head2 search_accepted
 
 Returns a ResultSet of cloak changes that have been acepted ( by the user ),
 but not approved or rejected by staff.
 
 =cut
 
-sub search_pending {
+sub search_accepted {
     my ($self) = @_;
 
     return $self->_search_cloak_change_status ('accepted');
@@ -64,6 +64,18 @@ sub search_failed {
     my ($self) = @_;
 
     return $self->_search_cloak_change_status ('error');
+}
+
+=head2 search_pending
+
+Returns a ResultSet of cloak changes pending staff action.
+
+=cut
+
+sub search_pending {
+    my ($self) = @_;
+
+    return $self->_search_cloak_change_status ( [ 'accepted', 'error' ] );
 }
 
 =head2 last_change

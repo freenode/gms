@@ -37,6 +37,18 @@ sub search_verified_groups {
     return $self->_search_groups_status(['pending_auto', 'verified']);
 }
 
+=head2 search_pending
+
+Returns a ResultSet of groups awaiting either approval or verification by staff.
+
+=cut
+
+sub search_pending {
+    my ($self) = @_;
+
+    return $self->_search_groups_status(['pending_auto', 'verified', 'pending_staff']);
+}
+
 =head2 search_active_groups
 
 Returns a ResultSet of currently active groups.

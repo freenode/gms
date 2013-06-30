@@ -14,17 +14,29 @@ ResultSet class for ChannelRequest.
 
 =head1 METHODS
 
-=head2 search_pending
+=head2 search_unapproved
 
 Returns a ResultSet of channel requests that have not been approved
 or rejected by staff.
 
 =cut
 
-sub search_pending {
+sub search_unapproved {
     my ($self) = @_;
 
     return $self->_search_channel_request_status ('pending_staff');
+}
+
+=head2 search_pending
+
+Returns a ResultSet of channel requests pending staff action.
+
+=cut
+
+sub search_pending {
+    my ($self) = @_;
+
+    return $self->_search_channel_request_status ( ['pending_staff', 'error'] );
 }
 
 =head2 search_unapplied
