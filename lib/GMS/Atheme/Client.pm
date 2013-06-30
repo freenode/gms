@@ -130,7 +130,11 @@ sub mark {
         my $setter = $self->metadata ($uid, 'private:mark:setter');
         my $time = $self->metadata ($uid, 'private:mark:timestamp');
 
-        return [$mark, $setter, $time];
+        if ( $mark ) {
+            return [$mark, $setter, $time];
+        } else {
+            return undef;
+        }
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
