@@ -1,56 +1,19 @@
-[% META title = 'Groups awaiting approval' %]
+[% META title = 'Approval Page' -%]
+<form action="" method="post">
+<a href="javascript:;" value="group" name="expand_approve">Approve group registrations</a>
+<div id="response_group"></div>
+<a href="javascript:;" value="cns" name="expand_approve">Approve Channel namespaces</a><br/>
+<div id="response_cns"></div>
+<a href="javascript:;" value="clns" name="expand_approve">Approve Cloak namespaces</a><br/>
+<div id="response_clns"></div>
+<a href="javascript:;" value="gca" name="expand_approve">Approve Group Contact Additions</a><br/>
+<div id="response_gca"></div>
+<a href="javascript:;" value="changes" name="expand_approve">Approve Changes</a><br/>
+<div id="response_changes"></div>
+<a href="javascript:;" value="cloaks" name="expand_approve">Approve Cloak Changes</a><br/>
+<div id="response_cloaks"></div>
+<a href="javascript:;" value="channels" name="expand_approve">Approve Channel Takeover and Drop Requests</a><br/>
+<div id="response_channels"></div>
 
-<form method="post" action="[% c.uri_for('/admin/approve/submit') %]">
-<input type="hidden" name="approve_groups"
-    value="[% FOREACH group IN to_approve %][% group.id %] [% END %]" />
-<input type="hidden" name="verify_groups"
-    value="[% FOREACH group IN to_verify %][% group.id %] [% END %]" />
-
-<p>The following groups are awaiting approval:</p>
-
-<table>
-<tr>
-  <th>Group</th> <th>Approve</th> <th>Reject</th> <th>Hold</th>
-</tr>
-[% FOREACH group IN to_approve -%]
-  <tr>
-    <td>
-      <a href="[% c.uri_for("/admin/group/${group.id}/view") %]">[% group.group_name | html %]</a>
-    </td>
-    <td><input type="radio" name="action_[% group.id %]" value="approve" /></td>
-    <td><input type="radio" name="action_[% group.id %]" value="reject" /></td>
-    <td><input type="radio" name="action_[% group.id %]" value="hold" checked="checked" /></td>
-  </tr>
-  <tr>
-    <td>Enter optional free text about this change:</td>
-    <td colspan="3"><textarea style="width:350px;height:100px;" name="freetext_[% group.id %]"></textarea></td>
-  </tr>
-[% END -%]
-</table>
-
-<p>The following groups are awaiting manual verification and approval:</p>
-
-<table>
-<tr>
-  <th>Group</th> <th>Approve</th> <th>Reject</th> <th>Verify</th> <th>Hold</th>
-</tr>
-[% FOREACH group IN to_verify -%]
-  <tr>
-    <td><a href="[% c.uri_for("/admin/group/${group.id}/view") %]">[% group.group_name | html %]</a></td>
-    <td><input type="radio" name="action_[% group.id %]" value="approve" /></td>
-    <td><input type="radio" name="action_[% group.id %]" value="reject" /></td>
-    <td><input type="radio" name="action_[% group.id %]" value="verify" /></td>
-    <td><input type="radio" name="action_[% group.id %]" value="hold" checked="checked" /></td>
-  </tr>
-  <tr>
-    <td>Enter optional free text about this change:</td>
-    <td colspan="4"><textarea style="width:350px;height:100px;" name="freetext_[% group.id %]"></textarea></td>
-  </tr>
-[% END -%]
-</table>
-
-<p>
-  <input type="submit" value="Submit" />
-</p>
-
-</form>
+<script src="[% c.uri_for('/static/js/admin.js') %]" type="text/javascript"></script>
+<script src="[% c.uri_for('/static/js/admin_approve.js') %]" type="text/javascript"></script>

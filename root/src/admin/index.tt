@@ -2,22 +2,7 @@
 
 <ul>
 <li>
-  <a href="[% c.uri_for('/admin/approve') %]">Review and Approve Group Registrations</a> ([% pending_groups %] pending)
-</li>
-<li>
-  <a href="[% c.uri_for('/admin/approve_namespaces') %]">Review and Approve Namespace Requests</a> ([% pending_namespaces %] pending)
-</li>
-<li>
-  <a href="[% c.uri_for('/admin/approve_new_gc') %]">Review and Approve Group Contact Additions</a> ([% pending_contacts %] pending)
-</li>
-<li>
-  <a href="[% c.uri_for('/admin/approve_change') %]">Review and Approve Changes</a> ([% pending_changes %] pending)
-</li>
-<li>
-  <a href="[% c.uri_for('/admin/approve_cloak') %]">Review and Approve Cloak Changes</a> ([% pending_cloaks %] pending)
-</li>
-<li>
-  <a href="[% c.uri_for('/admin/approve_channel_requests') %]">Review and Approve Channel takeover & drop requests</a> ([% pending_channels %] pending)
+  <a href="[% c.uri_for('/admin/approve') %]">Review and approve changes</a>
 </li>
 <li>
   <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
