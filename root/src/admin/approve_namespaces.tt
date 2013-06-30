@@ -1,7 +1,0 @@
-[% META title = 'Approve Namespaces' %]
-
-<form method="post" action="[% c.uri_for('/admin/approve_namespaces') %]">
-<label><input type='radio' name='approve_item' value='1' /> Channel Namespaces ([% pending_channel %] pending)</label><br />
-<label><input type='radio' name='approve_item' value='2' /> Cloak Namespaces ([% pending_cloak %] pending)</label><br />
-<input type="submit" value="Submit" />
-</form>
