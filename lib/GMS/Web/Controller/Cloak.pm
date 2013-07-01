@@ -37,7 +37,7 @@ Displays all pending cloaks for the contact, if any.
 
 sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c ) = @_;
-    
+
     my $account = $c->user->account;
     my $change_rs = $c->model("DB::CloakChange");
 

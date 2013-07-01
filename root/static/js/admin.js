@@ -164,7 +164,7 @@ function arrows(id, up) {
     for ( var i = 0; i < len; i++ ) {
         var arrow = arrows[i];
 
-        if ( arrow.getAttribute ('value') !== id ) 
+        if ( arrow.getAttribute ('value') !== id )
             continue;
 
         arrow.className = ( up ? __CLASS_ARROW_UP : __CLASS_ARROW_DOWN );

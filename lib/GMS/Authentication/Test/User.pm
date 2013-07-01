@@ -19,7 +19,7 @@ L<Catalyst::Authentication::Credential::Password>.
 
 =head2 new
 
-Constructs a user object 
+Constructs a user object
 
 =cut
 

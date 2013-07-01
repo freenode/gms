@@ -259,7 +259,7 @@ sub last_change {
 =head2 accept_invitation
 
 Marks the user as having accepted the invitation to be a group contact.
-Their status now is pending_staff as staff has to approve their group 
+Their status now is pending_staff as staff has to approve their group
 contact status.
 
 =cut

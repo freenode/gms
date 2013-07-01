@@ -102,7 +102,7 @@ session.
 
 sub is_valid_token {
     my ($self, $c) = @_;
-   
+
     return ($c->request->params->{_token} && $self->token($c) && $c->request->params->{_token} eq $self->token($c));
 }
 

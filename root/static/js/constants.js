@@ -174,31 +174,31 @@ var __TEMPLATE_CONTAINER_END  = "</div>";
 /* apply/reject/verify/approve links */
 
 var __TEMPLATE_APPLY          =
-"<div class='" + __CLASS_16 + "'>" + 
+"<div class='" + __CLASS_16 + "'>" +
     "<a id='" + __ID_APPLY + "%id' name='" + __NAME_APPLY + "%req_type' href='javascript:;' value='%id'>" +
         __APPLY +
     "</a> <i name='" + __NAME_EXPAND + "' value='%id' class='" + __CLASS_ARROW_DOWN + "'></i>" +
 "</div>";
 var __TEMPLATE_APPROVE        =
-"<div class='" + __CLASS_16 + "'>" + 
+"<div class='" + __CLASS_16 + "'>" +
     "<a id='" + __ID_APPROVE + "%id' name='" + __NAME_APPROVE + "%req_type' href='javascript:;' value='%id'>" +
         __APPROVE +
     "</a> <i name='" + __NAME_EXPAND + "' value='%id' class='" + __CLASS_ARROW_DOWN + "'></i>" +
 "</div>";
 var __TEMPLATE_REJECT         =
-"<div class='" + __CLASS_16 + "'>" + 
+"<div class='" + __CLASS_16 + "'>" +
     "<a id='" + __ID_REJECT + "%id' name='" + __NAME_REJECT + "%req_type' href='javascript:;' value='%id'>" +
         __REJECT +
     "</a> <i name='" + __NAME_EXPAND + "' value='%id' class='" + __CLASS_ARROW_DOWN + "'></i>" +
 "</div>";
 var __TEMPLATE_RETRY          =
-"<div class='" + __CLASS_16 + "'>" + 
+"<div class='" + __CLASS_16 + "'>" +
     "<a id='" + __ID_APPROVE + "%id' name='" + __NAME_APPROVE + "%req_type' href='javascript:;' value='%id'>" +
         __RETRY +
     "</a> <i name='" + __NAME_EXPAND + "' value='%id' class='" + __CLASS_ARROW_DOWN + "'></i>" +
 "</div>";
 var __TEMPLATE_VERIFY         =
-"<div class='" + __CLASS_16 + "'>" + 
+"<div class='" + __CLASS_16 + "'>" +
     "<a id='" + __ID_VERIFY + "%id' name='" + __NAME_VERIFY + "%req_type' href='javascript:;' value='%id'>" +
         __VERIFY +
     "</a> <i name='" + __NAME_EXPAND + "' value='%id' class='" + __CLASS_ARROW_DOWN + "'></i>" +
@@ -286,7 +286,7 @@ var __TEMPLATE_DROP_FAILED    =
         "%request_type" +
     "</small>" +
     __REQUESTOR + "%requestor_name" +
-    __BR + __PREVIOUSLY_FAILED + 
+    __BR + __PREVIOUSLY_FAILED +
     "</blockquote>" +
 "</div>";
 
@@ -319,7 +319,7 @@ var __TEMPLATE_TRANSFER_FAILED      =
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
     __REQUESTOR + "%requestor_name" +
-    __BR + __PREVIOUSLY_FAILED + 
+    __BR + __PREVIOUSLY_FAILED +
     "</blockquote>" +
 "</div>";
 
@@ -489,7 +489,7 @@ var __TEMPLATE_NSC_INFO     =
         "%namespace_name" +
         "</p>" +
         "<small>" +
-            __GROUP + 
+            __GROUP +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
             "</a>" +
@@ -633,7 +633,7 @@ __TEMPLATE_CONTAINER_END      +
 __TEMPLATE_HIDDENDIV;
 
 var __TEMPLATE_VERIFIED_GROUP =
-__TEMPLATE_CONTAINER          + 
+__TEMPLATE_CONTAINER          +
 __TEMPLATE_GROUP_INFO         +
 __TEMPLATE_APPROVE            +
 __TEMPLATE_VERIFIED           +

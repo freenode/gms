@@ -63,7 +63,7 @@ throws_ok { $group2->approve ($admin) }
 throws_ok { $group2->reject ($admin) }
           qr/Can't reject a group not pending approval/,
           "Can't reject a rejected group";
-          
+
 throws_ok { $group3->verify($admin) }
           qr/Can't verify a group that isn't pending verification/,
           "Can't verify a group not pending verification";
@@ -71,7 +71,7 @@ throws_ok { $group3->verify($admin) }
 throws_ok { $group3->approve ($admin) }
           qr/Can't approve a group that isn't verified or pending verification/,
           "Can't approve a group not pending approval";
-          
+
 throws_ok { $group3->reject ($admin) }
           qr/Can't reject a group not pending approval/,
           "Can't reject a group not pending approval";

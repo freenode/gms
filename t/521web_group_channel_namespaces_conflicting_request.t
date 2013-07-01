@@ -3,7 +3,7 @@
 # and at the same time another group tries
 # to get the same namespace, a conflict can exist.
 # GMS notifies the group contact of the latter group
-# of that, and has them confirm they want to create 
+# of that, and has them confirm they want to create
 # a conflict. Admins are then responsible to fix it.
 
 use lib qw(t/lib);
@@ -58,7 +58,7 @@ $ua->submit_form(
         namespace => 'new_namespace_3'
     }
 );
-    
+
 $ua->content_contains("Another group has requested that namespace", "Catch conflicting request");
 
 $ua->submit_form(

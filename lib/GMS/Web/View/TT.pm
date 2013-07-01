@@ -16,7 +16,7 @@ GMS::Web::View::TT - TT View for GMS::Web
 
 =head1 DESCRIPTION
 
-TT View for GMS::Web. 
+TT View for GMS::Web
 
 =head1 SEE ALSO
 

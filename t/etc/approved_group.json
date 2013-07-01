@@ -47,7 +47,7 @@
         {
             "class": "CloakNamespaceChange",
             "quantity": "all"
-        }, 
+        }
     ],
     "includes": [
         { "file": "common_rules.json" }

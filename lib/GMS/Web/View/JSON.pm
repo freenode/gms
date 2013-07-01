@@ -23,7 +23,7 @@ GMS::Web::View::JSON - JSON View for GMS::Web
 
 =head1 DESCRIPTION
 
-JSON View for GMS::Web. 
+JSON View for GMS::Web
 
 =head1 SEE ALSO
 

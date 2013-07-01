@@ -47,11 +47,11 @@
         {
             "class": "CloakNamespaceChange",
             "quantity": "all"
-        }, 
+        }
         {
-	     "class": "CloakChange",
-	     "quantity": "all"
-	}
+            "class": "CloakChange",
+            "quantity": "all"
+        }
     ],
     "includes": [
         { "file": "common_rules.json" }

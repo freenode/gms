@@ -18,7 +18,7 @@ GMS::Web::View::Email - Templated Email View for GMS::Web
 
 =head1 DESCRIPTION
 
-View for sending template-generated email from GMS::Web. 
+View for sending template-generated email from GMS::Web
 
 =head1 AUTHOR
 

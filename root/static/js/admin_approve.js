@@ -21,7 +21,7 @@ function handleJSON_list ( text, type ) {
         resp_elem.innerHTML = html;
         return;
     }
-    
+
     if ( length === 0 ) {
         resp_elem.innerHTML = format_no_requests (type);
         return;
@@ -97,7 +97,7 @@ function addClickExpand (elem, type) {
         break;
         case __TYPE_GCC:
             url = __URL_ADMIN_APPROVE_GCC;
-        break; 
+        break;
         case __TYPE_GROUP:
             url = __URL_ADMIN_APPROVE_GROUP;
         break;

@@ -110,7 +110,7 @@ use GMS::Exception;
 
 Constructor. A CloakNamespace is constructed with all the fields required both for itself
 and its initial CloakNamespaceChange, and will implicitly create a 'create' change.
-If the cloak namespace has invalid characters or is too long, an error is shown to the 
+If the cloak namespace has invalid characters or is too long, an error is shown to the
 user.
 
 
@@ -118,7 +118,7 @@ user.
 
 sub new {
     my ($class, $args) = @_;
-    
+
     my @errors;
     my $valid=1;
 

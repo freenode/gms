@@ -110,7 +110,7 @@ use GMS::Exception;
 
 Constructor. A ChannelNamespace is constructed with all the fields required both for itself
 and its initial ChannelNamespaceChange, and will implicitly create a 'create' change.
-If the channel namespace has invalid characters or is too long, an error is shown to the 
+If the channel namespace has invalid characters or is too long, an error is shown to the
 user.
 
 =cut
@@ -131,7 +131,7 @@ sub new {
         push @errors, 'Channel namespaces can be no longer than 50 characters.';
         $valid = 0;
     }
-    
+
     if (!$valid) {
         die GMS::Exception::InvalidNamespace->new(\@errors);
     }

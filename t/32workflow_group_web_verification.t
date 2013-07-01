@@ -34,7 +34,7 @@ $content = $group->verify_token;
         my ($self, $cgi) = @_;
 
         my $path = $cgi->path_info;
-        
+
         if ($file =~ /$path/) {
             print $content . "\n";
         }
