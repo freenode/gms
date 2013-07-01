@@ -36,6 +36,8 @@ requires 'Dir::Self';
 requires 'Config::JFDI';
 requires 'SQL::Translator' => '0.11002';
 
+requires 'Net::DNS';
+
 test_requires 'Test::WWW::Mechanize::Catalyst';
 
 # XXX: remove these dependencies eventually -- they're here for development/debugging
