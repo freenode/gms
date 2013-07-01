@@ -110,6 +110,12 @@ function addClickExpand (elem, type) {
         var resp_elem = document.getElementById('response_' + type);
 
         elem.onclick = function() {
+            if ( elem.className === __CLASS_ARROW_DOWN ) {
+                elem.className = __CLASS_ARROW_UP;
+            } else if ( elem.className === __CLASS_ARROW_UP ) {
+                elem.className = __CLASS_ARROW_DOWN;
+            }
+
             if (!resp_elem.innerHTML) {
                 sendAjaxRequest (url, 'GET', {}, function(xmlHttp) {
                     var response = xmlHttp.responseText;

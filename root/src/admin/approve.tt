@@ -1,18 +1,18 @@
 [% META title = 'Approval Page' -%]
 <form action="" method="post">
-<a href="javascript:;" value="group" name="expand_approve">Approve group registrations</a>
+<a href="javascript:;" value="group" name="expand_approve">Approve group registrations</a> <i name='expand_approve' value='group' class='hand icon-chevron-down'></i>
 <div id="response_group"></div>
-<a href="javascript:;" value="cns" name="expand_approve">Approve Channel namespaces</a><br/>
+<a href="javascript:;" value="cns" name="expand_approve">Approve Channel namespaces</a> <i name='expand_approve' value='cns' class='hand icon-chevron-down'></i><br/>
 <div id="response_cns"></div>
-<a href="javascript:;" value="clns" name="expand_approve">Approve Cloak namespaces</a><br/>
+<a href="javascript:;" value="clns" name="expand_approve">Approve Cloak namespaces</a> <i name='expand_approve' value='clns' class='hand icon-chevron-down'></i><br/>
 <div id="response_clns"></div>
-<a href="javascript:;" value="gca" name="expand_approve">Approve Group Contact Additions</a><br/>
+<a href="javascript:;" value="gca" name="expand_approve">Approve Group Contact Additions</a> <i name='expand_approve' value='gca' class='hand icon-chevron-down'></i><br/>
 <div id="response_gca"></div>
-<a href="javascript:;" value="changes" name="expand_approve">Approve Changes</a><br/>
+<a href="javascript:;" value="changes" name="expand_approve">Approve Changes</a> <i name='expand_approve' value='changes' class='hand icon-chevron-down'></i><br/>
 <div id="response_changes"></div>
-<a href="javascript:;" value="cloaks" name="expand_approve">Approve Cloak Changes</a><br/>
+<a href="javascript:;" value="cloaks" name="expand_approve">Approve Cloak Changes</a> <i name='expand_approve' value='cloaks' class='hand icon-chevron-down'></i><br/>
 <div id="response_cloaks"></div>
-<a href="javascript:;" value="channels" name="expand_approve">Approve Channel Takeover and Drop Requests</a><br/>
+<a href="javascript:;" value="channels" name="expand_approve">Approve Channel Takeover and Drop Requests</a> <i name='expand_approve' value='channels' class='hand icon-chevron-down'></i><br/>
 <div id="response_channels"></div>
 
 <script src="[% c.uri_for('/static/js/admin.js') %]" type="text/javascript"></script>
