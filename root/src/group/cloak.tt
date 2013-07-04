@@ -8,7 +8,7 @@
         <div id="cloak" class='margin0'>
             <div class='div75'>
                 Which user to cloak?<br/>
-                <input type="text" id='accountname' name="accountname_0"  /><br/>
+                <input type="text" id='accname' name="accountname_0"  /><br/>
                 Enter the cloak:<br/>
                 <select id='cloakns' name="cloak_namespace_0">
                     [% FOREACH namespace IN cloak_namespaces %]
