@@ -311,6 +311,18 @@ sub change {
     return $ret;
 }
 
+=head2 status
+
+Returns the active change status.
+
+=cut
+
+sub status {
+    my ($self) = @_;
+
+    return $self->active_change->status;
+}
+
 =head2 approve
 
 Marks the channel request as approved by staff and attempts to apply the changes
@@ -321,9 +333,13 @@ on Atheme
 sub approve {
     my ($self, $session, $account, $freetext) = @_;
 
-    $self->change ($account, { status => "approved", change_freetext => $freetext });
+    if ( $self->status->is_pending_staff || $self->status->is_error ) {
+        $self->change ($account, { status => "approved", change_freetext => $freetext });
+        return $self->sync_to_atheme($session);
+    } else {
+        die GMS::Exception->new ("Can't approve a change not pending approval");
+    }
 
-    return $self->sync_to_atheme($session);
 }
 
 
@@ -336,7 +352,11 @@ Marks the channel request as rejected by staff.
 sub reject {
     my ($self, $account, $freetext) = @_;
 
-    $self->change ($account, { status => "rejected", change_freetext => $freetext });
+    if ( $self->status->is_pending_staff || $self->status->is_error ) {
+        $self->change ($account, { status => "rejected", change_freetext => $freetext });
+    } else {
+        die GMS::Exception->new ("Can't reject a change not pending approval");
+    }
 }
 
 =head2 apply
@@ -348,7 +368,11 @@ Marks the channel request as applied
 sub apply {
     my ($self, $account, $freetext) = @_;
 
-    $self->change ( $account, { status => "applied", change_freetext => $freetext } );
+    if ( $self->status->is_error || $self->status->is_approved ) {
+        $self->change ( $account, { status => "applied", change_freetext => $freetext } );
+    } else {
+        die GMS::Exception->new ("Can't apply a change not pending application");
+    }
 }
 
 =head2 sync_to_atheme

@@ -494,6 +494,10 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
             $c->stash->{json_rejected} = \@rejected_changes;
         }
     }
+    catch (GMS::Exception $e) {
+        $c->stash->{json_error} = $e->message;
+        $c->stash->{json_success} = 0;
+    }
     catch (RPC::Atheme::Error $e) {
         $c->stash->{json_error} = $e->description;
         $c->stash->{json_failed} = \@approve_changes;
@@ -597,6 +601,10 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
             $c->stash->{json_applied} = \@applied_requests;
             $c->stash->{json_rejected} = \@rejected_requests;
         }
+    }
+    catch (GMS::Exception $e) {
+        $c->stash->{json_error} = $e->message;
+        $c->stash->{json_success} = 0;
     }
     catch (RPC::Atheme::Error $e) {
         $c->stash->{json_error} = $e->description;
