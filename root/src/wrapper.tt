@@ -6,7 +6,7 @@
 [%END -%]
 [% IF (!c.request.param ('ajax')) -%]
     <?xml version="1.0" encoding="UTF-8" ?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.4//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
       <head>
         <title>Freenode Group Management System</title>
@@ -19,8 +19,6 @@
         <script type="text/javascript" src="[% c.uri_for('/static/js/format.js') %]"></script>
         <script type="text/javascript" src="[% c.uri_for('/static/js/constants.js') %]"></script>
         <script type="text/javascript" src="[% c.uri_for('/static/js/json.min.js') %]"></script>
-        <script type="text/javascript" src="[% c.uri_for('/static/js/jquery.js') %]"></script>
-        <script type="text/javascript" src="[% c.uri_for('/static/js/bootstrap.min.js') %]"></script>
         <script type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]"></script>
       </head>
       <body>

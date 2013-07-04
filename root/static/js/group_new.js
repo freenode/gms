@@ -34,9 +34,9 @@ function toggleGAB() {
 
 function showGAB(show) {
     if (show) {
-        $("#gab").show(400);
+        document.getElementById('gab').style.display = '';
     } else {
-        $("#gab").hide(400);
+        document.getElementById('gab').style.display = 'none';
     }
 }
 
@@ -52,10 +52,10 @@ function toggleList() {
 }
 
 function showList(show) {
-    if ( show ) {
-        $("#listing").show(400);
+    if (show) {
+        document.getElementById('listing').style.display = '';
     } else {
-        $("#listing").hide(400);
+        document.getElementById('listing').style.display = 'none';
     }
 }
 

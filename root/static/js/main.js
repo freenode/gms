@@ -1,5 +1,5 @@
-HTMLElement.prototype.getElementById = function(id) {
-    var children = this.getElementsByTagName('*');
+function getId (elem, id) {
+    var children = elem.getElementsByTagName('*');
     var len = children.length;
 
     for ( var i = 0; i < len; i++ ) {
@@ -11,10 +11,8 @@ HTMLElement.prototype.getElementById = function(id) {
     return false;
 }
 
-if (!HTMLElement.prototype.remove) {
-    HTMLElement.prototype.remove = function() {
-        this.parentNode.removeChild(this);
-    }
+function remove (elem) {
+    elem.parentNode.removeChild(elem);
 }
 
 function IE() {

@@ -11,16 +11,16 @@ function removeBox (elem) {
    var parent = elem.parentNode.parentNode;
 
     if ( parent.id !== __ID_CLOAK ) {
-        parent.remove();
+        remove(parent);
     } else {
         /* keep the node, so that we can use it as a template,
          * but remove the values from its inputs */
 
-        var account_input = parent.getElementById ( __ID_ACCOUNTNAME );
+        var account_input = getId ( parent, __ID_ACCOUNTNAME );
         account_input.setAttribute('value', '');
         account_input.value = '';
 
-        var cloak_input = parent.getElementById (__ID_USERCLOAK);
+        var cloak_input = getId (parent, __ID_USERCLOAK);
         cloak_input.setAttribute('value','');
         cloak_input.value = '';
 
@@ -45,18 +45,18 @@ function addAnother() {
     elem.removeAttribute ('id');
     elem.className = __CLASS_CLOAK;
 
-    var account_input = elem.getElementById ( __ID_ACCOUNTNAME );
+    var account_input = getId (elem, __ID_ACCOUNTNAME );
     account_input.setAttribute ('name', __NAME_ACCOUNTNAME + count);
     account_input.setAttribute('value', '');
     account_input.value = '';
     account_input.removeAttribute('id');
 
-    var cloakns_input = elem.getElementById (__ID_CLOAKNS);
+    var cloakns_input = getId  (elem, __ID_CLOAKNS);
     cloakns_input.setAttribute('name', __NAME_CLOAKNS + count);
     cloakns_input.selectedIndex = document.getElementById(__ID_CLOAKNS).selectedIndex;
     cloakns_input.removeAttribute('id');
 
-    var cloak_input = elem.getElementById (__ID_USERCLOAK);
+    var cloak_input = getId (elem, __ID_USERCLOAK);
     cloak_input.setAttribute('name', __NAME_CLOAK + count);
     cloak_input.setAttribute('value','');
     cloak_input.value = '';

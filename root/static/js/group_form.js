@@ -19,9 +19,9 @@ function displayAddr(show) {
     for ( var i = 0; i < len; i++ ) {
         var elem = addrElems[i];
         if ( show ) {
-            $(elem).show(400);
+                elem.style.display = '';
         } else {
-            $(elem).hide(400);
+                elem.style.display = 'none';
         }
     }
     if ( document.getElementById('update_address') ) {
@@ -39,12 +39,10 @@ function displayAddr(show) {
 
 function groupPage() {
     displayAddr(false);
-    $('#address_input').hide(400);
+    document.getElementById('address_input').style.display = 'none';
 
     var group_type = document.getElementById('group_type');
-    group_type.onchange = function() {
-        groupTypeChange();
-    }
+    group_type.setAttribute('onchange','groupTypeChange();');
 }
 
 function groupTypeChange() {

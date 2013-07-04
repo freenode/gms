@@ -91,4 +91,7 @@
 </p>
 
 </form>
+
+<script src="[% c.uri_for ('/static/js/jquery.js') %]" type="text/javascript"></script>
+<script src="[% c.uri_for ('/static/js/bootstrap.min.js') %]" type="text/javascript"></script>
 <script src="[% c.uri_for ('/static/js/admin_search.js') %]" type="text/javascript"></script>
