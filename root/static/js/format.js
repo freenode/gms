@@ -435,3 +435,10 @@ function format_url_change ( new_url, old_url ) {
 
     return html;
 }
+
+function format_user_cloak_url ( id ) {
+    var url = __URL_USER_ACCEPT_CLOAK;
+
+    url = url.replace (/\%id/g, id);
+    return url;
+}

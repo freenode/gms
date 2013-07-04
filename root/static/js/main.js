@@ -194,7 +194,7 @@ function sendAjaxRequest (url, method, params, func) {
 
 function approveCloak (id, action) {
     sendAjaxRequest (
-        "/cloak/" + id + "/approve",
+        format_user_cloak_url(id),
         "POST",
         {
             'action': action
