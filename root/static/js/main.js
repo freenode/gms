@@ -11,6 +11,12 @@ HTMLElement.prototype.getElementById = function(id) {
     return false;
 }
 
+if (!HTMLElement.prototype.remove) {
+    HTMLElement.prototype.remove = function() {
+        this.parentNode.removeChild(this);
+    }
+}
+
 function IE() {
     var matches = navigator.userAgent.match (/MSIE ([0-9]+)/);
 
