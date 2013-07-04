@@ -247,8 +247,14 @@ sub TO_JSON {
     my ($self) = @_;
 
     return {
-        accountname => $self->accountname,
-        id          => $self->id,
+        'address_one' => $self->address_one,
+        'address_two' => $self->address_two,
+        'city'        => $self->city,
+        'state'       => $self->state,
+        'country'     => $self->country,
+        'code'        => $self->code,
+        'phone'       => $self->phone,
+        'phone2'      => $self->phone2
     };
 }
 
