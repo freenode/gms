@@ -438,6 +438,7 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
     }
 
     if ($new_namespace) {
+        $new_namespace =~ s/^\#//;
         $new_namespace =~ s/-\*//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
