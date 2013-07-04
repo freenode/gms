@@ -27,9 +27,21 @@ function handleJSON_list ( text, type ) {
         return;
     }
 
+    var html;
+
+    if ( type === __TYPE_GROUP ) {
+        html = format_mass_action(type, __ACTION_VERIFY);
+    } else if ( type === __TYPE_CHANNEL || type === __TYPE_CLOAK ) {
+        html = format_mass_action(type, __ACTION_APPLY);
+    } else {
+        html = format_mass_action(type);
+    }
+
+    resp_elem.innerHTML += html;
+
     for ( var i = 0; i < length; i++ ) {
         var approve = to_approve[i];
-        var html;
+        html = '';
 
         if ( type === __TYPE_CC ) {
             html = format_cc ( approve );

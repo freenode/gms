@@ -30,7 +30,9 @@ var __STATUS_PENDING_STAFF    = 'pending_staff';
 /* ids, classnames and names of html elements */
 var __ID_ACCOUNTNAME          = 'accname';
 var __ID_APPLY                = 'apply_';
+var __ID_APPLY_ALL            = 'apply_all_';
 var __ID_APPROVE              = 'approve_';
+var __ID_APPROVE_ALL          = 'approve_ALL_the_';
 var __ID_BTN_ADD              = 'btn_add';
 var __ID_CLOAK_CONTAINER      = 'cloak_container';
 var __ID_CLOAK                = 'cloak';
@@ -43,8 +45,11 @@ var __ID_HIDDEN               = 'hidden-'; /* id of the hidden elem */
 var __ID_NUM_CLOAKS           = 'num_cloaks';
 var __ID_NS                   = 'ns';
 var __ID_REJECT               = 'reject_';
+var __ID_REJECT_ALL           = 'reject_all_';
+var __ID_SELECT_ALL           = 'select_all_';
 var __ID_USERCLOAK            = 'usercloak';
 var __ID_VERIFY               = 'verify_';
+var __ID_VERIFY_ALL           = 'verify_all_';
 
 var __CLASS_16                = 'div16';
 var __CLASS_25                = 'div25';    /* class name of an elem taking up 25% width */
@@ -63,6 +68,8 @@ var __CLASS_GROUPNAME         = 'gname';
 var __CLASS_HEIGHT_100PX      = 'h100';
 var __CLASS_HIDDEN            = 'hidden';
 var __CLASS_HIDDENDIV         = __CLASS_HIDDEN + ' ' + __CLASS_FULLWIDTH;
+var __CLASS_MARGIN0           = 'margin0';
+var __CLASS_MASS              = 'mass_action';
 var __CLASS_NS                = 'ns';
 var __CLASS_TEXTAREA          = __CLASS_90 + ' ' + __CLASS_HEIGHT_100PX;
 
@@ -74,7 +81,9 @@ var __NAME_CLOAKNS            = 'cloak_namespace_';
 var __NAME_EXPAND             = 'expand';   /* name of the arrows */
 var __NAME_EXPAND_APPROVE     = 'expand_approve';
 var __NAME_FREETEXT           = 'freetext_';
+var __NAME_MASS               = 'mass_action';
 var __NAME_REJECT             = 'reject_';
+var __NAME_SELECT_ALL         = 'select_all';
 var __NAME_VERIFY             = 'verify_';
 
 /* misc constants */
@@ -127,6 +136,7 @@ var __REQUESTED_NAMESPACE     = 'Requested namespace: ';
 var __REQUESTOR               = 'Requestor: ';
 var __RETRY                   = 'Retry';
 var __VERIFY                  = 'Verify';
+var __SELECT_ALL              = 'Select all';
 var __STATUS                  = 'Status: ';
 var __TYPE                    = 'Type: ';
 var __URL                     = 'URL: ';
@@ -171,6 +181,95 @@ var __URL_USER_ACCEPT_CLOAK   = __ROOT + '/cloak/%id/approve';
 /* container */
 var __TEMPLATE_CONTAINER      = "<div class='" + __CLASS_CONTAINER + "'>";
 var __TEMPLATE_CONTAINER_END  = "</div>";
+
+/* Approve all checked etc */
+
+var __TEMPLATE_MASS_ACTION    =
+"<div class='" + __CLASS_FULLWIDTH + " " + __CLASS_MARGIN0 + "'>" +
+    "<div class='" + __CLASS_66 + "'>" +
+        "<blockquote class='" + __CLASS_MARGIN0 + "'>" +
+            "<p>" +
+                "<label>" +
+                    "<input type='checkbox' class='" + __CLASS_MASS + "' id='" + __ID_SELECT_ALL + "%req_type' value='%req_type' />" +
+                    __SELECT_ALL +
+                "</label>" +
+            "</p>" +
+        "</blockquote>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_APPROVE_ALL + "%req_type' href='javascript:;'>" +
+            __APPROVE +
+        "</a>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_REJECT_ALL + "%req_type' href='javascript:;'>" +
+            __REJECT +
+        "</a>" +
+    "</div>" +
+"</div>";
+
+var __TEMPLATE_MASS_ACTION_VERIFY =
+"<div class='" + __CLASS_FULLWIDTH + " " + __CLASS_MARGIN0 + "'>" +
+    "<div class='" + __CLASS_50 + "'>" +
+    "<blockquote class='" + __CLASS_MARGIN0 + "'>" +
+        "<p>" +
+            "<label>" +
+                "<input type='checkbox' class='" + __CLASS_MASS + "' id='" + __ID_SELECT_ALL + "%req_type' value='%req_type' /> " +
+                __SELECT_ALL +
+            "</label>" +
+        "</p>" +
+    "</blockquote>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_APPROVE_ALL + "%req_type' href='javascript:;'>" +
+            __APPROVE +
+        "</a>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_VERIFY_ALL + "%req_type' href='javascript:;'>" +
+            __VERIFY +
+        "</a>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_REJECT_ALL + "%req_type' href='javascript:;'>" +
+            __REJECT +
+        "</a>" +
+    "</div>" +
+"</div>";
+
+var __TEMPLATE_MASS_ACTION_APPLY =
+"<div class='" + __CLASS_FULLWIDTH + " " + __CLASS_MARGIN0 + "'>" +
+    "<div class='" + __CLASS_50 + "'>" +
+        "<blockquote class='" + __CLASS_MARGIN0 + "'>" +
+            "<p>" +
+                "<label>" +
+                    "<input type='checkbox' class='" + __CLASS_MASS + "' id='" + __ID_SELECT_ALL + "%req_type' + value='%req_type' />" +
+                    __SELECT_ALL +
+                "</label>" +
+            "</p>" +
+        "</blockquote>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_APPROVE_ALL + "%req_type' href='javascript:;'>" +
+            __APPROVE +
+        "</a>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_APPLY_ALL + "%req_type' href='javascript:;'>" +
+            __APPLY +
+        "</a>" +
+    "</div>" +
+    "<div class='" + __CLASS_16 + "'>" +
+        "<a id='" + __ID_REJECT_ALL + "%req_type' href='javascript:;'>" +
+            __REJECT +
+        "</a>" +
+    "</div>" +
+"</div>";
+
+/* checkbox */
+
+var __TEMPLATE_CHECKBOX       =
+"<input type='checkbox' class='" + __CLASS_MASS + "' name='" + __NAME_MASS + "_%req_type' value='%id' />";
 
 /* apply/reject/verify/approve links */
 
@@ -253,6 +352,7 @@ var __TEMPLATE_AGC_INFO      =
 "<div class='" + __CLASS_66 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
             "</a> - <a target='_blank' href='" + __URL_USER + "'>%gc_name</a>" +
@@ -266,6 +366,7 @@ var __TEMPLATE_DROP_INFO      =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
     "<p>" +
+        __TEMPLATE_CHECKBOX +
         "%channel_name" +
     "</p>" +
     "<small>" +
@@ -281,6 +382,7 @@ var __TEMPLATE_DROP_FAILED    =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
     "<p>" +
+        __TEMPLATE_CHECKBOX +
         "%channel_name" +
     "</p>" +
     "<small>" +
@@ -297,6 +399,7 @@ var __TEMPLATE_TRANSFER_INFO      =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
     "<p>" +
+        __TEMPLATE_CHECKBOX +
         "%channel_name" +
     "</p>" +
     "<small>" +
@@ -313,6 +416,7 @@ var __TEMPLATE_TRANSFER_FAILED      =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
     "<p>" +
+         __TEMPLATE_CHECKBOX +
         "%channel_name" +
     "</p>" +
     "<small>" +
@@ -330,6 +434,7 @@ var __TEMPLATE_CLOAK_INFO     =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_USER + "'>%target_name</a>" +
         "</p>" +
         "<small>" +
@@ -344,6 +449,7 @@ var __TEMPLATE_CLOAK_FAILED =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_USER + "'>%target_name</a>" +
         "</p>" +
         "<small>" +
@@ -359,6 +465,7 @@ var __TEMPLATE_CNS_INFO       =
 "<div class='" + __CLASS_66 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
             "</a> - %requested_namespace" +
@@ -377,6 +484,7 @@ var __TEMPLATE_GROUP_INFO     =
 "<div class='" + __CLASS_50 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
             "</a>" +
@@ -433,6 +541,7 @@ var __TEMPLATE_CC_INFO       =
 "<div class='" + __CLASS_66 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_USER + "'>" +
                 "%account_name" +
             "</a>" +
@@ -449,6 +558,7 @@ var __TEMPLATE_GC_INFO       =
 "<div class='" + __CLASS_66 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
             "</a>" +
@@ -468,6 +578,7 @@ var __TEMPLATE_GCC_INFO       =
 "<div class='" + __CLASS_66 + "'>" +
     "<blockquote>" +
         "<p>" +
+            __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
             "</a> - <a target='_blank' href='" + __URL_USER + "'>%account_name</a>" +
@@ -487,6 +598,7 @@ var __TEMPLATE_NSC_INFO     =
 "<div class='" + __CLASS_66 + "'>" +
     "<blockquote>" +
         "<p>" +
+        __TEMPLATE_CHECKBOX +
         "%namespace_name" +
         "</p>" +
         "<small>" +

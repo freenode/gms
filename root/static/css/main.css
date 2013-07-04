@@ -156,3 +156,13 @@ address {
 h1 {
     font-size: 25px;
 }
+
+.mass_action {
+    position: relative;
+    top: -3px;
+    margin-right: 10px !important;
+}
+
+.margin0 {
+    margin: 0 !important;
+}

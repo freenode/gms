@@ -276,6 +276,38 @@ function format_mark ( mark_obj ) {
     return html;
 }
 
+function format_mass_action ( obj_type, type  ) {
+    var html;
+
+    if ( type === __ACTION_APPLY ) {
+        html = __TEMPLATE_MASS_ACTION_APPLY;
+    } else if ( type === __ACTION_VERIFY ) {
+        html = __TEMPLATE_MASS_ACTION_VERIFY;
+    } else {
+        html = __TEMPLATE_MASS_ACTION;
+    }
+
+    if ( obj_type === __TYPE_CC ) {
+        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CC);
+    } else if ( obj_type === __TYPE_CLNC ) {
+        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CLNC);
+    } else if ( obj_type === __TYPE_CLNS ) {
+        html = html.replace (/\%req_type/g, __TYPE_NS2);
+    } else if ( obj_type === __TYPE_CNC ) {
+        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CNC);
+    } else if ( obj_type === __TYPE_CNS ) {
+        html = html.replace (/\%req_type/g, __TYPE_NS1);
+    }  else if ( obj_type === __TYPE_GC ) {
+        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_GC);
+    }  else if ( obj_type === __TYPE_GCC ) {
+        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_GCC);
+    } else {
+        html = html.replace (/\%req_type/g, obj_type);
+    }
+
+    return html;
+}
+
 function format_name_change ( new_name, old_name ) {
     var html = __NAME_CHANGED;
 

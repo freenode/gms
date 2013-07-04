@@ -218,51 +218,149 @@ function prepareActions(type, action, extraData) {
         var elem = elems[i];
         addClickAction(elem, elem.getAttribute('value'), type, action, extraData);
     }
+
+    var select_all = document.getElementById( __ID_SELECT_ALL + type + ( extraData ? '_' + extraData : '' ) );
+
+    if ( select_all ) {
+        select_all.onclick = function() {
+            checkAll ( type + ( extraData ? '_' + extraData : '' ) );
+        }
+    }
+
+    var apply_all = document.getElementById( __ID_APPLY_ALL + type + ( extraData ? '_' + extraData : '' ) );
+
+    if ( apply_all ) {
+        apply_all.onclick = function() {
+            approveAll ( type + ( extraData ? '_' + extraData : '' ), type, __ACTION_APPLY, extraData );
+        }
+    }
+
+    var approve_all = document.getElementById( __ID_APPROVE_ALL + type + ( extraData ? '_' + extraData : '' ) );
+
+    if ( approve_all ) {
+        approve_all.onclick = function() {
+            approveAll ( type + ( extraData ? '_' + extraData : '' ), type, __ACTION_APPROVE, extraData );
+        }
+    }
+
+    var reject_all = document.getElementById( __ID_REJECT_ALL + type + ( extraData ? '_' + extraData : '' ) );
+
+    if ( reject_all ) {
+        reject_all.onclick = function() {
+            approveAll ( type + ( extraData ? '_' + extraData : '' ), type, __ACTION_REJECT, extraData );
+        }
+    }
+
+    var verify_all = document.getElementById( __ID_VERIFY_ALL + type + ( extraData ? '_' + extraData : '' ) );
+
+    if ( verify_all ) {
+        verify_all.onclick = function() {
+            approveAll ( type + ( extraData ? '_' + extraData : '' ), type, __ACTION_VERIFY, extraData );
+        }
+    }
+}
+
+var selectedAll = [];
+
+function checkAll ( type ) {
+    var elems = document.getElementsByName ( __NAME_MASS + "_" + type );
+    var len = elems.length;
+
+    for ( var i = 0; i < len; i++ ) {
+        var elem = elems[i];
+
+        if ( !selectedAll [ type ] ) {
+            elem.checked = true;
+        } else {
+            elem.checked = false;
+        }
+    }
+
+    selectedAll [ type ] = !selectedAll [ type ];
+}
+
+function approveAll ( name, type, action, extraData ) {
+    var elems = document.getElementsByName ( __NAME_MASS + "_" + name );
+    var len = elems.length;
+    var ids = [];
+
+    for ( var i = 0; i < len; i++ ) {
+        var elem = elems[i];
+
+        if ( elem.checked ) {
+            var id = elem.getAttribute('value');
+            ids.push (id);
+        }
+    }
+
+    approve (ids, type, action, extraData);
 }
 
 function approve ( id, type, action, extraData ) {
     var post = {};
-    var freetext = (
-        document.getElementById (__ID_FREETEXT + id) && document.getElementById(__ID_FREETEXT + id).value
-         ? document.getElementById(__ID_FREETEXT + id).value
-         : ''
-    );
-
-    post['action_' + id] = action;
-    post['freetext_' + id] = freetext;
+    var ids;
     var url;
+
+    if (!id) {
+        return;
+    }
+
+    if ( typeof id === 'object' ) {
+        ids = id;
+    } else {
+        ids = [id];
+    }
+
+    if ( ids.length == 0 ) {
+        return;
+    }
+
+    var ids_str = ids.join (" ");
 
     switch ( type ) {
         case __TYPE_GROUP:
             url = __URL_ADMIN_SUBMIT_GROUP;
-            post['approve_groups'] = id;
+            post['approve_groups'] = ids_str;
         break;
         case __TYPE_CHANGE:
             url = __URL_ADMIN_SUBMIT_CHNG;
-            post['approve_changes'] = id;
+            post['approve_changes'] = ids_str;
             if ( extraData ) {
                 post['change_item'] = extraData;
             }
         break;
         case __TYPE_CLOAK:
             url = __URL_ADMIN_SUBMIT_CLOAK;
-            post['approve_changes'] = id;
+            post['approve_changes'] = ids_str;
         break;
         case __TYPE_CHANNEL:
             url = __URL_ADMIN_SUBMIT_CHAN;
-            post['approve_requests'] = id;
+            post['approve_requests'] = ids_str;
         break;
         case __TYPE_NAMESPACE:
             url = __URL_ADMIN_SUBMIT_NS;
-            post['approve_namespaces'] = id;
+            post['approve_namespaces'] = ids_str;
             if ( extraData ) {
                 post['approve_item'] = extraData;
             }
         break;
         case __TYPE_NEW_GC:
             url = __URL_ADMIN_SUBMIT_GCA;
-            post['approve_contacts'] = id;
+            post['approve_contacts'] = ids_str;
         break;
+    }
+
+    for ( var i = 0; i < ids.length; i++ ) {
+        var id = ids[i];
+
+        var freetext = (
+            document.getElementById (__ID_FREETEXT + id) && document.getElementById(__ID_FREETEXT + id).value
+            ? document.getElementById(__ID_FREETEXT + id).value
+            : ''
+        );
+
+        post['action_' + id] = action;
+        post['freetext_' + id] = freetext;
     }
 
     sendAjaxRequest (url, 'POST', post, function(xmlHttp) {
@@ -272,6 +370,8 @@ function approve ( id, type, action, extraData ) {
 }
 
 function pageLoad ( type, extraData ) {
+    selectedAll [ type + ( extraData ? '_' + extraData : '' ) ] = false;
+
     prepareExpands();
 
     prepareActions(type, __ACTION_APPLY, extraData);
