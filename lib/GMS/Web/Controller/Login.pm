@@ -50,14 +50,18 @@ sub do_login :Chained('base') :PathPart('submit') :Args(0) :Local :VerifyToken {
     my $password = $c->request->params->{password} || "";
 
     if ($username && $password) {
-        if ($c->authenticate( { username => $username, password => $password } )) {
-            $c->flash->{status_msg} = "You are now logged in as $username";
-            $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/'));
-            delete $c->session->{redirect_to};
+        try {
+            if ($c->authenticate( { username => $username, password => $password } )) {
+                $c->flash->{status_msg} = "You are now logged in as $username";
+                $c->response->redirect($c->session->{redirect_to} || $c->uri_for('/'));
+                delete $c->session->{redirect_to};
 
-            return;
-        } else {
-            $c->stash->{error_msg} = "Invalid username or password";
+                return;
+            } else {
+                $c->stash->{error_msg} = "Invalid username or password";
+            }
+        } catch (RPC::Atheme::Error $e) {
+            $c->stash->{error_msg} = $e->description;
         }
     }
 
