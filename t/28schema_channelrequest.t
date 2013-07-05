@@ -84,7 +84,7 @@ is $schema->resultset('ChannelRequest')->search_pending->count, 17, '17 pending 
 ok $request->reject($admin), "Rejecting a request works";
 ok $request->active_change->status->is_rejected, "Rejecting works";
 
-ok $request->change ($admin, { status => 'pending_staff' });
+ok $request->change ($admin, { status => 'error' });
 ok $request->apply($admin), "Marking as applied works";
 
 ok $request->active_change->status->is_applied, "Marking as applied works";

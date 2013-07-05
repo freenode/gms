@@ -88,13 +88,7 @@ $ua->click_button(
     number => 2
 );
 
-$ua->content_contains("Successfully rejected the cloak", "Rejection worked.");
-
-$change12->discard_changes;
-
-ok $change12->active_change->status->is_rejected, "Rejection worked.";
-
-$ua->content_lacks("group11/user11", "Rejected cloak is no longer there.");
+$ua->content_contains("Can't reject a change not pending approval", "Can't reject a cloak not pending approval");
 
 $ua->get ("http://localhost/cloak/999/approve");
 $ua->content_contains ("That cloak doesn't exist or hasn't been assigned to you.", "Can't approve cloak change that does not exist");

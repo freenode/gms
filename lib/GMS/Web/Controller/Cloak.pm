@@ -3,6 +3,7 @@ package GMS::Web::Controller::Cloak;
 use strict;
 use warnings;
 use base qw (GMS::Web::TokenVerification);
+use TryCatch;
 
 =head1 NAME
 
@@ -80,16 +81,20 @@ sub approve :Chained('cloak') :PathPart('approve') :Args(0) {
 
     my $cloak = $c->stash->{cloak};
 
-    if ($c->request->body_params->{action} eq 'approve') {
-        $cloak->accept($c->user->account);
+    try {
+        if ($c->request->body_params->{action} eq 'approve') {
+            $cloak->accept($c->user->account);
 
-        $c->stash->{status_msg} = "Successfully approved the cloak. Please wait for staff to also approve it.";
-    } elsif ($c->request->body_params->{action} eq 'reject') {
-        $cloak->reject($c->user->account);
+            $c->stash->{status_msg} = "Successfully approved the cloak. Please wait for staff to also approve it.";
+        } elsif ($c->request->body_params->{action} eq 'reject') {
+            $cloak->reject($c->user->account);
 
-        $c->stash->{status_msg} = "Successfully rejected the cloak.";
-    } else {
-        $c->stash->{error_msg} = "Invalid action";
+            $c->stash->{status_msg} = "Successfully rejected the cloak.";
+        } else {
+            $c->stash->{error_msg} = "Invalid action";
+        }
+    } catch (GMS::Exception $e) {
+        $c->stash->{error_msg} = $e->message;
     }
 
     $c->detach ('index');
