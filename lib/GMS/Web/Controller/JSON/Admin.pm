@@ -207,14 +207,14 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
                 my $freetext = $params->{"freetext_$contact_id"};
 
                 if ($action eq 'approve') {
-                    $c->log->info("Approving group contact id $contact_id for group $gc->group->id (" .
+                    $c->log->info("Approving group contact id $contact_id for group " . $gc->group->id . " (" .
                         $gc->contact->account->accountname . " is now group contact for " .
                         $gc->group->group_name . ") by " . $c->user->username . "\n");
 
                     $gc->approve($account, $freetext);
                     push @approved_contacts, $contact_id;
                 } elsif ($action eq 'reject') {
-                    $c->log->info("Rejecting group contact id $contact_id for group $gc->group->id (" .
+                    $c->log->info("Rejecting group contact id $contact_id for group " . $gc->group->id . " (" .
                         $gc->contact->account->accountname . " rejected as group contact for " .
                         $gc->group->group_name . ") by " . $c->user->username . "\n");
 
@@ -296,15 +296,15 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
     }
     catch (RPC::Atheme::Error $e) {
         $c->stash->{json_error} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-        if ($change_item && $change_item == 1) { #group contact change
+        if ($change_item && $change_item eq 'gcc') { #group contact change
             @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
-        } elsif ($change_item && $change_item == 2) { #group change
+        } elsif ($change_item && $change_item eq 'gc') { #group change
             @to_approve = $c->model ("DB::GroupChange")->active_requests();
-        } elsif ($change_item && $change_item == 3) { #contact change
+        } elsif ($change_item && $change_item eq 'cc' ) { #contact change
             @to_approve = $c->model ("DB::ContactChange")->active_requests();
-        } elsif ($change_item && $change_item == 4) { #channel namespace change
+        } elsif ($change_item && $change_item eq 'cnc' ) { #channel namespace change
             @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
-        } elsif ($change_item && $change_item == 5) { #cloak namespace change
+        } elsif ($change_item && $change_item eq 'clnc' ) { #cloak namespace change
             @to_approve = $c->model ("DB::CloakNamespaceChange")->active_requests();
         }
     }
@@ -529,7 +529,7 @@ sub approve_channel_requests :Chained('base') :PathPart('approve_channel_request
     }
     catch (RPC::Atheme::Error $e) {
         @to_approve = @approve_requests;
-        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        $c->stash->{json_error} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
     }
 
     $c->stash->{json_to_approve} = \@to_approve;
