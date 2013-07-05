@@ -177,7 +177,7 @@ sub TO_JSON {
 
     if ($first) {
         $accountname = $first->contact->account->accountname;
-        $dropped = $first->contact->account->dropped;
+        $dropped = $first->contact->account->is_dropped;
     }
 
     return {

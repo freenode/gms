@@ -332,6 +332,11 @@ var __TEMPLATE_MARK         =
     "%marked" +
 "</p>";
 
+/* account dropped */
+
+var __TEMPLATE_ACCOUNT_DROPPED =
+"<b>%dropped_account's account has been dropped!</b>";
+
 /* no changes pending */
 var __TEMPLATE_NO_REQUESTS          =
 "<b>No %req_type are currently pending approval. Congratulations!</b>";
@@ -357,6 +362,7 @@ var __TEMPLATE_AGC_INFO      =
                 "%group_name" +
             "</a> - <a target='_blank' href='" + __URL_USER + "'>%gc_name</a>" +
         "</p>" +
+        "%target_account_dropped" +
     "</blockquote>" +
 "</div>";
 
@@ -372,7 +378,8 @@ var __TEMPLATE_DROP_INFO      =
     "<small>" +
         "%request_type" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" +
+    __REQUESTOR + "%requestor_name" + __BR +
+    "%requestor_account_dropped" +
     "</blockquote>" +
 "</div>";
 
@@ -388,8 +395,9 @@ var __TEMPLATE_DROP_FAILED    =
     "<small>" +
         "%request_type" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" +
-    __BR + __PREVIOUSLY_FAILED +
+    __REQUESTOR + "%requestor_name" + __BR +
+    "%requestor_account_dropped" +
+    __BR + __PREVIOUSLY_FAILED + __BR
     "</blockquote>" +
 "</div>";
 
@@ -406,7 +414,9 @@ var __TEMPLATE_TRANSFER_INFO      =
         "%request_type" +
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" +
+    __REQUESTOR + "%requestor_name" + __BR +
+    "%requestor_account_dropped" + __BR +
+    "%target_account_dropped" +
     "</blockquote>" +
 "</div>";
 
@@ -423,7 +433,9 @@ var __TEMPLATE_TRANSFER_FAILED      =
         "%request_type" +
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" +
+    __REQUESTOR + "%requestor_name" + __BR +
+    "%requestor_account_dropped" + __BR +
+    "%target_account_dropped" +
     __BR + __PREVIOUSLY_FAILED +
     "</blockquote>" +
 "</div>";
@@ -440,6 +452,7 @@ var __TEMPLATE_CLOAK_INFO     =
         "<small>" +
             "%cloak" +
         "</small>" +
+        "%target_account_dropped" +
     "</blockquote>" +
 "</div>";
 
@@ -455,6 +468,7 @@ var __TEMPLATE_CLOAK_FAILED =
         "<small>" +
             "%cloak" +
         "</small>" +
+        "%target_account_dropped" + __BR +
         __PREVIOUSLY_FAILED +
     "</blockquote>" +
 "</div>";
@@ -474,7 +488,8 @@ var __TEMPLATE_CNS_INFO       =
             "<a target='_blank' href='%group_url'>%group_url</a>" +
         "</small>" +
         __REQUESTOR + "%requestor_name" + __BR +
-        __REQUESTED_NAMESPACE + "%requested_namespace" +
+        __REQUESTED_NAMESPACE + "%requested_namespace" + __BR +
+        "%requestor_account_dropped" + __BR +
     "</blockquote>" +
 "</div>";
 
@@ -494,7 +509,8 @@ var __TEMPLATE_GROUP_INFO     =
         "</small>" +
         "%group_type" + __GROUP_TYPE + __BR +
         __INITIAL_CONTACT + "%group_initial_contact" + __BR +
-        __INITIAL_NAMESPACE + "%group_initial_namespace" +
+        __INITIAL_NAMESPACE + "%group_initial_namespace" + __BR +
+        "%requestor_account_dropped" +
     "</blockquote>" +
 "</div>";
 
@@ -549,6 +565,7 @@ var __TEMPLATE_CC_INFO       =
         "%name_changed" +
         "%email_changed" +
         "%phone_changed" +
+        "%requestor_account_dropped" +
     "</blockquote>" +
 "</div>";
 
@@ -589,6 +606,7 @@ var __TEMPLATE_GCC_INFO       =
         __REQUESTED_CONTACT + "%account_name" + __BR +
         "%status_changed" +
         "%primary_changed" +
+        "%target_account_dropped" +
     "</blockquote>" +
 "</div>";
 

@@ -1,3 +1,10 @@
+function format_account_drop ( account ) {
+    var html = __TEMPLATE_ACCOUNT_DROPPED;
+
+    html = html.replace (/%dropped_account/g, account);
+    return html;
+}
+
 function format_address ( address ) {
     var html = __TEMPLATE_ADDRESS;
 
@@ -58,6 +65,12 @@ function format_cc ( change ) {
         html = html.replace ( /\%phone_changed/g, '' );
     }
 
+    if ( change.contact_account_dropped ) {
+        html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( change.contact_account_name ) );
+    } else {
+        html = html.replace ( /\%requestor_account_dropped/g, '' );
+    }
+
     return html;
 }
 
@@ -105,6 +118,18 @@ function format_channel ( request ) {
         html = html.replace (/\%marked/g, '');
     } else {
         html = html.replace (/\%marked/g, format_mark ( request.target_mark ) );
+    }
+
+    if ( request.requestor_dropped ) {
+        html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( request.requestor_name ) );
+    } else {
+        html = html.replace ( /\%requestor_account_dropped/g, '' );
+    }
+
+    if ( request.target_dropped ) {
+        html = html.replace ( /\%target_account_dropped/g, format_account_drop ( request.target_name ) );
+    } else {
+        html = html.replace ( /\%target_account_dropped/g, '' );
     }
 
     return html;
@@ -159,6 +184,12 @@ function format_cloak ( request ) {
         }
 
         html = html.replace (/\%recent_cloak_changes/g, replacement);
+    }
+
+    if ( request.target_dropped ) {
+        html = html.replace ( /\%target_account_dropped/g, format_account_drop ( request.target_name ) );
+    } else {
+        html = html.replace ( /\%target_account_dropped/g, '' );
     }
 
     return html;
@@ -217,6 +248,12 @@ function format_gcc ( change ) {
         html = html.replace ( /\%primary_changed/, '');
     }
 
+    if ( change.contact_account_dropped ) {
+        html = html.replace ( /\%target_account_dropped/g, format_account_drop ( change.contact_account_name ) );
+    } else {
+        html = html.replace ( /\%target_account_dropped/g, '' );
+    }
+
     return html;
 }
 
@@ -249,6 +286,12 @@ function format_group ( group ) {
     html = html.replace (/\%group_initial_namespace/g, group.initial_namespace_name);
     html = html.replace (/\%group_url/g, group.url);
     html = html.replace (/\%group_type/g, group.type);
+
+    if ( group.initial_contact_account_dropped ) {
+        html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( group.initial_contact_account_name ) );
+    } else {
+        html = html.replace ( /\%requestor_account_dropped/g, '' );
+    }
 
     return html;
 }
@@ -363,6 +406,12 @@ function format_namespace ( namespace, type ) {
     html = html.replace (/\%group_url/g, namespace.group_url);
     html = html.replace (/\%requestor_name/g, namespace.requestor_account_name);
 
+    if ( namespace.requestor_account_dropped ) {
+        html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( namespace.requestor_account_name ) );
+    } else {
+        html = html.replace ( /\%requestor_account_dropped/g, '' );
+    }
+
     return html;
 }
 
@@ -375,6 +424,12 @@ function format_new_gc ( gc ) {
     html = html.replace (/\%group_name/g, gc.group_name);
     html = html.replace (/\%account_id/g, gc.contact_account_id);
     html = html.replace (/\%gc_name/g, gc.contact_account_name);
+
+    if ( gc.contact_account_dropped ) {
+        html = html.replace ( /\%target_account_dropped/g, format_account_drop ( gc.contact_account_name ) );
+    } else {
+        html = html.replace ( /\%target_account_dropped/g, '' );
+    }
 
     return html;
 }
@@ -395,7 +450,7 @@ function format_no_requests ( type ) {
     } else if ( type === __TYPE_CLOAK ) {
         html = html.replace (/\%req_type/g, __CLOAK_CHANGES);
     } else if ( type === __TYPE_CNC ) {
-        html = html.replace (/\%req_type/g, __CNCS);
+        html = html.replace (/\%req_type/g, __CNC);
     } else if ( type === __TYPE_CNS ) {
         html = html.replace (/\%req_type/g, __CNS);
     } else if ( type === __TYPE_GC ) {

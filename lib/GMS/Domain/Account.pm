@@ -84,6 +84,19 @@ sub mark {
     return $client->mark ($self->id);
 }
 
+=head2 is_dropped
+
+Returns if the account is dropped
+
+=cut
+
+sub is_dropped {
+    my ($self) = @_;
+
+    return ($self->dropped ? 1 : 0);
+}
+
+
 =head2 TO_JSON
 
 Returns a representative object for the JSON parser.

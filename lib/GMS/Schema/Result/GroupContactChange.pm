@@ -252,7 +252,7 @@ sub TO_JSON {
         'group_url'               => $self->group_contact->group->url,
         'contact_account_id'      => $self->group_contact->contact->account->id,
         'contact_account_name'    => $self->group_contact->contact->account->accountname,
-        'contact_account_dropped' => $self->group_contact->contact->account->dropped,
+        'contact_account_dropped' => $self->group_contact->contact->account->is_dropped,
         'status'                  => $self->status->value,
         'gc_status'               => $self->group_contact->status->value,
         'primary'                 => $self->primary,

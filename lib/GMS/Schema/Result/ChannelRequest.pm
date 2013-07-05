@@ -462,7 +462,7 @@ sub TO_JSON {
 
     if ( $self->target ) {
         $target_name     = $self->target->accountname;
-        $target_dropped  = $self->target->dropped;
+        $target_dropped  = $self->target->is_dropped;
         $target_id       = $self->target->id;
     }
 
@@ -474,6 +474,7 @@ sub TO_JSON {
         'status'            => $self->active_change->status->value,
         'change_freetext'   => $self->active_change->change_freetext,
         'requestor_name'    => $self->requestor->account->accountname,
+        'requestor_dropped' => $self->requestor->account->is_dropped,
         'target_id'         => $target_id,
         'target_name'       => $target_name,
         'target_dropped'    => $target_dropped,

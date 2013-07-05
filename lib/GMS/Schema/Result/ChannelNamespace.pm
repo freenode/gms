@@ -300,6 +300,7 @@ sub TO_JSON {
         'group_url'              => $self->group->url,
         'requestor_account_name' => $self->active_change->changed_by->accountname,
         'requestor_account_id' => $self->active_change->changed_by->id,
+        'requestor_account_dropped' => $self->active_change->changed_by->is_dropped,
     }
 }
 

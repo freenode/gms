@@ -125,6 +125,7 @@ sub TO_JSON {
         'phone'                   => $self->phone,
         'contact_phone'           => $self->contact->phone,
         'changed_by_account_name' => $self->changed_by->accountname,
+        'contact_account_dropped' => $self->contact->account->is_dropped,
     }
 }
 

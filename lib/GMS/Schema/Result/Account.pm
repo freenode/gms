@@ -156,4 +156,44 @@ __PACKAGE__->has_many(
     }
 );
 
+=head2 is_dropped
+
+Returns if an account is dropped.
+
+=cut
+
+sub is_dropped {
+    my ($self) = @_;
+
+    return ( $self->dropped ? 1 : 0 );
+}
+
+=head2 mark
+
+If we're trying to get the mark from the database,
+it probably means we cant' get the account from Atheme.
+Return undef.
+
+=cut
+
+sub mark {
+    undef;
+}
+
+=head2 TO_JSON
+
+Returns a representative object for the JSON parser.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return {
+        accountname => $self->accountname,
+        id          => $self->id,
+        dropped     => $self->is_dropped,
+    };
+}
+
 1;

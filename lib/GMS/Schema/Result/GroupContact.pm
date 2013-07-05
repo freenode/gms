@@ -389,7 +389,7 @@ sub TO_JSON {
         'group_name'              => $self->group->group_name,
         'contact_account_name'    => $self->contact->account->accountname,
         'contact_account_id'      => $self->contact->account->id,
-        'contact_account_dropped' => $self->contact->account->dropped,
+        'contact_account_dropped' => $self->contact->account->is_dropped,
     };
 }
 

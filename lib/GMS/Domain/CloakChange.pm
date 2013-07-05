@@ -111,6 +111,7 @@ sub TO_JSON {
         'cloak'                       => $self->cloak,
         'target_id'                   => $self->target->id,
         'target_name'                 => $self->target->accountname,
+        'target_dropped'              => $self->target->is_dropped,
         'target_mark'                 => $self->target->mark,
         'target_recent_cloak_changes' => \@recent,
         'status'                      => $self->active_change->status->value,

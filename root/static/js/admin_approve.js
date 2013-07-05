@@ -13,6 +13,14 @@ function handleJSON_list ( text, type ) {
         return;
     }
 
+    if (json.json_error) {
+        var error_container = document.getElementById ( __ID_ERROR_CONTAINER );
+        if (error_container) {
+            error_container.className = __CLASS_ERROR;
+            error_container.innerHTML = __ERROR_TXT + __BR + json.json_error;
+        }
+    }
+
     var to_approve = json.json_to_approve;
     var length = to_approve.length;
 
