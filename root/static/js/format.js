@@ -138,12 +138,7 @@ function format_channel ( request ) {
 function format_cloak_change ( change ) {
     var html = __TEMPLATE_CLOAK_CHANGE;
     html = html.replace (/\%cloak/, change.cloak);
-
-    var time_obj = change.change_time;
-    var date = time_obj.local_c.day + "/" + time_obj.local_c.month + "/" + time_obj.local_c.year + " " +
-    time_obj.local_c.hour + ":" + time_obj.local_c.minute + ":" + time_obj.local_c.second;
-
-    html = html.replace (/\%time/, date);
+    html = html.replace (/\%time/, change.change_time);
 
     return html;
 }
