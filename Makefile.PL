@@ -27,6 +27,7 @@ requires 'Test::MockModule';
 requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class' => '0.08124';
+requires 'DBIx::Class::DeploymentHandler';
 requires 'DBIx::Class::Fixtures';
 requires 'DBIx::Class::InflateColumn::Object::Enum';
 requires 'DBIx::Class::InflateColumn::DateTime';
