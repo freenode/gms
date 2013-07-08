@@ -203,7 +203,7 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
         $c->model('DB')->schema->txn_do(sub {
             foreach my $contact_id (@approve_contacts) {
                 my $gc = $rs->find_by_id($contact_id);
-                my $action = $params->{"action_$contact_id"};
+                my $action = $params->{"action_$contact_id"} || 'hold';
                 my $freetext = $params->{"freetext_$contact_id"};
 
                 if ($action eq 'approve') {
@@ -360,7 +360,7 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
         $c->model('DB')->schema->txn_do(sub {
             foreach my $change_id (@approve_changes) {
                 my $change = $change_rs->find({ id => $change_id });
-                my $action = $params->{"action_$change_id"};
+                my $action = $params->{"action_$change_id"} || 'hold';
                 my $freetext = $params->{"freetext_$change_id"};
 
                 if ($action eq 'approve') {
@@ -560,7 +560,7 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
         $c->model('DB')->schema->txn_do(sub {
             foreach my $req_id (@approve_requests) {
                 my $request = $req_rs->find({ id => $req_id });
-                my $action = $params->{"action_$req_id"} || '';
+                my $action = $params->{"action_$req_id"} || 'hold';
                 my $freetext = $params->{"freetext_$req_id"};
 
                 if ($action eq 'approve') {
@@ -672,7 +672,7 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
         $c->model('DB')->schema->txn_do(sub {
             foreach my $namespace_id (@approve_namespaces) {
                 my $namespace = $namespace_rs->find({ id => $namespace_id });
-                my $action = $params->{"action_$namespace_id"};
+                my $action = $params->{"action_$namespace_id"} || 'hold';
                 my $freetext = $params->{"freetext_$namespace_id"};
 
                 if ($action eq 'approve') {
