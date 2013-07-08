@@ -1,12 +1,160 @@
+use utf8;
 package GMS::Schema::Result::GroupContact;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
+=head1 NAME
+
+GMS::Schema::Result::GroupContact
+
+=cut
+
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
+
+=head1 TABLE: C<group_contacts>
+
+=cut
+
+__PACKAGE__->table("group_contacts");
+
+=head1 ACCESSORS
+
+=head2 group_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 contact_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 active_change
+
+  data_type: 'integer'
+  default_value: -1
+  is_foreign_key: 1
+  is_nullable: 0
+
+=cut
+
+__PACKAGE__->add_columns(
+  "group_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "contact_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "active_change",
+  {
+    data_type      => "integer",
+    default_value  => -1,
+    is_foreign_key => 1,
+    is_nullable    => 0,
+  },
+);
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</group_id>
+
+=item * L</contact_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("group_id", "contact_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<group_contacts_unique_active_change>
+
+=over 4
+
+=item * L</active_change>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("group_contacts_unique_active_change", ["active_change"]);
+
+=head1 RELATIONS
+
+=head2 active_change
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::GroupContactChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "active_change",
+  "GMS::Schema::Result::GroupContactChange",
+  { id => "active_change" },
+  { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+
+=head2 contact
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Contact>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "contact",
+  "GMS::Schema::Result::Contact",
+  { id => "contact_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 group
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Group>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "group",
+  "GMS::Schema::Result::Group",
+  { id => "group_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 group_contact_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupContactChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_contact_changes",
+  "GMS::Schema::Result::GroupContactChange",
+  {
+    "foreign.contact_id" => "self.contact_id",
+    "foreign.group_id"   => "self.group_id",
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q/Hs8g7khgPUxsCS3/aADQ
+# You can replace this text with custom content, and it will be preserved on regeneration
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
@@ -116,13 +264,6 @@ __PACKAGE__->belongs_to(
   { id => "active_change" },
   {},
 );
-
-
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-08 18:39:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7y+Su1JqNCS+2e+Gc7A5Hw
-
-
-# You can replace this text with custom content, and it will be preserved on regeneration
 
 use TryCatch;
 

@@ -1,18 +1,21 @@
+use utf8;
 package GMS::Schema::Result::CloakChange;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
-use strict;
-use warnings;
-use GMS::Atheme::Client;
-use RPC::Atheme::Error;
-
-use base 'DBIx::Class::Core';
-
 =head1 NAME
 
 GMS::Schema::Result::CloakChange
+
+=cut
+
+use strict;
+use warnings;
+
+use base 'DBIx::Class::Core';
+
+=head1 TABLE: C<cloak_changes>
 
 =cut
 
@@ -30,15 +33,15 @@ __PACKAGE__->table("cloak_changes");
 =head2 target
 
   data_type: 'varchar'
-  size: 32
   is_foreign_key: 1
   is_nullable: 0
+  size: 32
 
 =head2 cloak
 
   data_type: 'varchar'
-  size: 63
   is_nullable: 0
+  size: 63
 
 =head2 active_change
 
@@ -58,9 +61,9 @@ __PACKAGE__->add_columns(
     sequence          => "cloak_changes_id_seq",
   },
   "target",
-  { data_type => "varchar", size => 32, is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 32 },
   "cloak",
-  { data_type => "varchar", size => 63, is_nullable => 0 },
+  { data_type => "varchar", is_nullable => 0, size => 63 },
   "active_change",
   {
     data_type      => "integer",
@@ -70,7 +73,30 @@ __PACKAGE__->add_columns(
   },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<unique_cloak_active_change>
+
+=over 4
+
+=item * L</active_change>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("unique_cloak_active_change", ["active_change"]);
 
 =head1 RELATIONS
@@ -87,22 +113,7 @@ __PACKAGE__->belongs_to(
   "active_change",
   "GMS::Schema::Result::CloakChangeChange",
   { id => "active_change" },
-  {},
-);
-
-=head2 target
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Account>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "target",
-  "GMS::Schema::Result::Account",
-  { id => "target" },
-  { join_type => 'left' },
+  { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 cloak_change_changes
@@ -117,8 +128,28 @@ __PACKAGE__->has_many(
   "cloak_change_changes",
   "GMS::Schema::Result::CloakChangeChange",
   { "foreign.cloak_change_id" => "self.id" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
+
+=head2 target
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Account>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "target",
+  "GMS::Schema::Result::Account",
+  { id => "target" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l/E5sfkYv6alaSszNUOc4A
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 use TryCatch;
 

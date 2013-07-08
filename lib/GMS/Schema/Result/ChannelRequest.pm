@@ -1,19 +1,21 @@
+use utf8;
 package GMS::Schema::Result::ChannelRequest;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
-use strict;
-use warnings;
-use RPC::Atheme::Error;
-
-use base 'DBIx::Class::Core';
-
-__PACKAGE__->load_components ("InflateColumn::Object::Enum");
-
 =head1 NAME
 
 GMS::Schema::Result::ChannelRequest
+
+=cut
+
+use strict;
+use warnings;
+
+use base 'DBIx::Class::Core';
+
+=head1 TABLE: C<channel_requests>
 
 =cut
 
@@ -43,15 +45,15 @@ __PACKAGE__->table("channel_requests");
 =head2 channel
 
   data_type: 'varchar'
-  size: 50
   is_nullable: 0
+  size: 50
 
 =head2 target
 
   data_type: 'varchar'
-  size: 32
   is_foreign_key: 1
   is_nullable: 1
+  size: 32
 
 =head2 request_data
 
@@ -87,9 +89,9 @@ __PACKAGE__->add_columns(
   "requestor",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "channel",
-  { data_type => "varchar", size => 50, is_nullable => 0 },
+  { data_type => "varchar", is_nullable => 0, size => 50 },
   "target",
-  { data_type => "varchar", is_foreign_key => 1, size => 32, is_nullable => 1 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 32 },
   "request_data",
   { data_type => "text", is_nullable => 1 },
   "active_change",
@@ -101,7 +103,30 @@ __PACKAGE__->add_columns(
   },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<unique_channel_request_active_change>
+
+=over 4
+
+=item * L</active_change>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("unique_channel_request_active_change", ["active_change"]);
 
 =head1 RELATIONS
@@ -118,37 +143,7 @@ __PACKAGE__->belongs_to(
   "active_change",
   "GMS::Schema::Result::ChannelRequestChange",
   { id => "active_change" },
-  {},
-);
-
-=head2 requestor
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Contact>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "requestor",
-  "GMS::Schema::Result::Contact",
-  { id => "requestor" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 target
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Account>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "target",
-  "GMS::Schema::Result::Account",
-  { id => "target" },
-  { join_type => 'left' },
+  { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 channel_request_changes
@@ -163,8 +158,50 @@ __PACKAGE__->has_many(
   "channel_request_changes",
   "GMS::Schema::Result::ChannelRequestChange",
   { "foreign.channel_request_id" => "self.id" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
+
+=head2 requestor
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Contact>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "requestor",
+  "GMS::Schema::Result::Contact",
+  { id => "requestor" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
+=head2 target
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Account>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "target",
+  "GMS::Schema::Result::Account",
+  { id => "target" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D6G+j0swI+hAMCJhfGUyUA
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+__PACKAGE__->load_components ("InflateColumn::Object::Enum");
 
 # Set enum columns to use Object::Enum
 __PACKAGE__->add_columns(
@@ -480,5 +517,4 @@ sub TO_JSON {
         'target_dropped'    => $target_dropped,
     }
 }
-
 1;

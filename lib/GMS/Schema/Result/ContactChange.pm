@@ -1,18 +1,21 @@
+use utf8;
 package GMS::Schema::Result::ContactChange;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+GMS::Schema::Result::ContactChange
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
-
-=head1 NAME
-
-GMS::Schema::Result::ContactChange
+=head1 TABLE: C<contact_changes>
 
 =cut
 
@@ -42,9 +45,10 @@ __PACKAGE__->table("contact_changes");
 
 =head2 changed_by
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_foreign_key: 1
   is_nullable: 0
+  original: {data_type => "varchar"}
 
 =head2 name
 
@@ -55,7 +59,6 @@ __PACKAGE__->table("contact_changes");
 =head2 phone
 
   data_type: 'varchar'
-  is_foreign_key: 0
   is_nullable: 1
   size: 32
 
@@ -71,15 +74,11 @@ __PACKAGE__->table("contact_changes");
   extra: {custom_type_name => "change_type",list => ["create","request","approve","reject","admin","workflow_change"]}
   is_nullable: 0
 
-=cut
-
 =head2 affected_change
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
-
-=cut
 
 =head2 change_freetext
 
@@ -106,11 +105,16 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "changed_by",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
+  {
+    data_type      => "text",
+    is_foreign_key => 1,
+    is_nullable    => 0,
+    original       => { data_type => "varchar" },
+  },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "phone",
-  { data_type => "varchar", is_foreign_key => 0, is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "email",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "change_type",
@@ -118,7 +122,14 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "change_type",
-      list => ["create", "request", "approve", "reject", "admin", "workflow_change"],
+      list => [
+        "create",
+        "request",
+        "approve",
+        "reject",
+        "admin",
+        "workflow_change",
+      ],
     },
     is_nullable => 0,
   },
@@ -127,38 +138,34 @@ __PACKAGE__->add_columns(
   "change_freetext",
   { data_type => "text", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 contact
+=head2 active_contact
 
-Type: belongs_to
+Type: might_have
 
 Related object: L<GMS::Schema::Result::Contact>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "contact",
+__PACKAGE__->might_have(
+  "active_contact",
   "GMS::Schema::Result::Contact",
-  { id => "contact_id" },
-  {},
-);
-
-=head2 changed_by
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Account>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "changed_by",
-  "GMS::Schema::Result::Account",
-  { id => "changed_by" },
-  {},
+  { "foreign.active_change" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 affected_change
@@ -176,16 +183,62 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-11 20:23:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ncLmSRVDVaO6N1GJD95Xhg
+=head2 changed_by
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Account>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "changed_by",
+  "GMS::Schema::Result::Account",
+  { id => "changed_by" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 contact
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Contact>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "contact",
+  "GMS::Schema::Result::Contact",
+  { id => "contact_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 contact_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::ContactChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "contact_changes",
+  "GMS::Schema::Result::ContactChange",
+  { "foreign.affected_change" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eHx9UAhGmH/69waofd9Qaw
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 # Set enum columns to use Object::Enum
 __PACKAGE__->add_columns(

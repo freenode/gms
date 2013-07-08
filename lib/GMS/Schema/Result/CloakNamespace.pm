@@ -1,18 +1,21 @@
+use utf8;
 package GMS::Schema::Result::CloakNamespace;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+GMS::Schema::Result::CloakNamespace
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
-
-=head1 NAME
-
-GMS::Schema::Result::CloakNamespace
+=head1 TABLE: C<cloak_namespaces>
 
 =cut
 
@@ -60,11 +63,61 @@ __PACKAGE__->add_columns(
     is_nullable    => 0,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<cloak_namespaces_unique_active_change>
+
+=over 4
+
+=item * L</active_change>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("cloak_namespaces_unique_active_change", ["active_change"]);
+
+=head2 C<unique_cloak_ns>
+
+=over 4
+
+=item * L</namespace>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("unique_cloak_ns", ["namespace"]);
 
 =head1 RELATIONS
+
+=head2 active_change
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::CloakNamespaceChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "active_change",
+  "GMS::Schema::Result::CloakNamespaceChange",
+  { id => "active_change" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
 
 =head2 cloak_namespace_changes
 
@@ -81,25 +134,12 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 active_change
 
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::CloakNamespaceChange>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "active_change",
-  "GMS::Schema::Result::CloakNamespaceChange",
-  { id => "active_change" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b2HYE6oAuOxL8f4Myetk0Q
-
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4RI+NzxE9oFoPw3Eofn5UQ
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 use TryCatch;
 use GMS::Exception;

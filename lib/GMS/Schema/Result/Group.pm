@@ -1,21 +1,21 @@
+use utf8;
 package GMS::Schema::Result::Group;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
-use strict;
-use warnings;
-
-use LWP::UserAgent;
-use HTTP::Request;
-use base 'DBIx::Class::Core';
-use Net::DNS qw();
-
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
-
 =head1 NAME
 
 GMS::Schema::Result::Group
+
+=cut
+
+use strict;
+use warnings;
+
+use base 'DBIx::Class::Core';
+
+=head1 TABLE: C<groups>
 
 =cut
 
@@ -92,11 +92,63 @@ __PACKAGE__->add_columns(
   "deleted",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<unique_active_change>
+
+=over 4
+
+=item * L</active_change>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("unique_active_change", ["active_change"]);
+
+=head2 C<unique_group_name>
+
+=over 4
+
+=item * L</group_name>
+
+=item * L</deleted>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("unique_group_name", ["group_name", "deleted"]);
 
 =head1 RELATIONS
+
+=head2 active_change
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::GroupChange>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "active_change",
+  "GMS::Schema::Result::GroupChange",
+  { id => "active_change" },
+  { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
 
 =head2 channel_namespace_changes
 
@@ -110,7 +162,7 @@ __PACKAGE__->has_many(
   "channel_namespace_changes",
   "GMS::Schema::Result::ChannelNamespaceChange",
   { "foreign.group_id" => "self.id" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 cloak_namespace_changes
@@ -125,7 +177,7 @@ __PACKAGE__->has_many(
   "cloak_namespace_changes",
   "GMS::Schema::Result::CloakNamespaceChange",
   { "foreign.group_id" => "self.id" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 group_changes
@@ -140,7 +192,7 @@ __PACKAGE__->has_many(
   "group_changes",
   "GMS::Schema::Result::GroupChange",
   { "foreign.group_id" => "self.id" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 group_contacts
@@ -155,22 +207,7 @@ __PACKAGE__->has_many(
   "group_contacts",
   "GMS::Schema::Result::GroupContact",
   { "foreign.group_id" => "self.id" },
-  {},
-);
-
-=head2 active_change
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::GroupChange>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "active_change",
-  "GMS::Schema::Result::GroupChange",
-  { id => "active_change" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 group_verifications
@@ -188,8 +225,16 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-02-01 21:27:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fC8WCMJinrT5Xam+mk/OOQ
+
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1ehoN2tyPTxRItAHFZ4yDQ
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
+use LWP::UserAgent;
+use HTTP::Request;
+use base 'DBIx::Class::Core';
+use Net::DNS qw();
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 # Pseudo-relations not added by Schema::Loader
 __PACKAGE__->many_to_many(contacts => 'group_contacts', 'contact');
@@ -216,7 +261,6 @@ __PACKAGE__->has_many(
       'where' => { 'active_change.status' => ['active', 'retired'] }
     }
 );
-
 
 use TryCatch;
 use String::Random qw/random_string/;

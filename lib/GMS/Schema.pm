@@ -1,3 +1,4 @@
+use utf8;
 package GMS::Schema;
 
 # Created by DBIx::Class::Schema::Loader
@@ -11,8 +12,8 @@ use base 'DBIx::Class::Schema';
 __PACKAGE__->load_namespaces;
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-11-06 23:44:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U5sbcfVHhUtE3hElE/pYOQ
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 12:07:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DqFS3cQmQC0J5TAqos99DA
 
 =head1 NAME
 

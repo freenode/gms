@@ -1,18 +1,21 @@
+use utf8;
 package GMS::Schema::Result::Address;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+GMS::Schema::Result::Address
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
-
-=head1 NAME
-
-GMS::Schema::Result::Address
+=head1 TABLE: C<addresses>
 
 =cut
 
@@ -102,24 +105,20 @@ __PACKAGE__->add_columns(
   "phone2",
   { data_type => "varchar", is_nullable => 1, size => 32 },
 );
-__PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 contact_changes
+=over 4
 
-Type: has_many
+=item * L</id>
 
-Related object: L<GMS::Schema::Result::ContactChange>
+=back
 
 =cut
 
-__PACKAGE__->has_many(
-  "contact_changes",
-  "GMS::Schema::Result::ContactChange",
-  { "foreign.address" => "self.id" },
-  {},
-);
+__PACKAGE__->set_primary_key("id");
+
+=head1 RELATIONS
 
 =head2 group_changes
 
@@ -133,12 +132,15 @@ __PACKAGE__->has_many(
   "group_changes",
   "GMS::Schema::Result::GroupChange",
   { "foreign.address" => "self.id" },
-  {},
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2010-12-26 23:18:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xfAitxEloRcFwfhet9pXxQ
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2eOkRKyaxOEhytZyi54ZZQ
+# You can replace this text with custom content, and it will be preserved on regeneration
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 =head1 METHODS
 
@@ -235,7 +237,6 @@ sub new {
 #    return $out;
 #}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 
 =head2 TO_JSON
 

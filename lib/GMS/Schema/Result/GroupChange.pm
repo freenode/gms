@@ -1,15 +1,21 @@
+use utf8;
 package GMS::Schema::Result::GroupChange;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+GMS::Schema::Result::GroupChange
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
-
-=head1 NAME
-
-GMS::Schema::Result::GroupChange
+=head1 TABLE: C<group_changes>
 
 =cut
 
@@ -39,9 +45,10 @@ __PACKAGE__->table("group_changes");
 
 =head2 changed_by
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_foreign_key: 1
   is_nullable: 0
+  original: {data_type => "varchar"}
 
 =head2 change_type
 
@@ -73,15 +80,11 @@ __PACKAGE__->table("group_changes");
   extra: {custom_type_name => "group_status",list => ["submitted","verified","active","deleted","pending_web","pending_staff","pending_auto"]}
   is_nullable: 0
 
-=cut
-
 =head2 affected_change
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
-
-=cut
 
 =head2 change_freetext
 
@@ -108,13 +111,25 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "changed_by",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
+  {
+    data_type      => "text",
+    is_foreign_key => 1,
+    is_nullable    => 0,
+    original       => { data_type => "varchar" },
+  },
   "change_type",
   {
     data_type => "enum",
     extra => {
       custom_type_name => "change_type",
-      list => ["create", "request", "approve", "reject", "admin", "workflow_change"],
+      list => [
+        "create",
+        "request",
+        "approve",
+        "reject",
+        "admin",
+        "workflow_change",
+      ],
     },
     is_nullable => 0,
   },
@@ -143,7 +158,15 @@ __PACKAGE__->add_columns(
     data_type => "enum",
     extra => {
       custom_type_name => "group_status",
-      list => ["submitted", "verified", "active", "deleted", "pending_web", "pending_staff", "pending_auto"],
+      list => [
+        "submitted",
+        "verified",
+        "active",
+        "deleted",
+        "pending_web",
+        "pending_staff",
+        "pending_auto",
+      ],
     },
     is_nullable => 0,
   },
@@ -152,19 +175,35 @@ __PACKAGE__->add_columns(
   "change_freetext",
   { data_type => "text", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 group
+=head2 active_group
 
-Type: belongs_to
+Type: might_have
 
 Related object: L<GMS::Schema::Result::Group>
 
 =cut
 
-__PACKAGE__->belongs_to("group", "GMS::Schema::Result::Group", { id => "group_id" }, {});
+__PACKAGE__->might_have(
+  "active_group",
+  "GMS::Schema::Result::Group",
+  { "foreign.active_change" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 address
 
@@ -178,22 +217,12 @@ __PACKAGE__->belongs_to(
   "address",
   "GMS::Schema::Result::Address",
   { id => "address" },
-  { join_type => "LEFT" },
-);
-
-=head2 changed_by
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Account>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "changed_by",
-  "GMS::Schema::Result::Account",
-  { id => "changed_by" },
-  {},
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 affected_change
@@ -211,15 +240,62 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07002 @ 2011-01-11 20:23:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/WOEPcBCLQnrznlOq5rueQ
+=head2 changed_by
 
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Account>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "changed_by",
+  "GMS::Schema::Result::Account",
+  { id => "changed_by" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 group
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Group>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "group",
+  "GMS::Schema::Result::Group",
+  { id => "group_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 group_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::GroupChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "group_changes",
+  "GMS::Schema::Result::GroupChange",
+  { "foreign.affected_change" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UqIsqNKd/whMq3zf8b6J3Q
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 # Set enum columns to use Object::Enum
 __PACKAGE__->add_columns(

@@ -1,18 +1,21 @@
+use utf8;
 package GMS::Schema::Result::CloakNamespaceChange;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+GMS::Schema::Result::CloakNamespaceChange
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
-
-=head1 NAME
-
-GMS::Schema::Result::CloakNamespaceChange
+=head1 TABLE: C<cloak_namespace_changes>
 
 =cut
 
@@ -48,9 +51,10 @@ __PACKAGE__->table("cloak_namespace_changes");
 
 =head2 changed_by
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_foreign_key: 1
   is_nullable: 0
+  original: {data_type => "varchar"}
 
 =head2 change_type
 
@@ -97,7 +101,12 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "changed_by",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0 },
+  {
+    data_type      => "text",
+    is_foreign_key => 1,
+    is_nullable    => 0,
+    original       => { data_type => "varchar" },
+  },
   "change_type",
   {
     data_type => "enum",
@@ -128,24 +137,20 @@ __PACKAGE__->add_columns(
   "change_freetext",
   { data_type => "text", is_nullable => 1 },
 );
-__PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 changed_by
+=over 4
 
-Type: belongs_to
+=item * L</id>
 
-Related object: L<GMS::Schema::Result::Account>
+=back
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "changed_by",
-  "GMS::Schema::Result::Account",
-  { id => "changed_by" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
+__PACKAGE__->set_primary_key("id");
+
+=head1 RELATIONS
 
 =head2 affected_change
 
@@ -162,37 +167,54 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
-=head2 namespace
+=head2 changed_by
 
 Type: belongs_to
 
-Related object: L<GMS::Schema::Result::CloakNamespace>
+Related object: L<GMS::Schema::Result::Account>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "namespace",
-  "GMS::Schema::Result::CloakNamespace",
-  { id => "namespace_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  "changed_by",
+  "GMS::Schema::Result::Account",
+  { id => "changed_by" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
-=head2 namespace_where_active
+=head2 cloak_namespace
 
-Type: has_one
+Type: might_have
 
 Related object: L<GMS::Schema::Result::CloakNamespace>
 
 =cut
 
-__PACKAGE__->has_one(
-  "namespace_where_active" =>
-  "GMS::Schema::Result::CloakNamespace" => 'active_change'
+__PACKAGE__->might_have(
+  "cloak_namespace",
+  "GMS::Schema::Result::CloakNamespace",
+  { "foreign.active_change" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 cloak_namespace_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::CloakNamespaceChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cloak_namespace_changes",
+  "GMS::Schema::Result::CloakNamespaceChange",
+  { "foreign.affected_change" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 group
@@ -207,13 +229,43 @@ __PACKAGE__->belongs_to(
   "group",
   "GMS::Schema::Result::Group",
   { id => "group_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-18 13:47:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1pXorSec8gyPuiPKCoKaNg
+=head2 namespace
 
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::CloakNamespace>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "namespace",
+  "GMS::Schema::Result::CloakNamespace",
+  { id => "namespace_id" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WqQB870dtQ0IA/4jCiNhLw
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+=head2 namespace_where_active
+
+Type: has_one
+
+Related object: L<GMS::Schema::Result::CloakNamespace>
+
+=cut
+
+__PACKAGE__->has_one(
+  "namespace_where_active" =>
+  "GMS::Schema::Result::CloakNamespace" => 'active_change'
+);
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
 use TryCatch;
 
