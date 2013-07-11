@@ -9,7 +9,7 @@
 
 [% FOREACH ns = results -%]
 <tr>
-  <td><a href='[% c.uri_for ("/staff/${ns.group.id}/view") %]'>[% ns.group.group_name | html %]</a></td>
+  <td><a href='[% c.uri_for ("/staff/group/${ns.group.id}/view") %]'>[% ns.group.group_name | html %]</a></td>
   <td>[% ns.namespace | html %]</td>
   <td>[% ns.status %]</td>
 </tr>
