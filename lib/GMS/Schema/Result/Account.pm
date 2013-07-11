@@ -272,18 +272,6 @@ sub is_dropped {
     return ( $self->dropped ? 1 : 0 );
 }
 
-=head2 mark
-
-If we're trying to get the mark from the database,
-it probably means we cant' get the account from Atheme.
-Return undef.
-
-=cut
-
-sub mark {
-    undef;
-}
-
 =head2 TO_JSON
 
 Returns a representative object for the JSON parser.
