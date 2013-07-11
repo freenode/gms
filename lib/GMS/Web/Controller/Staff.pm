@@ -275,14 +275,12 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
             $accname =~ s#_#\\_#g;
             $account_search = {
                 'accountname' => { 'ilike', $accname },
-                order_by => 'id'
             };
         }
         catch (GMS::Exception $e) {
             $c->stash->{error_msg} = $e->message;
             $account_search = {
                 'accountname' => 0,
-                order_by => 'id'
             };
         }
 
