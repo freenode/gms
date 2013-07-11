@@ -2,6 +2,7 @@ package GMS::Atheme::Client;
 
 use TryCatch;
 use RPC::Atheme::Error;
+use GMS::Exception;
 
 =head1 NAME
 
@@ -242,6 +243,43 @@ sub private {
         my $private = $session->command ( $session->service, 'private', $uid);
         return ( $private == 1 );
     } catch (RPC::Atheme::Error $e) {
+        die $e;
+    }
+}
+
+=head2 listvhost
+
+Returns a list of vhosts matching a pattern.
+
+=cut
+
+sub listvhost {
+    my ($self, $pattern) = @_;
+    my $session = $self->{_session};
+
+    if (!$pattern) {
+        die GMS::Exception->new ("Please provide a search pattern");
+    }
+
+    try {
+        my $result_str = $session->command ( 'NickServ', 'listvhost', $pattern );
+
+        my @results = split /\n/, $result_str;
+        pop @results;
+
+        return unless @results;
+
+        my %result_hash;
+
+        foreach my $result (@results) {
+            my ($user, $cloak) = $result =~ /-\s+(\S+)\s+(\S+)/;
+
+            $result_hash{$user} = $cloak;
+        }
+
+        return %result_hash;
+    }
+    catch (RPC::Atheme::Error $e) {
         die $e;
     }
 }
