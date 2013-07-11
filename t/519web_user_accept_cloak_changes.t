@@ -88,7 +88,7 @@ $ua->click_button(
     number => 2
 );
 
-$ua->content_contains("Can't reject a change not pending approval", "Can't reject a cloak not pending approval");
+$ua->content_contains("Successfully rejected", "Rejecting works");
 
 $ua->get ("http://localhost/cloak/999/approve");
 $ua->content_contains ("That cloak doesn't exist or hasn't been assigned to you.", "Can't approve cloak change that does not exist");

@@ -331,7 +331,7 @@ by either the user or staff.
 sub reject {
     my ($self, $account, $freetext) = @_;
 
-    if ( $self->status->is_accepted || $self->status->is_error ) {
+    if ( $self->status->is_offered || $self->status->is_accepted || $self->status->is_error ) {
         $self->change ($account, { status => "rejected", change_freetext => $freetext });
     } else {
         die GMS::Exception->new ("Can't reject a change not pending approval");

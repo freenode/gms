@@ -82,11 +82,13 @@ sub approve :Chained('cloak') :PathPart('approve') :Args(0) {
     my $cloak = $c->stash->{cloak};
 
     try {
-        if ($c->request->body_params->{action} eq 'approve') {
+        my $action = $c->request->body_params->{action} || '';
+
+        if ($action && $action eq 'approve') {
             $cloak->accept($c->user->account);
 
             $c->stash->{status_msg} = "Successfully approved the cloak. Please wait for staff to also approve it.";
-        } elsif ($c->request->body_params->{action} eq 'reject') {
+        } elsif ($action && $action eq 'reject') {
             $cloak->reject($c->user->account);
 
             $c->stash->{status_msg} = "Successfully rejected the cloak.";
