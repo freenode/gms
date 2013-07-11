@@ -30,7 +30,7 @@
         <div [% IF i == 0 %] id="cloak" [% END %] class='margin0'>
             <div class='div75'>
                 Which user to cloak?<br/>
-                <input type='text' [% IF i == 0 %] id='accountname' [% END %] name='accountname_[% i %]' value='[% req.accountname | html %]' /><br/>
+                <input type='text' [% IF i == 0 %] id='accname' [% END %] name='accountname_[% i %]' value='[% req.accountname | html %]' /><br/>
                 Enter the cloak?<br/>
                 <select id='cloakns' name="cloak_namespace_[% i %]">
                     [% FOREACH namespace IN cloak_namespaces %]
