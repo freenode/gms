@@ -91,6 +91,7 @@ sub single_group :Chained('base') :PathPart('group') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
     my $group_row = $c->model('DB::Group')->find({ id => $group_id });
+    $c->stash->{group_row} = $group_row;
 
     try {
         my $session = $c->model('Atheme')->session;
@@ -214,7 +215,7 @@ sub do_add_gc :Chained('single_group') :PathPart('add_gc/submit') :Args(0) {
         $c->detach ("add_gc");
     } else {
         my $contact = $account->contact;
-        my $group = $c->stash->{group};
+        my $group = $c->stash->{group_row};
 
         try {
             $group->add_contact ($contact, $c->user->account->id, { 'freetext' => $p->{freetext} });
@@ -299,7 +300,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $p = $c->request->params;
-    my $group = $c->stash->{group};
+    my $group = $c->stash->{group_row};
     my $address;
 
     try {
@@ -367,8 +368,7 @@ GroupContactChange with 'admin' as the change type.
 sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     my ($self, $c) = @_;
 
-    my $group_obj = $c->stash->{group};
-    my $group = $group_obj->group_row;
+    my $group = $c->stash->{group_row};
 
     my $params = $c->request->params;
     my @group_contacts = split / /, $params->{group_contacts};
@@ -420,7 +420,7 @@ Processes the form to edit channel namespaces or add a new channel namespace for
 sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces/submit') :Args(0) {
     my ($self, $c) = @_;
 
-    my $group = $c->stash->{group};
+    my $group = $c->stash->{group_row};
     my $p = $c->request->params;
     my $new_namespace = $p->{namespace};
 
@@ -489,7 +489,7 @@ Processes the form to edit cloak namespaces or add a new cloak namespace for the
 sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces/submit') :Args(0) {
     my ($self, $c) = @_;
 
-    my $group = $c->stash->{group};
+    my $group = $c->stash->{group_row};
     my $p = $c->request->params;
     my $new_namespace = $p->{namespace};
 

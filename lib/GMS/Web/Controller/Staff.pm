@@ -64,14 +64,24 @@ sub single_group :Chained('base') :PathPart('group') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
     my $group_row = $c->model('DB::Group')->find({ id => $group_id });
-    my $session = $c->model('Atheme')->session;
 
-    if ($group_row) {
-        my $group = GMS::Domain::Group->new ( $session, $group_row );
+    try {
+        my $session = $c->model('Atheme')->session;
 
-        $c->stash->{group} = $group;
-    } else {
-        $c->detach('/default');
+        if ($group_row) {
+            my $group = GMS::Domain::Group->new ( $session, $group_row );
+            $c->stash->{group} = $group;
+        } else {
+            $c->detach('/default');
+        }
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+        if ($group_row) {
+            $c->stash->{group} = $group_row;
+        } else {
+            $c->detach('/default');
+        }
     }
 }
 
