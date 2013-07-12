@@ -679,6 +679,65 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
     }
 }
 
+=head2 listvhost
+
+Displays a list of users that are cloaked under one of
+the group's cloak namespaces.
+
+=cut
+
+sub listvhost :Chained('single_group') :PathPart('listvhost') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @cloak_namespaces = $group->active_cloak_namespaces;
+
+    if (! @cloak_namespaces) {
+        $c->stash->{error_msg} = "This group has no cloak namespaces. Please request a cloak namespace first.";
+        $c->detach ('edit_cloak_namespaces');
+    }
+
+    $c->stash->{cloak_namespaces} = \@cloak_namespaces;
+    $c->stash->{template} = 'group/listvhost.tt';
+}
+
+=head2 do_listvhost
+
+Processes the form to display a list of users that
+are cloaked under one of the group's cloak namespaces.
+
+=cut
+
+sub do_listvhost :Chained('single_group') :PathPart('listvhost/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $p = $c->request->params;
+
+    my $namespace = $p->{namespace};
+
+    if ( !$group->active_cloak_namespaces->find ({ 'namespace' => $namespace }) ) {
+        $c->stash->{error_msg} = "The namespace $namespace does not belong in your group's namespaces.";
+        $c->detach('listvhost');
+    }
+
+    try {
+        my $session = $c->model('Atheme')->session;
+        my $client = GMS::Atheme::Client->new ($session);
+
+        my $search = "$namespace/*";
+        my %results = $client->listvhost ($search);
+
+        $c->stash->{results} = \%results;
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
+        $c->detach ('listvhost');
+    }
+
+    $c->stash->{template} = 'group/listvhost_results.tt';
+}
+
 =head2 edit_channel_namespaces
 
 Shows the group's current channel namespaces and allows the group contact to
