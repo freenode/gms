@@ -137,4 +137,43 @@ $ua->submit_form(
 
 $ua->content_contains("The namespace invalid does not belong in your Group's namespaces.", "Can't have a cloak in a namespace you don't own");
 
+$ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
+
+$ua->submit_form(
+    fields => {
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => '42'
+    }
+);
+
+$ua->content_contains("The cloak provided looks like a CIDR mask", "Can't have invalid cloak");
+
+$ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
+
+$ua->submit_form(
+    fields => {
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => '42/1337'
+    }
+);
+
+$ua->content_contains("The cloak provided looks like a CIDR mask", "Can't have invalid cloak");
+
+$ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
+
+$ua->submit_form(
+    fields => {
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => '42/this-should-work'
+    }
+);
+
+$ua->content_contains("Successfully requested 1 cloak(s)", "Requesting cloak wokrs");
+
 done_testing;

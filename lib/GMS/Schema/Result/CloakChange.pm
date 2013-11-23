@@ -187,10 +187,17 @@ sub new {
         $valid = 0;
     } else {
         my $cloak = $args->{cloak};
-        my ($ns, $role) = split qr|/|, $cloak;
+        my (@parts) = split qr|/|, $cloak;
+
+        my ($ns, $role) = @parts;
 
         if (!$ns || !$role) {
             push @errors, "The cloak provided is invalid; it should be in the format of group/(role/)user";
+            $valid = 0;
+        }
+
+        if ( (split '', $parts[-1])[0] =~ /[0-9]/ ) {
+            push @errors, "The cloak provided looks like a CIDR mask.";
             $valid = 0;
         }
 
