@@ -15,6 +15,8 @@ use GMSTest::Database;
 my $schema = need_database 'new_db';
 
 my $cloakchange = $schema->resultset('CloakChange')->find({ 'id' => 1 });
+my $group = $schema->resultset('Group')->find({ 'id' => 2 });
+
 my $user = $schema->resultset('Account')->find ({ 'accountname' => 'account0' });
 my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin' });
 
@@ -56,5 +58,79 @@ $cloakchange->approve ( undef, $admin );
 $cloakchange->discard_changes;
 
 ok $cloakchange->active_change->status->is_error, "Status is changed to error";
+
+#:throws_ok { $change->approve ($admin) } qr /Can't approve a change that isn't a request/, 'We can only approve changes that are requests';
+
+eval {
+    $schema->resultset('CloakChange')->create({ });
+};
+
+my $error = $@;
+
+ok $error;
+
+is_deeply $error->message, [
+    "target must be specified",
+    "Cloak must be provided",
+    "Changed by must be provided"
+];
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => '@#!$@_',
+            'changed_by' => '3EAB67EC',
+        })
+} qr/The cloak contains invalid characters/;
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => 'LoremipsumdolorsitametconsecteturadipiscingelitMaurisegetrutrummf',
+            'changed_by' => '3EAB67EC',
+        })
+} qr/The cloak is too long/;
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => 'cloak/',
+            'changed_by' => '3EAB67EC',
+        })
+} qr/The cloak provided is invalid/;
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => 'cloak/42',
+            'changed_by' => '3EAB67EC',
+        })
+} qr/The cloak provided looks like a CIDR mask/;
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => 'cloak/42/is-ok',
+            'changed_by' => '3EAB67EC',
+        })
+} qr/You need to provide a group/;
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => 'cloak/42/is-ok',
+            'group'      => $group,
+            'changed_by' => '3EAB67EC',
+        })
+} qr/does not belong in your Group's namespaces/;
+
+lives_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
+            'cloak'      => 'group0/42/is-ok',
+            'group'      => $group,
+            'changed_by' => '3EAB67EC',
+        })
+};
 
 done_testing;
