@@ -246,7 +246,7 @@ __PACKAGE__->many_to_many("roles", "user_roles", "role");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D9sxJe/DSz2BzGYuW6N8Gg
 # You can replace this text with custom content, and it will be preserved on regeneration
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum","InflateColumn::Boolean","Core");
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum","Core");
 
 # Pseudo-relations not added by Schema::Loader
 

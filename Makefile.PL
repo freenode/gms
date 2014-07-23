@@ -31,7 +31,6 @@ requires 'DBIx::Class::DeploymentHandler';
 requires 'DBIx::Class::Fixtures';
 requires 'DBIx::Class::InflateColumn::Object::Enum';
 requires 'DBIx::Class::InflateColumn::DateTime';
-requires 'DBIx::Class::InflateColumn::Boolean';
 requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
