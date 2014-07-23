@@ -23,7 +23,6 @@ requires 'Config::General'; # This should reflect the config file format you've 
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 
 requires 'MooseX::OneArgNew';
-requires 'Test::MockModule';
 requires 'TryCatch';
 requires 'RPC::XML';
 requires 'DBIx::Class' => '0.08124';
@@ -39,6 +38,8 @@ requires 'SQL::Translator' => '0.11002';
 requires 'Net::DNS';
 
 test_requires 'Test::WWW::Mechanize::Catalyst';
+test_requires 'Test::MockModule';
+test_requires 'Test::Most';
 
 # XXX: remove these dependencies eventually -- they're here for development/debugging
 requires 'Catalyst::Plugin::StackTrace';
