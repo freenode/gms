@@ -34,6 +34,7 @@ requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
 requires 'SQL::Translator' => '0.11002';
+requires 'JSON::XS';
 
 requires 'Net::DNS';
 
