@@ -30,6 +30,7 @@ requires 'DBIx::Class::DeploymentHandler';
 requires 'DBIx::Class::Fixtures';
 requires 'DBIx::Class::InflateColumn::Object::Enum';
 requires 'DBIx::Class::InflateColumn::DateTime';
+requires 'DBD::Pg';
 requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
@@ -40,7 +41,10 @@ requires 'Net::DNS';
 
 test_requires 'Test::WWW::Mechanize::Catalyst';
 test_requires 'Test::MockModule';
+test_requires 'Test::MockObject';
 test_requires 'Test::Most';
+test_requires 'Test::Pod';
+test_requires 'Test::Pod::Coverage';
 
 # XXX: remove these dependencies eventually -- they're here for development/debugging
 requires 'Catalyst::Plugin::StackTrace';
