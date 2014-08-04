@@ -38,6 +38,10 @@ requires 'SQL::Translator' => '0.11002';
 requires 'JSON::XS';
 
 requires 'Net::DNS';
+requires 'FCGI';
+requires 'FCGI::ProcManager';
+
+requires 'LWP::Protocol::https';
 
 test_requires 'Test::WWW::Mechanize::Catalyst';
 test_requires 'Test::MockModule';
