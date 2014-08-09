@@ -14,8 +14,8 @@ function format_address ( address ) {
     html = html.replace (/\%state/g, address.state);
     html = html.replace (/\%code/g, address.code);
     html = html.replace (/\%country/g, address.country);
-    html = html.replace (/\%phone/g, address.phone);
     html = html.replace (/\%phone2/g, address.phone2);
+    html = html.replace (/\%phone/g, address.phone);
 
     return html;
 }
