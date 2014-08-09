@@ -111,6 +111,14 @@ $Services{GMSServ}->bind_command(
     access => "special:gms"
 );
 
+$Services{GMSServ}->bind_command(
+    name => "noticechan",
+    desc => "Notice a channel",
+    help_path => "gmsserv/noticechan",
+    handler => \&gms_noticechan,
+    access => "special:gms"
+);
+
 sub gms_uid {
     my ($source, @parv) = @_;
 
@@ -359,5 +367,20 @@ sub gms_private {
         } else {
             $source->success (-1);
         }
+    }
+}
+
+sub gms_noticechan {
+    my ($source, @parv) = @_;
+
+    my ($channel, $notice) = @parv;
+
+    my $chan = $Atheme::Channels{$channel};
+
+    if (!$chan) {
+        $source->fail (Atheme::Fault::nosuch_target(), "The channel $channel does not exist");
+    } else {
+        $chan->notice ('GMSServ', $notice);
+        $source->success ('Success');
     }
 }
