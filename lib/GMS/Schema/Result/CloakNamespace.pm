@@ -324,6 +324,27 @@ sub last_change {
     return $changes[0];
 }
 
+=head2 get_change_string
+
+Returns a string illustrating the difference between the current state and the
+requested change.
+
+=cut
+
+sub get_change_string {
+    my ($self, $change, $address) = @_;
+
+    my $str = '';
+
+    $str .= "Status: " . $self->status . " -> " . $change->{status} . ", "
+    if $self->status ne $change->{status};
+
+    # Get rid of trailing ,
+    $str =~ s/,\s*$//;
+
+    return $str ? $str : "No changes.";
+}
+
 =head2 TO_JSON
 
 Returns a representative object for the JSON parser.

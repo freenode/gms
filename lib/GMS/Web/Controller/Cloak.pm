@@ -88,10 +88,23 @@ sub approve :Chained('cloak') :PathPart('approve') :Args(0) {
             $cloak->accept($c->user->account);
 
             $c->stash->{status_msg} = "Successfully approved the cloak. Please wait for staff to also approve it.";
+
+            notice_staff_chan(
+                $c,
+                $c->user->account->accountname . " accepted the cloak " .
+                $cloak->cloak . " - " .
+                $c->uri_for('/admin/approve')
+            );
         } elsif ($action && $action eq 'reject') {
             $cloak->reject($c->user->account);
 
             $c->stash->{status_msg} = "Successfully rejected the cloak.";
+
+            notice_staff_chan(
+                $c,
+                $c->user->account->accountname . " rejected the cloak " .
+                $cloak->cloak
+            );
         } else {
             $c->stash->{error_msg} = "Invalid action";
         }
@@ -100,6 +113,24 @@ sub approve :Chained('cloak') :PathPart('approve') :Args(0) {
     }
 
     $c->detach ('index');
+}
+
+=head2 notice_staff_chan
+
+Sends a notice to the staff channel about an action, dying quietly if there's
+an error.
+
+=cut
+
+sub notice_staff_chan {
+    my ($c, @notices) = @_;
+
+    # Don't die if this fails
+    eval {
+        my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+
+        $client->notice_staff_chan(@notices);
+    };
 }
 
 1;

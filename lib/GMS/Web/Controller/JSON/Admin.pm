@@ -100,6 +100,7 @@ sub do_approve_groups :Chained('base') :PathPart('approve_groups/submit') :Args(
     }
 
     my ( @approved_groups, @verified_groups, @rejected_groups );
+    my ( @approved_groups_names, @verified_groups_names, @rejected_groups_names );
 
     try {
         $c->model('DB')->schema->txn_do(sub {
@@ -114,18 +115,24 @@ sub do_approve_groups :Chained('base') :PathPart('approve_groups/submit') :Args(
 
                     $group->approve($account, $freetext);
                     push @approved_groups, $group_id;
+
+                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved group: " . $group->group_name);
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
 
                     $group->reject($account, $freetext);
                     push @rejected_groups, $group_id;
+
+                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected group: " . $group->group_name);
                 } elsif ($action eq 'verify') {
                     $c->log->info("Verifying group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
 
                     $group->verify($account, $freetext);
                     push @verified_groups, $group_id;
+
+                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " verified group: " . $group->group_name);
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -213,6 +220,12 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
 
                     $gc->approve($account, $freetext);
                     push @approved_contacts, $contact_id;
+
+                    notice_staff_chan($c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " approved gc :" .  $gc->contact->account->accountname .
+                        " for " .  $gc->group->group_name
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting group contact id $contact_id for group " . $gc->group->id . " (" .
                         $gc->contact->account->accountname . " rejected as group contact for " .
@@ -220,6 +233,13 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
 
                     $gc->reject($account, $freetext);
                     push @rejected_contacts, $contact_id;
+
+                    notice_staff_chan(
+                        $c,
+                        "[ADMIN]: " . $c->user->account->accountname .
+                        " rejected gc :" . $gc->contact->account->accountname . "
+                        for " . $gc->group->group_name
+                    );
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -232,6 +252,7 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
         $c->stash->{json_approved} = \@approved_contacts;
         $c->stash->{json_rejected} = \@rejected_contacts;
         $c->stash->{json_success} = 1;
+
     }
     catch (GMS::Exception $e) {
         $c->stash->{json_error} = $e->message;
@@ -362,6 +383,19 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"} || 'hold';
                 my $freetext = $params->{"freetext_$change_id"};
+                my $target;
+
+                if ($change_item eq 'gcc') { #group contact change
+                    $target = $change->group_contact->contact->account->accountname . " ( for " . $change->group_contact->group->group_name . " ) ";
+                } elsif ($change_item eq 'gc') { #group change
+                    $target = $change->group->group_name;
+                } elsif ($change_item eq 'cc') { #contact change
+                    $target = $change->contact->account->accountname;
+                } elsif ($change_item eq 'cnc') { #channel namespace change
+                    $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
+                } elsif ($change_item eq 'clnc') { #cloak namespace change
+                    $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
+                }
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving $type id $change_id" .
@@ -369,12 +403,16 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
 
                     $change->approve ($account, $freetext);
                     push @approved_changes, $change_id;
+
+                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved $type $target");
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting $type id $change_id" .
                         " by " . $c->user->username . "\n");
 
                     push @rejected_changes, $change_id;
                     $change->reject ($account, $freetext);
+
+                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected $type $target");
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -461,18 +499,41 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
 
                     $error = $change->approve ($session, $c->user->account, $freetext);
                     push @approved_changes, $change_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " approved group cloak " .  $change->cloak . " for " .
+                        $change->target->accountname
+                    );
+
                 } elsif ($action eq 'apply') {
                     $c->log->info ("Marking cloakChange id $change_id as applied" .
                         " by " . $c->user->username . "\n");
 
                     $change->apply ($c->user->account, $freetext);
                     push @applied_changes, $change_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " marked as applied: group cloak " .  $change->cloak . "
+                        for " .  $change->target->accountname
+                    );
+
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
 
                     $change->reject ($c->user->account, $freetext);
                     push @rejected_changes, $change_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " rejected group cloak " .  $change->cloak . " for " .
+                        $change->target->accountname
+                    );
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -563,24 +624,51 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                 my $action = $params->{"action_$req_id"} || 'hold';
                 my $freetext = $params->{"freetext_$req_id"};
 
+                my $req_txt = "";
+
+                if ($request->request_type eq 'transfer') {
+                    $req_txt = " to " . $request->target->accountname;
+                }
+
                 if ($action eq 'approve') {
                     $c->log->info("Approving ChannelRequest id $req_id" .
                         " by " . $c->user->username . "\n");
 
                     $error = $request->approve ($session, $account, $freetext);
                     push @approved_requests, $req_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " approved channel " .  $request->request_type . " $req_txt for "
+                        .  $request->channel
+                    );
                 } elsif ($action eq 'apply') {
                     $c->log->info ("Marking ChannelRequest id $req_id as applied" .
                         " by " . $c->user->username . "\n");
 
                     $request->apply ($c->user->account, $freetext);
                     push @applied_requests, $req_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " marked as applied " .  " channel " .
+                        $request->request_type . " $req_txt for " .  $request->channel
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting ChannelRequest id $req_id" .
                         " by " . $c->user->username . "\n");
 
                     $request->reject ($c->user->account, $freetext);
                     push @rejected_requests, $req_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " rejected channel " .  $request->request_type . " $req_txt for "
+                        .  $request->channel
+                    );
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -681,12 +769,27 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
 
                     $namespace->approve ($account, $freetext);
                     push @approved_namespaces, $namespace_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " approved $type " . $namespace->namespace . " for " .
+                        $namespace->group->group_name
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting $type id $namespace_id" .
                         " by " . $c->user->username . "\n");
 
                     $namespace->reject ($account, $freetext);
                     push @rejected_namespaces, $namespace_id;
+
+                    notice_staff_chan (
+                        $c,
+                        "[ADMIN]: " .  $c->user->account->accountname .
+                        " rejected $type " . $namespace->namespace . " for " .
+                        $namespace->group->group_name
+                    );
+
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -704,6 +807,24 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
         $c->stash->{json_error} = $e->message;
         $c->stash->{json_success} = 0;
     }
+}
+
+=head2 notice_staff_chan
+
+Sends a notice to the staff channel about an action, dying quietly if there's
+an error.
+
+=cut
+
+sub notice_staff_chan {
+    my ($c, @notices) = @_;
+
+    # Don't die if this fails
+    eval {
+        my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+
+        $client->notice_staff_chan(@notices);
+    };
 }
 
 1;

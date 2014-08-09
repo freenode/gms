@@ -13,7 +13,7 @@ use TryCatch;
 has _dbic_group_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (id group_name add_contact submitted auto_verify verify_auto active_change change url active_channel_namespaces add_to_channel_namespaces active_cloak_namespaces add_to_cloak_namespaces cloak_namespaces channel_namespaces deleted status group_type verify_url verify_token verify_dns verify_freetext last_change invite_contact) ]
+    handles => [ qw (id group_name add_contact submitted auto_verify verify_auto active_change change url active_channel_namespaces add_to_channel_namespaces active_cloak_namespaces add_to_cloak_namespaces cloak_namespaces channel_namespaces deleted status group_type verify_url verify_token verify_dns verify_freetext last_change invite_contact get_change_string) ]
 );
 
 =head1 PACKAGE

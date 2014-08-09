@@ -514,6 +514,33 @@ sub id {
     return $self->contact->id . "_" . $self->group->id;
 }
 
+=head2 get_change_string
+
+Returns a string illustrating the difference between the current state and the
+requested change.
+
+=cut
+
+sub get_change_string {
+    my ($self, $change, $address) = @_;
+
+    my $str = '';
+
+    $str .= "Status: " . $self->status . " -> " . $change->{status} . ", "
+    if $self->status ne $change->{status};
+
+    my $curPrimary = $self->is_primary ? "primary" : "secondary";
+    my $newPrimary = $change->{primary} != -1 ? "primary" : "secondary";
+
+    $str .= "Primary: " . $curPrimary . " -> " . $newPrimary . ", "
+    if $self->is_primary != $change->{primary};
+
+    # Get rid of trailing ,
+    $str =~ s/,\s*$//;
+
+    return $str ? $str : "No changes.";
+}
+
 =head2 TO_JSON
 
 Returns a representative object for the JSON parser.

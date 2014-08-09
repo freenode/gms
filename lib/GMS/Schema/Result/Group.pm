@@ -577,6 +577,7 @@ sub auto_verify {
     my $content = $response->content;
     $content =~ s/^\s+//;
     $content =~ s/\s+$//;
+
     if ($content eq $self->verify_token) {
         $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
         return 1;
@@ -853,6 +854,35 @@ sub _use_automatic_verification {
     $name =~ s/\W//g;
 
     return ($name eq $url) ? 1 : 0;
+}
+
+=head2 get_change_string
+
+Returns a string illustrating the difference between the current state and the
+requested change.
+
+=cut
+
+sub get_change_string {
+    my ($self, $change, $address) = @_;
+
+    my $str = '';
+
+    $str .= "Type: " . $self->group_type . " -> " . $change->{group_type} . ", "
+    if $self->group_type ne $change->{group_type};
+
+    $str .= "URL: " . $self->url . " -> " . $change->{url} . ", "
+    if $self->url ne $change->{url};
+
+    my $current_addr = $self->address || "None";
+    my $new_addr = ( $address && $address ne "-1" ) ? $address : "None";
+
+    $str .= "Address: $current_addr -> $new_addr" if "$current_addr" ne "$new_addr";
+
+    # Get rid of trailing ,
+    $str =~ s/,\s*$//;
+
+    return $str ? $str : "No changes.";
 }
 
 # You can replace this text with custom content, and it will be preserved on regeneration

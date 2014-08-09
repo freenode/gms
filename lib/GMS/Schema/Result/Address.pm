@@ -142,6 +142,9 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
+use overload '""' => \&stringify,
+             fallback => 1;
+
 =head1 METHODS
 
 =head2 new
@@ -257,6 +260,31 @@ sub TO_JSON {
         'phone'       => $self->phone,
         'phone2'      => $self->phone2
     };
+}
+
+=head2 stringify
+
+Returns a string representation.
+
+=cut
+
+sub stringify {
+    my ($self) = @_;
+
+    my $str = $self->address_one;
+    $str .= ", " . $self->address_two if $self->address_two;
+
+    $str .= ", " . $self->city;
+
+    $str .= ", " . $self->state if $self->state;
+    $str .= ", " . $self->code if $self->code;
+
+    $str .= ", " . $self->country;
+    $str .= ", " . $self->phone;
+
+    $str .= ", " . $self->phone2 if $self->phone2;
+
+    return $str;
 }
 
 1;

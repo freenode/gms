@@ -156,9 +156,23 @@ sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
     my $result = $group->auto_verify($c->user->account->id, $c->request->params);
     if ($result == 1) {
         $c->stash->{msg} = "Group successfully verified. Please wait for staff to approve or decline your group request";
+
+        notice_staff_chan(
+            $c,
+            "Automagical verification of " . $group->group_name . " by " .
+            $c->user->account->accountname . ": " .
+            $c->uri_for("/staff/group/" . $group->id . "/view")
+        );
     }
     elsif ($result == 0) {
         $c->stash->{msg} = "Please wait for staff to verify your group and approve or decline your group request";
+
+        notice_staff_chan(
+            $c,
+            $group->group_name . " is pending manual verification - " .
+            $c->uri_for("/staff/group/" . $group->id . "/view")
+        );
+
     }
     elsif ($result == -1) {
         $c->stash->{error_msg} = "Unable to complete auto verification. Please check that you have completed either of the steps below. If
@@ -212,6 +226,13 @@ sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
         my $group = $c->stash->{group};
         try {
             $group->invite_contact ($contact, $c->user->account->id);
+
+            notice_staff_chan(
+                $c,
+                $c->user->account->accountname . " invited " .
+                $account->accountname . " as a gc for " .  $group->group_name .
+                " - Waiting for user verification."
+            );
         }
         catch (GMS::Exception $e) {
             $c->stash->{error_msg} = $e;
@@ -236,6 +257,13 @@ sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
     my $gc = $c->user->account->contact->group_contacts->find ({ 'group_id' => $group->id });
     $gc->accept_invitation();
     $c->stash->{msg} = "Successfully accepted the group invitation. Please wait for staff to accept this.<br/>";
+
+    notice_staff_chan(
+        $c,
+        $c->user->account->accountname . " accepted the addition as a gc to " .
+        $group->group_name . " - " . $c->uri_for("/admin/approve")
+    );
+
     $c->stash->{template} = 'group/action_done.tt';
 }
 
@@ -252,6 +280,9 @@ sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0)
     my $gc = $c->user->account->contact->group_contacts->find ({ 'group_id' => $group->id });
     $gc->decline_invitation ();
     $c->stash->{msg} = "Successfully declined the group invitation.<br/>";
+
+    notice_staff_chan($c, $c->user->account->accountname . " rejected the addition as a gc to " . $group->group_name);
+
     $c->stash->{template} = 'group/action_done.tt';
 }
 
@@ -330,6 +361,16 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
             $address = -1;
         }
 
+        notice_staff_chan(
+            $c,
+            (
+                $c->user->account->accountname . " has requested a change for " .
+                " the group information for " . $group->group_name . " - " .
+                $c->uri_for("/admin/approve"),
+                $group->group_name . " changes: " . $group->get_change_string($p, $address)
+            )
+        );
+
         $group->change ($c->user->account->id, 'request', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
     }
     catch (GMS::Exception::InvalidAddress $e) {
@@ -385,6 +426,14 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     my $params = $c->request->params;
     my @group_contacts = split / /, $params->{group_contacts};
 
+  notice_staff_chan
+    (
+        $c,
+        $c->user->account->accountname . " has requested a change for " .
+        $group->group_name . "s gc information - " .
+        $c->uri_for("/admin/approve"),
+    );
+
     foreach my $contact_id (@group_contacts) {
         my $contact = $group_row->group_contacts->find ({ contact_id => $contact_id });
         my $action = $params->{"action_$contact_id"};
@@ -396,11 +445,19 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
                 $primary = -1;
             }
 
-            $contact->change ($c->user->account->id, 'request', { 'status' => $status, 'primary' => $primary });
+            my $change = { 'status' => $status, 'primary' => $primary };
+
+            notice_staff_chan(
+                $c,
+                $contact->contact->account->accountname . ": " . $contact->get_change_string($change)
+            );
+
+            $contact->change ($c->user->account->id, 'request', $change);
         } elsif ($action eq 'hold') {
             next;
         }
     }
+
 
     $c->stash->{msg} = "Successfully requested the GroupContactChanges.";
     $c->stash->{template} = 'group/action_done.tt';
@@ -501,6 +558,14 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
                     target => $account->id,
                     changed_by => $c->user->account->id,
                 });
+
+            notice_staff_chan(
+                $c,
+                $c->user->account->accountname .
+                " has requested the channel transfer of " . $channel . " to " .
+                $account->accountname . " for " . $group->group_name . " - " .
+                $c->uri_for("/admin/approve")
+            );
         } elsif ($action == 2) {
             $channels->request ({
                     requestor => $c->user->account->contact->id,
@@ -510,6 +575,13 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
                     request_type => 'drop',
                     changed_by => $c->user->account,
                 });
+
+            notice_staff_chan(
+                $c,
+                $c->user->account->accountname . " has requested the channel " .
+                "drop of " . $channel . " for " . $group->group_name . " - " .
+                $c->uri_for("/admin/approve")
+            );
         }
     }
     catch (GMS::Exception::InvalidChannelRequest $e) {
@@ -614,6 +686,12 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
         try {
             $change_rs->create ({ target => $account->id, cloak => "$namespace/$cloak", changed_by => $c->user->account, group => $group });
             ++$success_count;
+
+            notice_staff_chan(
+                $c,
+                "Cloak request for " . $group->group_name . ": " .
+                $account->accountname . " -> $namespace/$cloak"
+            );
         }
         catch (GMS::Exception::InvalidCloakChange $e) {
             push (@errors, @{$e->message});
@@ -653,6 +731,12 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
             try {
                 $change_rs->create ({ target => $account->id, cloak => $cloak, changed_by => $c->user->account, group => $group });
                 ++$success_count;
+
+                notice_staff_chan(
+                    $c,
+                    "Cloak request for " . $group->group_name . ": " .
+                    $account->accountname . " -> $cloak"
+                );
             }
             catch (GMS::Exception::InvalidCloakChange $e) {
                 push (@errors, @{$e->message});
@@ -664,6 +748,14 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
 
     if (!@errors) {
         $c->stash->{msg} = "Successfully requested $success_count cloak(s).";
+
+        notice_staff_chan(
+            $c,
+            $c->user->account->accountname . " has requested $success_count " .
+            "cloak changes for " . $group->group_name . " - " .
+            "Please wait for user approval."
+        );
+
         $c->stash->{template} = 'group/action_done.tt';
     }
     else {
@@ -674,7 +766,18 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
         $c->stash->{reqs} = \@reqs;
         $c->stash->{errors} = \@errors;
 
+
+        if ($success_count) {
+            notice_staff_chan(
+                $c,
+                $c->user->account->accountname . " has requested $success_count " .
+                "cloak changes for " .  $group->group_name . " - " .
+                "Please wait for user approval."
+            );
+        }
+
         $c->stash->{status_msg} = "Success: $success_count request(s). Failure: $error_count request(s).";
+
         $c->detach ('cloak');
     }
 }
@@ -772,12 +875,26 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
 
     my $namespace_rs = $c->model("DB::ChannelNamespace");
 
+    my $changes = 0;
+
     foreach my $namespace (@namespaces) {
         my $namespace_id = $namespace->id;
 
         if ($p->{"edit_$namespace_id"}) {
             my $status = $p->{"status_$namespace_id"};
-            $namespace->change ($c->user->account, 'request', { 'status' => $status });
+            my $change = { 'status' => $status };
+
+            notice_staff_chan(
+                $c,
+                (
+                    $c->user->account->accountname . " has requested a channel " .
+                    "namespace change for " . $group->group_name . "/" . $namespace->namespace,
+                    $namespace->get_change_string($change)
+                )
+            );
+
+            $namespace->change ($c->user->account, 'request', $change);
+            ++$changes;
         }
     }
 
@@ -808,9 +925,27 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
                 $c->detach ('edit_channel_namespaces');
             }
         }
+
+        notice_staff_chan(
+            $c,
+            $c->user->account->accountname . " has requesed a new channel namespace" .
+            "($new_namespace) for " . $group->group_name
+        );
+
+        ++$changes;
+    }
+
+    if ($changes) {
+        notice_staff_chan(
+            $c,
+            $c->user->account->accountname . " has requested $changes channel " .
+            "namespace changes for " . $group->group_name . " - " .
+            $c->uri_for("/admin/approve")
+        );
     }
 
     $c->stash->{msg} = 'Namespace updates requested successfully,';
+
     $c->stash->{template} = 'group/action_done.tt';
 }
 
@@ -848,12 +983,26 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
 
     my $namespace_rs = $c->model("DB::CloakNamespace");
 
+    my $changes = 0;
+
     foreach my $namespace (@namespaces) {
         my $namespace_id = $namespace->id;
 
         if ($p->{"edit_$namespace_id"}) {
+            ++$changes;
             my $status = $p->{"status_$namespace_id"};
-            $namespace->change ($c->user->account, 'request', { 'status' => $status });
+            my $change = { 'status' => $status };
+
+            notice_staff_chan(
+                $c,
+                (
+                    $c->user->account->accountname . " has requested a " .
+                    "cloak namespace change for " . $group->group_name . "/" . $namespace->namespace,
+                    $namespace->get_change_string($change)
+                )
+            );
+
+            $namespace->change ($c->user->account, 'request', $change);
         }
     }
 
@@ -884,6 +1033,23 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
                 $c->detach ('edit_cloak_namespaces');
             }
         }
+
+        notice_staff_chan(
+            $c,
+            $c->user->account->accountname . " has requesed a new cloak namespace " .
+            "($new_namespace) for " . $group->group_name
+        );
+
+        ++$changes;
+    }
+
+    if ($changes) {
+        notice_staff_chan(
+            $c,
+            $c->user->account->accountname . " has requested $changes cloak " .
+            "namespace changes for " . $group->group_name . " - " .
+            $c->uri_for("/admin/approve")
+        );
     }
 
     $c->stash->{msg} = 'Namespace updates requested successfully,';
@@ -1016,6 +1182,13 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
             #}
 
             $group->update;
+
+            notice_staff_chan(
+                $c,
+                "New group registration by " . $account->accountname . ": " .
+                $group->group_name . " (" . $group->url . ") - " .
+                $c->uri_for("/staff/group/" . $group->id . "/view")
+            );
         });
     }
     catch (GMS::Exception::InvalidGroup $e) {
@@ -1044,5 +1217,24 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     $c->stash->{template} = 'group/added.tt';
 }
+
+=head2 notice_staff_chan
+
+Sends a notice to the staff channel about an action, dying quietly if there's
+an error.
+
+=cut
+
+sub notice_staff_chan {
+    my ($c, @notices) = @_;
+
+    # Don't die if this fails
+    eval {
+        my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+
+        $client->notice_staff_chan(@notices);
+    };
+}
+
 
 1;
