@@ -13,7 +13,7 @@ use TryCatch;
 has _dbic_group_contact_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (id group_id contact_id last_change status active_change group) ]
+    handles => [ qw (id group_id contact_id last_change status active_change group get_change_string) ]
 );
 
 =head1 PACKAGE
