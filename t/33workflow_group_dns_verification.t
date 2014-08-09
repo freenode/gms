@@ -9,6 +9,15 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
+# Let's not make the test get stuck if web verification does, we don't care
+# about it right now.  Also, we don't want it to somehow succeed since we're
+# dong DNS verification instead.
+
+my $mock_lwp = Test::MockModule->new('LWP::UserAgent');
+$mock_lwp->mock('new', sub { my ($mock) = @_; return $mock; });
+$mock_lwp->mock('request', sub { my ($mock) = @_; return $mock; });
+$mock_lwp->mock('content', sub { return ''; });
+
 our ($file, $content);
 
 my $schema = need_database 'basic_db';

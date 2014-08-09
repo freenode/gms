@@ -11,6 +11,18 @@ use GMSTest::Database;
 
 my $schema = need_database 'three_groups';
 
+# Let's not make the test get stuck if web verification does,
+# we don't care about it right now.
+
+my $mock_lwp = Test::MockModule->new('LWP::UserAgent');
+$mock_lwp->mock('new', sub { my ($mock) = @_; return $mock; });
+$mock_lwp->mock('request', sub { my ($mock) = @_; return $mock; });
+$mock_lwp->mock('content', sub { return ''; });
+
+my $mock_dns = Test::MockModule->new('Net::DNS::Resolver');
+$mock_dns->mock('new', sub { my ($mock) = @_; return $mock; });
+$mock_dns->mock('search', sub { return ''; });
+
 #
 # Test validation on construction
 #
