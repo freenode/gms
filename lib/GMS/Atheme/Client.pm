@@ -1,8 +1,12 @@
 package GMS::Atheme::Client;
 
+use warnings;
+use strict;
+
 use TryCatch;
 use RPC::Atheme::Error;
 use GMS::Exception;
+use GMS::Config;
 
 =head1 NAME
 
@@ -28,6 +32,8 @@ Accepts a RPC::Atheme::Session object and stores it.
 
 sub new {
     my ($class, $session) = @_;
+
+    my $self = { };
 
     $self->{_session} = $session;
 
@@ -279,8 +285,21 @@ sub listvhost {
 
         return %result_hash;
     }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
+
+=head2 notice_chan
+
+Sends a notice to a channel.
+
+=cut
+
+sub notice_chan {
+    my ( $self, $channel, @notices ) = @_;
+    my $session = $self->{_session};
+
+    return if !$channel || !scalar @notices;
+
+    foreach my $notice (@notices) {
+        $session->command($session->service, 'noticechan', $channel, $notice) if $notice;
     }
 }
 
