@@ -303,4 +303,23 @@ sub notice_chan {
     }
 }
 
+=head2 notice_staff_chan
+
+Sends a notice to the configured staff channel.
+
+=cut
+
+sub notice_staff_chan {
+    my ($self, @notices) = @_;
+
+    my $config = GMS::Config->atheme;
+    my $channel = $config->{channel};
+
+    # Allow for disabling this...
+
+    return if !$channel;
+
+    return $self->notice_chan($channel, @notices);
+}
+
 1;
