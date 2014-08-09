@@ -5,6 +5,17 @@ use Test::More;
 use Test::MockObject;
 use Test::MockModule;
 
+# We don't want this right now.
+
+
+
+my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
+$mockModel->mock ('session' => sub { });
+
+my $mock = Test::MockModule->new('GMS::Atheme::Client');
+$mock->mock('new', sub { });
+$mock->mock('notice_staff_chan', sub {});
+
 use HTTP::Server::Simple::CGI;
 use base qw(HTTP::Server::Simple::CGI);
 

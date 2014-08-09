@@ -3,8 +3,8 @@ use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
 use Test::More;
-use Test::MockModule;
 use Test::MockObject;
+use Test::MockModule;
 
 our $schema = need_database 'staff';
 

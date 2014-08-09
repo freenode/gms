@@ -21,9 +21,11 @@ $mockAccounts->mock ('find_by_uid', sub {
     });
 
 my $mockAtheme = new Test::MockObject;
+$mockAtheme->mock('notice_staff_chan', sub {});
 
 my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
 $mockModel->mock ('session' => sub { $mockAtheme });
+
 
 my $change_rs = $schema->resultset('CloakChange');
 

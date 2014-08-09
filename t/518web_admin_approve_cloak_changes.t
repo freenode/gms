@@ -2,8 +2,14 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
-use Test::MockModule;
 use Test::MockObject;
+use Test::MockModule;
+
+# We don't want this right now.
+
+my $mock = Test::MockModule->new('GMS::Atheme::Client');
+$mock->mock('notice_staff_chan', sub {});
+
 
 our $schema = need_database 'new_db';
 

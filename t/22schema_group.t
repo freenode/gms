@@ -103,6 +103,7 @@ is $group->url, 'http://example.org', "Approving a change updates group state";
 
 $group->auto_verify ($useraccount->id, { freetext => 'text here' });
 
+
 is $schema->resultset('Group')->search_submitted_groups->count, 2, 'Submitted groups increment on submitting a new group';
 is $schema->resultset('Group')->search_verified_groups->count, 1;
 is $schema->resultset('Group')->search_active_groups->count, 0;

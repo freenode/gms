@@ -2,8 +2,17 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 use Test::More;
-use Test::MockModule;
 use Test::MockObject;
+use Test::MockModule;
+
+# We don't want this right now.
+
+my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
+$mockModel->mock ('session' => sub { });
+
+my $mock = Test::MockModule->new('GMS::Atheme::Client');
+$mock->mock('new', sub { });
+$mock->mock('notice_staff_chan', sub {});
 
 our $schema = need_database 'approved_group';
 
