@@ -52,12 +52,7 @@ sub cloak {
     my ( $self, $accountname, $cloak ) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command($session->service, 'cloak', $accountname, $cloak);
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command($session->service, 'cloak', $accountname, $cloak);
 }
 
 =head2 take_over
@@ -73,15 +68,10 @@ sub take_over {
     my ($self, $channel, $gc_name, $requestor) = @_;
     my $session = $self->{_session};
 
-    try {
-        if ( $self->chanregistered ( $channel ) ) {
-            return $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
-        } else {
-            return $session->command($session->service, 'fregister', $channel, $gc_name, $requestor);
-        }
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
+    if ( $self->chanregistered ( $channel ) ) {
+        return $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
+    } else {
+        return $session->command($session->service, 'fregister', $channel, $gc_name, $requestor);
     }
 }
 
@@ -95,12 +85,7 @@ sub drop {
     my ($self, $channel, $requestor) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command($session->service, 'drop', $channel, $requestor);
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command($session->service, 'drop', $channel, $requestor);
 }
 
 =head2 metadata
@@ -132,19 +117,14 @@ Returns an account's mark, if there is one
 sub mark {
     my ($self, $uid) = @_;
 
-    try {
-        my $mark = $self->metadata ($uid, 'private:mark:reason');
-        my $setter = $self->metadata ($uid, 'private:mark:setter');
-        my $time = $self->metadata ($uid, 'private:mark:timestamp');
+    my $mark = $self->metadata ($uid, 'private:mark:reason');
+    my $setter = $self->metadata ($uid, 'private:mark:setter');
+    my $time = $self->metadata ($uid, 'private:mark:timestamp');
 
-        if ( $mark ) {
-            return [$mark, $setter, $time];
-        } else {
-            return undef;
-        }
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
+    if ( $mark ) {
+        return [$mark, $setter, $time];
+    } else {
+        return undef;
     }
 }
 
@@ -158,12 +138,7 @@ sub chanexists {
     my ($self, $channel) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command ($session->service, 'chanexists', $channel) == 1;
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command ($session->service, 'chanexists', $channel) == 1;
 }
 
 =head2 chanregistered
@@ -176,12 +151,7 @@ sub chanregistered {
     my ($self, $channel) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command ($session->service, 'chanregistered', $channel) == 1;
-    }
-    catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command ($session->service, 'chanregistered', $channel) == 1;
 }
 
 =head2 registered
@@ -194,11 +164,7 @@ sub registered {
     my ($self, $uid) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command ($session->service, 'registered', $uid);
-    } catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command ($session->service, 'registered', $uid);
 }
 
 =head2 lastlogin
@@ -211,11 +177,7 @@ sub lastlogin {
     my ($self, $uid) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command ($session->service, 'lastlogin', $uid);
-    } catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command ($session->service, 'lastlogin', $uid);
 }
 
 =head2 lastseen
@@ -228,11 +190,7 @@ sub lastseen {
     my ($self, $uid) = @_;
     my $session = $self->{_session};
 
-    try {
-        return $session->command ($session->service, 'lastseen', $uid);
-    } catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    return $session->command ($session->service, 'lastseen', $uid);
 }
 
 =head2 private
@@ -245,12 +203,8 @@ sub private {
     my ($self, $uid) = @_;
     my $session = $self->{_session};
 
-    try {
-        my $private = $session->command ( $session->service, 'private', $uid);
-        return ( $private == 1 );
-    } catch (RPC::Atheme::Error $e) {
-        die $e;
-    }
+    my $private = $session->command ( $session->service, 'private', $uid);
+    return ( $private == 1 );
 }
 
 =head2 listvhost
@@ -267,24 +221,23 @@ sub listvhost {
         die GMS::Exception->new ("Please provide a search pattern");
     }
 
-    try {
-        my $result_str = $session->command ( 'NickServ', 'listvhost', $pattern );
+    my $result_str = $session->command ( 'NickServ', 'listvhost', $pattern );
 
-        my @results = split /\n/, $result_str;
-        pop @results;
+    my @results = split /\n/, $result_str;
+    pop @results;
 
-        return unless @results;
+    return unless @results;
 
-        my %result_hash;
+    my %result_hash;
 
-        foreach my $result (@results) {
-            my ($user, $cloak) = $result =~ /-\s+(\S+)\s+(\S+)/;
+    foreach my $result (@results) {
+        my ($user, $cloak) = $result =~ /-\s+(\S+)\s+(\S+)/;
 
-            $result_hash{$user} = $cloak;
-        }
-
-        return %result_hash;
+        $result_hash{$user} = $cloak;
     }
+
+    return %result_hash;
+}
 
 =head2 notice_chan
 
