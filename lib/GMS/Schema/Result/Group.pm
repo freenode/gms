@@ -422,7 +422,7 @@ sub change {
     if ( defined ( my $va = $args->{verify_auto} ) ) {
         $self->verify_auto ($va);
     }
-    if ($change_args{address} && $change_args{address} == -1) {
+    if ($change_args{address} && $change_args{address} eq "-1") {
         $change_args{address} = undef; #make it possible for groups to remove their address.
     }
 
