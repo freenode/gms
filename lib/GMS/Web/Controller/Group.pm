@@ -692,6 +692,14 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
                 "Cloak request for " . $group->group_name . ": " .
                 $account->accountname . " -> $namespace/$cloak"
             );
+
+            memo(
+                $c,
+                $account->accountname,
+                "You have a pending cloak request from " . $group->group_name .
+                ". Cloak: $namespace/$cloak. Please go to " .
+                $c->uri_for('/cloak') . " to accept or deny."
+            );
         }
         catch (GMS::Exception::InvalidCloakChange $e) {
             push (@errors, @{$e->message});
@@ -736,6 +744,14 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
                     $c,
                     "Cloak request for " . $group->group_name . ": " .
                     $account->accountname . " -> $cloak"
+                );
+
+                memo(
+                    $c,
+                    $account->accountname,
+                    "You have a pending cloak request from " . $group->group_name .
+                    ". Cloak: $cloak. Please go to " .
+                    $c->uri_for('/cloak') . " to accept or deny."
                 );
             }
             catch (GMS::Exception::InvalidCloakChange $e) {
@@ -1236,5 +1252,20 @@ sub notice_staff_chan {
     };
 }
 
+=head2 memo
+
+Sends a memo to a user.
+
+=cut
+
+sub memo {
+    my ($c, $user, $memo) = @_;
+
+    eval {
+        my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+
+        $client->memo($user, $memo);
+    }
+}
 
 1;

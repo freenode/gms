@@ -275,4 +275,18 @@ sub notice_staff_chan {
     return $self->notice_chan($channel, @notices);
 }
 
+=head2 memo
+
+Sends a memo to a user.
+
+=cut
+
+sub memo {
+    my ($self, $user, $memo) = @_;
+
+    my $session = $self->{_session};
+
+    return $session->command("MemoServ", "send", $user, $memo);
+}
+
 1;
