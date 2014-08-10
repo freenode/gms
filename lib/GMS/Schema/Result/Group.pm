@@ -316,7 +316,7 @@ sub new {
         push @errors, "Group URL must be up to 64 characters.";
         $valid = 0;
     } elsif ($args->{url} !~ m/^http:\/\// && $args->{url} !~ m/^https:\/\//) {
-        $args->{url} = "https://" . $args->{url};
+        $args->{url} = "http://" . $args->{url};
     }
 
     if (!$valid) {
