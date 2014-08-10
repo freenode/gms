@@ -291,7 +291,7 @@ $group = $schema->resultset('Group')->create({
 });
 isa_ok $group, 'GMS::Schema::Result::Group';
 
-is $group->url, 'https://example.com/', 'No http or https means https:// is added automatically';
+is $group->url, 'http://example.com/', 'No http or https means http:// is added automatically';
 
 $group = $schema->resultset('Group')->create({
     account => $useraccount,

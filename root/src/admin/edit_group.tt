@@ -33,7 +33,7 @@
   </td>
 </tr>
 <tr>
-  <td><label for="gurl">Group URL</label></td> <td><input id="gurl" type="url" name="url" value="[% url | html %]" /></td>
+  <td><label for="gurl">Group URL</label></td> <td><input id="gurl" type="text" name="url" value="[% url | html %]" /></td>
 </tr>
 <tr id="address_input">
   <td>Does the group have a registered / postal address?</td>
