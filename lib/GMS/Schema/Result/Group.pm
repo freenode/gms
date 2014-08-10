@@ -233,6 +233,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use base 'DBIx::Class::Core';
 use Net::DNS qw();
+use Domain::PublicSuffix qw( );
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
@@ -371,16 +372,18 @@ sub insert {
                 verification_type => "web_token",
                 verification_data => random_string("cccccccccccc"),
             });
+
         my $url = URI->new ($self->url);
         my $domain = $url->host || '';
 
-        my @parts = split (/\./, $domain);
+        my $dps = Domain::PublicSuffix->new();
+        my $root = $dps->get_root_domain($domain);
 
-        if ($parts[-1] && $parts[-2]) {
-            $domain = $parts[-2] . "." . $parts[-1];
+        if ($root) {
             $self->add_to_group_verifications ({
                 verification_type => "dns",
-                verification_data => "freenode-" . random_string ("ccccccc") . "." . $domain
+                verification_data => "freenode-" . random_string ("ccccccc") .
+                "." . $root
             });
         }
     });
@@ -444,21 +447,20 @@ sub change {
         my $url = URI->new ($change_args{url});
         my $domain = $url->host || '';
 
-        my @parts = split (/\./, $domain);
+        my $dps = Domain::PublicSuffix->new();
+        my $root = $dps->get_root_domain($domain);
 
-        if ($parts[-1] && $parts[-2]) {
-            $domain = $parts[-2] . "." . $parts[-1];
+        if ($root) {
             $ver = $self->group_verifications->find_or_new({
                     'verification_type' => 'dns'
                 });
 
-            $ver->verification_data (
-                "freenode-" . random_string ("ccccccc") . "." . $domain
+            $ver->verification_data(
+                "freenode-" . random_string ("ccccccc") .  "." . $root
             );
 
             $ver->insert_or_update;
         }
-
     }
 
     $self->active_change($ret) if $change_type ne 'request';

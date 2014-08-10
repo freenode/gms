@@ -42,6 +42,7 @@ requires 'FCGI';
 requires 'FCGI::ProcManager';
 
 requires 'LWP::Protocol::https';
+requires 'Domain::PublicSuffix';
 
 test_requires 'Test::WWW::Mechanize::Catalyst';
 test_requires 'Test::MockModule';
