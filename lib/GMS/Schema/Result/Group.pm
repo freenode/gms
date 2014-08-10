@@ -427,6 +427,40 @@ sub change {
     }
 
     my $ret = $self->add_to_group_changes(\%change_args);
+
+    if (!$self->status->is_verified && !$self->status->is_active && $self->url && $self->url ne $change_args{url}) {
+        my $ver = $self->group_verifications->find_or_new(
+            {
+                'verification_type' => 'web_url'
+            }
+        );
+
+        $ver->verification_data(
+            $change_args{url} . "/" . random_string("ccccccc") . ".txt"
+        );
+
+        $ver->insert_or_update;
+
+        my $url = URI->new ($change_args{url});
+        my $domain = $url->host || '';
+
+        my @parts = split (/\./, $domain);
+
+        if ($parts[-1] && $parts[-2]) {
+            $domain = $parts[-2] . "." . $parts[-1];
+            $ver = $self->group_verifications->find_or_new({
+                    'verification_type' => 'dns'
+                });
+
+            $ver->verification_data (
+                "freenode-" . random_string ("ccccccc") . "." . $domain
+            );
+
+            $ver->insert_or_update;
+        }
+
+    }
+
     $self->active_change($ret) if $change_type ne 'request';
 
     if ($self->status->is_deleted) {
