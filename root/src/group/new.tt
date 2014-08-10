@@ -40,7 +40,7 @@ to help us verify your registration.</p>
 <tr>
   <td><label for="group_url">* Group URL</label></td>
   <td>
-    <input type="url" required id="group_url" name="group_url" style="width:90%" value="[% group_url | html %]">
+    <input type="text" required id="group_url" name="group_url" style="width:90%" value="[% group_url | html %]">
     <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 3)" onmouseout="untooltip()" />
   </td>
 </tr>
