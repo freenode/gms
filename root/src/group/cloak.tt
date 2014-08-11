@@ -15,7 +15,7 @@
                         <option value="[% namespace.namespace | html %]" >[% namespace.namespace | html %]</option>
                     [% END %]
                 </select> /
-                <input type="text" id='usercloak' onblur='addAnother()'  name="cloak_0" />
+                <input type="text" id='usercloak' onblur='setTimeout(function() { addAnother() }, 200)'  name="cloak_0" />
             </div>
             <div class='div25'>
                 <i class='icon-remove hand' onclick='removeBox(this)'></i>
