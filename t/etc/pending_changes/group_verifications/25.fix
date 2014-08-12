@@ -2,7 +2,7 @@ $HASH1 = {
            group_id    => 7,
            id          => 25,
            verification_data
-                       => 'freenode-adxxnom.example.com',
+                       => 'freenode-adxxnom.example.co.uk',
            verification_type
                        => 'dns'
          };

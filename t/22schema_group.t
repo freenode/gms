@@ -101,6 +101,9 @@ is $group->active_change->id, $approval->id, "Approval updates active_change";
 is $group->active_change->url, 'http://example.org', "Approving a change updates group state";
 is $group->url, 'http://example.org', "Approving a change updates group state";
 
+like $group->verify_url, qr/example\.org/, 'changing the url changes verify url';
+like $group->verify_dns, qr/example\.org$/, 'changing the url changes verify dns';
+
 $group->auto_verify ($useraccount->id, { freetext => 'text here' });
 
 
