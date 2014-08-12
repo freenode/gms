@@ -5,9 +5,6 @@ use Test::More;
 use Test::MockObject;
 use Test::MockModule;
 
-# We don't want this right now.
-
-
 
 my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
 $mockModel->mock ('session' => sub { });
