@@ -91,4 +91,40 @@ is $account->contact->phone, 9876543210, 'Updating contact info works';
 
 $ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
 
+$ua->get_ok("http://localhost/admin/account/AAAAAAAAS/edit", "Check contact info editing form");
+
+my $account = $schema->resultset('Account')->find({ 'accountname' => 'admin01' });
+ok $account;
+isa_ok $account, 'GMS::Schema::Result::Account';
+
+ok !$account->contact, 'No contact information yet.';
+
+$ua->submit_form(fields => {
+    phone => 9876543210
+});
+
+$ua->content_contains(
+    "Your name can't be empty",
+    "Contact information is required when creating a new contact"
+);
+
+$ua->submit_form(fields => {
+        user_name => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna risus, commodo vitae tempor vitae, sodales quis odio. Maecenas vehicula fermentum libero, sed molestie ipsum cursus in. Vivamus dignissim, velit et tristique ornare, ipsum nisi sodales amet.',
+        user_email => 'test@email.com'
+    });
+
+$ua->content_contains("Your name can be up to 255 characters", "Errors are shown");
+
+$ua->submit_form(fields => {
+    user_name  => 'Test Name',
+    user_email => 'test@email.com',
+    phone      => '12345678910'
+});
+
+ok $account->contact, "The account now has contact info";
+
+is $account->contact->name, 'Test Name', 'Updating contact info works';
+is $account->contact->email, 'test@email.com', 'Updating contact info works';
+is $account->contact->phone, '12345678910', 'Updating contact info works';
+
 done_testing;

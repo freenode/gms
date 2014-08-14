@@ -208,7 +208,7 @@ sub new {
     my ($class, $args) = @_;
 
     my @change_arg_names = (
-        'name', 'email', 'phone'
+        'name', 'email', 'phone', 'change_freetext'
     );
 
     my %change_args;

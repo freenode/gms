@@ -545,22 +545,25 @@ sub edit_account :Chained('account') :PathPart('edit') :Args(0) {
     my $account = $c->stash->{account};
     my $contact = $account->contact;
 
-    my $active_change = $contact->active_change;
-    my $last_change = $contact->last_change;
-    my $change;
+    if ($contact) {
 
-    if ($last_change->change_type->is_request) {
-        $change = $last_change;
-        $c->stash->{status_msg} = "Warning: There is already a change request pending for this contact.
-         As a result, information from the current request is used instead of the active change.";
-    } else {
-        $change = $active_change;
-    }
+        my $active_change = $contact->active_change;
+        my $last_change = $contact->last_change;
+        my $change;
 
-    if (!$c->stash->{form_submitted}) {
-        $c->stash->{user_name} = $change->name;
-        $c->stash->{user_email} = $change->email;
-        $c->stash->{phone} = $change->phone;
+        if ($last_change->change_type->is_request) {
+            $change = $last_change;
+            $c->stash->{status_msg} = "Warning: There is already a change request pending for this contact.
+             As a result, information from the current request is used instead of the active change.";
+        } else {
+            $change = $active_change;
+        }
+
+        if (!$c->stash->{form_submitted}) {
+            $c->stash->{user_name} = $change->name;
+            $c->stash->{user_email} = $change->email;
+            $c->stash->{phone} = $change->phone;
+        }
     }
 
     $c->stash->{template} = 'admin/edit_account.tt';
@@ -583,7 +586,25 @@ sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
     my $contact = $account->contact;
 
     try {
-        $contact->change ($c->user->account->id, 'admin', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, phone => $params->{phone}, 'change_freetext' => $params->{freetext} });
+        if ($contact) {
+            $contact->change (
+                $c->user->account->id,
+                'admin', {
+                    'name' => $params->{user_name},
+                    'email' => $params->{user_email},
+                    phone => $params->{phone},
+                    'change_freetext' => $params->{freetext}
+                }
+            );
+        } else {
+            $contact = $c->model('DB::Contact')->create({
+                account_id      => $account->id,
+                name            => $params->{user_name},
+                email           => $params->{user_email},
+                phone           => $params->{phone},
+                change_freetext => $params->{freetext}
+            });
+        }
     }
     catch (GMS::Exception::InvalidChange $e) {
         $c->stash->{errors} = $e->message;
