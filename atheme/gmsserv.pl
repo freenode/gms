@@ -201,18 +201,6 @@ sub gms_fregister {
     } elsif (!$requestor_acc) {
         $source->fail (Atheme::Fault::nosuch_target(), "The account with uid $requestor is not registered");
     } else {
-        my %hook_data = {
-            'name'     => $channel,
-            'chan'     => $chan,
-            'approved' => 0
-        };
-
-        Atheme::Hooks::call_hooks ('channel_can_register', \%hook_data);
-
-        if ($hook_data{approved} != 0) {
-            return;
-        }
-
         my $creg = $chan->register ($source, $nf_acc);
 
         if ( $chan->ts > 0 ) {
