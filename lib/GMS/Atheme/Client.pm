@@ -289,4 +289,57 @@ sub memo {
     return $session->command("MemoServ", "send", $user, $memo);
 }
 
+=head2 listchans
+
+Returns a list of channels matching a pattern.
+
+=cut
+
+sub listchans {
+    my ($self, $pattern) = @_;
+    my $session = $self->{_session};
+
+    if (!$pattern) {
+        die GMS::Exception->new ("Please provide a search pattern");
+    }
+
+    my $result_str = $session->command ( 'ChanServ', 'list', 'pattern', $pattern );
+
+    my @results = split /\n/, $result_str;
+
+    # Channels matching pattern...
+    # And final count.
+    shift @results;
+    pop @results;
+
+    foreach my $result (@results) {
+        ($result) = $result =~ /^- (\#\S+) \(\S+\)/;
+    }
+
+    return \@results;
+}
+
+=head2 list_group_chans
+
+Returns a listchans for the given namespaces.
+
+=cut
+
+sub list_group_chans {
+    my ($self, @namespaces) = @_;
+
+    my @results;
+
+    foreach my $namespace (@namespaces) {
+        # #chan and #chan-*
+        my $resultref = $self->listchans("#" . $namespace->namespace);
+        push @results, @$resultref;
+
+        $resultref = $self->listchans("#" . $namespace->namespace . "-*");
+        push @results, @$resultref;
+    }
+
+    return \@results;
+}
+
 1;

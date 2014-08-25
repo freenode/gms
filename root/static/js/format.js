@@ -291,6 +291,11 @@ function format_group ( group ) {
     return html;
 }
 
+function format_group_id (text, group_id) {
+    text = text.replace(/\%group_id/g, group_id);
+    return text;
+}
+
 function format_email_change ( new_email, old_email ) {
     var html = __EMAIL_CHANGED;
 

@@ -34,6 +34,7 @@ var __ID_APPLY_ALL            = 'apply_all_';
 var __ID_APPROVE              = 'approve_';
 var __ID_APPROVE_ALL          = 'approve_ALL_the_';
 var __ID_BTN_ADD              = 'btn_add';
+var __ID_CHANNEL              = 'channel';
 var __ID_CLOAK_CONTAINER      = 'cloak_container';
 var __ID_CLOAK                = 'cloak';
 var __ID_CLOAKNS              = 'cloakns';
@@ -168,11 +169,12 @@ var __URL_ADMIN_SUBMIT_GROUP  = __ROOT + '/json/admin/approve_groups/submit';
 var __URL_ADMIN_SUBMIT_NS     = __ROOT + '/json/admin/approve_namespaces/submit';
 
 var __URL_GROUP               = __ROOT + '/admin/group/%group_id/view';
+var __URL_GROUP_LISTCHANS     = __ROOT + '/json/group/%group_id/listchans';
+
 var __URL_STAFF_ACCOUNTNAME   = __ROOT + '/json/staff/search_account_name';
-var __URL_STAFF_FULLNAME     = __ROOT + '/json/staff/search_full_name';
+var __URL_STAFF_FULLNAME      = __ROOT + '/json/staff/search_full_name';
 var __URL_STAFF_GROUPNAME     = __ROOT + '/json/staff/search_group_name';
-var __URL_STAFF_NS            = __ROOT +
-'/json/staff/search_ns_name';
+var __URL_STAFF_NS            = __ROOT + '/json/staff/search_ns_name';
 var __URL_USER                = __ROOT + '/staff/account/%account_id/view';
 var __URL_USER_ACCEPT_CLOAK   = __ROOT + '/cloak/%id/approve';
 
