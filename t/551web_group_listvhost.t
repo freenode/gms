@@ -59,14 +59,28 @@ $mockAtheme->mock ( 'command' => sub {
 $mockModel->mock ('session' => sub { $mockAtheme });
 
 $ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");
+
+$ua->content_contains ("admin - group0/cloak", "Cloak is visible - no need for a form");
+$ua->content_contains ("user - group0/anothercloak", "Cloak is visible - no need for a form");
+
+my $group = $schema->resultset('Group')->find({ id => 2 });
+$group->add_to_cloak_namespaces({ namespace => 'group01', 'group_id' => 2, 'status' => 'active', 'account' => 'AAAAAAAAH'});
+
+$ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");
+
+$ua->content_lacks ("admin - group0/cloak", "need to choose namespace if more than one");
+$ua->content_lacks ("user - group0/anothercloak", "need to choose namespace if more than one");
+
 $ua->submit_form (
     fields => {
         'namespace' => 'group0'
     }
 );
 
-$ua->content_contains ("admin - group0/cloak", "Cloak is visible");
-$ua->content_contains ("user - group0/anothercloak", "Cloak is visible");
+
+$ua->content_contains ("admin - group0/cloak", "Cloak is visible after form");
+$ua->content_contains ("user - group0/anothercloak", "Cloak is visible after form");
+
 
 $ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");
 $ua->submit_form (

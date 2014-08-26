@@ -814,6 +814,9 @@ sub listvhost :Chained('single_group') :PathPart('listvhost') :Args(0) {
     if (! @cloak_namespaces) {
         $c->stash->{error_msg} = "This group has no cloak namespaces. Please request a cloak namespace first.";
         $c->detach ('edit_cloak_namespaces');
+    } if (scalar @cloak_namespaces == 1) {
+        $c->stash->{namespace} = $cloak_namespaces[0]->namespace;
+        $c->detach('do_listvhost');
     }
 
     $c->stash->{cloak_namespaces} = \@cloak_namespaces;
@@ -833,7 +836,7 @@ sub do_listvhost :Chained('single_group') :PathPart('listvhost/submit') :Args(0)
     my $group = $c->stash->{group};
     my $p = $c->request->params;
 
-    my $namespace = $p->{namespace};
+    my $namespace = $c->stash->{namespace} || $p->{namespace};
 
     if ( !$group->active_cloak_namespaces->find ({ 'namespace' => $namespace }) ) {
         $c->stash->{error_msg} = "The namespace $namespace does not belong in your group's namespaces.";
