@@ -520,4 +520,30 @@ $group = $schema->resultset('Group')->create({
 });
 ok $group, "group creation works if we give an address";
 
+$namespace = $group->add_to_channel_namespaces ({
+        'group_id' => $group->id,
+        'account' => $adminaccount,
+        'namespace' => 'test',
+        'status' => 'active'
+    });
+my $cloak_namespace = $group->add_to_cloak_namespaces ({
+        'group_id' => $group->id,
+        'account' => $adminaccount,
+        'namespace' => 'test',
+        'status' => 'active'
+    });
+
+ok $namespace;
+ok $namespace->status eq 'active';
+
+ok $cloak_namespace;
+ok $cloak_namespace->status eq 'active';
+
+ok $group->change ( $adminaccount, 'admin', { 'status' => 'deleted' });
+$namespace->discard_changes;
+$cloak_namespace->discard_changes;
+
+ok $namespace->status eq 'deleted', 'namespaces are deleted when deleting a group';
+ok $cloak_namespace->status eq 'deleted', 'namespaces are deleted when deleting a group';
+
 done_testing;

@@ -469,6 +469,14 @@ sub change {
         # deleted only needs to be an increasing integer value; the current
         # time seems convenient.
         $self->deleted(time) unless $self->deleted;
+
+        foreach my $cns ($self->active_channel_namespaces->all) {
+            $cns->change( $account, 'workflow_change', { status => 'deleted', 'change_freetext' => $args->{change_freetext} } );
+        }
+
+        foreach my $clns ($self->active_cloak_namespaces->all) {
+            $clns->change( $account, 'workflow_change', { status => 'deleted', 'change_freetext' => $args->{change_freetext} } );
+        }
     } else {
         $self->deleted(0);
     }
