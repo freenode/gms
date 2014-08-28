@@ -2,6 +2,8 @@
 PREFIX ?= /home/gms/freenode/atheme/
 ATHEME ?= /home/gms/atheme
 
+SUBDIR = freenode
+
 ATHEME_CFLAGS = -I$(ATHEME)/include -I$(ATHEME)/libmowgli-2/src/libmowgli -DDATADIR=\"$(PREFIX)/etc\"
 
 SOURCES = \
@@ -23,6 +25,6 @@ clean:
 .PHONY: install
 
 install: $(MODULES)
-	mkdir -p $(PREFIX)/modules/scripting/lib/gms/
-	install -t $(PREFIX)/modules/scripting/lib/gms/ $(SCRIPTS)
-	install -t $(PREFIX)/modules/ $(MODULES)
+	install -d $(PREFIX)/modules/$(SUBDIR)
+	install -t $(PREFIX)/modules/$(SUBDIR) $(SCRIPTS)
+	install -t $(PREFIX)/modules/$(SUBDIR) $(MODULES)
