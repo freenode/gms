@@ -154,7 +154,6 @@ function addClickExpand (elem, type) {
 function afterLoad() {
     pageLoad(__TYPE_GROUP);
     pageLoad(__TYPE_NEW_GC);
-    pageLoad(__TYPE_CHANGE, __TYPE_CC);
     pageLoad(__TYPE_CHANGE, __TYPE_CLNC);
     pageLoad(__TYPE_CHANGE, __TYPE_CNC);
     pageLoad(__TYPE_CHANGE, __TYPE_GC);

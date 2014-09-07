@@ -544,9 +544,6 @@ var __TEMPLATE_CHANGES         =
 "<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_GC + "'>" + __GROUP_CHANGES + "</a> (%pending_gc pending)" +
 "<div id='" + __PREFIX_RESPONSE + __TYPE_GC + "'></div>" +
 
-"<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_CC + "'>" + __CONTACT_CHANGES + "</a> (%pending_cc pending)" +
-"<div id='" + __PREFIX_RESPONSE + __TYPE_CC + "'></div>" +
-
 "<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_CNC + "'>" + __CNC + "</a> (%pending_cnc pending)" +
 "<div id='" + __PREFIX_RESPONSE + __TYPE_CNC + "'></div>" +
 

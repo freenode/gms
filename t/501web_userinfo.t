@@ -64,17 +64,12 @@ $ua->submit_form(fields => {
         user_email => 'test03@example.com',
     });
 
-$ua->content_contains("Successfully submitted the change request", "Check editing contact info");
+$ua->content_contains("Successfully changed contact info", "Check editing contact info");
 
-$ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
+$contact->discard_changes;
 
-$ua->content_contains("There is already a change request pending", "Perevious requests to edit are considered");
-
-$ua->content_contains("Second Contact Test", "The input fields have the new information for editing");
-
-$ua->content_contains('test03@example.com', "The input fields have the new information for editing");
-
-$ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
+ok $contact->name eq 'Second Contact Test', 'Changing info works';
+ok $contact->email eq 'test03@example.com';
 
 $ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
 

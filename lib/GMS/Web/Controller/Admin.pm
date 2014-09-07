@@ -57,12 +57,10 @@ sub index :Chained('base') :PathPart('') :Args(0) {
 
     $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;
     $c->stash->{pending_namespaces} = $c->model('DB::ChannelNamespace')->search_pending->count + $c->model('DB::CloakNamespace')->search_pending->count;
-    $c->stash->{pending_contacts} = $c->model('DB::GroupContact')->search_pending->count;
 
     $c->stash->{pending_changes} =
       $c->model('DB::GroupContactChange')->active_requests->count
       + $c->model('DB::GroupChange')->active_requests->count
-      + $c->model('DB::ContactChange')->active_requests->count
       + $c->model('DB::ChannelNamespaceChange')->active_requests->count
       + $c->model('DB::CloakNamespaceChange')->active_requests->count;
 
@@ -758,68 +756,6 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         }
 
         $c->stash->{template} = 'admin/search_gc_results.tt';
-    } elsif ($change_item == 3) { #ContactChanges
-        $change_rs = $c->model('DB::ContactChange');
-
-        my $accname = $p->{accname};
-        my $account_search;
-
-        if ($accname) {
-            try {
-                my $accounts = $c->model('Accounts');
-                my $account = $accounts->find_by_name ( $accname );
-                my $uid = $account->id;
-
-                $account_search = $uid;
-            }
-            catch (RPC::Atheme::Error $e) {
-                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-
-                my $account_rs = $c->model('DB::Account');
-                my $account = $account_rs->find ({ accountname => $accname });
-
-                if (!$account) {
-                    $c->stash->{error_msg} = "Could not find an account with that account name.";
-                    $c->detach ('search_changes');
-                }
-
-                my $uid = $account->id;
-                $account_search = $uid;
-            }
-            catch (GMS::Exception $e) {
-                $c->stash->{error_msg} = $e->message;
-                $c->detach('search_changes');
-            }
-        } else {
-            $account_search = { 'ilike', '%' };
-        }
-
-        $rs = $change_rs -> search(
-            { 'contact.account_id' => $account_search },
-            {
-                join => 'contact',
-                order_by => 'id',
-                page => $page,
-                rows => 15
-            }
-        );
-
-        my @rows = $rs->all;
-
-        try {
-            my $session = $c->model('Atheme')->session;
-
-            foreach my $row (@rows) {
-                my $gc_change = GMS::Domain::ContactChange->new ( $session, $row );
-                push @results, $gc_change;
-            }
-        }
-        catch (RPC::Atheme::Error $e) {
-            @results = @rows;
-            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-        }
-
-        $c->stash->{template} = 'admin/search_cc_results.tt';
     } elsif ($change_item == 4) { #ChannelNamespaceChanges
         $change_rs = $c->model('DB::ChannelNamespaceChange');
 

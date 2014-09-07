@@ -292,13 +292,6 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
                 my $change = GMS::Domain::GroupChange->new ($session, $change_row);
                 push @to_approve, $change;
             }
-        } elsif ($change_item && $change_item eq 'cc') { #contact change
-            @approve_changes = $c->model ("DB::ContactChange")->active_requests();
-
-            foreach my $change_row (@approve_changes) {
-                my $change = GMS::Domain::ContactChange->new ($session, $change_row);
-                push @to_approve, $change;
-            }
         } elsif ($change_item && $change_item eq 'cnc') { #channel namespace change
             @approve_changes = $c->model ("DB::ChannelNamespaceChange")->active_requests();
 
@@ -321,8 +314,6 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
             @to_approve = $c->model ("DB::GroupContactChange")->active_requests();
         } elsif ($change_item && $change_item eq 'gc') { #group change
             @to_approve = $c->model ("DB::GroupChange")->active_requests();
-        } elsif ($change_item && $change_item eq 'cc' ) { #contact change
-            @to_approve = $c->model ("DB::ContactChange")->active_requests();
         } elsif ($change_item && $change_item eq 'cnc' ) { #channel namespace change
             @to_approve = $c->model ("DB::ChannelNamespaceChange")->active_requests();
         } elsif ($change_item && $change_item eq 'clnc' ) { #cloak namespace change
@@ -332,7 +323,6 @@ sub approve_change :Chained('base') :PathPart('approve_change') :Args(0) {
 
     $c->stash->{json_pending_groupcontact} = $c->model("DB::GroupContactChange")->active_requests->count;
     $c->stash->{json_pending_group} = $c->model("DB::GroupChange")->active_requests->count;
-    $c->stash->{json_pending_contact} = $c->model("DB::ContactChange")->active_requests->count;
     $c->stash->{json_pending_cns} = $c->model("DB::ChannelNamespaceChange")->active_requests->count;
     $c->stash->{json_pending_clns} = $c->model("DB::CloakNameSpaceChange")->active_requests->count;
 
@@ -361,9 +351,6 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
     } elsif ($change_item eq 'gc') { #group change
         $change_rs = $c->model('DB::GroupChange');
         $type = "GroupChange";
-    } elsif ($change_item eq 'cc') { #contact change
-        $change_rs = $c->model('DB::ContactChange');
-        $type = "ContactChange";
     } elsif ($change_item eq 'cnc') { #channel namespace change
         $change_rs = $c->model('DB::ChannelNamespaceChange');
         $type = "ChannelNamespaceChange";
@@ -389,8 +376,6 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                     $target = $change->group_contact->contact->account->accountname . " ( for " . $change->group_contact->group->group_name . " ) ";
                 } elsif ($change_item eq 'gc') { #group change
                     $target = $change->group->group_name;
-                } elsif ($change_item eq 'cc') { #contact change
-                    $target = $change->contact->account->accountname;
                 } elsif ($change_item eq 'cnc') { #channel namespace change
                     $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
                 } elsif ($change_item eq 'clnc') { #cloak namespace change

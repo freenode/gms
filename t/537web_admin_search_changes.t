@@ -79,18 +79,6 @@ $ua->get_ok("http://localhost/admin/search_changes", "Search changes page works"
 
 $ua->submit_form (
     fields => {
-        change_item => 3,
-        accname => 'account1'
-    }
-);
-
-$ua->content_contains ('request', 'Change is there');
-$ua->content_contains ('Email Two1', 'Change is there');
-
-$ua->get_ok("http://localhost/admin/search_changes", "Search changes page works");
-
-$ua->submit_form (
-    fields => {
         change_item => 4,
         groupname => 'group031',
         namespace => 'namespace1'

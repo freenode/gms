@@ -98,8 +98,8 @@ sub update :Path('update') :Args(0) :Local :VerifyToken {
 
     if ($contact) {
         try {
-            $contact->change ($account->id, 'request', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, phone => $params->{phone} });
-            $msg = "Successfully submitted the change request. Please wait for staff to approve the change.";
+            $contact->change ($account->id, 'workflow_change', { 'name' => $params->{user_name}, 'email' => $params->{user_email}, phone => $params->{phone} });
+            $msg = "Successfully changed contact info.";
         }
         catch (GMS::Exception::InvalidChange $e) {
             $c->stash->{errors} = $e->message;
