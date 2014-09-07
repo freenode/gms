@@ -700,7 +700,7 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         $rs = $change_rs -> search(
             {
                 'contact.account_id' => $account_search,
-                'group.group_name' => { 'ilike', $groupname }
+                'group.group_name' => { 'ilike', '%' . $groupname . '%' }
             },
             {
                 join => { 'group_contact' => [ 'contact', 'group' ] },
@@ -733,7 +733,7 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
         $groupname =~ s#_#\\_#g;
 
         $rs = $change_rs -> search(
-            { 'group.group_name' => { 'ilike', $groupname } },
+            { 'group.group_name' => { 'ilike', '%' . $groupname . '%' } },
             {
                 join => 'group',
                 order_by => 'id',
@@ -831,8 +831,8 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
 
         $rs = $change_rs -> search(
             {
-                'namespace.namespace' => { 'ilike', $namespace },
-                'group.group_name' => { 'ilike', $groupname }
+                'namespace.namespace' => { 'ilike', '%' . $namespace . '%' },
+                'group.group_name' => { 'ilike', '%' . $groupname . '%' }
             },
             {
                 join => [ 'namespace', 'group' ],
@@ -869,8 +869,8 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
 
         $rs = $change_rs -> search(
             {
-                'namespace.namespace' => { 'ilike', $namespace },
-                'group.group_name' => { 'ilike', $groupname }
+                'namespace.namespace' => { 'ilike', '%' .  $namespace  . '%'},
+                'group.group_name' => { 'ilike', '%' . $groupname . '%' }
             },
             {
                 join => [ 'namespace', 'group' ],

@@ -161,7 +161,7 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
         my $group_name = $p->{group_name};
         $group_name =~ s#_#\\_#g; #escape _ so it's not used as a wildcard.
 
-        push @search, 'group_name' => { 'ilike', $group_name };
+        push @search, 'group_name' => { 'ilike', '%' . $group_name . '%' };
     }
 
     if ($p->{gc_accname}) {
@@ -302,7 +302,7 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
         $name =~ s#_#\\_#g;
 
         push @search, {
-            'active_change.name' => { ilike => $name },
+            'active_change.name' => { ilike => '%' . $name . '%' },
         };
         push @join, { 'contact' => 'active_change' };
     }
@@ -400,7 +400,7 @@ sub do_search_namespaces :Chained('base') :PathPart('search_namespaces/submit') 
     $namespace =~ s#_#\\_#g; #escape _ so it's not used as a wildcard.
 
     my $rs = $namespace_rs -> search(
-        { 'namespace' => { 'ilike' => $namespace } },
+        { 'namespace' => { 'ilike' => '%' . $namespace . '%' } },
         {
             page => $page,
             rows => 15,

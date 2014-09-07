@@ -146,4 +146,16 @@ $ua->content_contains ('transfer', 'change is there');
 $ua->content_contains ('applied', 'change is there');
 $ua->content_contains ('admin', 'change is there');
 
+$ua->get_ok("http://localhost/admin/search_changes", "Search changes page works");
+
+$ua->submit_form (
+    fields => {
+        change_item => 1,
+        gc_accname => 'account1',
+        gc_groupname => 'oup'
+    }
+);
+
+$ua->content_contains('group021', 'wildcard match is used.');
+
 done_testing;

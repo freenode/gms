@@ -176,4 +176,15 @@ $ua->click_button(
 $ua->content_contains("group111", "paging works");
 $ua->content_contains("name='current_page' value='2'", "We're at 2nd page");
 
+$ua->get("http://localhost/staff/search_groups");
+
+$ua->submit_form(
+    fields => {
+        group_name => 'roup',
+    }
+);
+
+$ua->content_contains('group2', 'wildcard match is used');
+$ua->content_contains('group3', 'wildcard match is used');
+
 done_testing;

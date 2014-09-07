@@ -124,4 +124,16 @@ $ua->click_button(
 $ua->content_contains("test101", "paging works");
 $ua->content_contains("name='current_page' value='2'", "We're at 2nd page");
 
+$ua->get("http://localhost/staff/search_namespaces");
+
+$ua->submit_form(
+    fields => {
+        namespace => 'est',
+        search_item => 1,
+    }
+);
+
+$ua->content_contains('test106', 'Wildcard match is used');
+$ua->content_contains('test107', 'Wildcard match is used');
+
 done_testing;

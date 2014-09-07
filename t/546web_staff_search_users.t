@@ -140,4 +140,15 @@ $ua->click_button(
 $ua->content_contains("Name 25", "paging works");
 $ua->content_contains("name='current_page' value='2'", "We're at 2nd page");
 
+$ua->get("http://localhost/staff/search_users");
+
+$ua->submit_form(
+    fields => {
+        fullname => 'ame',
+    }
+);
+
+$ua->content_contains('Name 20', 'Wild card match is used.');
+$ua->content_contains('Name 21', 'Wild card match is used.');
+
 done_testing;

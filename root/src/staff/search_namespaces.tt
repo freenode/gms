@@ -1,7 +1,7 @@
 <form method="post" action="[% c.uri_for('/staff/search_namespaces/submit') %]">
 
 <p>
-  Enter the search criteria. Wildcard: '%'
+  Enter the search criteria.
 </p>
 
 <table class='fullwidth'>
