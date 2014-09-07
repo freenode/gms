@@ -1237,6 +1237,81 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     $c->stash->{template} = 'group/added.tt';
 }
 
+=head2 listchans
+
+Displays a list of channels under the group's channel namespaces
+
+=cut
+
+sub listchans :Chained('single_group') :PathPart('listchans') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my @channel_namespaces = $group->active_channel_namespaces;
+
+    if (! @channel_namespaces) {
+        $c->stash->{error_msg} = "This group has no channel namespaces. Please request channel namespace first.";
+        $c->detach ('edit_channel_namespaces');
+    } if (scalar @channel_namespaces == 1) {
+        $c->stash->{namespace} = $channel_namespaces[0]->namespace;
+        $c->detach('do_listchans');
+    }
+
+    $c->stash->{channel_namespaces} = \@channel_namespaces;
+    $c->stash->{template} = 'group/listchans.tt';
+}
+
+=head2 do_listchans
+
+Process the L</listchans> form.
+
+=cut
+
+sub do_listchans :Chained('single_group') :PathPart('listchans/submit') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $group = $c->stash->{group};
+    my $p = $c->request->params;
+
+    my $namespace =  $c->stash->{namespace} || $p->{namespace};
+
+    try {
+        my $session = $c->model('Atheme')->session;
+        my $client = GMS::Atheme::Client->new ($session);
+        my %results;
+        my @namespaces;
+
+        if ($namespace) {
+            if ( !( $namespace = $group->active_channel_namespaces->find ({ 'namespace' => $namespace }) ) ) {
+                $c->stash->{error_msg} = "The namespace $namespace does not belong in your group's namespaces.";
+                $c->detach('listchans');
+            }
+
+            @namespaces = ($namespace);
+        } else {
+            @namespaces = $group->active_channel_namespaces->all;
+        }
+
+        foreach my $namespace (@namespaces) {
+            my $namespace_name = $namespace->namespace;
+
+            my $resultref = $client->listchans("#$namespace_name");
+            $results{"#$namespace_name"} = $resultref;
+
+            $resultref = $client->listchans("#$namespace_name-*");
+            $results{"#$namespace_name-*"} = $resultref;
+        }
+
+        $c->stash->{results} = \%results;
+    }
+    catch (RPC::Atheme::Error $e) {
+        $c->stash->{error_msg} = $e->description;
+        $c->detach ('listchans');
+    }
+
+    $c->stash->{template} = 'group/listchans_results.tt';
+}
+
 =head2 notice_staff_chan
 
 Sends a notice to the staff channel about an action, dying quietly if there's

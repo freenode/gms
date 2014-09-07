@@ -48,6 +48,9 @@
 <a href="[% c.uri_for ("/group/${group.id}/take_over"); %]">Take over a channel that's in the group's namespace.</a>
 </li>
 <li>
+<a href="[% c.uri_for ("/group/${group.id}/listchans"); %]">View channels currently in the group's namespaces.</a>
+</li>
+<li>
 <a href="[% c.uri_for ("/group/${group.id}/cloak"); %]">Assign a user a group cloak.</a>
 </li>
 <li>

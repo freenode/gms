@@ -1,0 +1,21 @@
+[% META title = 'List Channels' %]
+
+[% total = 0 %]<br/>
+
+[% FOREACH namespace IN results.keys %]
+    [% NEXT IF !results.$namespace.size %]
+
+    <h3>[% namespace %]</h3>
+    <ul>
+    [% FOREACH channel IN results.$namespace %]
+        <li>[% channel %]</li>
+        [% total = total + 1 %]
+    [% END %]
+    </ul>
+[% END %]
+
+<p>
+    <b>[% total %]</b> result(s).
+</p>
+
+<a href="[% c.uri_for ("/group/${group.id}/view") %]">View group status</a>
