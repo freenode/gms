@@ -296,28 +296,6 @@ isa_ok $group, 'GMS::Schema::Result::Group';
 
 is $group->url, 'http://example.com/', 'No http or https means http:// is added automatically';
 
-$group = $schema->resultset('Group')->create({
-    account => $useraccount,
-    group_name => 'another',
-    group_type => 'informal',
-    url => 'invalid..com',
-    address => $address->id
-});
-isa_ok $group, 'GMS::Schema::Result::Group';
-
-is $group->verify_dns, undef, 'No verify DNS on invalid URL';
-
-$group = $schema->resultset('Group')->create({
-    account => $useraccount,
-    group_name => 'yet_another',
-    group_type => 'informal',
-    url => 'invalid',
-    address => $address->id
-});
-isa_ok $group, 'GMS::Schema::Result::Group';
-
-is $group->verify_dns, undef, 'No verify DNS on invalid URL';
-
 # We need to test what happens if $parts[-1] && $parts[-2]
 # in GMS::Schema::Result::Group is empty. Because we can't
 # provide an empty URL, we'll have to mock the URI module.

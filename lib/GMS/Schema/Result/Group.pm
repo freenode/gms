@@ -233,7 +233,6 @@ use LWP::UserAgent;
 use HTTP::Request;
 use base 'DBIx::Class::Core';
 use Net::DNS qw();
-use Domain::PublicSuffix qw( );
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
@@ -376,14 +375,11 @@ sub insert {
         my $url = URI->new ($self->url);
         my $domain = $url->host || '';
 
-        my $dps = Domain::PublicSuffix->new();
-        my $root = $dps->get_root_domain($domain);
-
-        if ($root) {
+        if ($domain) {
             $self->add_to_group_verifications ({
                 verification_type => "dns",
                 verification_data => "freenode-" . random_string ("ccccccc") .
-                "." . $root
+                "." . $domain
             });
         }
     });
@@ -447,16 +443,13 @@ sub change {
         my $url = URI->new ($change_args{url});
         my $domain = $url->host || '';
 
-        my $dps = Domain::PublicSuffix->new();
-        my $root = $dps->get_root_domain($domain);
-
-        if ($root) {
+        if ($domain) {
             $ver = $self->group_verifications->find_or_new({
                     'verification_type' => 'dns'
                 });
 
             $ver->verification_data(
-                "freenode-" . random_string ("ccccccc") .  "." . $root
+                "freenode-" . random_string ("ccccccc") .  "." . $domain
             );
 
             $ver->insert_or_update;
