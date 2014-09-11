@@ -54,7 +54,6 @@ test_requires 'Test::Pod::Coverage';
 # XXX: remove these dependencies eventually -- they're here for development/debugging
 requires 'Catalyst::Plugin::StackTrace';
 
-catalyst;
 
 install_script glob('script/*.pl');
 auto_install;

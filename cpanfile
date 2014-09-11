@@ -34,6 +34,7 @@ requires 'Net::DNS';
 requires 'FCGI';
 requires 'FCGI::ProcManager';
 
+requires 'Catalyst::Plugin::StackTrace';
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
 
@@ -47,6 +48,4 @@ requires 'Test::Pod';
 requires 'Test::Pod::Coverage';
 }
 
-# XXX: remove these dependencies eventually -- they're here for development/debugging
-requires 'Catalyst::Plugin::StackTrace';
 
