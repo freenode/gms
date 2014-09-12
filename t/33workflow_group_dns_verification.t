@@ -35,9 +35,7 @@ isa_ok $group, "GMS::Schema::Result::Group";
 
 my $mock = Test::MockObject->new;
 
-$mock->mock ('answer' => sub { $mock });
-$mock->mock ('type'   => sub { 'CNAME' });
-$mock->mock ('cname'  => sub { 'anything.freenode.net' });
+$mock->mock ('answer' => sub { { 'char_str_list' => [ $group->verify_dns ] } });
 
 my $mockDNS = Test::MockModule->new ('Net::DNS::Resolver');
 $mockDNS->mock ('search', sub { $mock });
@@ -56,16 +54,17 @@ $group = $schema->resultset('Group')->create({
 
 isa_ok $group, "GMS::Schema::Result::Group";
 
-$mock->mock ('answer' => sub { $mock });
-$mock->mock ('type'   => sub { 'CNAME' });
-$mock->mock ('cname'  => sub { 'wrong.invalid' });
+$mock->mock ('answer' => sub { { char_str_list => [ ] } });
 
 is $group->auto_verify ($user), -1, 'Wrong DNS returns -1';
 
-$mock->mock ('answer' => sub { $mock });
-$mock->mock ('type'   => sub { 'CNAME' });
-$mock->mock ('cname'  => sub { 'wrong' });
+$mock->mock ('answer' => sub { { 'address' => '127.0.0.127' } });
+
+is $group->auto_verify ($user), 1, 'Verifying group with A record works';
+
+$mock->mock ('answer' => sub { { 'address' => '' } });
 
 is $group->auto_verify ($user), -1, 'Wrong DNS returns -1';
+
 
 done_testing;

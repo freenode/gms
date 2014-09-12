@@ -3,13 +3,16 @@
 <h2>Verify [% group.group_name | html %]</h2>
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/verify/submit") %]">
-    Here are the possible verification methods:<br/><br/>
+    Here are the possible verification methods. You have to do <b>one</b> of the below:<br/><br/>
     <ul >
         <li>
-            Create a file called [% group.verify_url | html %] with content [% group.verify_token %]
+            Create a file called <b>[% group.verify_url | html %]</b> with content <b>[% group.verify_token %]</b>
         </li>
         <li>
-            CNAME [% group.verify_dns | html %] to freenode.net
+            Create a TXT record on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b>.
+        </li>
+        <li>
+            Alias <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>
         </li>
         <li>
             Enter free text in the area below explaining why you can't do the above:<br/><br/>

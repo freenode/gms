@@ -82,9 +82,9 @@ $ua->content_contains ("successfully verified", "Web verification worked");
 
 my $mock = Test::MockObject->new;
 
-$mock->mock ('answer' => sub { $mock });
-$mock->mock ('type'   => sub { 'CNAME' });
-$mock->mock ('cname'  => sub { 'freenode.net' });
+$group = $schema->resultset('Group')->find({ id => 7 });
+
+$mock->mock ('answer' => sub { { 'char_str_list' => [ $group->verify_dns ] } });
 
 my $search;
 

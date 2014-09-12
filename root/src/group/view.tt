@@ -8,7 +8,11 @@
 <tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
 <tr> <td>Verification URL</td>  <td>[% group.verify_url | html %]</td> </tr>
 <tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
-<tr> <td>DNS pointing to freenode.net</td> <td>[%group.verify_dns | html %]</td> </tr>
+<tr> <td colspan="2">&nbsp;</td> </tr>
+<tr> <th colspan="2">DNS verification:</td> </tr>
+<tr> <td colspan="2">The DNS verification can be either a TXT on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b> or aliasing <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>.</td></tr>
+
+
 [% IF group.git_url %]
 <tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url | html %]</td> </tr>
 [% END %]

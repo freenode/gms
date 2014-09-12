@@ -621,25 +621,31 @@ sub auto_verify {
     }
 
     if ($self->verify_dns) {
-        my $dns_query = Net::DNS::Resolver->new->search ( $self->verify_dns );
+        my $dns_query = Net::DNS::Resolver->new->search($self->verify_dns, 'TXT');
 
         if ($dns_query) {
             foreach my $result ($dns_query->answer) {
-                if ( $result->type ne 'CNAME' ) {
-                    next;
+                if ($result->{char_str_list} && $result->{char_str_list}->[0] eq $self->verify_dns) {
+                    $self->change (
+                        $account,
+                        'workflow_change', { status => 'pending_auto' }
+                    );
+
+                    return 1;
                 }
+            }
+        }
 
-                my @parts = split (/\./, $result->cname);
-                my $domain;
+        $dns_query = Net::DNS::Resolver->new->search($self->verify_dns, 'A');
 
-                if ($parts[-1] && $parts[-2]) {
-                    $domain = $parts[-2] . "." . $parts[-1];
-                } else {
-                    return -1;
-                }
+        if ($dns_query) {
+            foreach my $result ($dns_query->answer) {
+                if ($result->{address} && $result->{address} eq '127.0.0.127') {
+                    $self->change (
+                        $account,
+                        'workflow_change', { status => 'pending_auto' }
+                    );
 
-                if ($domain eq "freenode.net") {
-                    $self->change ($account, 'workflow_change', { status => 'pending_auto' } );
                     return 1;
                 }
             }
