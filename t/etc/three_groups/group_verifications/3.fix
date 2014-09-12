@@ -1,4 +1,5 @@
 $HASH1 = {
     group_id => 3,
-    dns => 'freenode-g34tg.localhost.'
+    verification_type => 'dns',
+    verification_data => 'freenode-g34tg.localhost.'
 };
