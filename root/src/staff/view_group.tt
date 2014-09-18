@@ -21,6 +21,10 @@
 [% END %]
 
 <h3>Contacts:</h3>
+[% IF !group.active_contacts %]
+<p>( None )</p>
+[% END %]
+
 <ul>
 [% FOREACH contact = group.active_contacts %]
 <li>
@@ -36,8 +40,10 @@
 [% IF admin -%]
 <h3>Historical/Inactive Contacts:</h3>
 <ul>
+[% count = 0 %]
 [% FOREACH gc = group.group_contacts %]
   [% IF gc.status != 'active' -%]
+    [% count = count + 1 %]
     <li>
       [% gc.contact.name | html %] ([% gc.contact.account.accountname | html %]) [% gc.status %]
       [% IF gc.contact.account.dropped %]
@@ -47,6 +53,9 @@
   [% END %]
 [% END %]
 </ul>
+[% IF count == 0 %]
+<p>( None )</p>
+[% END %]
 [% END %]
 
 <h3>Actions:</h3>

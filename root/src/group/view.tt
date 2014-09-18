@@ -24,6 +24,9 @@
 [% END %]
 
 <h3>Contacts:</h3>
+[% IF !group.active_contacts %]
+( None )
+[% END %]
 <ul>
 [% FOREACH contact = group.active_contacts %]
 <li>
