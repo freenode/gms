@@ -262,6 +262,17 @@ __PACKAGE__->has_many(
     }
 );
 
+__PACKAGE__->has_many(
+    "pending_group_contacts",
+    "GMS::Schema::Result::GroupContact",
+    { "foreign.group_id" => "self.id" },
+    { 'join' => 'active_change',
+      'where' => { 'active_change.status' => [ 'invited', 'pending_staff' ] }
+    }
+);
+
+__PACKAGE__->many_to_many(pending_contacts => 'pending_group_contacts', 'contact');
+
 use TryCatch;
 use String::Random qw/random_string/;
 

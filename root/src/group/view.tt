@@ -37,6 +37,23 @@
  </li>
 [% END %]
 </ul>
+
+<h3>Pending Contacts</h3>
+[% IF !group.pending_contacts %]
+<p>( None )</p>
+[% END %]
+<ul>
+[% FOREACH contact = group.pending_contacts %]
+<li>
+  [% contact.name | html %] ([% contact.account.accountname | html %])
+
+  [% IF contact.account.dropped %]
+    ( dropped )
+  [% END %]
+</li>
+[% END %]
+</ul>
+
 <h3>Actions:</h3>
 <ul>
 [% IF group.status.is_pending_web -%]

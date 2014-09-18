@@ -48,7 +48,7 @@ sub new {
 
     my @gc_rows = $row->group_contacts;
 
-    my ( @gcs, @active_gcs, @editable_gcs, @active_contacts );
+    my ( @gcs, @active_gcs, @editable_gcs, @active_contacts, @pending_contacts );
 
     try {
         foreach my $gc ( @gc_rows ) {
@@ -65,12 +65,17 @@ sub new {
             if ($contact->status eq 'retired') {
                 push @editable_gcs, $contact;
             }
+
+            if ($contact->status eq 'invited' || $contact->status eq 'pending_staff') {
+                push @pending_contacts, $contact->contact;
+            }
         }
 
         $self->{_group_contacts} = \@gcs;
         $self->{_active_group_contacts} = \@active_gcs;
         $self->{_editable_group_contacts} = \@editable_gcs;
         $self->{_active_contacts} = \@active_contacts;
+        $self->{_pending_contacts} = \@pending_contacts;
     }
     catch (RPC::Atheme::Error $e) {
         die $e;
@@ -137,6 +142,20 @@ sub editable_group_contacts {
     my ($self) = @_;
 
     my $gcs = $self->{_editable_group_contacts};
+    return @$gcs;
+}
+
+=head2 pending_contacts
+
+Returns an array of GMS::Domain::Contact objects for group contacts pending
+staff approval.
+
+=cut
+
+sub pending_contacts {
+    my ($self) = @_;
+
+    my $gcs = $self->{_pending_contacts};
     return @$gcs;
 }
 
