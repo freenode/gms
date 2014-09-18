@@ -47,9 +47,6 @@ sub new {
     $self->{_dbic_group_row} = $row;
 
     my @gc_rows = $row->group_contacts;
-    my @active_gc_rows = $row->active_group_contacts;
-    my @editable_gc_rows = $row->editable_group_contacts;
-    my @active_contact_rows = $row->active_contacts;
 
     my ( @gcs, @active_gcs, @editable_gcs, @active_contacts );
 
@@ -58,21 +55,16 @@ sub new {
             my $contact = GMS::Domain::GroupContact->new ( $session, $gc );
 
             push @gcs, $contact;
-        }
-        foreach my $gc ( @active_gc_rows ) {
-            my $contact = GMS::Domain::GroupContact->new ( $session, $gc );
 
-            push @active_gcs, $contact;
-        }
-        foreach my $gc ( @editable_gc_rows ) {
-            my $contact = GMS::Domain::GroupContact->new ( $session, $gc );
+            if ($contact->status eq 'active')  {
+                push @active_gcs, $contact;
+                push @editable_gcs, $contact;
+                push @active_contacts, $contact->contact;
+            }
 
-            push @editable_gcs, $contact;
-        }
-        foreach my $contact_row ( @active_contact_rows ) {
-            my $contact = GMS::Domain::Contact->new ( $session, $contact_row );
-
-            push @active_contacts, $contact;
+            if ($contact->status eq 'retired') {
+                push @editable_gcs, $contact;
+            }
         }
 
         $self->{_group_contacts} = \@gcs;

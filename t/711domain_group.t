@@ -8,9 +8,12 @@ use Test::MockObject;
 use RPC::Atheme::Error;
 use lib qw(t/lib);
 use GMSTest::Common;
+use GMSTest::Database;
 
 use GMS::Domain::Group;
 use GMS::Exception;
+
+my $schema = need_database 'new_db';
 
 my $mockContact = new Test::MockModule('GMS::Domain::Contact');
 $mockContact->mock ('new', sub {
@@ -26,62 +29,48 @@ $mockGroupContact->mock ('new', sub {
 
 
 my $mockSession = new Test::MockObject;
-my $mockRow = new Test::MockObject;
+my $row = $schema->resultset('Group')->find({ id => 149});
 
-$mockRow->mock ('group_contacts', sub {
-        (
-            'user1',
-            'user2',
-            'user3'
-        )
-    });
-$mockRow->mock ('active_group_contacts', sub {
-        (
-            'user4',
-            'user5'
-        )
-    });
-$mockRow->mock ('editable_group_contacts', sub {
-        (
-            'user6',
-            'user7'
-        )
-    });
-$mockRow->mock ('active_contacts', sub {
-        (
-            'contact1',
-            'contact2'
-        )
-    });
+my $group = GMS::Domain::Group->new ( $mockSession, $row );
 
-my $group = GMS::Domain::Group->new ( $mockSession, $mockRow );
+use Data::Dumper;
 
 my @gcs = $group->group_contacts;
-is_deeply \@gcs, [ 'user1', 'user2', 'user3' ], 'Retrieving group contacts works';
+ok scalar @gcs eq 2;
+
+ok $gcs[0]->contact->account->accountname eq 'account49';
+ok $gcs[1]->contact->account->accountname eq 'admin';
 
 my @active_gcs = $group->active_group_contacts;
-is_deeply \@active_gcs, ['user4', 'user5'], 'Retrieving active gcs works';
+
+ok scalar @active_gcs eq 1;
+
+ok $active_gcs[0]->contact->account->accountname eq 'account49';
 
 my @editable_gcs = $group->editable_group_contacts;
-is_deeply \@editable_gcs, ['user6', 'user7'], 'Retrieving editable gcs works';
+
+ok scalar @editable_gcs eq 2, 'Retired gcs should show up here';
 
 my @active_contacts = $group->active_contacts;
-is_deeply \@active_contacts, ['contact1', 'contact2'], 'Retrieving contacts works';
 
-$mockContact->mock ('new', sub {
+ok scalar @active_contacts eq 1;
+
+ok $active_contacts[0]->account->accountname eq 'account49';
+
+$mockGroupContact->mock ('new', sub {
         die GMS::Exception->new ("Test error");
     });
 
 throws_ok {
-    GMS::Domain::Group->new ($mockSession, $mockRow);
+    GMS::Domain::Group->new ($mockSession, $row);
 } qr/Test error/, "Errors are thrown";
 
-$mockContact->mock ('new', sub {
+$mockGroupContact->mock ('new', sub {
         die RPC::Atheme::Error->new (1, "Test error");
     });
 
 throws_ok {
-    GMS::Domain::Group->new ($mockSession, $mockRow);
+    GMS::Domain::Group->new ($mockSession, $row);
 } qr/Test error/, "Errors are thrown";
 
 done_testing;
