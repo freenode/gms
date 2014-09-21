@@ -474,11 +474,11 @@ sub change {
         # time seems convenient.
         $self->deleted(time) unless $self->deleted;
 
-        foreach my $cns ($self->active_channel_namespaces->all) {
+        foreach my $cns ($self->channel_namespaces->all) {
             $cns->change( $account, 'workflow_change', { status => 'deleted', 'change_freetext' => $args->{change_freetext} } );
         }
 
-        foreach my $clns ($self->active_cloak_namespaces->all) {
+        foreach my $clns ($self->cloak_namespaces->all) {
             $clns->change( $account, 'workflow_change', { status => 'deleted', 'change_freetext' => $args->{change_freetext} } );
         }
     } else {
