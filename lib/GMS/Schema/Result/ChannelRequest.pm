@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<channel_requests>
 
 =cut
@@ -67,6 +81,12 @@ __PACKAGE__->table("channel_requests");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 namespace_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -101,6 +121,8 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "namespace_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -158,7 +180,22 @@ __PACKAGE__->has_many(
   "channel_request_changes",
   "GMS::Schema::Result::ChannelRequestChange",
   { "foreign.channel_request_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  undef,
+);
+
+=head2 namespace
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::ChannelNamespace>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "namespace",
+  "GMS::Schema::Result::ChannelNamespace",
+  { id => "namespace_id" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 =head2 requestor
@@ -197,8 +234,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D6G+j0swI+hAMCJhfGUyUA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-21 14:38:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:05c4ZxDHBcKfmuNkAMpUlw
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->load_components ("InflateColumn::Object::Enum");

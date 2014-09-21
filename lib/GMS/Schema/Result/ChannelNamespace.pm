@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<channel_namespaces>
 
 =cut
@@ -131,12 +145,27 @@ __PACKAGE__->has_many(
   "channel_namespace_changes",
   "GMS::Schema::Result::ChannelNamespaceChange",
   { "foreign.namespace_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  undef,
+);
+
+=head2 channel_requests
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::ChannelRequest>
+
+=cut
+
+__PACKAGE__->has_many(
+  "channel_requests",
+  "GMS::Schema::Result::ChannelRequest",
+  { "foreign.namespace_id" => "self.id" },
+  undef,
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o2FVyYCkwu1G7kq104JPzQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-21 14:38:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R6JFE6xBYn8BqRxZGLHKag
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
