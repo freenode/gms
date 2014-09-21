@@ -76,8 +76,19 @@ Returns a ResultSet of channel requests with the given current status.
 sub _search_channel_request_status {
     my ($self, $status) = @_;
 
+    my $namespace_rs = $self->result_source->schema->resultset('ChannelNamespace');
+
     return $self->search(
-        { 'active_change.status' => $status },
+        {
+            'active_change.status' => $status,
+            'me.namespace_id' => {
+                'in' => $namespace_rs->search({
+                        'active_change.status' => 'active',
+                    },
+                    { join => 'active_change' }
+                )->get_column('me.id')->as_query,
+            },
+        },
         { join => 'active_change' }
     );
 }
