@@ -291,15 +291,20 @@ sub new {
     }
 
     if ($valid) {
-        my $namespace = delete $args->{namespace};
+        my $namespace_name = delete $args->{namespace};
         my $group = delete $args->{group};
         my $channel = $args->{channel};
 
-        if ( !$group->active_channel_namespaces->find ({ 'namespace' => $namespace }) ) {
+        my $namespace = $group->active_channel_namespaces->find ({ 'namespace' => $namespace_name });
+
+        if (!$namespace) {
             push @errors, "This namespace does not belong in your Group's namespaces.";
             $valid = 0;
+        } else {
+            $args->{namespace_id} = $namespace->id;
         }
-        if ( $channel ne "#$namespace" && !match_glob ("#$namespace-*", $channel) ) {
+
+        if ( $channel ne "#$namespace_name" && !match_glob ("#$namespace_name-*", $channel) ) {
             push @errors, "This channel does not belong in that namespace.";
             $valid = 0;
         }
