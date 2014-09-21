@@ -2,6 +2,7 @@ $HASH1 = {
            active_change => 79,
            channel       => '#group46',
            id            => 47,
+           namespace_id  => 93,
            request_data  => undef,
            request_type  => 'transfer',
            requestor     => 48,

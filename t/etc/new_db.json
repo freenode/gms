@@ -5,6 +5,10 @@
             "quantity": "all"
         },
         {
+            "class": "Address",
+            "quantity": "all"
+        },
+        {
             "class": "Contact",
             "quantity": "all"
         },

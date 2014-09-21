@@ -2,6 +2,7 @@ $HASH1 = {
            active_change => 7,
            channel       => '#group3',
            id            => 4,
+           namespace_id  => 7,
            request_data  => undef,
            request_type  => 'drop',
            requestor     => 5,
