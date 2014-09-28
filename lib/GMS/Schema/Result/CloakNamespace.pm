@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<cloak_namespaces>
 
 =cut
@@ -119,6 +133,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 cloak_changes
+
+Type: has_many
+
+Related object: L<GMS::Schema::Result::CloakChange>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cloak_changes",
+  "GMS::Schema::Result::CloakChange",
+  { "foreign.namespace_id" => "self.id" },
+  undef,
+);
+
 =head2 cloak_namespace_changes
 
 Type: has_many
@@ -131,12 +160,12 @@ __PACKAGE__->has_many(
   "cloak_namespace_changes",
   "GMS::Schema::Result::CloakNamespaceChange",
   { "foreign.namespace_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  undef,
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4RI+NzxE9oFoPw3Eofn5UQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-28 18:31:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LmkXkHMTlkxRiNMGwccw6A
 # You can replace this text with custom content, and it will be preserved on regeneration
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");

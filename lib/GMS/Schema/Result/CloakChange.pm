@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<cloak_changes>
 
 =cut
@@ -50,6 +64,12 @@ __PACKAGE__->table("cloak_changes");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 namespace_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -71,6 +91,8 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "namespace_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -128,7 +150,22 @@ __PACKAGE__->has_many(
   "cloak_change_changes",
   "GMS::Schema::Result::CloakChangeChange",
   { "foreign.cloak_change_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  undef,
+);
+
+=head2 namespace
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::CloakNamespace>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "namespace",
+  "GMS::Schema::Result::CloakNamespace",
+  { id => "namespace_id" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 =head2 target
@@ -147,8 +184,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l/E5sfkYv6alaSszNUOc4A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-28 18:31:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G9/kg4CYO++6lZ4y20R7Wg
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 use TryCatch;
