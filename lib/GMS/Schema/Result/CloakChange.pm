@@ -243,9 +243,15 @@ sub new {
         if (!$group) {
             push @errors, "You need to provide a group";
             $valid = 0;
-        } elsif ( !$group->active_cloak_namespaces->find ({ 'namespace' => $ns }) ) {
+        } else {
+            my $namespace = $group->active_cloak_namespaces->find ({ 'namespace' => $ns });
+
+            if (!$namespace) {
                 push @errors, "The namespace $ns does not belong in your Group's namespaces.";
                 $valid = 0;
+            } else {
+                $args->{namespace_id} = $namespace->id;
+            }
         }
     }
 
