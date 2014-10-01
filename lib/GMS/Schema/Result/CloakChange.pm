@@ -150,7 +150,7 @@ __PACKAGE__->has_many(
   "cloak_change_changes",
   "GMS::Schema::Result::CloakChangeChange",
   { "foreign.cloak_change_id" => "self.id" },
-  undef,
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 namespace
