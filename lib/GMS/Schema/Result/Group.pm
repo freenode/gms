@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<groups>
 
 =cut
@@ -226,8 +240,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1ehoN2tyPTxRItAHFZ4yDQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-10-01 18:48:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vPyXJ6h8UV2RdNdXLqmqdg
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 use LWP::UserAgent;
 use HTTP::Request;
