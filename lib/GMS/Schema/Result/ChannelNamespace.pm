@@ -145,7 +145,7 @@ __PACKAGE__->has_many(
   "channel_namespace_changes",
   "GMS::Schema::Result::ChannelNamespaceChange",
   { "foreign.namespace_id" => "self.id" },
-  undef,
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 channel_requests
@@ -160,7 +160,7 @@ __PACKAGE__->has_many(
   "channel_requests",
   "GMS::Schema::Result::ChannelRequest",
   { "foreign.namespace_id" => "self.id" },
-  undef,
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
