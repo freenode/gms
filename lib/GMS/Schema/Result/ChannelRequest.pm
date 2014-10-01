@@ -180,7 +180,7 @@ __PACKAGE__->has_many(
   "channel_request_changes",
   "GMS::Schema::Result::ChannelRequestChange",
   { "foreign.channel_request_id" => "self.id" },
-  undef,
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 namespace
