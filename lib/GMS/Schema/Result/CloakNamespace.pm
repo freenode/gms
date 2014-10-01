@@ -145,7 +145,7 @@ __PACKAGE__->has_many(
   "cloak_changes",
   "GMS::Schema::Result::CloakChange",
   { "foreign.namespace_id" => "self.id" },
-  undef,
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 cloak_namespace_changes
@@ -160,7 +160,7 @@ __PACKAGE__->has_many(
   "cloak_namespace_changes",
   "GMS::Schema::Result::CloakNamespaceChange",
   { "foreign.namespace_id" => "self.id" },
-  undef,
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
