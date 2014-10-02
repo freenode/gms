@@ -1,0 +1,87 @@
+$VAR1 = {
+          'rules' => {
+                       'Group' => {
+                                    'fetch' => [
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_changes'
+                                                 },
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_verifications'
+                                                 }
+                                               ]
+                                  },
+                       'ChanelRequest' => {
+                                            'fetch' => [
+                                                         {
+                                                           'rel' => 'channel_request_changes',
+                                                           'quantity' => 'all'
+                                                         }
+                                                       ]
+                                          },
+                       'Contact' => {
+                                      'fetch' => [
+                                                   {
+                                                     'quantity' => 'all',
+                                                     'rel' => 'contact_changes'
+                                                   }
+                                                 ]
+                                    },
+                       'ChannelNamespace' => {
+                                               'fetch' => [
+                                                            {
+                                                              'quantity' => 'all',
+                                                              'rel' => 'channel_namespace_changes'
+                                                            }
+                                                          ]
+                                             },
+                       'CloakNamespace' => {
+                                             'fetch' => [
+                                                          {
+                                                            'rel' => 'cloak_namespace_changes',
+                                                            'quantity' => 'all'
+                                                          }
+                                                        ]
+                                           }
+                     },
+          'sets' => [
+                      {
+                        'quantity' => 'all',
+                        'class' => 'Account'
+                      },
+                      {
+                        'quantity' => 'all',
+                        'class' => 'Contact'
+                      },
+                      {
+                        'quantity' => 'all',
+                        'class' => 'GroupContact'
+                      },
+                      {
+                        'class' => 'Group',
+                        'quantity' => 'all'
+                      },
+                      {
+                        'quantity' => 'all',
+                        'class' => 'GroupChange'
+                      },
+                      {
+                        'class' => 'Role',
+                        'quantity' => 'all'
+                      },
+                      {
+                        'class' => 'UserRole',
+                        'quantity' => 'all'
+                      }
+                    ],
+          'has_many' => {
+                          'fetch' => 0
+                        },
+          'belongs_to' => {
+                            'fetch' => 1
+                          },
+          'might_have' => {
+                            'fetch' => 0
+                          }
+        };
