@@ -50,6 +50,17 @@ __PACKAGE__->table("channel_namespaces");
   is_nullable: 0
   size: 50
 
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "channel_namespace_status_type",list => ["active","deleted","pending_staff"]}
+  is_nullable: 0
+
+=head2 group_id
+
+  data_type: 'integer'
+  is_nullable: 0
+
 =head2 active_change
 
   data_type: 'integer'
@@ -69,6 +80,17 @@ __PACKAGE__->add_columns(
   },
   "namespace",
   { data_type => "varchar", is_nullable => 0, size => 50 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "channel_namespace_status_type",
+      list => ["active", "deleted", "pending_staff"],
+    },
+    is_nullable => 0,
+  },
+  "group_id",
+  { data_type => "integer", is_nullable => 0 },
   "active_change",
   {
     data_type      => "integer",
@@ -164,8 +186,6 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-21 14:38:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R6JFE6xBYn8BqRxZGLHKag
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
@@ -212,8 +232,8 @@ sub new {
 
     my %change_args;
 
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'pending_staff';
+    $args->{status} ||= 'pending_staff';
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
     $change_args{change_type} = 'create';
     $change_args{changed_by} = delete $args->{account};
     $change_args{change_freetext} = delete $args->{freetext};
@@ -274,8 +294,15 @@ sub change {
     );
 
     my $ret = $self->add_to_channel_namespace_changes(\%change_args);
-    $self->active_change($ret) if $change_type ne 'request';
-    $self->update;
+
+    if ($change_type ne 'request') {
+        $self->active_change($ret);
+
+        $self->group_id ($args->{group_id}) if $args->{group_id};
+        $self->status ($args->{status}) if $args->{status};
+        $self->update;
+    }
+
     return $ret;
 }
 
@@ -374,6 +401,9 @@ sub get_change_string {
     return $str ? $str : "No changes.";
 }
 
+__PACKAGE__->add_columns(
+    '+status' => { is_enum => 1 },
+);
 
 =head2 TO_JSON
 
