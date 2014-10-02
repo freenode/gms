@@ -744,7 +744,7 @@ are currently active
 sub active_channel_namespaces {
     my ($self) = @_;
 
-    return $self->channel_namespaces->search({ status => 'active' });
+    return $self->channel_namespaces->search({ 'me.status' => 'active' });
 }
 
 =head2 active_cloak_namespaces
