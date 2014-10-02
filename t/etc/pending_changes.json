@@ -47,7 +47,7 @@
         {
             "class": "CloakNamespaceChange",
             "quantity": "all"
-        }
+        },
         {
             "class": "CloakChange",
             "quantity": "all"

@@ -33,6 +33,6 @@
                 "rel": "channel_request_changes",
                 "quantity": "all"
             } ]
-        },
+        }
     }
 }
