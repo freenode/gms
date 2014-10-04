@@ -1,9 +1,10 @@
 $HASH1 = {
            active_change
-                    => 65,
-           cloak    => 'group34/user34',
-           id       => 35,
+                   => 65,
+           cloak   => 'group34/user34',
+           id      => 35,
            namespace_id
-                    => 69,
-           target   => '4FFC96BA'
+                   => 69,
+           status  => 'accepted',
+           target  => '4FFC96BA'
          };
