@@ -12,5 +12,6 @@ $HASH1 = {
            email    => 'user 35@example.com',
            id       => 31,
            name     => 'Name 35',
+           phone    => undef,
            time     => '2013-04-06 11:49:08.110062'
          };

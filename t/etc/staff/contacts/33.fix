@@ -1,7 +1,10 @@
 $HASH1 = {
            account_id
-                    => '9B98CF86',
+                   => '9B98CF86',
            active_change
-                    => 33,
-           id       => 33
+                   => 33,
+           email   => 'user 37@example.com',
+           id      => 33,
+           name    => 'Name 37',
+           phone   => undef
          };
