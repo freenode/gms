@@ -1,12 +1,17 @@
 $HASH1 = {
+           affected_change
+                    => undef,
+           change_freetext
+                    => undef,
            change_type
-                   => 'create',
+                    => 'create',
            changed_by
-                   => 2,
+                    => 2,
            contact_id
-                   => 2,
-           email   => 'test2@example.com',
-           id      => 2,
-           name    => 'Contact Test',
-           time    => '2010-11-20 23:52:38.1746'
+                    => 2,
+           email    => 'test2@example.com',
+           id       => 2,
+           name     => 'Contact Test',
+           phone    => undef,
+           time     => '2010-11-20 23:52:38.1746'
          };

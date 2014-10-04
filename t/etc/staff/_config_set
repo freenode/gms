@@ -1,13 +1,22 @@
 $VAR1 = {
-          'might_have' => {
-                            'fetch' => 0
-                          },
           'rules' => {
+                       'Group' => {
+                                    'fetch' => [
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_changes'
+                                                 },
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_verifications'
+                                                 }
+                                               ]
+                                  },
                        'ChanelRequest' => {
                                             'fetch' => [
                                                          {
-                                                           'rel' => 'channel_request_changes',
-                                                           'quantity' => 'all'
+                                                           'quantity' => 'all',
+                                                           'rel' => 'channel_request_changes'
                                                          }
                                                        ]
                                           },
@@ -19,18 +28,6 @@ $VAR1 = {
                                                    }
                                                  ]
                                     },
-                       'Group' => {
-                                    'fetch' => [
-                                                 {
-                                                   'quantity' => 'all',
-                                                   'rel' => 'group_changes'
-                                                 },
-                                                 {
-                                                   'rel' => 'group_verifications',
-                                                   'quantity' => 'all'
-                                                 }
-                                               ]
-                                  },
                        'CloakNamespace' => {
                                              'fetch' => [
                                                           {
@@ -42,38 +39,35 @@ $VAR1 = {
                        'ChannelNamespace' => {
                                                'fetch' => [
                                                             {
-                                                              'rel' => 'channel_namespace_changes',
-                                                              'quantity' => 'all'
+                                                              'quantity' => 'all',
+                                                              'rel' => 'channel_namespace_changes'
                                                             }
                                                           ]
                                              }
                      },
-          'belongs_to' => {
-                            'fetch' => 1
+          'might_have' => {
+                            'fetch' => 0
                           },
-          'has_many' => {
-                          'fetch' => 0
-                        },
           'sets' => [
                       {
                         'quantity' => 'all',
                         'class' => 'Account'
                       },
                       {
-                        'class' => 'Contact',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'Contact'
                       },
                       {
-                        'class' => 'GroupContact',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'GroupContact'
                       },
                       {
                         'quantity' => 'all',
                         'class' => 'Group'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'GroupChange'
+                        'class' => 'GroupChange',
+                        'quantity' => 'all'
                       },
                       {
                         'class' => 'Role',
@@ -84,20 +78,20 @@ $VAR1 = {
                         'class' => 'UserRole'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'GroupVerification'
+                        'class' => 'GroupVerification',
+                        'quantity' => 'all'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'ChannelNamespace'
+                        'class' => 'ChannelNamespace',
+                        'quantity' => 'all'
                       },
                       {
                         'class' => 'ChannelNamespaceChange',
                         'quantity' => 'all'
                       },
                       {
-                        'class' => 'CloakNamespace',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'CloakNamespace'
                       },
                       {
                         'class' => 'CloakNamespaceChange',
@@ -107,5 +101,11 @@ $VAR1 = {
                         'quantity' => 'all',
                         'class' => 'CloakChange'
                       }
-                    ]
+                    ],
+          'belongs_to' => {
+                            'fetch' => 1
+                          },
+          'has_many' => {
+                          'fetch' => 0
+                        }
         };
