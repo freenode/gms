@@ -50,6 +50,17 @@ __PACKAGE__->table("cloak_namespaces");
   is_nullable: 0
   size: 63
 
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "channel_namespace_status_type",list => ["active","deleted","pending_staff"]}
+  is_nullable: 0
+
+=head2 group_id
+
+  data_type: 'integer'
+  is_nullable: 0
+
 =head2 active_change
 
   data_type: 'integer'
@@ -69,6 +80,17 @@ __PACKAGE__->add_columns(
   },
   "namespace",
   { data_type => "varchar", is_nullable => 0, size => 63 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "channel_namespace_status_type",
+      list => ["active", "deleted", "pending_staff"],
+    },
+    is_nullable => 0,
+  },
+  "group_id",
+  { data_type => "integer", is_nullable => 0 },
   "active_change",
   {
     data_type      => "integer",
@@ -131,6 +153,21 @@ __PACKAGE__->belongs_to(
   "GMS::Schema::Result::CloakNamespaceChange",
   { id => "active_change" },
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
+=head2 group
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Group>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "group",
+    "GMS::Schema::Result::Group",
+    { id => "group_id" },
+    { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 =head2 cloak_changes
@@ -213,8 +250,8 @@ sub new {
 
     my %change_args;
 
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'pending_staff';
+    $args->{status} ||= 'pending_staff';
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
     $change_args{change_type} = 'create';
     $change_args{changed_by} = delete $args->{account};
     $change_args{change_freetext} = delete $args->{freetext};
@@ -275,8 +312,15 @@ sub change {
     );
 
     my $ret = $self->add_to_cloak_namespace_changes(\%change_args);
-    $self->active_change($ret) if $change_type ne 'request';
-    $self->update;
+
+    if ($change_type ne 'request') {
+        $self->active_change($ret);
+
+        $self->group_id ($args->{group_id}) if $args->{group_id};
+        $self->status ($args->{status}) if $args->{status};
+        $self->update;
+    }
+
     return $ret;
 }
 
@@ -328,17 +372,6 @@ sub status {
     return $self->active_change->status;
 }
 
-=head2 group
-
-Returns the namespace's current group, based on the active change.
-
-=cut
-
-sub group {
-    my ($self) = @_;
-    return $self->active_change->group;
-}
-
 =head2 last_change
 
 Returns the most recent change for the cloak namespace.
@@ -373,6 +406,10 @@ sub get_change_string {
 
     return $str ? $str : "No changes.";
 }
+
+__PACKAGE__->add_columns(
+    '+status' => { is_enum => 1 },
+);
 
 =head2 TO_JSON
 

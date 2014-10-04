@@ -757,7 +757,7 @@ are currently active
 sub active_cloak_namespaces {
     my ($self) = @_;
 
-    return $self->cloak_namespaces->search({ status => 'active' });
+    return $self->cloak_namespaces->search({ 'me.status' => 'active' });
 }
 
 =head2 add_to_channel_namespaces
