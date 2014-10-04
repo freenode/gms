@@ -70,6 +70,12 @@ __PACKAGE__->table("cloak_changes");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "cloak_change_status",list => ["offered","accepted","approved","rejected","applied","error"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -93,6 +99,16 @@ __PACKAGE__->add_columns(
   },
   "namespace_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "cloak_change_status",
+      list => ["offered", "accepted", "approved", "rejected", "applied", "error"],
+    },
+    is_nullable => 0,
+  },
+
 );
 
 =head1 PRIMARY KEY
@@ -268,9 +284,14 @@ sub new {
         'changed_by',
         'status',
     );
+
     my %change_args;
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'offered';
+
+    $args->{status} ||= 'offered';
+
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
+
+    delete $args->{changed_by};
 
     $args->{cloak_change_changes} = [ \%change_args ];
 
@@ -326,21 +347,12 @@ sub change {
     my $ret = $self->add_to_cloak_change_changes(\%change_args);
     $self->active_change($ret);
 
+    $self->status($args->{status});
+
     $self->update;
     return $ret;
 }
 
-=head2 status
-
-Returns the active change status.
-
-=cut
-
-sub status {
-    my ($self) = @_;
-
-    return $self->active_change->status;
-}
 
 =head2 accept
 
@@ -457,6 +469,11 @@ sub sync_to_atheme {
 
     return $error;
 }
+
+# Set enum columns to use Object::Enum
+__PACKAGE__->add_columns(
+    '+status' => { is_enum => 1 },
+);
 
 =head2 TO_JSON
 
