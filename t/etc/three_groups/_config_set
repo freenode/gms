@@ -1,25 +1,13 @@
 $VAR1 = {
           'rules' => {
-                       'ChanelRequest' => {
-                                            'fetch' => [
-                                                         {
-                                                           'quantity' => 'all',
-                                                           'rel' => 'channel_request_changes'
-                                                         }
-                                                       ]
-                                          },
-                       'Group' => {
-                                    'fetch' => [
-                                                 {
-                                                   'quantity' => 'all',
-                                                   'rel' => 'group_changes'
-                                                 },
-                                                 {
-                                                   'quantity' => 'all',
-                                                   'rel' => 'group_verifications'
-                                                 }
-                                               ]
-                                  },
+                       'CloakNamespace' => {
+                                             'fetch' => [
+                                                          {
+                                                            'quantity' => 'all',
+                                                            'rel' => 'cloak_namespace_changes'
+                                                          }
+                                                        ]
+                                           },
                        'ChannelNamespace' => {
                                                'fetch' => [
                                                             {
@@ -28,6 +16,26 @@ $VAR1 = {
                                                             }
                                                           ]
                                              },
+                       'Group' => {
+                                    'fetch' => [
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_changes'
+                                                 },
+                                                 {
+                                                   'rel' => 'group_verifications',
+                                                   'quantity' => 'all'
+                                                 }
+                                               ]
+                                  },
+                       'ChanelRequest' => {
+                                            'fetch' => [
+                                                         {
+                                                           'quantity' => 'all',
+                                                           'rel' => 'channel_request_changes'
+                                                         }
+                                                       ]
+                                          },
                        'Contact' => {
                                       'fetch' => [
                                                    {
@@ -35,57 +43,49 @@ $VAR1 = {
                                                      'rel' => 'contact_changes'
                                                    }
                                                  ]
-                                    },
-                       'CloakNamespace' => {
-                                             'fetch' => [
-                                                          {
-                                                            'rel' => 'cloak_namespace_changes',
-                                                            'quantity' => 'all'
-                                                          }
-                                                        ]
-                                           }
+                                    }
                      },
           'might_have' => {
                             'fetch' => 0
                           },
-          'belongs_to' => {
-                            'fetch' => 1
-                          },
-          'has_many' => {
-                          'fetch' => 0
-                        },
           'sets' => [
                       {
                         'class' => 'Account',
                         'quantity' => 'all'
                       },
                       {
-                        'class' => 'Contact',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'Contact'
                       },
                       {
                         'quantity' => 'all',
                         'class' => 'GroupContact'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'Group'
+                        'class' => 'Group',
+                        'quantity' => 'all'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'GroupChange'
+                        'class' => 'GroupChange',
+                        'quantity' => 'all'
                       },
                       {
                         'quantity' => 'all',
                         'class' => 'Role'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'UserRole'
+                        'class' => 'UserRole',
+                        'quantity' => 'all'
                       },
                       {
-                        'quantity' => 'all',
-                        'class' => 'GroupVerification'
+                        'class' => 'GroupVerification',
+                        'quantity' => 'all'
                       }
-                    ]
+                    ],
+          'belongs_to' => {
+                            'fetch' => 1
+                          },
+          'has_many' => {
+                          'fetch' => 0
+                        }
         };
