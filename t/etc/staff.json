@@ -5,6 +5,10 @@
             "quantity": "all"
         },
         {
+            "class": "Address",
+            "quantity": "all"
+        },
+        {
             "class": "Contact",
             "quantity": "all"
         },
@@ -49,9 +53,17 @@
             "quantity": "all"
         },
         {
-	     "class": "CloakChange",
-	     "quantity": "all"
-	}
+            "class": "CloakChange",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelRequest",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelRequestChange",
+            "quantity": "all"
+        }
     ],
     "includes": [
         { "file": "common_rules.json" }
