@@ -1,53 +1,13 @@
 $VAR1 = {
+          'belongs_to' => {
+                            'fetch' => 1
+                          },
+          'has_many' => {
+                          'fetch' => 0
+                        },
           'might_have' => {
                             'fetch' => 0
                           },
-          'rules' => {
-                       'Contact' => {
-                                      'fetch' => [
-                                                   {
-                                                     'quantity' => 'all',
-                                                     'rel' => 'contact_changes'
-                                                   }
-                                                 ]
-                                    },
-                       'Group' => {
-                                    'fetch' => [
-                                                 {
-                                                   'quantity' => 'all',
-                                                   'rel' => 'group_changes'
-                                                 },
-                                                 {
-                                                   'rel' => 'group_verifications',
-                                                   'quantity' => 'all'
-                                                 }
-                                               ]
-                                  },
-                       'ChanelRequest' => {
-                                            'fetch' => [
-                                                         {
-                                                           'rel' => 'channel_request_changes',
-                                                           'quantity' => 'all'
-                                                         }
-                                                       ]
-                                          },
-                       'CloakNamespace' => {
-                                             'fetch' => [
-                                                          {
-                                                            'rel' => 'cloak_namespace_changes',
-                                                            'quantity' => 'all'
-                                                          }
-                                                        ]
-                                           },
-                       'ChannelNamespace' => {
-                                               'fetch' => [
-                                                            {
-                                                              'quantity' => 'all',
-                                                              'rel' => 'channel_namespace_changes'
-                                                            }
-                                                          ]
-                                             }
-                     },
           'sets' => [
                       {
                         'quantity' => 'all',
@@ -58,12 +18,12 @@ $VAR1 = {
                         'class' => 'Address'
                       },
                       {
-                        'class' => 'Contact',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'Contact'
                       },
                       {
-                        'class' => 'GroupContact',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'GroupContact'
                       },
                       {
                         'quantity' => 'all',
@@ -86,12 +46,12 @@ $VAR1 = {
                         'class' => 'GroupVerification'
                       },
                       {
-                        'class' => 'ChannelNamespace',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'ChannelNamespace'
                       },
                       {
-                        'class' => 'ChannelNamespaceChange',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'ChannelNamespaceChange'
                       },
                       {
                         'class' => 'CloakNamespace',
@@ -102,8 +62,8 @@ $VAR1 = {
                         'class' => 'CloakNamespaceChange'
                       },
                       {
-                        'class' => 'CloakChange',
-                        'quantity' => 'all'
+                        'quantity' => 'all',
+                        'class' => 'CloakChange'
                       },
                       {
                         'class' => 'ChannelRequest',
@@ -114,10 +74,50 @@ $VAR1 = {
                         'quantity' => 'all'
                       }
                     ],
-          'has_many' => {
-                          'fetch' => 0
-                        },
-          'belongs_to' => {
-                            'fetch' => 1
-                          }
+          'rules' => {
+                       'ChanelRequest' => {
+                                            'fetch' => [
+                                                         {
+                                                           'rel' => 'channel_request_changes',
+                                                           'quantity' => 'all'
+                                                         }
+                                                       ]
+                                          },
+                       'CloakNamespace' => {
+                                             'fetch' => [
+                                                          {
+                                                            'quantity' => 'all',
+                                                            'rel' => 'cloak_namespace_changes'
+                                                          }
+                                                        ]
+                                           },
+                       'Contact' => {
+                                      'fetch' => [
+                                                   {
+                                                     'quantity' => 'all',
+                                                     'rel' => 'contact_changes'
+                                                   }
+                                                 ]
+                                    },
+                       'ChannelNamespace' => {
+                                               'fetch' => [
+                                                            {
+                                                              'rel' => 'channel_namespace_changes',
+                                                              'quantity' => 'all'
+                                                            }
+                                                          ]
+                                             },
+                       'Group' => {
+                                    'fetch' => [
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_changes'
+                                                 },
+                                                 {
+                                                   'quantity' => 'all',
+                                                   'rel' => 'group_verifications'
+                                                 }
+                                               ]
+                                  }
+                     }
         };
