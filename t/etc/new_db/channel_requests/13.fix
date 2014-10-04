@@ -6,5 +6,6 @@ $HASH1 = {
            request_data  => undef,
            request_type  => 'transfer',
            requestor     => 14,
+           status        => 'applied',
            target        => '44C6F40C'
          };
