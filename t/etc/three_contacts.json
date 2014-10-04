@@ -5,6 +5,10 @@
             "quantity": "all"
         },
         {
+            "class": "Address",
+            "quantity": "all"
+        },
+        {
             "class": "Contact",
             "quantity": "all"
         },
@@ -26,6 +30,38 @@
         },
         {
             "class": "UserRole",
+            "quantity": "all"
+        },
+        {
+            "class": "GroupVerification",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelNamespace",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelNamespaceChange",
+            "quantity": "all"
+        },
+        {
+            "class": "CloakNamespace",
+            "quantity": "all"
+        },
+        {
+            "class": "CloakNamespaceChange",
+            "quantity": "all"
+        },
+        {
+            "class": "CloakChange",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelRequest",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelRequestChange",
             "quantity": "all"
         }
     ],

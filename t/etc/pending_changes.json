@@ -5,6 +5,10 @@
             "quantity": "all"
         },
         {
+            "class": "Address",
+            "quantity": "all"
+        },
+        {
             "class": "Contact",
             "quantity": "all"
         },
@@ -50,6 +54,14 @@
         },
         {
             "class": "CloakChange",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelRequest",
+            "quantity": "all"
+        },
+        {
+            "class": "ChannelRequestChange",
             "quantity": "all"
         }
     ],
