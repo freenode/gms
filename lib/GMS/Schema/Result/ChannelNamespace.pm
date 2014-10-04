@@ -155,6 +155,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 group
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Group>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "group",
+    "GMS::Schema::Result::Group",
+    { id => "group_id" },
+    { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
 =head2 channel_namespace_changes
 
 Type: has_many
@@ -352,17 +367,6 @@ Returns the current status of the namespace, based on the active change.
 sub status {
     my ($self) = @_;
     return $self->active_change->status;
-}
-
-=head2 group
-
-Returns the namespace's current group, based on the active change.
-
-=cut
-
-sub group {
-    my ($self) = @_;
-    return $self->active_change->group;
 }
 
 =head2 last_change
