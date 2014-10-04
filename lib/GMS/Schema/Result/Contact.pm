@@ -44,6 +44,24 @@ __PACKAGE__->table("contacts");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 name
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 255
+
+=head2 phone
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 32
+
+=head2 email
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -68,6 +86,12 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "name",
+  { data_type => "varchar", is_nullable => 0, size => 255 },
+  "phone",
+  { data_type => "varchar", is_nullable => 1, size => 32 },
+  "email",
+  { data_type => "varchar", is_nullable => 0, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -212,11 +236,13 @@ sub new {
     );
 
     my %change_args;
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
     $change_args{change_type} = 'create';
     $change_args{changed_by} = $args->{account_id};
 
     $args->{contact_changes} = [ \%change_args ];
+
+    delete $args->{'change_freetext'};
 
     return $class->next::method($args);
 }
@@ -240,39 +266,6 @@ sub insert {
         });
 
     return $ret;
-}
-
-=head2 name
-
-Returns the contact's full name, as retrieved from the active_change.
-
-=cut
-
-sub name {
-    my ($self) = @_;
-    return $self->active_change->name;
-}
-
-=head2 email
-
-Returns the contact's email address, as retrieved from the active_change.
-
-=cut
-
-sub email {
-    my ($self) = @_;
-    return $self->active_change->email;
-}
-
-=head2 phone
-
-Returns the contact's phone, as retrieved from the active_change.
-
-=cut
-
-sub phone {
-    my ($self) = @_;
-    return $self->active_change->phone;
 }
 
 =head2 change
@@ -310,7 +303,15 @@ sub change {
     );
 
     my $ret = $self->add_to_contact_changes(\%change_args);
-    $self->active_change($ret) if $change_type ne 'request';
+
+    if ($change_type ne 'request') {
+        $self->active_change($ret);
+
+        $self->name($args->{name} || $change->name);
+        $self->phone($args->{phone} || $change->phone);
+        $self->email($args->{email} || $change->email);
+    }
+
     $self->update;
     return $ret;
 }
