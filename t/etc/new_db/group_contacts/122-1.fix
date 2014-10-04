@@ -1,5 +1,7 @@
 $HASH1 = {
            active_change => 181,
            contact_id    => 1,
-           group_id      => 122
+           group_id      => 122,
+           primary       => 0,
+           status        => 'invited'
          };
