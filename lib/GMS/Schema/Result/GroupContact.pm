@@ -42,6 +42,18 @@ __PACKAGE__->table("group_contacts");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 primary
+
+  data_type: 'boolean'
+  default_value: false
+  is_nullable: 0
+
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "group_contact_status",list => ["invited","retired","active","deleted","pending_staff"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -55,6 +67,17 @@ __PACKAGE__->add_columns(
     default_value  => -1,
     is_foreign_key => 1,
     is_nullable    => 0,
+  },
+  "primary",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "group_contact_status",
+      list => ["invited", "retired", "active", "deleted", "pending_staff"],
+    },
+    is_nullable => 0,
   },
 );
 
@@ -151,118 +174,10 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q/Hs8g7khgPUxsCS3/aADQ
-# You can replace this text with custom content, and it will be preserved on regeneration
-
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
 
-=head1 NAME
-
-GMS::Schema::Result::GroupContact
-
-=cut
-
-__PACKAGE__->table("group_contacts");
-
-=head1 ACCESSORS
-
-=head2 group_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 contact_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 active_change
-
-  data_type: 'integer'
-  default_value: -1
-  is_foreign_key: 1
-  is_nullable: 0
-
-=cut
-
 __PACKAGE__->add_columns(
-  "group_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "contact_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "active_change",
-  {
-    data_type      => "integer",
-    default_value  => -1,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
-);
-__PACKAGE__->set_primary_key("group_id", "contact_id");
-__PACKAGE__->add_unique_constraint("group_contacts_unique_active_change", ["active_change"]);
-
-=head1 RELATIONS
-
-=head2 group_contact_changes
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::GroupContactChange>
-
-=cut
-
-__PACKAGE__->has_many(
-  "group_contact_changes",
-  "GMS::Schema::Result::GroupContactChange",
-  {
-    "foreign.contact_id" => "self.contact_id",
-    "foreign.group_id"   => "self.group_id",
-  },
-  {},
-);
-
-=head2 group
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Group>
-
-=cut
-
-__PACKAGE__->belongs_to("group", "GMS::Schema::Result::Group", { id => "group_id" }, {});
-
-=head2 contact
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Contact>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "contact",
-  "GMS::Schema::Result::Contact",
-  { id => "contact_id" },
-  {},
-);
-
-=head2 active_change
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::GroupContactChange>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "active_change",
-  "GMS::Schema::Result::GroupContactChange",
-  { id => "active_change" },
-  {},
+    '+status' => { is_enum => 1 },
 );
 
 use TryCatch;
@@ -285,29 +200,19 @@ sub new {
         'primary',
         'status',
     );
+
+    $args->{status} ||= 'invited';
+    $args->{primary} ||= 0;
+
     my %change_args;
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'invited';
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
     $change_args{change_type} = 'create';
-    $change_args{primary} ||= 0;
     $change_args{changed_by} = delete $args->{account};
     $change_args{change_freetext} = delete $args->{freetext};
 
     $args->{group_contact_changes} = [ \%change_args ];
 
     return $class->next::method($args);
-}
-
-=head2 status
-
-Returns the GroupContact's current status based on their active change.
-
-=cut
-
-sub status {
-    my ($self) = @_;
-
-    return $self->active_change->status;
 }
 
 =head2 is_primary
@@ -319,7 +224,7 @@ Returns if the group contact is a primary contact for their group.
 sub is_primary {
     my ($self) = @_;
 
-    return $self->active_change->primary;
+    return $self->primary;
 }
 
 =head2 insert
@@ -378,7 +283,13 @@ sub change {
     }
 
     my $ret = $self->add_to_group_contact_changes(\%change_args);
-    $self->active_change($ret) if $change_type ne 'request';
+
+    if ($change_type ne 'request') {
+        $self->active_change($ret);
+        $self->primary($change_args{primary});
+        $self->status($change_args{status});
+    }
+
     $self->update;
     return $ret;
 }
