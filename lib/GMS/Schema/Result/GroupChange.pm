@@ -384,7 +384,14 @@ sub approve {
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
     my $ret = $self->group->active_change($self->copy({ change_type => 'approve', changed_by => $account, affected_change => $self->id, change_freetext => $freetext }));
+
+    $self->group->status($self->status);
+    $self->group->address($self->address);
+    $self->group->group_type($self->group_type);
+    $self->group->url($self->url);
+
     $self->group->update;
+
     return $ret;
 }
 

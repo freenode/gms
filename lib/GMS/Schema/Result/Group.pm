@@ -75,6 +75,30 @@ __PACKAGE__->table("groups");
   default_value: 0
   is_nullable: 0
 
+=head2 group_type
+
+  data_type: 'enum'
+  extra: {custom_type_name => "group_type",list => ["informal","corporation","education","government","nfp","internal"]}
+  is_nullable: 0
+
+=head2 url
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 64
+
+=head2 address
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "group_status",list => ["submitted","verified","active","deleted","pending_web","pending_staff","pending_auto"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -105,6 +129,43 @@ __PACKAGE__->add_columns(
   },
   "deleted",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "group_type",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "group_type",
+      list => [
+        "informal",
+        "corporation",
+        "education",
+        "government",
+        "nfp",
+        "internal",
+      ],
+    },
+    is_nullable => 0,
+  },
+  "url",
+  { data_type => "varchar", is_nullable => 1, size => 64 },
+  "address",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "group_status",
+      list => [
+        "submitted",
+        "verified",
+        "active",
+        "deleted",
+        "pending_web",
+        "pending_staff",
+        "pending_auto",
+      ],
+    },
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -162,6 +223,26 @@ __PACKAGE__->belongs_to(
   "GMS::Schema::Result::GroupChange",
   { id => "active_change" },
   { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+
+=head2 address
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Address>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "address",
+  "GMS::Schema::Result::Address",
+  { id => "address" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 channel_namespace_changes
@@ -239,10 +320,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 address
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-10-01 18:48:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vPyXJ6h8UV2RdNdXLqmqdg
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::Address>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "address",
+  "GMS::Schema::Result::Address",
+  { id => "address" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 use LWP::UserAgent;
 use HTTP::Request;
 use base 'DBIx::Class::Core';
@@ -354,10 +451,13 @@ sub new {
         'group_type',
         'url',
         'address',
+        'status',
     );
     my %change_args;
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} = 'pending_web';
+
+    $args->{status} = 'pending_web';
+
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
     $change_args{change_type} = 'create';
     $change_args{changed_by} = delete $args->{account};
 
@@ -481,9 +581,17 @@ sub change {
         }
     }
 
-    $self->active_change($ret) if $change_type ne 'request';
+    if ($change_type ne 'request') {
+        $self->active_change($ret);
 
-    if ($self->status->is_deleted) {
+        $self->status($change_args{status});
+        $self->address($change_args{address});
+        $self->url($change_args{url});
+        $self->group_type($change_args{group_type});
+
+    }
+
+    if ($self->active_change->status->is_deleted) {
         # deleted only needs to be an increasing integer value; the current
         # time seems convenient.
         $self->deleted(time) unless $self->deleted;
@@ -515,28 +623,6 @@ sub change {
 #    $url =~ s/\/$//;
 #    return $url;
 #}
-
-=head2 status
-
-Returns the current status of the group, based on the active change.
-
-=cut
-sub status {
-    my ($self) = @_;
-    return $self->active_change->status;
-}
-
-=head2 group_type
-
-Returns the group type ( informal, coorporation, NGO, etc) of the
-group, based on the active change.
-
-=cut
-
-sub group_type {
-    my ($self) = @_;
-    return $self->active_change->group_type;
-}
 
 =head2 verify_url
 
@@ -686,29 +772,6 @@ sub auto_verify {
     return -1;
 }
 
-=head2 url
-
-Returns the current URL of the group, based on the active change.
-
-=cut
-
-sub url {
-    my ($self) = @_;
-
-    return $self->active_change->url;
-}
-
-=head2 address
-
-Returns the Address object for the group, based on the active change.
-
-=cut
-
-sub address {
-    my ($self) = @_;
-
-    return $self->active_change->address;
-}
 
 =head2 channel_namespaces
 
@@ -952,6 +1015,11 @@ sub get_change_string {
 
     return $str ? $str : "No changes.";
 }
+
+__PACKAGE__->add_columns(
+    '+group_type' => { is_enum => 1 },
+    '+status' => { is_enum => 1 },
+);
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
