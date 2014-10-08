@@ -41,7 +41,9 @@
         </li>
     </ul>
     <div class="row">
-        <input type="submit" class="btn btn-primary col-xs-offset-8 col-xs-4" value="submit" />
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
     </div>
 </form>
 

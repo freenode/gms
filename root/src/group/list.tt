@@ -1,31 +1,41 @@
 [% META title = 'Group List' -%]
 
-<p>You are a member of the following groups:</p>
+<p>You are a <strong>member</strong> of the following groups</p>
 
-<ul>
+<ul class="list-group">
 [% FOREACH group IN groups -%]
-  <li>
+  <li class="list-group-item">
     <a href="[% c.uri_for("/group/${group.id}/view") %]">[% group.group_name | html %]</a>
   </li>
 [% END %]
 </ul>
 
-<p>You have the following group applications pending:</p>
+<p>You have the following group applications <strong>pending</strong></p>
 
-<ul>
+<ul class="list-group">
 [% FOREACH group IN pendinggroups -%]
-  <li>
+  <li class="list-group-item"> 
     <a href="[% c.uri_for("/group/${group.id}/view") %]">[% group.group_name | html %]</a>
   </li>
 [% END %]
 </ul>
 
-<p>You have been invited to the following groups:</p>
+<p>You have been <strong>invited</strong> to the following groups</p>
 
-<ul>
+<ul class="list-group">
 [% FOREACH group IN invitedgroups -%]
-  <li>
-    [% group.group_name | html %] <a href="[% c.uri_for("/group/${group.id}/invite/accept") %]">Accept</a> - <a href="[% c.uri_for("/group/${group.id}/invite/decline") %]">Decline</a>
+  <li class="list-group-item">
+    <div class="row">
+        <div class="col-xs-9">
+            [% group.group_name | html %] 
+        </div>
+        <div class="col-xs-3 text-right">
+            <div class="btn-group">
+                <a href="[% c.uri_for("/group/${group.id}/invite/accept") %]" class="btn btn-success">Accept</a>
+                <a href="[% c.uri_for("/group/${group.id}/invite/decline") %]" class="btn btn-danger">Decline</a>
+            </div>
+        </div>
+    </div>
   </li>
 [% END %]
 </ul>

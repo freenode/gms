@@ -4,16 +4,18 @@
 
 [% group.group_name | html %]'s current active namespaces are:<br/><br/>
 
-<form method="post" action="[% c.uri_for("/group/${group.id}/edit_cloak_namespaces/submit") %]">
+<form method="post" action="[% c.uri_for("/group/${group.id}/edit_cloak_namespaces/submit") %]" class="form-horizontal">
 
 [% IF cloak_namespaces.size != 0 %]
-    <table class="fullwidth">
-    <tr>
-    <th class="td33">Namespace</th>
-    <th class="td33">Status</th>
-    <th class="td33">Change?</th>
-    </tr>
-
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Namespace</th>
+                <th>Status</th>
+                <th>Change?</th>
+            </tr>
+        </thead>
+        <tbody>
     [% FOREACH namespace IN cloak_namespaces %]
 
     [%
@@ -26,33 +28,43 @@
     %]
 
     <tr>
-    <td>
-        [% namespace.namespace | html %]
-    </td>
-    <td>
-        <select style="width:80%" name='status_[% namespace.id %]'>
-        <option value='active' [% IF change.status.is_active %] selected [% END %]>active</option>
-        <option value='deleted' [% IF change.status.is_deleted %] selected [% END %]>deleted</option>
-        </select>
-    </td>
-    <td>
-        <label><input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change</label>
-    </td>
+        <td>
+            [% namespace.namespace | html %]
+        </td>
+        <td>
+            <select class="form-control" name='status_[% namespace.id %]'>
+                <option value='active' [% IF change.status.is_active %] selected [% END %]>active</option>
+                <option value='deleted' [% IF change.status.is_deleted %] selected [% END %]>deleted</option>
+            </select>
+        </td>
+        <td>
+            <label class="checkbox-inline"><input type="checkbox" name="edit_[% namespace.id %]" value="1" /> Change</label>
+        </td>
     </tr>
     [% END %]
-
+    </tbody>
     </table>
-    <br/>
-[% ELSE %]
-    Your group currently has no cloak namespaces, but you can add another.
-[% END %]
-<p>
-  Add a new namespace:<br/>
-  <input type='text' name='namespace' value="[% prev_namespace | html %]" /><br />
-  [% IF confirm %]
-    <input type="checkbox" name="do_confirm" value="1" /> Confirm Create Conflicting Change<br/>
-  [% END %]
-  <input type='submit' value='Submit' />
-</p>
 
+[% ELSE %]
+    <p class="alert alert-info">Your group currently has no cloak namespaces, but you can add another.</p>
+[% END %]
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Add a new namespace</label>
+        <div class="col-sm-9">
+            <input type='text' name='namespace' value="[% prev_namespace | html %]" class="form-control" />
+        </div>
+    </div>
+  [% IF confirm %]
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Confirm Create Conflicting Change</label>
+        <div class="col-sm-9">
+            <input type="checkbox" name="do_confirm" value="1" />
+        </div>
+    </div>
+  [% END %]
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 </form>
