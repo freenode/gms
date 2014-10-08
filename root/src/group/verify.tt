@@ -3,22 +3,24 @@
 <h2>Verify [% group.group_name | html %]</h2>
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/verify/submit") %]">
-    Here are the possible verification methods. You have to do <b>one</b> of the below:<br/><br/>
+    Here are the possible verification methods. You have to do <strong>one</strong> of the below:<br/><br/>
     <ul >
         <li>
-            Create a file called <b>[% group.verify_url | html %]</b> with content <b>[% group.verify_token %]</b>
+            Create a file called <strong>[% group.verify_url | html %]</strong> with content <strong>[% group.verify_token %]</strong>
         </li>
         <li>
-            Create a TXT record on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b>.
+            Create a TXT record on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong>.
         </li>
         <li>
-            Alias <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>
+            Alias <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>
         </li>
         <li>
             Enter free text in the area below explaining why you can't do the above:<br/><br/>
-            <textarea style="height:200px;width:90%" name="freetext"></textarea>
+            <textarea class="form-control" name="freetext"></textarea>
         </li>
     </ul>
     Once you've completed one of the verification methods above, submit this form:<br/><br/>
-    <input type="submit" class='btn btn-primary' value="Submit" />
+    <div class="row">
+        <input type="submit" class="btn btn-primary col-xs-offset-8 col-xs-4" value="Submit" />
+    </div>
 </form>

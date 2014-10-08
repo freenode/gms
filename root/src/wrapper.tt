@@ -6,12 +6,13 @@
 [%END -%]
 [% IF (!c.request.param ('ajax')) -%]
     <?xml version="1.0" encoding="UTF-8" ?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.4//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
       <head>
         <title>Freenode Group Management System</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/bootstrap.min.css') %]" />
+        <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/bootstrap-theme.min.css') %]" />
         <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/main.css') %]" />
         <script type="text/javascript">
             document.root_url = "[% c.uri_for ('/') | html %]";
@@ -22,70 +23,57 @@
         <script type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]"></script>
       </head>
       <body>
-        <div id="header">
-          <div class="logo">
-            <img src="[% c.uri_for('/static/img/freenode_logo.png') %]" width="340" height="68" />
-          </div>
-          <div class="login">
-              [% IF c.user_exists -%]
-              You are logged in as [% c.user.username | html %]
-              (<a href="[% c.uri_for('/logout') %]">log out</a>).
-              [% ELSE -%]
-              You are not logged in
-              (<a href="[% c.uri_for('/login') %]">log in</a>).
-              [% END %]
-          </div>
-        </div><!-- header end -->
-        <div id="sidebar">
-          <div><!-- links -->
-            <a href="http://freenode.net/">Freenode Main Page</a>
-            <br />
-            <a href="[% c.uri_for('/') %]">GMS Home</a>
-          </div>
-          <div>
-              <ul class="nolist">
-                  [% IF  c.check_user_roles('admin')  %]
-                  <li><a href="[% c.uri_for('/admin/') %]">Admin</a></li>
-                  [% ELSIF c.check_user_roles ('staff') %]
-                  <li><a href="[% c.uri_for('/staff/') %]">Staff</a></li>
-                  [% END %]
-                  <li><a href="[% c.uri_for('/group/') %]">Your groups</a></li>
-                  <li><a href="[% c.uri_for('/userinfo') %]">Your contact info</a></li>
-                  <li><a href="[% c.uri_for('/cloak') %]">Your pending group cloaks</a></li>
-                  <li><a href="[% c.uri_for('/group/new') %]">Register a new group</a></li>
-              </ul>
-          </div>
-        </div><!-- sidebar end -->
-        <div id="main">
-          <!-- error box -->
-
-          <div id="error_container" class="alert alert-error [% IF !error_msg %] hidden [% END %]">
-            [% error_msg | html %]
-          </div>
-
-          [% IF errors %]
-          <div class="alert alert-error">
-              <p> The following errors were encountered:</p>
-              <ul>
-                  [% FOREACH error IN errors %]
-                  <li> [% error | html %] </li>
-                  [% END %]
-              </ul>
-          </div>
-          [% END %]
-          <!-- status box -->
-          [% IF status_msg %]
-          <div class="alert alert-info">
-            [% status_msg | html %]
-          </div>
-          [% END %]
-          <!-- content box -->
-          <div class="content">
-            [% content %]
-          </div>
-        </div><!-- main end -->
-        <div id="footer">
-        </div><!-- footer end -->
+        <div id="header" class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="navbar-header">
+                <img src="[% c.uri_for('/static/img/freenode_logo.png') %]" alt="freenode" />
+            </div>
+            <div class="navbar-right">
+                [% IF c.user_exists -%]
+                You are logged in as [% c.user.username | html %] (<a href="[% c.uri_for('/logout') %]" class="logout">log out</a>).
+                [% ELSE -%]
+                You are not logged in (<a href="[% c.uri_for('/login') %]" class="login">log in</a>).
+                [% END %]
+            </div>
+        </div>
+        <div id="content" class="container-fluid">
+            <div class="row">
+                <div id="menu" class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                    <div class="btn-group-vertical btn-block">
+                        <a href="http://freenode.net/" class="btn btn-default" ><i class="glyphicon glyphicon-chevron-right"></i> Freenode Main Page</a>
+                        <a href="[% c.uri_for('/') %]" class="btn btn-default" ><i class="glyphicon glyphicon-home"></i> GMS Home</a>
+                        [% IF  c.check_user_roles('admin')  %]
+                          <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin</a>
+                        [% ELSIF c.check_user_roles ('staff') %]
+                          <a href="[% c.uri_for('/staff/') %]" class="btn btn-default">Staff</a>
+                        [% END %]
+                          <a href="[% c.uri_for('/group/') %]" class="btn btn-default">Your groups</a>
+                          <a href="[% c.uri_for('/userinfo') %]" class="btn btn-default">Your contact info</a>
+                          <a href="[% c.uri_for('/cloak') %]" class="btn btn-default">Your pending group cloaks</a>
+                          <a href="[% c.uri_for('/group/new') %]" class="btn btn-default">Register a new group</a>
+                    </div>
+                </div>
+                <div id="main" class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
+                    <div class="alert alert-danger [% IF !error_msg %] hidden [% END %]">
+                        [% error_msg | html %]
+                    </div>
+                    [% IF errors %]
+                        <div class="alert alert-danger">
+                            <p>The following errors were encountered:</p>
+                            <ul>
+                                [% FOREACH error IN errors %]
+                                <li>[% error | html %]</li>
+                                [% END %]
+                            </ul>
+                        </div>
+                    [% END %]
+                    [% IF status_msg %]
+                        <div class="alert alert-info">
+                            [% status_msg | html %]
+                        </div>
+                    [% END %]
+                    [% content %]
+                </div>
+            </div>
       </body>
     </html>
 [% ELSE -%]
@@ -98,12 +86,12 @@
       HTML code.
    -->
    [% IF error_msg %]
-      <div class="alert alert-error">
+      <div class="alert alert-danger">
         [% error_msg | html %]
       </div>
   [% END %]
   [% IF errors %]
-      <div class="alert alert-error">
+      <div class="alert alert-danger">
         <p> The following errors were encountered:</p>
         <ul>
           [% FOREACH error IN errors %]

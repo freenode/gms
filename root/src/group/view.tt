@@ -2,19 +2,18 @@
 
 <h2>[% group.group_name | html %]</h2>
 
-<table>
-<tr> <td>Type</td>              <td>[% group.group_type %]</td> </tr>
-<tr> <td>URL</td>               <td>[% group.url %]</td> </tr>
-<tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
-<tr> <td>Verification URL</td>  <td>[% group.verify_url | html %]</td> </tr>
-<tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
-<tr> <td colspan="2">&nbsp;</td> </tr>
-<tr> <th colspan="2">DNS verification:</td> </tr>
-<tr> <td colspan="2">The DNS verification can be either a TXT on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b> or aliasing <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>.</td></tr>
+<table class="table table-condensed">
+<tr> <td class="text-right"><strong>Type</strong></td>              <td colspan="2">[% group.group_type %]</td> </tr>
+<tr> <td class="text-right"><strong>URL</strong></td>               <td colspan="2">[% group.url %]</td> </tr>
+<tr> <td class="text-right"><strong>Status</strong></td>            <td colspan="2">[% group.status %]</td> </tr>
+<tr> <td class="text-right"><strong>Verification URL</strong></td>  <td colspan="2">[% group.verify_url | html %]</td> </tr>
+<tr> <td class="text-right"><strong>Verification token</strong></td><td colspan="2">[% group.verify_token %]</td> </tr>
+<tr> <td colspan="3"><strong>DNS verification:</strong></td> </tr>
+<tr> <td colspan="3">The DNS verification can be either a TXT on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong> or aliasing <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>.</td></tr>
 
 
 [% IF group.git_url %]
-<tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url | html %]</td> </tr>
+<tr> <td class="text-right"><strong>Gitweb/Cvsweb URL</strong></td> <td colspan="2">[% group.git_url | html %]</td> </tr>
 [% END %]
 </table>
 [% IF group.verify_freetext %]
