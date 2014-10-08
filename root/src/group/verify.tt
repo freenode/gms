@@ -21,6 +21,8 @@
     </ul>
     Once you've completed one of the verification methods above, submit this form:<br/><br/>
     <div class="row">
-        <input type="submit" class="btn btn-primary col-xs-offset-8 col-xs-4" value="Submit" />
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
     </div>
 </form>

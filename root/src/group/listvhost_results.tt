@@ -1,9 +1,9 @@
 [% META title = 'List cloaks' %]
 
 [% results.size %] result(s):<br/>
-<ul>
+<ul class="list-group">
     [% FOREACH result IN results.pairs %]
-        <li>[% result.key | html %] - [% result.value | html %]</li>
+        <li class="list-group-item">[% result.key | html %] - [% result.value | html %]</li>
     [% END %]
 </ul>
 <a href="[% c.uri_for ("/group/${group.id}/view") %]">View group status</a>
