@@ -50,114 +50,109 @@ to help us verify your registration.</p>
         </div>
     </div>
     [% IF confirm %]
-    <div class="checkbox">
-        <label><input type="checkbox" name="do_confirm" value="1" /> Confirm Create Conflicting Change</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Confirm Create Conflicting Change</label>
+        <div class="input-group col-sm-9">
+            <input type="checkbox" name="do_confirm" value="1" />
+        </div>
     </div>
     [% END %]
-    <div id="address_input">
-        <p>Does the group have a registered / postal address?</p>
-        <div class="radio">
-            <label><input type="radio" [% IF has_address=="y" %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address=="n" || !has_address %] checked="checked" [% END %] /> No</label>
+    <div class="form-group" id="address_input"> 
+        <label class="col-sm-3 control-label">Does the group have a registered / postal address?</label>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" [% IF has_address=="y" %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label>
+            <label class="radio-inline"><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address=="n" || !has_address %] checked="checked" [% END %] /> No</label>
         </div>
     </div>
-    <div name="addr_hide">
-        <div class="form-group">
-            <label>Group Address</label>
-            <span onmouseover="tooltip(this, 5)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+    <div class="form-group" name="addr_hide">
+        <label>Group Address</label>
+        <span onmouseover="tooltip(this, 5)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="addr1" class="col-sm-3 control-label">* Address 1</label>
+        <div class="col-sm-9">
+            <input id="addr1" type="text" name="address_one" class="form-control" value="[% address_one | html %]" />
         </div>
-        <div class="form-group">
-            <label for="addr1" class="col-sm-3 control-label">* Address 1</label>
-            <div class="col-sm-9">
-                <input id="addr1" type="text" name="address_one" class="form-control" value="[% address_one | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="addr2" class="col-sm-3 control-label">Address 2</label>
+        <div class="col-sm-9">
+            <input id="addr2" type="text" name="address_two" class="form-control" value="[% address_two | html %]" />
         </div>
-        <div class="form-group">
-            <label for="addr2" class="col-sm-3 control-label">Address 2</label>
-            <div class="col-sm-9">
-                <input id="addr2" type="text" name="address_two" class="form-control" value="[% address_two | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="addr2" class="col-sm-3 control-label">* City</label>
+        <div class="col-sm-9">
+            <input id="city" type="text" name="city" class="form-control" value="[% city | html %]" />
         </div>
-        <div class="form-group">
-            <label for="addr2" class="col-sm-3 control-label">* City</label>
-            <div class="col-sm-9">
-                <input id="city" type="text" name="city" class="form-control" value="[% city | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="state" class="col-sm-3 control-label">State</label>
+        <div class="col-sm-9">
+            <input id="state" type="text" name="state" class="form-control" value="[% state | html %]" />
         </div>
-        <div class="form-group">
-            <label for="state" class="col-sm-3 control-label">State</label>
-            <div class="col-sm-9">
-                <input id="state" type="text" name="state" class="form-control" value="[% state | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide"> 
+        <label for="pcode" class="col-sm-3 control-label">Postal Code</label>
+        <div class="col-sm-9">
+            <input id="pcode" type="text" name="postcode" class="form-control" value="[% postcode | html %]" />
         </div>
-        <div class="form-group">
-            <label for="pcode" class="col-sm-3 control-label">Postal Code</label>
-            <div class="col-sm-9">
-                <input id="pcode" type="text" name="postcode" class="form-control" value="[% postcode | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="country" class="col-sm-3 control-label">* Country</label>
+        <div class="col-sm-9">
+            <input id="country" type="text" name="country" class="form-control" value="[% country | html %]" />
         </div>
-        <div class="form-group">
-            <label for="country" class="col-sm-3 control-label">* Country</label>
-            <div class="col-sm-9">
-                <input id="country" type="text" name="country" class="form-control" value="[% country | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="phone" class="col-sm-3 control-label">* Telephone</label>
+        <div class="col-sm-9">
+            <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" type="text" name="phone" class="form-control" value="[% phone | html %]" />
         </div>
-        <div class="form-group">
-            <label for="phone" class="col-sm-3 control-label">* Telephone</label>
-            <div class="col-sm-9">
-                <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" type="text" name="phone" class="form-control" value="[% phone | html %]" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="phone2" class="col-sm-3 control-label">Telephone (alternate)</label>
-            <div class="col-sm-9">
-                <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone2" class="form-control" value="[% phone2 | html %]" />
-            </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="phone2" class="col-sm-3 control-label">Telephone (alternate)</label>
+        <div class="col-sm-9">
+            <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone2" class="form-control" value="[% phone2 | html %]" />
         </div>
     </div>
     <h4>Additional Information</h4>
-    <p>Join the Groups Advisory Board? <span onmouseover="tooltip(this, 6)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span></p>
-    <div class="radio">
-        <label><input type="radio" name="join_gab" id="join_gab_y" value="Yes" [% IF join_gab == "Yes" || !join_gab %] checked="checked" [% END %] /> Yes</label>
-    </div>
-    <div class="radio">
-        <label><input type="radio" name="join_gab" id="join_gab_n" value="No" [% IF join_gab == "No" %] checked="checked" [% END %] /> No</label>
-    </div>
-    <div id="gab">
-        <div class="form-group">
-            <label for="gab_email" class="col-sm-3 control-label">Email address for GAB mailing list</label>
-            <div class="col-sm-9">
-                <input type="email" id="gab_email" name="gab_email" class="form-control" value="[% gab_email %]" />
-            </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Join the Groups Advisory Board? <span onmouseover="tooltip(this, 6)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span></label>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="join_gab" id="join_gab_y" value="Yes" [% IF join_gab == "Yes" || !join_gab %] checked="checked" [% END %] /> Yes</label>
+            <label class="radio-inline"><input type="radio" name="join_gab" id="join_gab_n" value="No" [% IF join_gab == "No" %] checked="checked" [% END %] /> No</label>
+        </div>
+    </div>    
+    <div class="form-group" id="gab">
+        <label for="gab_email" class="col-sm-3 control-label">Email address for GAB mailing list</label>
+        <div class="col-sm-9">
+            <input type="email" id="gab_email" name="gab_email" class="form-control" value="[% gab_email %]" />
         </div>
     </div>
-    <p>Include project on Primary Groups listing? <span onmouseover="tooltip(this, 7)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span></p>
-    <div class="radio">
-        <label><input type="radio" name="include_listing" id="include_listing_y" value="y" [% IF include_listing=="y" || !include_listing  %] checked="checked" [% END %] /> Yes</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Include project on Primary Groups listing? <span onmouseover="tooltip(this, 7)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span></label>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="include_listing" id="include_listing_y" value="y" [% IF include_listing=="y" || !include_listing  %] checked="checked" [% END %] /> Yes</label>
+            <label class="radio-inline"><input type="radio" name="include_listing" id="include_listing_n" value="n" [% IF include_listing=="n" %] checked="checked" [% END %] /> No</label>
+        </div>
     </div>
-    <div class="radio">
-        <label><input type="radio" name="include_listing" id="include_listing_n" value="n" [% IF include_listing=="n" %] checked="checked" [% END %] /> No</label>
-    </div>
-    <div id="listing">
-        <div class="form-group">
-            <label for="listurl" class="col-sm-3 control-label">URL to be linked</label>
-            <div class="col-sm-9">
-                <input id="listurl" type="text" name="listing_url" style="width:90%" value="[% listing_url %]" />
-            </div>
+    <div class="form-group" id="listing">
+        <label for="listurl" class="col-sm-3 control-label">URL to be linked</label>
+        <div class="col-sm-9">
+            <input id="listurl" type="text" name="listing_url" style="width:90%" value="[% listing_url %]" />
         </div>
     </div>
     <div class="form-group">
         <label for="blurb" class="col-sm-3 control-label">Small blurb about the project</label>
         <div class="col-sm-9">
-            <textarea class="form-control" id="blurb" name="listing_blurb" cols="45" rows="5">[% listing_blurb %]</textarea>
+            <textarea class="form-control" id="blurb" name="listing_blurb" >[% listing_blurb %]</textarea>
         </div>
     </div>
     <div class="form-group">
         <label for="other" class="col-sm-3 control-label">Any other information</label>
         <div class="col-sm-9">
-            <textarea class="form-control" name="other_info" id="other" cols="45" rows="5">[% other_info %]</textarea>
+            <textarea class="form-control" name="other_info" id="other" >[% other_info %]</textarea>
         </div>
     </div>
     <div class="form-group">
