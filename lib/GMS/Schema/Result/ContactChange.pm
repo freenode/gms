@@ -311,6 +311,11 @@ sub approve {
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
     my $ret = $self->contact->active_change($self->copy({ change_type => 'approve', changed_by => $account, affected_change => $self->id, change_freetext => $freetext }));
+
+    $self->contact->name($self->name);
+    $self->contact->email($self->email);
+    $self->contact->phone($self->phone);
+
     $self->contact->update;
     return $ret;
 }

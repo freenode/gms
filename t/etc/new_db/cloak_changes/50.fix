@@ -3,5 +3,8 @@ $HASH1 = {
                    => 92,
            cloak   => 'group49/user49',
            id      => 50,
+           namespace_id
+                   => 99,
+           status  => 'applied',
            target  => '57972A8E'
          };

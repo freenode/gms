@@ -1,7 +1,9 @@
 $HASH1 = {
            active_change
                     => 114,
+           group_id => 104,
            id       => 70,
            namespace
-                    => 'namespace34'
+                    => 'namespace34',
+           status   => 'active'
          };

@@ -25,6 +25,9 @@ $mockAccounts->mock ('find_by_uid', sub {
 
 my $mockAtheme = new Test::MockObject;
 
+$mockAtheme->mock('service', sub { 'GMSServ' });
+$mockAtheme->mock('command', sub { } );
+
 my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
 $mockModel->mock ('session' => sub { $mockAtheme });
 

@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<cloak_changes>
 
 =cut
@@ -50,6 +64,18 @@ __PACKAGE__->table("cloak_changes");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 namespace_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "cloak_change_status",list => ["offered","accepted","approved","rejected","applied","error"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -71,6 +97,18 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "namespace_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "cloak_change_status",
+      list => ["offered", "accepted", "approved", "rejected", "applied", "error"],
+    },
+    is_nullable => 0,
+  },
+
 );
 
 =head1 PRIMARY KEY
@@ -131,6 +169,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 namespace
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::CloakNamespace>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "namespace",
+  "GMS::Schema::Result::CloakNamespace",
+  { id => "namespace_id" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
 =head2 target
 
 Type: belongs_to
@@ -147,8 +200,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l/E5sfkYv6alaSszNUOc4A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-28 18:31:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G9/kg4CYO++6lZ4y20R7Wg
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 use TryCatch;
@@ -206,9 +259,15 @@ sub new {
         if (!$group) {
             push @errors, "You need to provide a group";
             $valid = 0;
-        } elsif ( !$group->active_cloak_namespaces->find ({ 'namespace' => $ns }) ) {
+        } else {
+            my $namespace = $group->active_cloak_namespaces->find ({ 'namespace' => $ns });
+
+            if (!$namespace) {
                 push @errors, "The namespace $ns does not belong in your Group's namespaces.";
                 $valid = 0;
+            } else {
+                $args->{namespace_id} = $namespace->id;
+            }
         }
     }
 
@@ -225,9 +284,14 @@ sub new {
         'changed_by',
         'status',
     );
+
     my %change_args;
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'offered';
+
+    $args->{status} ||= 'offered';
+
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
+
+    delete $args->{changed_by};
 
     $args->{cloak_change_changes} = [ \%change_args ];
 
@@ -283,21 +347,12 @@ sub change {
     my $ret = $self->add_to_cloak_change_changes(\%change_args);
     $self->active_change($ret);
 
+    $self->status($args->{status});
+
     $self->update;
     return $ret;
 }
 
-=head2 status
-
-Returns the active change status.
-
-=cut
-
-sub status {
-    my ($self) = @_;
-
-    return $self->active_change->status;
-}
 
 =head2 accept
 
@@ -414,6 +469,11 @@ sub sync_to_atheme {
 
     return $error;
 }
+
+# Set enum columns to use Object::Enum
+__PACKAGE__->add_columns(
+    '+status' => { is_enum => 1 },
+);
 
 =head2 TO_JSON
 

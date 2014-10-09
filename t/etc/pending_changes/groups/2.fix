@@ -1,8 +1,17 @@
 $HASH1 = {
-           active_change => 6,
-           deleted       => 0,
-           group_name    => 'group02',
-           id            => 2,
-           submitted     => '2012-08-02 16:48:38.246374',
-           verify_auto   => 0
+           active_change
+                    => 6,
+           address  => undef,
+           deleted  => 0,
+           group_name
+                    => 'group02',
+           group_type
+                    => 'informal',
+           id       => 2,
+           status   => 'pending_staff',
+           submitted
+                    => '2012-08-02 16:48:38.246374',
+           url      => 'http://localhost/',
+           verify_auto
+                    => 0
          };

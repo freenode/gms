@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<channel_requests>
 
 =cut
@@ -67,6 +81,18 @@ __PACKAGE__->table("channel_requests");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 namespace_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 status
+
+  data_type: 'enum'
+  extra: {custom_type_name => "channel_request_status",list => ["pending_staff","approved","rejected","applied","error"]}
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -100,6 +126,17 @@ __PACKAGE__->add_columns(
     default_value  => -1,
     is_foreign_key => 1,
     is_nullable    => 0,
+  },
+  "namespace_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "status",
+  {
+    data_type => "enum",
+    extra => {
+      custom_type_name => "channel_request_status",
+      list => ["pending_staff", "approved", "rejected", "applied", "error"],
+    },
+    is_nullable => 0,
   },
 );
 
@@ -161,6 +198,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 namespace
+
+Type: belongs_to
+
+Related object: L<GMS::Schema::Result::ChannelNamespace>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "namespace",
+  "GMS::Schema::Result::ChannelNamespace",
+  { id => "namespace_id" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
 =head2 requestor
 
 Type: belongs_to
@@ -197,8 +249,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D6G+j0swI+hAMCJhfGUyUA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-09-21 14:38:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:05c4ZxDHBcKfmuNkAMpUlw
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->load_components ("InflateColumn::Object::Enum");
@@ -254,15 +306,20 @@ sub new {
     }
 
     if ($valid) {
-        my $namespace = delete $args->{namespace};
+        my $namespace_name = delete $args->{namespace};
         my $group = delete $args->{group};
         my $channel = $args->{channel};
 
-        if ( !$group->active_channel_namespaces->find ({ 'namespace' => $namespace }) ) {
+        my $namespace = $group->active_channel_namespaces->find ({ 'namespace' => $namespace_name });
+
+        if (!$namespace) {
             push @errors, "This namespace does not belong in your Group's namespaces.";
             $valid = 0;
+        } else {
+            $args->{namespace_id} = $namespace->id;
         }
-        if ( $channel ne "#$namespace" && !match_glob ("#$namespace-*", $channel) ) {
+
+        if ( $channel ne "#$namespace_name" && !match_glob ("#$namespace_name-*", $channel) ) {
             push @errors, "This channel does not belong in that namespace.";
             $valid = 0;
         }
@@ -286,9 +343,12 @@ sub new {
         'status',
     );
 
+    $args->{status} ||= 'pending_staff';
+
     my %change_args;
-    @change_args{@change_arg_names} = delete @{$args}{@change_arg_names};
-    $change_args{status} ||= 'pending_staff';
+    @change_args{@change_arg_names} = @{$args}{@change_arg_names};
+
+    delete $args->{changed_by};
 
     $args->{channel_request_changes} = [ \%change_args ];
 
@@ -344,20 +404,10 @@ sub change {
     my $ret = $self->add_to_channel_request_changes(\%change_args);
     $self->active_change($ret);
 
+    $self->status($args->{status});
+
     $self->update;
     return $ret;
-}
-
-=head2 status
-
-Returns the active change status.
-
-=cut
-
-sub status {
-    my ($self) = @_;
-
-    return $self->active_change->status;
 }
 
 =head2 approve
@@ -483,6 +533,11 @@ sub sync_to_atheme {
 
     return $error;
 }
+
+# Set enum columns to use Object::Enum
+__PACKAGE__->add_columns(
+    '+status' => { is_enum => 1 },
+);
 
 =head2 TO_JSON
 

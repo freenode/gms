@@ -15,6 +15,20 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::InflateColumn::Object::Enum>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
+
 =head1 TABLE: C<channel_namespace_changes>
 
 =cut
@@ -54,7 +68,6 @@ __PACKAGE__->table("channel_namespace_changes");
   data_type: 'text'
   is_foreign_key: 1
   is_nullable: 0
-  original: {data_type => "varchar"}
 
 =head2 change_type
 
@@ -101,12 +114,7 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "changed_by",
-  {
-    data_type      => "text",
-    is_foreign_key => 1,
-    is_nullable    => 0,
-    original       => { data_type => "varchar" },
-  },
+  { data_type => "text", is_foreign_key => 1, is_nullable => 0 },
   "change_type",
   {
     data_type => "enum",
@@ -248,8 +256,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 14:42:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PvvC3FH/bTOPvQN/Q6AFcQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-10-01 18:48:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fXHlNya4jTclDPIISd5PKA
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum");
@@ -325,6 +333,10 @@ sub approve {
     die GMS::Exception::InvalidChange->new("Need an account to approve a change") unless $account;
 
     my $ret = $self->namespace->active_change($self->copy({ change_type => 'approve', changed_by => $account, affected_change => $self->id, change_freetext => $freetext }));
+
+    $self->namespace->status($self->status);
+    $self->namespace->group_id($self->group_id);
+
     $self->namespace->update;
     return $ret;
 }

@@ -133,4 +133,23 @@ lives_ok {
         })
 };
 
+my $pending = $schema->resultset('CloakChange')->search_pending;
+
+ok $pending->count == 17, "17 pending requests";
+
+my $req = $pending->find({ "namespace.namespace" => "group40" }, { join => "namespace" });
+
+ok $req, 'Request exists';
+
+$req->namespace->change ($admin, 'workflow_change', { status => 'deleted' });
+
+$pending = $schema->resultset('ChannelRequest')->search_pending;
+$req = $pending->find({ "namespace.namespace" => "group0" }, { join => "namespace" });
+
+ok !$req, 'Request is not valid anymore, since the namespace is gone';
+
+ok $pending->count == 16;
+
+warn $pending->count;
+
 done_testing;

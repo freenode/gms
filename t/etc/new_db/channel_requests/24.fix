@@ -2,8 +2,10 @@ $HASH1 = {
            active_change => 40,
            channel       => '#group23',
            id            => 24,
+           namespace_id  => 47,
            request_data  => undef,
            request_type  => 'drop',
            requestor     => 25,
+           status        => 'pending_staff',
            target        => '4A494B6E'
          };
