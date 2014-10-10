@@ -83,4 +83,22 @@ $ua->submit_form(
 $ua->content_lacks('#example-1', 'Listing specific namespace');
 $ua->content_contains('#example2-1', 'Listing specific namespace');
 
+$schema->resultset("ChannelRequest")->create({
+        channel => '#example2-3',
+        requestor => 1,
+        namespace => 'example2',
+        group => $group,
+        request_type => 'transfer',
+        target => 'AAAAAAAAP',
+        changed_by => 'AAAAAAAAP'
+    });
+
+$ua->get_ok("http://localhost/group/1/listchans", "Listing channels page");
+$ua->submit_form(
+    fields => {
+        namespace => 'example2',
+    });
+
+$ua->content_contains('example2-3', 'Pending requests are shown');
+
 done_testing;

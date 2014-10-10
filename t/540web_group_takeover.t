@@ -86,7 +86,9 @@ $ua->submit_form(
 
 $ua->content_contains ("Successfully requested the channel take over", "Transfer works");
 
-$ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
+$ua->get_ok("http://localhost/group/1/listchans");
+
+$ua->content_contains('#example-test', 'Pending requests are shown');
 
 $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 

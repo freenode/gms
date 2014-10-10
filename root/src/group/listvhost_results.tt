@@ -1,9 +1,27 @@
 [% META title = 'List cloaks' %]
 
+<h3>Active cloaks</h3>
 [% results.size %] result(s):<br/>
 <ul>
     [% FOREACH result IN results.pairs %]
         <li>[% result.key | html %] - [% result.value | html %]</li>
     [% END %]
 </ul>
+
+<h3>Requested cloaks</h3>
+[% pending.size %] result(s):<br/>
+<ul>
+    [% FOREACH cloak IN pending %]
+        [% IF cloak.status == 'offered' %]
+            [% status = 'Waiting user approval' %]
+        [% ELSIF cloak.status == 'accepted' %]
+            [% status = 'Waiting staff approval' %]
+        [% END %]
+
+        <li>[% cloak.target.accountname | html %] - [% cloak.cloak | html %] ([% status %])</li>
+    [% END %]
+</ul>
+
+
+
 <a href="[% c.uri_for ("/group/${group.id}/view") %]">View group status</a>

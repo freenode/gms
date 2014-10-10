@@ -850,6 +850,22 @@ sub do_listvhost :Chained('single_group') :PathPart('listvhost/submit') :Args(0)
         my $search = "$namespace/*";
         my %results = $client->listvhost ($search);
 
+        my @pending = $c->model('DB::CloakChange')->search_pending->search(
+            {
+                'namespace.namespace'    => $namespace
+            },
+            { join => 'namespace' }
+        )->all;
+
+        push @pending, $c->model('DB::CloakChange')->search_offered->search(
+            {
+                'namespace.namespace'   => $namespace
+            },
+            { join => 'namespace' }
+        )->all;
+
+
+        $c->stash->{pending} = \@pending;
         $c->stash->{results} = \%results;
     }
     catch (RPC::Atheme::Error $e) {
@@ -1279,6 +1295,7 @@ sub do_listchans :Chained('single_group') :PathPart('listchans/submit') :Args(0)
         my $session = $c->model('Atheme')->session;
         my $client = GMS::Atheme::Client->new ($session);
         my %results;
+        my %pending;
         my @namespaces;
 
         if ($namespace) {
@@ -1303,6 +1320,26 @@ sub do_listchans :Chained('single_group') :PathPart('listchans/submit') :Args(0)
         }
 
         $c->stash->{results} = \%results;
+
+        my @requests = $c->model('DB::ChannelRequest')->search_pending->search(
+            {
+                'namespace.group_id'    => $group->id
+            },
+            { join => 'namespace' }
+        )->all;
+
+        foreach my $request (@requests) {
+            my $namespace_name = $request->namespace->namespace;
+
+            if ("#$namespace_name" eq $request->channel) {
+                $pending{"#$namespace_name"} = $request->channel;
+            } else {
+                $pending{"#$namespace_name-*"} = $request->channel;
+            }
+        }
+
+        $c->stash->{pending} = \%pending;
+
     }
     catch (RPC::Atheme::Error $e) {
         $c->stash->{error_msg} = $e->description;
