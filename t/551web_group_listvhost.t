@@ -71,15 +71,36 @@ $ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");
 $ua->content_lacks ("admin - group0/cloak", "need to choose namespace if more than one");
 $ua->content_lacks ("user - group0/anothercloak", "need to choose namespace if more than one");
 
+my $cloak = $schema->resultset("CloakChange")->create({
+        cloak => 'group0/user',
+        group => $group,
+        target => 'AAAAAAAAH',
+        changed_by => 'AAAAAAAAH'
+    });
+
 $ua->submit_form (
     fields => {
         'namespace' => 'group0'
     }
 );
 
+my $group = $schema->resultset('Group')->find({ id => 2 });
 
 $ua->content_contains ("admin - group0/cloak", "Cloak is visible after form");
 $ua->content_contains ("user - group0/anothercloak", "Cloak is visible after form");
+$ua->content_contains ("group0/user (Waiting user approval)", "pending cloaks are shown");
+
+my $admin = $schema->resultset('Account')->find({ id => 'AAAAAAAAH' });
+$cloak->accept($admin);
+
+$ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");
+$ua->submit_form (
+    fields => {
+        'namespace' => 'group0'
+    }
+);
+
+$ua->content_contains ("group0/user (Waiting staff approval)", "pending cloaks are shown");
 
 
 $ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");

@@ -113,16 +113,15 @@ sub _search_cloak_change_status {
 
     return $self->search(
         {
-            'active_change.status' => $status,
+            'me.status' => $status,
             'me.namespace_id' => {
                 'in' => $namespace_rs->search({
-                        'active_change.status' => 'active',
+                        'inner.status' => 'active',
                     },
-                    { join => 'active_change' }
-                )->get_column('me.id')->as_query,
+                    { alias => 'inner' }
+                )->get_column('inner.id')->as_query,
             },
         },
-        { join => 'active_change' }
     );
 }
 

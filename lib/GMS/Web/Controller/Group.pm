@@ -850,6 +850,22 @@ sub do_listvhost :Chained('single_group') :PathPart('listvhost/submit') :Args(0)
         my $search = "$namespace/*";
         my %results = $client->listvhost ($search);
 
+        my @pending = $c->model('DB::CloakChange')->search_pending->search(
+            {
+                'namespace.namespace'    => $namespace
+            },
+            { join => 'namespace' }
+        )->all;
+
+        push @pending, $c->model('DB::CloakChange')->search_offered->search(
+            {
+                'namespace.namespace'   => $namespace
+            },
+            { join => 'namespace' }
+        )->all;
+
+
+        $c->stash->{pending} = \@pending;
         $c->stash->{results} = \%results;
     }
     catch (RPC::Atheme::Error $e) {
