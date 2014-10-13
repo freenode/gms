@@ -101,6 +101,8 @@ is $group->active_channel_namespaces, 1, "Group still has one active namespace, 
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
+$ua->text_like(qr/Pending namespaces for.*example1/, 'Pending namespaces are shown');
+
 $ua->submit_form(
     fields => {
         namespace => 'test'

@@ -101,6 +101,8 @@ is $group->active_cloak_namespaces, 1, "Group still has one active namespace, si
 
 $ua->get_ok("http://localhost/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
+$ua->text_like(qr/Pending namespaces for.*example1/, 'Pending namespaces are shown');
+
 $ua->submit_form(
     fields => {
         namespace => 'test'

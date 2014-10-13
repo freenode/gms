@@ -46,6 +46,19 @@
 [% ELSE %]
     Your group currently has no cloak namespaces, but you can add another.
 [% END %]
+
+<h2>Pending namespaces for [% group.group_name | html %]</h2>
+
+[% IF pending_namespaces.size != 0 %]
+    <ul>
+    [% FOREACH namespace IN pending_namespaces %]
+        <li>[% namespace.namespace %]</li>
+    [% END %]
+    </ul>
+[% ELSE %]
+    No namespaces currently pending.
+[% END %]
+
 <p>
   Add a new namespace:<br/>
   <input type='text' name='namespace' value="[% prev_namespace | html %]" /><br />

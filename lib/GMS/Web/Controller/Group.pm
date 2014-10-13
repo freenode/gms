@@ -888,8 +888,10 @@ sub edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_nam
 
     my $group = $c->stash->{group};
     my @channel_namespaces = $group->active_channel_namespaces;
+    my @pending_namespaces = $group->pending_channel_namespaces;
 
     $c->stash->{channel_namespaces} = \@channel_namespaces;
+    $c->stash->{pending_namespaces} = \@pending_namespaces;
     $c->stash->{template} = 'group/edit_channel_namespaces.tt';
 }
 
@@ -995,9 +997,11 @@ sub edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespa
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
-    my @cloak_namespaces = $group->active_cloak_namespaces;
+    my @cloak_namespaces    = $group->active_cloak_namespaces;
+    my @pending_namespaces  = $group->pending_cloak_namespaces;
 
     $c->stash->{cloak_namespaces} = \@cloak_namespaces;
+    $c->stash->{pending_namespaces} = \@pending_namespaces;
     $c->stash->{template} = 'group/edit_cloak_namespaces.tt';
 }
 

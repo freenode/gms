@@ -810,6 +810,19 @@ sub active_channel_namespaces {
     return $self->channel_namespaces->search({ 'me.status' => 'active' });
 }
 
+=head2 pending_channel_namespaces
+
+Returns the channel namespaces that belong to the group, and that
+are currently pending
+
+=cut
+
+sub pending_channel_namespaces {
+    my ($self) = @_;
+
+    return $self->channel_namespaces->search({ 'me.status' => 'pending_staff' });
+}
+
 =head2 active_cloak_namespaces
 
 Returns the cloak namespaces that belong to the group, and that
@@ -821,6 +834,19 @@ sub active_cloak_namespaces {
     my ($self) = @_;
 
     return $self->cloak_namespaces->search({ 'me.status' => 'active' });
+}
+
+=head2 pending_cloak_namespaces
+
+Returns the cloak namespaces that belong to the group, and that
+are currently pending
+
+=cut
+
+sub pending_cloak_namespaces {
+    my ($self) = @_;
+
+    return $self->cloak_namespaces->search({ 'me.status' => 'pending_staff' });
 }
 
 =head2 add_to_channel_namespaces
