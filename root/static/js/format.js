@@ -400,6 +400,7 @@ function format_namespace ( namespace, type ) {
         html = html.replace (/\%req_type/g, __TYPE_NS2);
     }
 
+    html = html.replace (/\%group_id/g, namespace.group_id);
     html = html.replace (/\%id/g, namespace.id);
     html = html.replace (/\%group_name/g, namespace.group_name);
     html = html.replace (/\%requested_namespace/g, namespace.namespace_name);
