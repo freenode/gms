@@ -27,7 +27,7 @@ function getChannels ( query, handler ) {
                 var json = JSON.parse ( xmlHttp.responseText );
                 //cache
                 channels = json.json_channels;
-                handler ( json.channels );
+                handler ( channels );
             } catch (e) {
                 if ( typeof console !== 'undefined' ) {
                     console.log (e);
