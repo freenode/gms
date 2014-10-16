@@ -71,7 +71,7 @@ ALTER TABLE group_contacts DROP CONSTRAINT group_contacts_fk_active_change;
 ALTER TABLE group_contacts DROP CONSTRAINT group_contacts_fk_contact_id;
 
 ;
-ALTER TABLE group_contacts ADD COLUMN primary boolean DEFAULT false NOT NULL;
+ALTER TABLE group_contacts ADD COLUMN "primary" boolean DEFAULT false NOT NULL;
 
 ;
 ALTER TABLE group_contacts ADD COLUMN status character varying NOT NULL;
