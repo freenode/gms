@@ -225,7 +225,7 @@ sub do_add_gc :Chained('single_group') :PathPart('add_gc/submit') :Args(0) {
     }
 
     $c->stash->{msg} = "Successfully added the group contact.";
-    $c->stash->{template} = 'staff/action_done.tt';
+    $c->stash->{template} = 'admin/action_done.tt';
 }
 
 =head2 view_address
@@ -335,7 +335,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     }
 
     $c->stash->{msg} = "Successfully edited the group's information.";
-    $c->stash->{template} = 'staff/action_done.tt';
+    $c->stash->{template} = 'admin/action_done.tt';
 }
 
 =head2 edit_gc
@@ -390,7 +390,7 @@ sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
     }
 
     $c->stash->{msg} = "Successfully edited the Group Contacts' information.";
-    $c->stash->{template} = 'staff/action_done.tt';
+    $c->stash->{template} = 'admin/action_done.tt';
 }
 
 =head2 edit_channel_namespaces
@@ -458,7 +458,7 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
     }
 
     $c->stash->{msg} = 'Namespaces updated successfully,';
-    $c->stash->{template} = 'staff/action_done.tt';
+    $c->stash->{template} = 'admin/action_done.tt';
 }
 
 =head2 edit_cloak_namespaces
@@ -527,7 +527,7 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
     }
 
     $c->stash->{msg} = 'Namespaces updated successfully';
-    $c->stash->{template} = 'staff/action_done.tt';
+    $c->stash->{template} = 'admin/action_done.tt';
 }
 
 =head2 edit_account
@@ -612,7 +612,7 @@ sub do_edit_account :Chained('account') :PathPart('edit/submit') :Args(0) {
     }
 
     $c->stash->{msg} = "Successfully edited the user's contact information.";
-    $c->stash->{template} = 'staff/action_done.tt';
+    $c->stash->{template} = 'admin/action_done.tt';
 }
 
 =head2 search_changes
