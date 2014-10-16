@@ -10,6 +10,4 @@ use GMS::Schema;
 
 my $db = GMS::Schema->do_connect;
 
-$db->deploy();
-
-
+$db->deploy({ add_drop_table => 1 });
