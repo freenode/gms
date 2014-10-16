@@ -38,6 +38,9 @@ requires 'Catalyst::Plugin::StackTrace';
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
 
+requires 'DBIx::Class::DeploymentHandler';
+requires 'MooseX::AttributeShortcuts';
+
 on 'test' => sub {
 
 requires 'Test::WWW::Mechanize::Catalyst';

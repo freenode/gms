@@ -45,6 +45,7 @@ requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
 
 requires 'DBIx::Class::DeploymentHandler';
+requires 'MooseX::AttributeShortcuts';
 
 test_requires 'Test::WWW::Mechanize::Catalyst';
 test_requires 'Test::MockModule';
