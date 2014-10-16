@@ -1,0 +1,2778 @@
+---
+schema:
+  procedures: {}
+  tables:
+    accounts:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+      fields:
+        accountname:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: accountname
+          order: 2
+          size:
+            - 32
+        dropped:
+          data_type: integer
+          default_value: 0
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: dropped
+          order: 3
+          size:
+            - 0
+        id:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 9
+      indices: []
+      name: accounts
+      options: []
+      order: 1
+    addresses:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+      fields:
+        address_one:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: address_one
+          order: 2
+          size:
+            - 255
+        address_two:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: address_two
+          order: 3
+          size:
+            - 255
+        city:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: city
+          order: 4
+          size:
+            - 255
+        code:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: code
+          order: 6
+          size:
+            - 32
+        country:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: country
+          order: 7
+          size:
+            - 64
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        phone:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: phone
+          order: 8
+          size:
+            - 32
+        phone2:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: phone2
+          order: 9
+          size:
+            - 32
+        state:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: state
+          order: 5
+          size:
+            - 255
+      indices: []
+      name: addresses
+      options: []
+      order: 2
+    channel_namespace_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - affected_change
+          match_type: ''
+          name: channel_namespace_changes_fk_affected_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: channel_namespace_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: channel_namespace_changes_fk_changed_by
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: channel_namespace_changes_fk_group_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - namespace_id
+          match_type: ''
+          name: channel_namespace_changes_fk_namespace_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: channel_namespaces
+          type: FOREIGN KEY
+      fields:
+        affected_change:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: affected_change
+          order: 8
+          size:
+            - 0
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 9
+          size:
+            - 0
+        change_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: channel_namespace_changes_change_type_type
+            list:
+              - create
+              - request
+              - approve
+              - reject
+              - admin
+              - workflow_change
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: change_type
+          order: 6
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 5
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 2
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        namespace_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: namespace_id
+          order: 3
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: channel_namespace_changes_status_type
+            list:
+              - active
+              - deleted
+              - pending_staff
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 7
+          size:
+            - 0
+        time:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: time
+          order: 4
+          size:
+            - 0
+      indices:
+        - fields:
+            - affected_change
+          name: channel_namespace_changes_idx_affected_change
+          options: []
+          type: NORMAL
+        - fields:
+            - changed_by
+          name: channel_namespace_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+          name: channel_namespace_changes_idx_group_id
+          options: []
+          type: NORMAL
+        - fields:
+            - namespace_id
+          name: channel_namespace_changes_idx_namespace_id
+          options: []
+          type: NORMAL
+      name: channel_namespace_changes
+      options: []
+      order: 3
+    channel_namespaces:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: channel_namespaces_unique_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - namespace
+          match_type: ''
+          name: unique_channel_ns
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: channel_namespaces_fk_active_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: channel_namespace_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: channel_namespaces_fk_group_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+      fields:
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 5
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 4
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        namespace:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: namespace
+          order: 2
+          size:
+            - 50
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: channel_namespace_status_type
+            list:
+              - active
+              - deleted
+              - pending_staff
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 3
+          size:
+            - 0
+      indices:
+        - fields:
+            - active_change
+          name: channel_namespaces_idx_active_change
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+          name: channel_namespaces_idx_group_id
+          options: []
+          type: NORMAL
+      name: channel_namespaces
+      options: []
+      order: 4
+    channel_request_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: channel_request_changes_fk_changed_by
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - channel_request_id
+          match_type: ''
+          name: channel_request_changes_fk_channel_request_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: channel_requests
+          type: FOREIGN KEY
+      fields:
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 6
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 4
+          size:
+            - 0
+        channel_request_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: channel_request_id
+          order: 2
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: channel_request_status
+            list:
+              - pending_staff
+              - approved
+              - rejected
+              - applied
+              - error
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 5
+          size:
+            - 0
+        time:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: time
+          order: 3
+          size:
+            - 0
+      indices:
+        - fields:
+            - changed_by
+          name: channel_request_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - channel_request_id
+          name: channel_request_changes_idx_channel_request_id
+          options: []
+          type: NORMAL
+      name: channel_request_changes
+      options: []
+      order: 5
+    channel_requests:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: unique_channel_request_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: channel_requests_fk_active_change
+          on_delete: NO ACTION
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: channel_request_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - namespace_id
+          match_type: ''
+          name: channel_requests_fk_namespace_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: channel_namespaces
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - requestor
+          match_type: ''
+          name: channel_requests_fk_requestor
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: contacts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - target
+          match_type: ''
+          name: channel_requests_fk_target
+          on_delete: NO ACTION
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+      fields:
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 7
+          size:
+            - 0
+        channel:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: channel
+          order: 4
+          size:
+            - 50
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        namespace_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: namespace_id
+          order: 8
+          size:
+            - 0
+        request_data:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: request_data
+          order: 6
+          size:
+            - 0
+        request_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: request_type
+            list:
+              - flags
+              - transfer
+              - drop
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: request_type
+          order: 2
+          size:
+            - 0
+        requestor:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: requestor
+          order: 3
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: channel_request_status
+            list:
+              - pending_staff
+              - approved
+              - rejected
+              - applied
+              - error
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 9
+          size:
+            - 0
+        target:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: target
+          order: 5
+          size:
+            - 32
+      indices:
+        - fields:
+            - active_change
+          name: channel_requests_idx_active_change
+          options: []
+          type: NORMAL
+        - fields:
+            - namespace_id
+          name: channel_requests_idx_namespace_id
+          options: []
+          type: NORMAL
+        - fields:
+            - requestor
+          name: channel_requests_idx_requestor
+          options: []
+          type: NORMAL
+        - fields:
+            - target
+          name: channel_requests_idx_target
+          options: []
+          type: NORMAL
+      name: channel_requests
+      options: []
+      order: 6
+    cloak_change_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: cloak_change_changes_fk_changed_by
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - cloak_change_id
+          match_type: ''
+          name: cloak_change_changes_fk_cloak_change_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: cloak_changes
+          type: FOREIGN KEY
+      fields:
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 6
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 4
+          size:
+            - 0
+        cloak_change_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: cloak_change_id
+          order: 2
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: cloak_change_status
+            list:
+              - offered
+              - accepted
+              - approved
+              - rejected
+              - applied
+              - error
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 5
+          size:
+            - 0
+        time:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: time
+          order: 3
+          size:
+            - 0
+      indices:
+        - fields:
+            - changed_by
+          name: cloak_change_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - cloak_change_id
+          name: cloak_change_changes_idx_cloak_change_id
+          options: []
+          type: NORMAL
+      name: cloak_change_changes
+      options: []
+      order: 7
+    cloak_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: unique_cloak_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: cloak_changes_fk_active_change
+          on_delete: NO ACTION
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: cloak_change_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - namespace_id
+          match_type: ''
+          name: cloak_changes_fk_namespace_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: cloak_namespaces
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - target
+          match_type: ''
+          name: cloak_changes_fk_target
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+      fields:
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 4
+          size:
+            - 0
+        cloak:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: cloak
+          order: 3
+          size:
+            - 63
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        namespace_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: namespace_id
+          order: 5
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: cloak_change_status
+            list:
+              - offered
+              - accepted
+              - approved
+              - rejected
+              - applied
+              - error
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 6
+          size:
+            - 0
+        target:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: target
+          order: 2
+          size:
+            - 32
+      indices:
+        - fields:
+            - active_change
+          name: cloak_changes_idx_active_change
+          options: []
+          type: NORMAL
+        - fields:
+            - namespace_id
+          name: cloak_changes_idx_namespace_id
+          options: []
+          type: NORMAL
+        - fields:
+            - target
+          name: cloak_changes_idx_target
+          options: []
+          type: NORMAL
+      name: cloak_changes
+      options: []
+      order: 8
+    cloak_namespace_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - affected_change
+          match_type: ''
+          name: cloak_namespace_changes_fk_affected_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: cloak_namespace_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: cloak_namespace_changes_fk_changed_by
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: cloak_namespace_changes_fk_group_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - namespace_id
+          match_type: ''
+          name: cloak_namespace_changes_fk_namespace_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: cloak_namespaces
+          type: FOREIGN KEY
+      fields:
+        affected_change:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: affected_change
+          order: 8
+          size:
+            - 0
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 9
+          size:
+            - 0
+        change_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: cloak_namespace_changes_change_type_type
+            list:
+              - create
+              - request
+              - approve
+              - reject
+              - admin
+              - workflow_change
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: change_type
+          order: 6
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 5
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 2
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        namespace_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: namespace_id
+          order: 3
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: cloak_namespace_changes_status_type
+            list:
+              - active
+              - deleted
+              - pending_staff
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 7
+          size:
+            - 0
+        time:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: time
+          order: 4
+          size:
+            - 0
+      indices:
+        - fields:
+            - affected_change
+          name: cloak_namespace_changes_idx_affected_change
+          options: []
+          type: NORMAL
+        - fields:
+            - changed_by
+          name: cloak_namespace_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+          name: cloak_namespace_changes_idx_group_id
+          options: []
+          type: NORMAL
+        - fields:
+            - namespace_id
+          name: cloak_namespace_changes_idx_namespace_id
+          options: []
+          type: NORMAL
+      name: cloak_namespace_changes
+      options: []
+      order: 9
+    cloak_namespaces:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: cloak_namespaces_unique_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - namespace
+          match_type: ''
+          name: unique_cloak_ns
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: cloak_namespaces_fk_active_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: cloak_namespace_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: cloak_namespaces_fk_group_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+      fields:
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 5
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 4
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        namespace:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: namespace
+          order: 2
+          size:
+            - 63
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: channel_namespace_status_type
+            list:
+              - active
+              - deleted
+              - pending_staff
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 3
+          size:
+            - 0
+      indices:
+        - fields:
+            - active_change
+          name: cloak_namespaces_idx_active_change
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+          name: cloak_namespaces_idx_group_id
+          options: []
+          type: NORMAL
+      name: cloak_namespaces
+      options: []
+      order: 10
+    contact_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - affected_change
+          match_type: ''
+          name: contact_changes_fk_affected_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: contact_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: contact_changes_fk_changed_by
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - contact_id
+          match_type: ''
+          name: contact_changes_fk_contact_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: contacts
+          type: FOREIGN KEY
+      fields:
+        affected_change:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: affected_change
+          order: 9
+          size:
+            - 0
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 10
+          size:
+            - 0
+        change_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: change_type
+            list:
+              - create
+              - request
+              - approve
+              - reject
+              - admin
+              - workflow_change
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: change_type
+          order: 8
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 4
+          size:
+            - 0
+        contact_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: contact_id
+          order: 2
+          size:
+            - 0
+        email:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: email
+          order: 7
+          size:
+            - 255
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        name:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: name
+          order: 5
+          size:
+            - 255
+        phone:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: phone
+          order: 6
+          size:
+            - 32
+        time:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: time
+          order: 3
+          size:
+            - 0
+      indices:
+        - fields:
+            - affected_change
+          name: contact_changes_idx_affected_change
+          options: []
+          type: NORMAL
+        - fields:
+            - changed_by
+          name: contact_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - contact_id
+          name: contact_changes_idx_contact_id
+          options: []
+          type: NORMAL
+      name: contact_changes
+      options: []
+      order: 11
+    contacts:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - account_id
+          match_type: ''
+          name: unique_account
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: unique_contact_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - account_id
+          match_type: ''
+          name: contacts_fk_account_id
+          on_delete: CASCADE
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: contacts_fk_active_change
+          on_delete: NO ACTION
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: contact_changes
+          type: FOREIGN KEY
+      fields:
+        account_id:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: account_id
+          order: 2
+          size:
+            - 0
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 3
+          size:
+            - 0
+        email:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: email
+          order: 6
+          size:
+            - 255
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        name:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: name
+          order: 4
+          size:
+            - 255
+        phone:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: phone
+          order: 5
+          size:
+            - 32
+      indices:
+        - fields:
+            - account_id
+          name: contacts_idx_account_id
+          options: []
+          type: NORMAL
+        - fields:
+            - active_change
+          name: contacts_idx_active_change
+          options: []
+          type: NORMAL
+      name: contacts
+      options: []
+      order: 12
+    group_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - address
+          match_type: ''
+          name: group_changes_fk_address
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: addresses
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - affected_change
+          match_type: ''
+          name: group_changes_fk_affected_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: group_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: group_changes_fk_changed_by
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: group_changes_fk_group_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+      fields:
+        address:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: address
+          order: 8
+          size:
+            - 0
+        affected_change:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: affected_change
+          order: 10
+          size:
+            - 0
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 11
+          size:
+            - 0
+        change_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: change_type
+            list:
+              - create
+              - request
+              - approve
+              - reject
+              - admin
+              - workflow_change
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: change_type
+          order: 5
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 4
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 2
+          size:
+            - 0
+        group_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_type
+            list:
+              - informal
+              - corporation
+              - education
+              - government
+              - nfp
+              - internal
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_type
+          order: 6
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_status
+            list:
+              - submitted
+              - verified
+              - active
+              - deleted
+              - pending_web
+              - pending_staff
+              - pending_auto
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 9
+          size:
+            - 0
+        time:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: time
+          order: 3
+          size:
+            - 0
+        url:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: url
+          order: 7
+          size:
+            - 64
+      indices:
+        - fields:
+            - address
+          name: group_changes_idx_address
+          options: []
+          type: NORMAL
+        - fields:
+            - affected_change
+          name: group_changes_idx_affected_change
+          options: []
+          type: NORMAL
+        - fields:
+            - changed_by
+          name: group_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+          name: group_changes_idx_group_id
+          options: []
+          type: NORMAL
+      name: group_changes
+      options: []
+      order: 13
+    group_contact_changes:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - affected_change
+          match_type: ''
+          name: group_contact_changes_fk_affected_change
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: group_contact_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - changed_by
+          match_type: ''
+          name: group_contact_changes_fk_changed_by
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+            - contact_id
+          match_type: ''
+          name: group_contact_changes_fk_group_id_contact_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - group_id
+            - contact_id
+          reference_table: group_contacts
+          type: FOREIGN KEY
+      fields:
+        affected_change:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: affected_change
+          order: 8
+          size:
+            - 0
+        change_freetext:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: change_freetext
+          order: 9
+          size:
+            - 0
+        change_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: change_type
+            list:
+              - create
+              - request
+              - approve
+              - reject
+              - admin
+              - workflow_change
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: change_type
+          order: 6
+          size:
+            - 0
+        changed_by:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: changed_by
+          order: 7
+          size:
+            - 0
+        contact_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: contact_id
+          order: 3
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 2
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        primary:
+          data_type: boolean
+          default_value: !!perl/ref
+            =: false
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: primary
+          order: 4
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_contact_status
+            list:
+              - invited
+              - retired
+              - active
+              - deleted
+              - pending_staff
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 5
+          size:
+            - 0
+      indices:
+        - fields:
+            - affected_change
+          name: group_contact_changes_idx_affected_change
+          options: []
+          type: NORMAL
+        - fields:
+            - changed_by
+          name: group_contact_changes_idx_changed_by
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+            - contact_id
+          name: group_contact_changes_idx_group_id_contact_id
+          options: []
+          type: NORMAL
+      name: group_contact_changes
+      options: []
+      order: 14
+    group_contacts:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+            - contact_id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: group_contacts_unique_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: group_contacts_fk_active_change
+          on_delete: NO ACTION
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: group_contact_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - contact_id
+          match_type: ''
+          name: group_contacts_fk_contact_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: contacts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: group_contacts_fk_group_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+      fields:
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 3
+          size:
+            - 0
+        contact_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: contact_id
+          order: 2
+          size:
+            - 0
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: group_id
+          order: 1
+          size:
+            - 0
+        primary:
+          data_type: boolean
+          default_value: !!perl/ref
+            =: false
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: primary
+          order: 4
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_contact_status
+            list:
+              - invited
+              - retired
+              - active
+              - deleted
+              - pending_staff
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 5
+          size:
+            - 0
+      indices:
+        - fields:
+            - active_change
+          name: group_contacts_idx_active_change
+          options: []
+          type: NORMAL
+        - fields:
+            - contact_id
+          name: group_contacts_idx_contact_id
+          options: []
+          type: NORMAL
+        - fields:
+            - group_id
+          name: group_contacts_idx_group_id
+          options: []
+          type: NORMAL
+      name: group_contacts
+      options: []
+      order: 15
+    group_verifications:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_id
+          match_type: ''
+          name: group_verifications_fk_group_id
+          on_delete: RESTRICT
+          on_update: RESTRICT
+          options: []
+          reference_fields:
+            - id
+          reference_table: groups
+          type: FOREIGN KEY
+      fields:
+        group_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: group_id
+          order: 2
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        verification_data:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: verification_data
+          order: 4
+          size:
+            - 0
+        verification_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_verifications_verification_type_type
+            list:
+              - web_url
+              - web_token
+              - git
+              - dns
+              - freetext
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: verification_type
+          order: 3
+          size:
+            - 0
+      indices:
+        - fields:
+            - group_id
+          name: group_verifications_idx_group_id
+          options: []
+          type: NORMAL
+      name: group_verifications
+      options: []
+      order: 16
+    groups:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: unique_active_change
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - group_name
+            - deleted
+          match_type: ''
+          name: unique_group_name
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - active_change
+          match_type: ''
+          name: groups_fk_active_change
+          on_delete: NO ACTION
+          on_update: NO ACTION
+          options: []
+          reference_fields:
+            - id
+          reference_table: group_changes
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - address
+          match_type: ''
+          name: groups_fk_address
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: addresses
+          type: FOREIGN KEY
+      fields:
+        active_change:
+          data_type: integer
+          default_value: -1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: active_change
+          order: 5
+          size:
+            - 0
+        address:
+          data_type: integer
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: address
+          order: 9
+          size:
+            - 0
+        deleted:
+          data_type: integer
+          default_value: 0
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: deleted
+          order: 6
+          size:
+            - 0
+        group_name:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: group_name
+          order: 2
+          size:
+            - 32
+        group_type:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_type
+            list:
+              - informal
+              - corporation
+              - education
+              - government
+              - nfp
+              - internal
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: group_type
+          order: 7
+          size:
+            - 0
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        status:
+          data_type: enum
+          default_value: ~
+          extra:
+            custom_type_name: group_status
+            list:
+              - submitted
+              - verified
+              - active
+              - deleted
+              - pending_web
+              - pending_staff
+              - pending_auto
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: status
+          order: 10
+          size:
+            - 0
+        submitted:
+          data_type: timestamp
+          default_value: !!perl/ref
+            =: current_timestamp
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: submitted
+          order: 3
+          size:
+            - 0
+        url:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: url
+          order: 8
+          size:
+            - 64
+        verify_auto:
+          data_type: boolean
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: verify_auto
+          order: 4
+          size:
+            - 0
+      indices:
+        - fields:
+            - active_change
+          name: groups_idx_active_change
+          options: []
+          type: NORMAL
+        - fields:
+            - address
+          name: groups_idx_address
+          options: []
+          type: NORMAL
+      name: groups
+      options: []
+      order: 17
+    roles:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - name
+          match_type: ''
+          name: roles_name_key
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+      fields:
+        id:
+          data_type: integer
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: id
+          order: 1
+          size:
+            - 0
+        name:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: name
+          order: 2
+          size:
+            - 32
+      indices: []
+      name: roles
+      options: []
+      order: 18
+    user_roles:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - account_id
+            - role_id
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - account_id
+          match_type: ''
+          name: user_roles_fk_account_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: accounts
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - role_id
+          match_type: ''
+          name: user_roles_fk_role_id
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - id
+          reference_table: roles
+          type: FOREIGN KEY
+      fields:
+        account_id:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: account_id
+          order: 1
+          size:
+            - 0
+        role_id:
+          data_type: integer
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: role_id
+          order: 2
+          size:
+            - 0
+      indices:
+        - fields:
+            - account_id
+          name: user_roles_idx_account_id
+          options: []
+          type: NORMAL
+        - fields:
+            - role_id
+          name: user_roles_idx_role_id
+          options: []
+          type: NORMAL
+      name: user_roles
+      options: []
+      order: 19
+  triggers: {}
+  views: {}
+translator:
+  add_drop_table: 0
+  filename: ~
+  no_comments: 0
+  parser_args:
+    sources:
+      - Account
+      - Address
+      - ChannelNamespace
+      - ChannelNamespaceChange
+      - ChannelRequest
+      - ChannelRequestChange
+      - CloakChange
+      - CloakChangeChange
+      - CloakNamespace
+      - CloakNamespaceChange
+      - Contact
+      - ContactChange
+      - Group
+      - GroupChange
+      - GroupContact
+      - GroupContactChange
+      - GroupVerification
+      - Role
+      - UserRole
+  parser_type: SQL::Translator::Parser::DBIx::Class
+  producer_args: {}
+  producer_type: SQL::Translator::Producer::YAML
+  show_warnings: 0
+  trace: 0
+  version: 0.11020
