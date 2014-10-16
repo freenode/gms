@@ -44,6 +44,8 @@ requires 'FCGI::ProcManager';
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
 
+requires 'DBIx::Class::DeploymentHandler';
+
 test_requires 'Test::WWW::Mechanize::Catalyst';
 test_requires 'Test::MockModule';
 test_requires 'Test::MockObject';

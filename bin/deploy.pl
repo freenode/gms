@@ -47,7 +47,7 @@ BEGIN {
 
     sub run {
         my ($self) = @_;
-        my ($cmd, @what) = @{$self->extra_argv};
+        my ($cmd, @what) = @ARGV;
         die "Must supply a command\n" unless $cmd;
         die "Extra argv detected - command only please\n" if @what;
         die "No such command ${cmd}\n" unless $self->can("cmd_${cmd}");

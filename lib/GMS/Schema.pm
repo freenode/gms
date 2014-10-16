@@ -62,6 +62,15 @@ sub do_connect {
         $connectinfo);
 }
 
+=head2 install_defaults
+
+Install data for DBIx::Class::DeploymentHandler.
+Do nothing for now.
+
+=cut
+
+sub install_defaults { }
+
 our $VERSION = 1;
 
 # You can replace this text with custom content, and it will be preserved on regeneration
