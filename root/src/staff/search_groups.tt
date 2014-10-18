@@ -1,58 +1,74 @@
 [% META title = 'Search Groups' %]
 
-<form method="post" action="[% c.uri_for('/staff/search_groups/submit') %]">
+<form method="post" action="[% c.uri_for('/staff/search_groups/submit') %]" class="form-horizontal">
 
-<p>
-  Enter the search criteria. Empty box matches errything.
-</p>
+  <p>
+    Enter the search criteria. Empty box matches errything.
+  </p>
 
-<table class='fullwidth'>
-  <tr>
-    <td><label for="gname">Group Name</label></td>
-    <td><input class='gname' id="gname"  type='text' name='group_name' /></td>
-  </tr>
-  <tr>
-    <td><label for="accname">Group Contact Accountname</label></td>
-    <td><input class='accname' id="accname"  type='text' name='gc_accname' /></td>
-  </tr>
-  <tr>
-    <td><label for="type">Group Type</label></td>
-    <td>
-      <select id="type" name='group_type'>
-        <option value='' selected='selected'>Please select...</option>
-        <option value='informal'>Informal Group</option>
-        <option value='corporation'>Corporation - Business entity</option>
-        <option value='education'>Educational Institution</option>
-        <option value='government'>Governmental Entity</option>
-        <option value='nfp'>Not for profit - Charitable Organisation</option>
-        <option value='internal'>Internal Group</option>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td><label for="status">Group Status</label></td>
-    <td>
-      <select id="status" name='group_status'>
-        <option value='' selected='selected'>Please select...</option>
-        <option value='pending_web'>pending_web</option>
-        <option value='pending_staff'>pending_staff</option>
-        <option value='pending_auto'>pending_auto</option>
-        <option value='verified'>verified</option>
-        <option value='active'>active</option>
-        <option value='deleted'>deleted</option>
-      </select>
-    </td>
-  <tr>
-</table>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="gname">Group Name</label>
+    <div class="col-sm-9">
+        <input class="gname form-control" id="gname"  type="text" name="group_name" />
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="accname">Group Contact Accountname</label>
+    <div class="col-sm-9">
+        <input class="accname form-control" id="accname"  type="text" name="gc_accname" />
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="type">Group Type</label>
+    <div class="col-sm-9">
+      <select id="type" name="group_type" class="form-control">
+          <option value="" selected="selected">Please select...</option>
+          <option value="informal">Informal Group</option>
+          <option value="corporation">Corporation - Business entity</option>
+          <option value="education">Educational Institution</option>
+          <option value="government">Governmental Entity</option>
+          <option value="nfp">Not for profit - Charitable Organisation</option>
+          <option value="internal">Internal Group</option>
+        </select>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="status">Group Status</label>
+    <div class="col-sm-9">
+      <select id="status" name="group_status" class="form-control">
+          <option value="" selected="selected">Please select...</option>
+          <option value="pending_web">pending_web</option>
+          <option value="pending_staff">pending_staff</option>
+          <option value="pending_auto">pending_auto</option>
+          <option value="verified">verified</option>
+          <option value="active">active</option>
+          <option value="deleted">deleted</option>
+        </select>
+    </div>
+  </div>
 
-<p>
-<label><input type='radio' name='mode' value='1' checked='checked' /> Show groups that match any of the criteria</label>
-<label><input type='radio' name='mode' value='2' /> Show groups that match all the criteria</label>
-</p>
-<br/>
-<p>
-  <input type='submit' class='btn btn-primary btn-large' value='Submit' />
-</p>
+  <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <div class="radio">
+            <label><input type="radio" name="mode" value="1" checked="checked" /> Show groups that match any of the criteria</label>
+        </div>
+  </div>
+  
+  <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <div class="radio">
+            <label><input type="radio" name="mode" value="2" /> Show groups that match all the criteria</label>
+        </div>
+  </div>
+  
+  <div class="row">
+      <div class="col-xs-offset-8 col-xs-4">
+          <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+      </div>
+  </div>
 
 </form>
 <script src="[% c.uri_for ('/static/js/jquery.js') %]" type="text/javascript"></script>

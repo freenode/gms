@@ -41,15 +41,18 @@
                     <div class="btn-group-vertical btn-block">
                         <a href="http://freenode.net/" class="btn btn-default" ><i class="glyphicon glyphicon-chevron-right"></i> Freenode Main Page</a>
                         <a href="[% c.uri_for('/') %]" class="btn btn-default" ><i class="glyphicon glyphicon-home"></i> GMS Home</a>
+                    </div>
+                    <p></p>
+                    <div class="btn-group-vertical btn-block">
                         [% IF  c.check_user_roles('admin')  %]
                           <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin</a>
                         [% ELSIF c.check_user_roles ('staff') %]
                           <a href="[% c.uri_for('/staff/') %]" class="btn btn-default">Staff</a>
                         [% END %]
-                          <a href="[% c.uri_for('/group/') %]" class="btn btn-default">Your groups</a>
-                          <a href="[% c.uri_for('/userinfo') %]" class="btn btn-default">Your contact info</a>
-                          <a href="[% c.uri_for('/cloak') %]" class="btn btn-default">Your pending group cloaks</a>
-                          <a href="[% c.uri_for('/group/new') %]" class="btn btn-default">Register a new group</a>
+                          <a href="[% c.uri_for('/group/') %]" class="btn btn-default"><i class="glyphicon glyphicon-align-justify"></i> Your groups</a>
+                          <a href="[% c.uri_for('/userinfo') %]" class="btn btn-default"><i class="glyphicon glyphicon-user"></i> Your contact info</a>
+                          <a href="[% c.uri_for('/cloak') %]" class="btn btn-default"><i class="glyphicon glyphicon-exclamation-sign"></i> Your pending group cloaks</a>
+                          <a href="[% c.uri_for('/group/new') %]" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> Register a new group</a>
                     </div>
                 </div>
                 <div id="main" class="col-xs-12 col-sm-8 col-md-9 col-lg-9">

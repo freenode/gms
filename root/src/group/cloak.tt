@@ -71,6 +71,8 @@
     [% END %]
     </div>
 [% END %]
+
+
     <div class="row">
         <input type="button" id="btn_add" value="Add another" class="btn btn-default col-xs-4 col-xs-offset-4" />
     </div>
@@ -81,8 +83,11 @@
     <textarea name="cloaks" placeholder="user user/cloak/here" class="form-control">[% cloaks %]</textarea>
 </p>
 
-
-    <input type="submit" class="btn btn-primary col-xs-4 col-xs-offset-8" value="Submit requests"/>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit requests" />
+        </div>
+    </div>
 
 </form>
 

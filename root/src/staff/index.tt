@@ -1,13 +1,13 @@
 <h3>Staff Page</h3>
 
-<ul>
-  <li>
+<ul class="list-group">
+  <li class="list-group-item">
     <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
   </li>
-  <li>
+  <li class="list-group-item">
     <a href="[% c.uri_for("/staff/search_users") %]">Search Users</a>
   </li>
-  <li>
+  <li class="list-group-item">
     <a href="[% c.uri_for("/staff/search_namespaces") %]">Search Namespaces</a>
   </li>
 </ul>

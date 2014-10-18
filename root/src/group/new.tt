@@ -155,7 +155,13 @@ to help us verify your registration.</p>
             <textarea class="form-control" name="other_info" id="other" >[% other_info %]</textarea>
         </div>
     </div>
-    <input type="submit" class="btn btn-primary col-xs-4 col-xs-offset-8" name="submit" value="Submit" />
+    
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
+
     
     <!-- Text for the mouseover tooltip elements !-->
 
