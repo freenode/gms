@@ -37,6 +37,8 @@ requires 'FCGI::ProcManager';
 requires 'Catalyst::Plugin::StackTrace';
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
+requires 'Text::Glob';
+
 
 requires 'DBIx::Class::DeploymentHandler';
 requires 'MooseX::AttributeShortcuts';
