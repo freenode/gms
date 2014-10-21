@@ -4,4 +4,152 @@ exactly useful yet.
 If you're interested in development of it, then further information is in the
 doc/ subdirectory.
 
-Install instructions are http://errietta.me/install.txt and you can ofcourse find us in irc.freenode.net #freenode-gms !
+INSTALLING:
+==========
+
+IRCd and Atheme
+---------------
+
+GMS needs to talk to a running Atheme instance. Atheme needs an IRC server to
+link to. Thus, somewhat annoyingly, you need an ircd running to hack on 
+the GMS web interface.
+
+For convenience of anyone wanting to test or develop GMS, I've put together a
+"quick ircd+atheme" bundle that will do just enough to make GMS work. You can
+either use this, or build and configure your own versions. For this 
+guide, I'll assume the former.
+
+First, choose your working directory. I'm going to assume that all of your GMS
+workspace is in $HOME/gms. Go to that directory, make a subdirectory named
+'src', and enter it.
+
+* Download charybdis from http://www.stack.nl/~jilles/irc/#charybdis
+* Clone atheme from git://github.com/atheme/atheme.git
+
+In the atheme directory do:
+
+git submodule init
+git submodule update
+
+./configure --prefix=<PREFIX> --with-perl --disable-nls
+make
+make install
+
+In the ircd-seven directory just run ./configure --prefix=<PREFIX>, make, 
+make install.
+
+For <PREFIX>, take the base working directory you decided on above. Add 
+/ircd for the ircd compilation, and /atheme for the atheme compilation. You 
+should end up with an ircd installed in (e.g.) $HOME/gms/ircd, and atheme in 
+$HOME/gms/atheme. If you chose a different directory, then the subsequent
+commands will vary accordingly.
+
+
+Next, place the ircd.conf file from http://errietta.me/ircd.conf in
+$HOME/gms/ircd/etc, and the atheme.conf fromhttp://errietta.me/atheme.conf
+and http://errietta.me/services.db files into $HOME/gms/atheme/etc. 
+
+Run::
+
+$HOME/gms/ircd/bin/ircd
+$HOME/gms/atheme/bin/atheme-services
+
+Then start up your IRC client of choice and connect to 127.0.0.1 port 6667.
+Check that you can oper up and identify to nickserv:
+
+/oper admin password
+/msg nickserv identify admin password
+
+The passwords in these example configs are literally "password". Change 
+them if you will -- they're easy enough to identify in the ircd config, and 
+`/msg nickserv set password' works as you expect -- but since they only listen 
+on localhost it shouldn't matter too much.
+
+Building and Running GMS
+------------------------
+
+Now you can start working with GMS itself. Inside your top level GMS 
+working directory, clone the git repository:
+
+git clone https://github.com/freenode/gms.git
+
+and cd into the resulting gms directory.
+
+Get a local cpan:
+wget -O- http://cpanmin.us | perl - -l ~/perl5 App::cpanminus local::lib
+eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
+
+You can add the last command to your .bashrc (or equiv) for the local deps
+to automatically be useful.
+
+To install dependancies:
+eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
+
+cpanm --local-lib=/var/www/gms/deps --installdeps .
+
+You also need to edit atheme/Makefile. Make sure the two directories
+at the top have the right directory, i.e.:
+
+PREFIX is the path to your atheme INSTALL dir
+
+PREFIX ?= /home/gms/freenode/atheme/
+
+ATHEME is the path to your atheme SOURCE dir
+
+ATHEME ?= /home/gms/atheme
+
+then cd to atheme and run
+
+make
+make install
+
+Edit your Atheme config file, and uncomment this line:
+
+loadscript "modules/freenode/gmsserv.pl";
+loadmodule "modules/freenode/freenode_prevent_registration";
+
+Then restart atheme.
+
+You now have the atheme-based parts of GMS in place and running.
+
+Now edit gms_web.conf, in the top level of the GMS source tree.
+
+The Model::DB section contains a DBI-style connection string that needs 
+to refer to a usable database and username. Once the tables have been set up,
+it  should only require insert, update and delete access to all tables in the 
+database. To create the tables, permission to create tables,
+sequences and indexes will  obviously be required.
+Currently GMS is developed with PostgreSQL; others may work but are untested.
+https://help.ubuntu.com/community/PostgreSQL is a decent guide for
+installing postgresql on ubuntu.
+
+The Model::Atheme section contains the settings required to log in to 
+Atheme's XML-RPC server. The master_account and master_password
+settings must be  for an account name that has the special:GMS
+privilege. In my example configs this is "GMS" and "password".
+
+Lastly, the email section controls the sending of email from GMS. 
+from_address is the address it will use in the From: field,
+while admin_address will  be Bcc:ed on all email sent. Set these to
+local test accounts where  possible; if you're working on anything
+related to group registration they'll get plenty of spam.
+
+Having set up your configuration file, run `./bin/deploy.pl install` from the 
+root of your GMS checkout to set up the database schema used by GMS.
+
+Once all this is done, start the GMS development web server by running
+`./script/gms_web_server.pl'. At this point begins the job of tracking 
+down what doesn't work and why.
+
+Updating
+---------
+
+`git pull` will pull latest from github. If files in lib/gms/Schema/Result
+have been changed you need to update the schema: `./bin/deploy.pl upgrade`
+
+
+Contributing
+------------
+Fork this, find an issue (or ask #freenode-gms) and create a branch, then
+do a pull request with the new code.
+
