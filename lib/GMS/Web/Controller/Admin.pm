@@ -55,25 +55,6 @@ Administrative home page.
 sub index :Chained('base') :PathPart('') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;
-    $c->stash->{pending_namespaces} = $c->model('DB::ChannelNamespace')->search_pending->count + $c->model('DB::CloakNamespace')->search_pending->count;
-
-    $c->stash->{pending_changes} =
-      $c->model('DB::GroupContactChange')->active_requests->count
-      + $c->model('DB::GroupChange')->active_requests->count
-      + $c->model('DB::ChannelNamespaceChange')->active_requests->count
-      + $c->model('DB::CloakNamespaceChange')->active_requests->count;
-
-    $c->stash->{pending_cloaks} =
-    $c->model('DB::CloakChange')->search_pending->count
-    + $c->model('DB::CloakChange')->search_unapplied->count
-    + $c->model('DB::CloakChange')->search_failed->count;
-
-    $c->stash->{pending_channels} =
-    $c->model('DB::ChannelRequest')->search_pending->count
-    + $c->model('DB::ChannelRequest')->search_unapplied->count
-    + $c->model('DB::ChannelRequest')->search_failed->count;
-
     $c->stash->{template} = 'admin/index.tt';
 }
 
@@ -169,6 +150,31 @@ Presents the approval page.
 
 sub approve: Chained('base') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
+
+    $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;
+    $c->stash->{pending_gc} = $c->model('DB::GroupContact')->search_pending->count;
+
+    $c->stash->{pending_channel_namespaces} = $c->model('DB::ChannelNamespace')->search_pending->count ;
+    $c->stash->{pending_cloak_namespaces} = $c->model('DB::CloakNamespace')->search_pending->count;
+    $c->stash->{pending_namespaces} = $c->stash->{pending_channel_namespaces} + $c->stash->{pending_cloak_namespaces};
+
+    $c->stash->{pending_changes} =
+      $c->model('DB::GroupContactChange')->active_requests->count
+      + $c->model('DB::GroupChange')->active_requests->count
+      + $c->model('DB::ChannelNamespaceChange')->active_requests->count
+      + $c->model('DB::CloakNamespaceChange')->active_requests->count;
+
+    $c->stash->{pending_cloaks} =
+    $c->model('DB::CloakChange')->search_pending->count
+    + $c->model('DB::CloakChange')->search_unapplied->count
+    + $c->model('DB::CloakChange')->search_failed->count;
+
+    $c->stash->{pending_channels} =
+    $c->model('DB::ChannelRequest')->search_pending->count
+    + $c->model('DB::ChannelRequest')->search_unapplied->count
+    + $c->model('DB::ChannelRequest')->search_failed->count;
+
+
     $c->stash->{template} = 'admin/approve.tt';
 }
 
