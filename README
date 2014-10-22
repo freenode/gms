@@ -83,6 +83,8 @@ You can add the last command to your .bashrc (or equiv) for the local deps
 to automatically be useful.
 
 To install dependancies:
+(Note:: You may need libexpat-dev or the equivalent package in your distribution!)
+
 eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
 
 cpanm --local-lib=/var/www/gms/deps --installdeps .
