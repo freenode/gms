@@ -87,7 +87,7 @@ To install dependancies:
 
 eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
 
-cpanm --local-lib=/var/www/gms/deps --installdeps .
+cpanm --installdeps .
 
 You also need to edit atheme/Makefile. Make sure the two directories
 at the top have the right directory, i.e.:
