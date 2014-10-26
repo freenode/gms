@@ -937,7 +937,7 @@ sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_
 
     if ($new_namespace) {
         $new_namespace =~ s/^\#//;
-        $new_namespace =~ s/-\*//;
+        $new_namespace =~ s/-\*$//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
             if (!$ns->status->is_deleted) {
@@ -1046,8 +1046,9 @@ sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_name
     }
 
     if ($new_namespace) {
-        $new_namespace =~ s|/||;
-        $new_namespace =~ s/\*//;
+        $new_namespace =~ s/^@//;
+        $new_namespace =~ s/\/\*$//;
+        $new_namespace =~ s/\/$//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $new_namespace }) ) ) {
             if (!$ns->status->is_deleted) {
