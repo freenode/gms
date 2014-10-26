@@ -233,8 +233,18 @@ sub new {
         $valid = 0;
     }
 
+    if ($args->{namespace} =~ /^\./) {
+        push @errors, "Cloak namespaces may not begin with a dot.";
+        $valid = 0;
+    }
+
     if (length $args->{namespace} > 63) {
         push @errors, "Cloak namespaces must be up to 63 characters.";
+        $valid = 0;
+    }
+
+    if (length $args->{namespace} == 0) {
+        push @errors, "A cloak namespace may not be an empty string.";
         $valid = 0;
     }
 

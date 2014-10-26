@@ -236,6 +236,11 @@ sub new {
         $valid = 0;
     }
 
+    if (length $args->{namespace} == 0) {
+        push @errors, "A channel namespace may not be an empty string.";
+        $valid = 0;
+    }
+
     if (!$valid) {
         die GMS::Exception::InvalidNamespace->new(\@errors);
     }
