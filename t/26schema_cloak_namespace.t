@@ -9,6 +9,8 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
+use Test::Exception;
+
 my $schema = need_database 'three_groups';
 
 my $group = $schema->resultset('Group')->find({ 'group_name' => 'group01' });
@@ -18,6 +20,11 @@ my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin01' });
 ok $group;
 
 my $namespace = $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $user, 'namespace' => "test" });
+
+
+throws_ok {
+    $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $user, 'namespace' => "" });
+} qr/empty string/, "can't have an empty string";
 
 ok $namespace->status->is_pending_staff, 'Newly created cloak namespace is pending-staff';
 

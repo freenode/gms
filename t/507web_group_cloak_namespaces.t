@@ -127,4 +127,13 @@ $ua->submit_form(
 );
 $ua->content_contains("Namespace updates requested successfully", "We can request the namespace if we confirm we want to");
 
+$ua->get_ok("http://localhost/group/1/edit_cloak_namespaces", "Edit channel namespaces page works");
+
+$ua->submit_form(
+    fields => {
+        namespace => '.'
+    }
+);
+$ua->content_contains("Cloak namespaces may not begin with a dot.", "Errors are shown");
+
 done_testing;
