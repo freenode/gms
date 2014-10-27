@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Test::Most;
+use Test::Exception;
 
 use lib qw(t/lib);
 
@@ -19,6 +20,11 @@ ok $group;
 ok $group->change ($admin, 'admin', { 'status' => 'active' });
 
 my $namespace = $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $user, 'namespace' => "test" });
+
+throws_ok {
+    $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $user, 'namespace' => "" });
+} qr/empty string/, "can't have an empty string";
+
 
 ok $namespace->status->is_pending_staff, 'Newly created channel namespace is pending-staff';
 
