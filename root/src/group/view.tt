@@ -10,7 +10,7 @@
 <tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
 <tr> <td colspan="2">&nbsp;</td> </tr>
 <tr> <th colspan="2">DNS verification:</td> </tr>
-<tr> <td colspan="2">The DNS verification can be either a TXT on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b> or aliasing <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>.</td></tr>
+<tr> <td colspan="2">The DNS verification can be either a TXT on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b> or aliasing (using a CNAME) <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>.</td></tr>
 
 
 [% IF group.git_url %]
