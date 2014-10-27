@@ -16,6 +16,6 @@
 <p>
   Enter optional free text about this change:<br />
   <textarea style="width:90%;height:200px;" name="freetext">[% freetext %]</textarea><br/>
-  <input type="submit" value="Submit" />
+  <input type="submit" value="Submit" class="btn btn-primary" />
 </p>
 </form>

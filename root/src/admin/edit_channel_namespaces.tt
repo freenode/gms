@@ -52,7 +52,7 @@
   [% IF confirm %]
     <input type="checkbox" name="do_confirm" value="1" /> Confirm Create Conflicting Change<br/>
   [% END %]
-  <input type='submit' value='Submit' />
+  <input type='submit' value='Submit' class='btn btn-primary' />
 </p>
 
 </form>

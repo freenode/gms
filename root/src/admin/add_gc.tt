@@ -5,5 +5,5 @@
     <p><input type="text" name="contact" /></p>
     <p>Enter optional free text about this change:</p>
     <p><textarea style="width:90%;height:200px;" name="freetext"></textarea></p>
-    <input type="submit" value="submit" />
+    <input type="submit" value="submit" class="btn btn-primary" />
 </form>

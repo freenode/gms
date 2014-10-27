@@ -37,7 +37,7 @@
     </li>
     </ul>
 
-    <p><input type="submit" value="submit" /></p>
+    <p><input type="submit" value="submit" class="btn btn-primary" /></p>
 </form>
 
 <script>

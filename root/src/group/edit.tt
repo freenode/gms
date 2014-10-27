@@ -58,7 +58,7 @@
   <td><label for="phone2">Telephone (alternate)</label></td><td><input id="phone2" type="text" pattern="[0-9 \+-]+" title="Please enter a valid telephone!" name="phone2" size="40" value="[% phone2 | html %]"></td>
 </tr>
 </table>
-<input type="submit" value="Submit" />
+<input type="submit" value="Submit" class="btn btn-primary" />
 </form>
 
 <script src="[% c.uri_for ('/static/js/group_form.js') %]" type="text/javascript">

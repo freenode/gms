@@ -35,7 +35,7 @@
 <p>
   Add a new namespace:
   Namespace: <input type='text' name='namespace' /><br />
-  <input type='submit' value='Submit' />
+  <input type='submit' value='Submit' class='btn btn-primary' />
 </p>
 
 </form>
