@@ -3,22 +3,28 @@
 <h2>Verify [% group.group_name | html %]</h2>
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/verify/submit") %]">
-    Here are the possible verification methods. You have to do <b>one</b> of the below:<br/><br/>
-    <ul >
-        <li>
-            Create a file called <b>[% group.verify_url | html %]</b> with content <b>[% group.verify_token %]</b>
+    <p>Here are the possible verification methods. You have to do <strong>one</strong> of the below:<p>
+    <ul class="list-group">
+        <li class="list-group-item">
+            Create a file called <strong>[% group.verify_url | html %]</strong> with content <strong>[% group.verify_token %]</strong>
         </li>
-        <li>
-            Create a TXT record on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b>.
+        <li class="list-group-item">
+            Create a TXT record on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong>.
         </li>
-        <li>
-            Alias <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>
+        <li class="list-group-item">
+            Alias <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>
         </li>
-        <li>
-            Enter free text in the area below explaining why you can't do the above:<br/><br/>
-            <textarea style="height:200px;width:90%" name="freetext"></textarea>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label>Enter free text in the area below explaining why you can't do the above:</label>
+                <textarea class="form-control" name="freetext"></textarea>
+            </div>
         </li>
     </ul>
-    Once you've completed one of the verification methods above, submit this form:<br/><br/>
-    <input type="submit" class='btn btn-primary' value="Submit" />
+    <p>Once you've completed one of the verification methods above, submit this form:</p>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 </form>

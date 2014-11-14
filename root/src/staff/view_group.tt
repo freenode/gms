@@ -2,22 +2,48 @@
 
 <h2>[% group.group_name | html %]</h2>
 
-<table>
-<tr> <td>Type</td>              <td>[% group.group_type %]</td> </tr>
-<tr> <td>URL</td>               <td>[% group.url | html %]</td> </tr>
-<tr> <td>Status</td>            <td>[% group.status | html %]</td> </tr>
-<tr> <td>Verification URL</td>  <td>[% group.verify_url | html %]</td> </tr>
-<tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
-<tr> <td>DNS pointing to freenode.net</td> <td>[%group.verify_dns | html %]</td> </tr>
-[% IF group.git_url %]
-    <tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url | html %]</td> </tr>
-[% END %]
-</table>
+<h2>[% group.group_name | html %]</h2>
 
+<table class="table table-condensed">
+    <tr>
+        <td class="text-right"><strong>Type</strong></td>
+        <td colspan="2">[% group.group_type %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>URL</strong></td>
+        <td colspan="2">[% group.url | html%]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>Status</strong></td>
+        <td colspan="2">[% group.status | html%]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>Verification URL</strong></td>
+        <td colspan="2">[% group.verify_url | html %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>Verification token</strong></td>
+        <td colspan="2">[% group.verify_token %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>DNS pointing to freenode.net</strong></td>
+        <td colspan="2">[%group.verify_dns | html %]</td>
+    </tr>
+  [% IF group.git_url %]
+    <tr>
+        <td class="text-right">Gitweb/Cvsweb URL</td>
+        <td colspan="2">[% group.git_url | html %]</td>
+    </tr>
+ [% END %]
 [% IF group.verify_freetext %]
-    <br/>
-    <b>This group can't be verified by another method because:</b><br/><br/>
-    [% group.verify_freetext | html %]
+    <tr>
+      <td colspan="3">
+        <p class="alert alert-danger">
+            <strong>This group can't be verified by another method because:</strong><br/>
+             [% group.verify_freetext | html %]
+        </p>
+      </td>
+    </tr>
 [% END %]
 
 <h3>Contacts:</h3>
@@ -25,13 +51,13 @@
 <p>( None )</p>
 [% END %]
 
-<ul>
+<ul class="list-group">
 [% FOREACH contact = group.active_contacts %]
-<li>
+<li class="list-group-item">
   [% contact.name | html %] ([% contact.account.accountname | html %])
 
   [% IF contact.account.dropped %]
-    ( dropped )
+    ( <strong class="text-danger">dropped</strong> )
   [% END %]
 </li>
 [% END %]
@@ -39,15 +65,15 @@
 
 [% IF admin -%]
 <h3>Historical/Inactive Contacts:</h3>
-<ul>
+<ul class="list-group">
 [% count = 0 %]
 [% FOREACH gc = group.group_contacts %]
   [% IF gc.status != 'active' -%]
     [% count = count + 1 %]
-    <li>
+    <li class="list-group-item">
       [% gc.contact.name | html %] ([% gc.contact.account.accountname | html %]) [% gc.status %]
       [% IF gc.contact.account.dropped %]
-        ( dropped )
+        ( <strong class="text-danger">dropped</strong> )
       [% END %]
     </li>
   [% END %]
@@ -59,26 +85,26 @@
 [% END %]
 
 <h3>Actions:</h3>
-<ul>
+<ul class="list-group">
 [%IF admin -%]
-  <li>
+  <li class="list-group-item">
     <a href="[% c.uri_for ("/admin/group/${group.id}/add_gc"); %]">Add Group Contact</a>
   </li>
-  <li>
+  <li class="list-group-item">
     <a href="[% c.uri_for ("/admin/group/${group.id}/edit"); %]">Edit Group Information</a>
   </li>
-  <li>
+  <li class="list-group-item"> 
     <a href="[% c.uri_for ("/admin/group/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
   </li>
   [% IF group.address %]
-    <li>
+    <li class="list-group-item">
       <a href="[% c.uri_for ("/admin/address/${group.address.id}/view"); %]">View Address</a>
     </li>
   [% END %]
-  <li>
+  <li class="list-group-item">
       <a href="[% c.uri_for ("/admin/group/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or add a new namespace for the group</a>
   </li>
-  <li>
+  <li class="list-group-item">
       <a href="[% c.uri_for ("/admin/group/${group.id}/edit_cloak_namespaces"); %]">View the group's cloak namespaces or add a new namespace for the group</a>
   </li>
 [% END %]

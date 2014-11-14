@@ -2,11 +2,28 @@
 
 <p>Use this form to update your personal information</p>
 
-<form method="post" action="[% c.uri_for('/userinfo/update') %]">
-<table>
-<tr> <td><label for="username">Name:</label></td><td><input required id="username" type="text" name="user_name" size="40" value="[% user_name | html %]" /></td> </tr>
-<tr> <td><label for="email">Email address:</label></td><td><input required id="email" type="email" name="user_email" size="40" value="[% user_email | html %]" /></td> </tr>
-<tr> <td><label for="phone">Telephone</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone"  type="text" name="phone" size="40" value="[% phone | html %]"></td> </tr>
-<tr> <td colspan="2"><input type="submit" name="submit" value="Submit" /></td> </tr>
-</table>
+<form method="post" action="[% c.uri_for('/userinfo/update') %]" class="form-horizontal">
+    <div class="form-group">
+        <label for="username" class="col-sm-3 control-label">Name</label>
+        <div class="col-xs-9">
+            <input required id="username" type="text" name="user_name" value="[% user_name | html %]" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="email" class="col-sm-3 control-label">Email address</label>
+        <div class="col-xs-9">
+            <input required id="email" type="email" name="user_email" value="[% user_email | html %]" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="phone" class="col-sm-3 control-label">Telephone</label>
+        <div class="col-xs-9">
+            <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone"  type="text" name="phone" value="[% phone | html %]" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 </form>

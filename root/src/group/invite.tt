@@ -1,8 +1,19 @@
 [% META title = 'Invite Contact' %]
 
-<h1>Invite group contact</h1>
-<form method="post" action="[% c.uri_for("/group/${group.id}/invite/submit") %]">
-    Enter the user name:<br/>
-    <input type="text" name="contact" /><br/>
-    <input type="submit" value="submit" class="btn btn-primary" />
+<h2>Invite group contact</h2>
+
+<form method="post" action="[% c.uri_for("/group/${group.id}/invite/submit") %]" class="form-horizontal">
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Enter the user name</label>
+        <div class="col-sm-9">
+            <input type="text" name="contact" class="form-control" />
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 </form>

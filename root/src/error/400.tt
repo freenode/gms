@@ -1,3 +1,3 @@
 [% META title = 'Bad Request' %]
 
-<p>You have performed an illegal action.</p>
+<p class="alert alert-danger">You have performed an illegal action.</p>

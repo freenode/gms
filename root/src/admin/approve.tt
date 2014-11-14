@@ -1,19 +1,49 @@
 [% META title = 'Approval Page' -%]
 <form action="" method="post">
-<a href="javascript:;" value="group" name="expand_approve">Approve group registrations</a> <span class="badge badge-info">[% pending_groups %]</span><i name='expand_approve' value='group' class='hand icon-chevron-down'></i>
-<div id="response_group"></div>
-<a href="javascript:;" value="cns" name="expand_approve">Approve Channel namespaces</a> <span class="badge badge-info">[% pending_channel_namespaces %]</span><i name='expand_approve' value='cns' class='hand icon-chevron-down'></i><br/>
-<div id="response_cns"></div>
-<a href="javascript:;" value="clns" name="expand_approve">Approve Cloak namespaces</a> <span class="badge badge-info">[% pending_cloak_namespaces %]</span><i name='expand_approve' value='clns' class='hand icon-chevron-down'></i><br/>
-<div id="response_clns"></div>
-<a href="javascript:;" value="gca" name="expand_approve">Approve Group Contact Additions</a> <span class="badge badge-info">[% pending_gc %]</span><i name='expand_approve' value='gca' class='hand icon-chevron-down'></i><br/>
-<div id="response_gca"></div>
-<a href="javascript:;" value="changes" name="expand_approve">Approve Changes</a> <span class="badge badge-info">[% pending_changes %]</span><i name='expand_approve' value='changes' class='hand icon-chevron-down'></i><br/>
-<div id="response_changes"></div>
-<a href="javascript:;" value="cloaks" name="expand_approve">Approve Cloak Changes</a> <span class="badge badge-info">[% pending_cloaks %]</span><i name='expand_approve' value='cloaks' class='hand icon-chevron-down'></i><br/>
-<div id="response_cloaks"></div>
-<a href="javascript:;" value="channels" name="expand_approve">Approve Channel Takeover and Drop Requests</a> <span class="badge badge-info">[% pending_channels %]</span><i name='expand_approve' value='channels' class='hand icon-chevron-down'></i><br/>
-<div id="response_channels"></div>
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="group" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve group registrations
+    </button>
+    <div id="response_group" class="clearfix"></div>
+</div>
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="cns" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve Channel namespaces
+    </button>
+    <div id="response_cns" class="clearfix"></div>
+</div>
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="clns" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve Cloak namespaces
+    </button>
+    <div id="response_clns" class="clearfix"></div>
+</div>
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="gca" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve Group Contact Additions
+    </button>
+    <div id="response_gca" class="clearfix"></div>
+</div>
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="changes" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve Changes
+    </button>
+    <div id="response_changes" class="clearfix"></div>
+</div>
+
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="cloaks" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve Cloak Changes
+    </button>
+    <div id="response_cloaks" class="clearfix"></div>
+</div>
+
+<div class="form-group">
+    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="channels" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i> Approve Channel Takeover and Drop Requests
+    </button>
+    <div id="response_channels" class="clearfix"></div>
+</div>
 
 <script src="[% c.uri_for('/static/js/admin.js') %]" type="text/javascript"></script>
 <script src="[% c.uri_for('/static/js/admin_approve.js') %]" type="text/javascript"></script>

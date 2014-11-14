@@ -1,6 +1,6 @@
 [% META title = 'Action Complete' %]
 
-<p>
+<p class="alert alert-info">
 [% msg %]
 </p>
 

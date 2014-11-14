@@ -2,37 +2,60 @@
 
 <h2>[% group.group_name | html %]</h2>
 
-<table>
-<tr> <td>Type</td>              <td>[% group.group_type %]</td> </tr>
-<tr> <td>URL</td>               <td>[% group.url %]</td> </tr>
-<tr> <td>Status</td>            <td>[% group.status %]</td> </tr>
-<tr> <td>Verification URL</td>  <td>[% group.verify_url | html %]</td> </tr>
-<tr> <td>Verification token</td><td>[% group.verify_token %]</td> </tr>
-<tr> <td colspan="2">&nbsp;</td> </tr>
-<tr> <th colspan="2">DNS verification:</td> </tr>
-<tr> <td colspan="2">The DNS verification can be either a TXT on <b>[% group.verify_dns | html %]</b> with text also <b>[% group.verify_dns | html %]</b> or aliasing (using a CNAME) <b>[% group.verify_dns | html %]</b> to <b>127.0.0.127</b>.</td></tr>
+<table class="table table-condensed">
+    <tr>
+        <td class="text-right"><strong>Type</strong></td>
+        <td colspan="2">[% group.group_type %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>URL</strong></td>
+        <td colspan="2">[% group.url %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>Status</strong></td>
+        <td colspan="2">[% group.status %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>Verification URL</strong></td>
+        <td colspan="2">[% group.verify_url | html %]</td>
+    </tr>
+    <tr>
+        <td class="text-right"><strong>Verification token</strong></td>
+        <td colspan="2">[% group.verify_token %]</td>
+    </tr>
+    <tr>
+        <td colspan="3"><strong>DNS verification:</strong></td>
+    </tr>
+    <tr>
+        <td colspan="3">The DNS verification can be either a TXT on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong> or aliasing <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>.</td>
+    </tr>
 
-
-[% IF group.git_url %]
-<tr> <td>Gitweb/Cvsweb URL</td> <td>[% group.git_url | html %]</td> </tr>
-[% END %]
+    [% IF group.git_url %]
+        <tr>
+            <td class="text-right"><strong>Gitweb/Cvsweb URL</strong></td>
+            <td colspan="2">[% group.git_url | html %]</td>
+        </tr>
+    [% END %]
 </table>
+
 [% IF group.verify_freetext %]
-    <br/>
-    <b>This group can't be verified by another method because:</b><br/><br/>
+    <p class="alert alert-info">
+    <strong>This group can't be verified by another method because:</strong><br />
     [% group.verify_freetext | html %]
+    </p>
 [% END %]
 
 <h3>Contacts:</h3>
+
 [% IF !group.active_contacts %]
-( None )
+<p>( None )</p>
 [% END %]
-<ul>
+<ul class="list-group">
 [% FOREACH contact = group.active_contacts %]
-<li>
+<li class="list-group-item">
    [% contact.name | html %] ([% contact.account.accountname | html %])
    [% IF contact.account.dropped %]
-     ( dropped )
+     ( <strong class="text-danger">dropped</strong> )
    [% END %]
  </li>
 [% END %]
@@ -42,52 +65,52 @@
 [% IF !group.pending_contacts %]
 <p>( None )</p>
 [% END %]
-<ul>
+<ul class="list-group">
 [% FOREACH contact = group.pending_contacts %]
-<li>
+<li class="list-group-item">
   [% contact.name | html %] ([% contact.account.accountname | html %])
 
   [% IF contact.account.dropped %]
-    ( dropped )
+    ( <strong class="text-danger">dropped</strong> )
   [% END %]
 </li>
 [% END %]
 </ul>
 
 <h3>Actions:</h3>
-<ul>
+<ul class="list-group">
 [% IF group.status.is_pending_web -%]
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">Verify Group</a>
 </li>
 [% END %]
 [% IF group.status.is_active -%]
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/edit"); %]">Edit Group Information</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/take_over"); %]">Take over a channel that's in the group's namespace.</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/listchans"); %]">View channels currently in the group's namespaces.</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/cloak"); %]">Assign a user a group cloak.</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/listvhost"); %]">View existing group cloaks</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or request a new namespace for your group</a>
 </li>
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/edit_cloak_namespaces"); %]">View the group's cloak namespaces or request a new cloak namespace for your group</a>
-</li>
+</li class="list-group-item">
 [% IF gc.is_primary %]
-<li>
+<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/edit_gc"); %]">Edit Group Contact Information</a>
 </li>
 [% END %]

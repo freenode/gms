@@ -1,14 +1,20 @@
 [% META title = 'List channels' %]
 
-<form method="post" action="[% c.uri_for("/group/${group.id}/listchans/submit") %]">
-
-    Channel namespace:<br/>
-    <select id='ns' name="namespace">
-        <option value="">All</option>
-        [% FOREACH namespace IN channel_namespaces %]
-            <option value="[% namespace.namespace | html %]" >[% namespace.namespace | html %]</option>
-        [% END %]
-    </select><br/>
-
-    <input type="submit" value="Search" class="btn btn-primary" />
+<form method="post" action="[% c.uri_for("/group/${group.id}/listchans/submit") %]" class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Channel namespace</label>
+        <div class="col-sm-9">
+            <select id="ns" name="namespace" class="form-control">
+                <option value="">All</option>
+                [% FOREACH namespace IN channel_namespaces %]
+                    <option value="[% namespace.namespace | html %]" >[% namespace.namespace | html %]</option>
+                [% END %]
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block"><i class="glyphicon glyphicon-search"></i> Search</button>
+        </div>
+    </div>
 </form>

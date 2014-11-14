@@ -7,16 +7,19 @@ before logging in again.</p>
 
 [% ELSE -%]
 
-<!-- Login form -->
 <h3>Login to GMS</h3>
 <p>Please log in using your services account credentials</p>
 
-<form method="post" action="[% c.uri_for('/login/submit') %]">
-<table>
-<tr> <td><label for="username">Username:</label></td><td><input id="username" type="text" name="username" size="40" /></td> </tr>
-<tr> <td><label for="password">Password:</label></td><td><input id="password" type="password" name="password" size="40" /></td> </tr>
-<tr> <td colspan="2"><input class="btn btn-primary" type="submit" name="submit" value="Login" /></td></tr>
-</table>
+<form method="post" action="[% c.uri_for('/login/submit') %]" role="form">
+	<div class="form-group">
+		<label for="username">Username:</label>
+		<input id="username" type="text" name="username" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="password">Password:</label>
+		<input id="password" type="password" name="password" class="form-control" />
+	</div>
+	<input class="btn btn-primary btn-block" type="submit" name="submit" value="Login" />
 </form>
 
 [% END %]

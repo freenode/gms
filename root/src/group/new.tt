@@ -8,205 +8,217 @@ explanation</a> of the group system, and provide as much information as you can
 to help us verify your registration.</p>
 
 <p>
-  Fields with * are mandatory
+  <strong>Fields with * are mandatory</strong><br />
   (Address fields are only required if the group has a registered address).
 </p>
 
-<form method="post" action="[% c.uri_for('/group/new/submit') %]">
-<table class="fullwidth">
-<tr> <td colspan="2"><strong>Group Information</strong></td> </tr>
-<tr>
-  <td class="td30"><label for="group_type">* Group Type</label></td>
-  <td class="td70">
-      <select style="width:90%" name="group_type" id="group_type">
-        <option [% IF group_type == "informal" || !group_type %] selected [% END %] value="informal" >Informal Group</option>
-        <option [% IF group_type == "corporation" %] selected [%END%] value="corporation">Corporation / Business entity</option>
-        <option [% IF group_type == "education" %] selected [%END%] value="education">Educational Institution</option>
-        <option  [% IF group_type == "government" %] selected [%END%] value="government">Governmental Entity</option>
-        <option  [% IF group_type == "nfp" %] selected [%END%] value="nfp">Not for profit / Charitable Organisation</option>
-        <option [% IF group_type == "internal" %] selected [%END%] value="internal">Internal Group</option>
-      </select>
+<form method="post" action="[% c.uri_for('/group/new/submit') %]" class="form-horizontal">
+    <h4>Group Information</h4>
+    <div class="form-group">
+        <label for="group_type" class="col-sm-3 control-label">* Group Type</label>
+        <div class="input-group col-sm-9">
+          <select class="form-control" name="group_type" id="group_type" required>
+            <option [% IF group_type == "informal" || !group_type %] selected [% END %] value="informal" >Informal Group</option>
+            <option [% IF group_type == "corporation" %] selected [%END%] value="corporation">Corporation / Business entity</option>
+            <option [% IF group_type == "education" %] selected [%END%] value="education">Educational Institution</option>
+            <option  [% IF group_type == "government" %] selected [%END%] value="government">Governmental Entity</option>
+            <option  [% IF group_type == "nfp" %] selected [%END%] value="nfp">Not for profit / Charitable Organisation</option>
+            <option [% IF group_type == "internal" %] selected [%END%] value="internal">Internal Group</option>
+          </select>
+          <span class="input-group-addon" onmouseover="tooltip(this, 1)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="group_name" class="col-sm-3 control-label">* Group Name</label>
+        <div class="input-group col-sm-9">
+            <input type="text" required id="group_name" name="group_name" class="form-control" value="[% group_name | html %]" />
+            <span class="input-group-addon" onmouseover="tooltip(this, 2)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="group_url" class="col-sm-3 control-label">* Group URL</label>
+        <div class="input-group col-sm-9">
+            <input type="text" required id="group_url" name="group_url" class="form-control" value="[% group_url | html %]" />
+            <span class="input-group-addon" onmouseover="tooltip(this, 3)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="group_cns" class="col-sm-3 control-label">* Channel Namespace</label>
+        <div class="input-group col-sm-9">
+            <input type="text" required id="group_cns" name="channel_namespace" class="form-control" value="[% channel_namespace | html %]" />
+            <span class="input-group-addon" onmouseover="tooltip(this, 3)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+        </div>
+    </div>
+    [% IF confirm %]
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Confirm Create Conflicting Change</label>
+        <div class="input-group col-sm-9">
+            <input type="checkbox" name="do_confirm" value="1" />
+        </div>
+    </div>
+    [% END %]
+    <div class="form-group" id="address_input"> 
+        <label class="col-sm-3 control-label">Does the group have a registered / postal address?</label>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" [% IF has_address=="y" %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label>
+            <label class="radio-inline"><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address=="n" || !has_address %] checked="checked" [% END %] /> No</label>
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label>Group Address</label>
+        <span onmouseover="tooltip(this, 5)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="addr1" class="col-sm-3 control-label">* Address 1</label>
+        <div class="col-sm-9">
+            <input id="addr1" type="text" name="address_one" class="form-control" value="[% address_one | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="addr2" class="col-sm-3 control-label">Address 2</label>
+        <div class="col-sm-9">
+            <input id="addr2" type="text" name="address_two" class="form-control" value="[% address_two | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="addr2" class="col-sm-3 control-label">* City</label>
+        <div class="col-sm-9">
+            <input id="city" type="text" name="city" class="form-control" value="[% city | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="state" class="col-sm-3 control-label">State</label>
+        <div class="col-sm-9">
+            <input id="state" type="text" name="state" class="form-control" value="[% state | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide"> 
+        <label for="pcode" class="col-sm-3 control-label">Postal Code</label>
+        <div class="col-sm-9">
+            <input id="pcode" type="text" name="postcode" class="form-control" value="[% postcode | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="country" class="col-sm-3 control-label">* Country</label>
+        <div class="col-sm-9">
+            <input id="country" type="text" name="country" class="form-control" value="[% country | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="phone" class="col-sm-3 control-label">* Telephone</label>
+        <div class="col-sm-9">
+            <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" type="text" name="phone" class="form-control" value="[% phone | html %]" />
+        </div>
+    </div>
+    <div class="form-group" name="addr_hide">
+        <label for="phone2" class="col-sm-3 control-label">Telephone (alternate)</label>
+        <div class="col-sm-9">
+            <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone2" class="form-control" value="[% phone2 | html %]" />
+        </div>
+    </div>
+    <h4>Additional Information</h4>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Join the Groups Advisory Board? <span onmouseover="tooltip(this, 6)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span></label>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="join_gab" id="join_gab_y" value="Yes" [% IF join_gab == "Yes" || !join_gab %] checked="checked" [% END %] /> Yes</label>
+            <label class="radio-inline"><input type="radio" name="join_gab" id="join_gab_n" value="No" [% IF join_gab == "No" %] checked="checked" [% END %] /> No</label>
+        </div>
+    </div>    
+    <div class="form-group" id="gab">
+        <label for="gab_email" class="col-sm-3 control-label">Email address for GAB mailing list</label>
+        <div class="col-sm-9">
+            <input type="email" id="gab_email" name="gab_email" class="form-control" value="[% gab_email %]" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Include project on Primary Groups listing? <span onmouseover="tooltip(this, 7)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span></label>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="include_listing" id="include_listing_y" value="y" [% IF include_listing=="y" || !include_listing  %] checked="checked" [% END %] /> Yes</label>
+            <label class="radio-inline"><input type="radio" name="include_listing" id="include_listing_n" value="n" [% IF include_listing=="n" %] checked="checked" [% END %] /> No</label>
+        </div>
+    </div>
+    <div class="form-group" id="listing">
+        <label for="listurl" class="col-sm-3 control-label">URL to be linked</label>
+        <div class="col-sm-9">
+            <input id="listurl" type="text" name="listing_url" style="width:90%" value="[% listing_url %]" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="blurb" class="col-sm-3 control-label">Small blurb about the project</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" id="blurb" name="listing_blurb" >[% listing_blurb %]</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="other" class="col-sm-3 control-label">Any other information</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" name="other_info" id="other" >[% other_info %]</textarea>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 
-      <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 1)" onmouseout="untooltip()" />
-  </td>
-</tr>
-<tr>
-  <td><label for="group_name">* Group Name</label></td>
-  <td>
-    <input type="text" required id="group_name" name="group_name" style="width:90%" value="[% group_name | html %]">
-    <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 2)" onmouseout="untooltip()" />
-  </td>
-</tr>
-<tr>
-  <td><label for="group_url">* Group URL</label></td>
-  <td>
-    <input type="text" required id="group_url" name="group_url" style="width:90%" value="[% group_url | html %]">
-    <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 3)" onmouseout="untooltip()" />
-  </td>
-</tr>
-<tr>
-  <td><label for="group_cns">* Channel Namespace</label></td>
-  <td>
-    <input required type="text" id="group_cns" name="channel_namespace" style="width:90%" value="[% channel_namespace | html %]">
-    <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 4)" onmouseout="untooltip()" />
-  </td>
+    
+    <!-- Text for the mouseover tooltip elements !-->
 
-</tr>
-[% IF confirm %]
-  <tr>
-    <td>
-      <label><input type="checkbox" name="do_confirm" value="1" /> Confirm Create Conflicting Change</label>
-    </td>
-  </tr>
-[% END %]
-<tr id="address_input">
-  <td>Does the group have a registered / postal address?</td>
-  <td><label><input type="radio" [% IF has_address=="y" %] checked="checked" [% END %] name="has_address" id="has_address_y" value="y"> Yes</label><br />
-      <label><input type="radio" name="has_address" id="has_address_n" value="n" [% IF has_address=="n" || !has_address %] checked="checked" [% END %]> No</label>
-  </td>
-</tr>
-<!--- Give address elements name="addr_hide", so that they are hidden with JS properly. !-->
-<tr name="addr_hide">
-  <td colspan="2">
-    <strong>Group Address</strong>
-    <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 5)" onmouseout="untooltip()" />
-  </td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="addr1">* Address 1:</label></td><td><input id="addr1" type="text" name="address_one" style="width:90%" value="[% address_one | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="addr2">Address 2:</label></td><td><input id="addr2" type="text" name="address_two" style="width:90%" value="[% address_two | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="city">* City</label></td><td><input id="city" type="text" name="city" style="width:90%" value="[% city | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="state">State</label></td><td><input id="state" type="text" name="state" style="width:90%" value="[% state | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="pcode">Postal Code</label></td><td><input id="pcode" type="text" name="postcode" style="width:90%" value="[% postcode | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="country">* Country</label></td><td><input id="country" type="text" name="country" style="width:90%" value="[% country | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="phone">* Telephone</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone" type="text" name="phone" style="width:90%" value="[% phone | html %]"></td>
-</tr>
-<tr name="addr_hide">
-  <td><label for="phone2">Telephone (alternate)</label></td><td><input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone2" type="text" name="phone2" style="width:90%" value="[% phone2 | html %]"></td>
-</tr>
+    <div class="hidden" id="tooltipText1">
+        <strong>Informal Group</strong><br />
+        The majority of registrations will be an informal group.<br />
+        Select this if your group is not associated with a legal entity in any way.<br /><br />
 
-<tr>
-  <td colspan="2"><strong>Additional Information</strong></td>
-</tr>
+        <strong>Internal Group</strong><br />
+        Select this option if your group is not public, and part of a larger internal organisation
+        like a university association.
+    </div>
 
-<tr>
-  <td>Join the Groups Advisory Board?</td>
-  <td>
-    <label class='inline'><input type="radio" name="join_gab" id="join_gab_y" value="Yes" [% IF join_gab == "Yes" || !join_gab %] checked="checked" [% END %]> Yes</label>
-    <label class='inline'><input type="radio" name="join_gab" id="join_gab_n" value="No" [% IF join_gab == "No" %] checked="checked" [% END %] > No</label>
-    <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 6)" onmouseout="untooltip()" />
-  </td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr id="gab">
-  <td><label for="gab_email">Email address for GAB mailing list</label></td>
-  <td><input type="email" id="gab_email" name="gab_email" style="width:90%" value="[% gab_email %]"></td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-  <td>Include project on Primary Groups listing?</td>
-  <td>
-    <label class='inline'><input type="radio" name="include_listing" id="include_listing_y" value="y" [% IF include_listing=="y" || !include_listing  %] checked="checked" [% END %] > Yes</label>
-    <label class='inline'><input type="radio" name="include_listing" id="include_listing_n" value="n" [% IF include_listing=="n" %] checked="checked" [% END %]> No</label>
-    <img src="[% c.uri_for('/static/img/info.gif') %]" onmouseover="tooltip(this, 7)" onmouseout="untooltip()" />
-  </td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr id="listing">
-  <td><label for="listurl">URL to be linked</label></td><td><input id="listurl" type="text" name="listing_url" style="width:90%" value="[% listing_url %]"></td>
-</tr>
-<tr>
-  <td><label for="blurb">Small blurb about the project</label></td>
-  <td><textarea style="width:90%" id="blurb" name="listing_blurb" cols="45" rows="5">[% listing_blurb %]</textarea></td>
-</tr>
-<tr>
-  <td><label for="other">Any other information</label></td>
-  <td><textarea style="width:90%" name="other_info" id="other" cols="45" rows="5">[% other_info %]</textarea></td>
-</tr>
-<tr>
-  <td colspan="2"><input type="submit" class='btn btn-primary' name="submit" value="Submit" /></td>
-</tr>
-</table>
+    <div class="hidden" id="tooltipText2">
+        <strong>Group Name</strong><br/>
+        The name of your group.
+    </div>
 
-<!-- Text for the mouseover tooltip elements !-->
+    <div class="hidden" id="tooltipText3">
+        <strong>Group URL</strong><br/>
+        The public website for your group. This will be used to help identify your claim to the group,
+        and to make sure the group request is on topic for freenode.
+    </div>
 
-<div class="hidden" id="tooltipText1">
-    <b>Informal Group</b><br />
-    The majority of registrations will be an informal group.<br />
-    Select this if your group is not associated with a legal entity in any way.<br /><br />
+    <div class="hidden" id="tooltipText4">
+        <strong>Channel Namespace</strong><br />
+        The channels which your group request to be reserved.<br />
+        This should be specified as a list of channel names or masks seperated by a comma.<br />
+        A channel mask is one which covers a group of channels, for example freenode would cover
+        all channels starting with #freenode-, such as #freenode-help, #freenode-dev, et cetera.<br /><br />
 
-    <b>Internal Group</b><br />
-    Select this option if your group is not public, and part of a larger internal organisation
-    like a university association.
-</div>
+        You only need to enter the namespace name (you do not need to use -*) <br />
 
-<div class="hidden" id="tooltipText2">
-    <b>Group Name</b><br/>
-    The name of your group.
-</div>
+        Don't claim too broad a range of channels, or your application may be denied. In this context, potentially
+        confusing acronyms may be disallowed.
+    </div>
 
-<div class="hidden" id="tooltipText3">
-    <b>Group URL</b><br/>
-    The public website for your group. This will be used to help identify your claim to the group,
-    and to make sure the group request is on topic for freenode.
-</div>
+    <div class="hidden" id="tooltipText5">
+        <strong>Address</strong><br/>
+        The address where the group is located, if applicable.<br/>
+    </div>
 
-<div class="hidden" id="tooltipText4">
-    <b>Channel Namespace</b><br />
-    The channels which your group request to be reserved.<br />
-    This should be specified as a list of channel names or masks seperated by a comma.<br />
-    A channel mask is one which covers a group of channels, for example freenode would cover
-    all channels starting with #freenode-, such as #freenode-help, #freenode-dev, et cetera.<br /><br />
+    <div class="hidden" id="tooltipText6">
+        <strong>Groups Advisory Board</strong><br />
+        The Groups Advisory Board (GAB) is open to all Group Contacts. GAB membership is optional
+        and provides your project with a voice in helping steer the direction of freenode and the
+        PDPC in current and future services provided to the FOSS communities.
+    </div>
 
-    You only need to enter the namespace name (you do not need to use -*) <br />
-
-    Don't claim too broad a range of channels, or your application may be denied. In this context, potentially
-    confusing acronyms may be disallowed.
-</div>
-
-<div class="hidden" id="tooltipText5">
-    <b>Address</b><br/>
-    The address where the group is located, if applicable.<br/>
-</div>
-
-<div class="hidden" id="tooltipText6">
-    <b>Groups Advisory Board</b><br />
-    The Groups Advisory Board (GAB) is open to all Group Contacts. GAB membership is optional
-    and provides your project with a voice in helping steer the direction of freenode and the
-    PDPC in current and future services provided to the FOSS communities.
-</div>
-
-<div class="hidden" id="tooltipText7">
-    <b>Primary Groups Listing</b><br/>
-    As groups are an important part of freenode, you may request that we list your group's information
-    publically on freenode.net. Answer yes if you would like to be listed -- this is optional!
-</div>
+    <div class="hidden" id="tooltipText7">
+        <strong>Primary Groups Listing</strong><br/>
+        As groups are an important part of freenode, you may request that we list your group's information
+        publically on freenode.net. Answer yes if you would like to be listed -- this is optional!
+    </div>
 
 </form>
 
-<script src="[% c.uri_for ('/static/js/group_form.js') %]" type="text/javascript">
-</script>
+<script src="[% c.uri_for ('/static/js/group_form.js') %]" type="text/javascript"></script>
 
-<script src="[% c.uri_for ('/static/js/group_new.js') %]" type="text/javascript">
-</script>
+<script src="[% c.uri_for ('/static/js/group_new.js') %]" type="text/javascript"></script>

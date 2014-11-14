@@ -1,13 +1,19 @@
 [% META title = 'List cloaks' %]
 
-<form method="post" action="[% c.uri_for("/group/${group.id}/listvhost/submit") %]">
-
-    Cloak namespace:<br/>
-    <select id='cloakns' name="namespace">
-        [% FOREACH namespace IN cloak_namespaces %]
-            <option value="[% namespace.namespace | html %]" >[% namespace.namespace | html %]</option>
-        [% END %]
-    </select><br/>
-
-    <input type="submit" value="Search" />
+<form method="post" action="[% c.uri_for("/group/${group.id}/listvhost/submit") %]" class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Cloak namespace</label>
+        <div class="col-sm-9">
+           <select id="cloakns" name="namespace" class="form-control">
+                [% FOREACH namespace IN cloak_namespaces %]
+                    <option value="[% namespace.namespace | html %]" >[% namespace.namespace | html %]</option>
+                [% END %]
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block"><i class="glyphicon glyphicon-search"></i> Search</button>
+        </div>
+    </div>
 </form>

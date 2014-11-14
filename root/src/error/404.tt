@@ -1,4 +1,4 @@
 [% META title = 'Not Found' %]
 
-<p>The requested page does not exist.</p>
+<p class="alert alert-danger">The requested page does not exist.</p>
 

@@ -4,8 +4,16 @@
 
 [% FOREACH cloak IN cloaks -%]
     <form action="[% c.uri_for("/cloak/${cloak.id}/approve") %]" name="[% cloak.cloak %]" method="post" >
-        [% cloak.cloak %]
-        <input type="submit" name="action" value="approve" onclick="approveCloak('[% cloak.id%]', 'approve', '[% c.controller.token(c) %]');return false;" class="btn btn-primary" />
-        <input type="submit" name="action" value="reject" onclick="approveCloak('[% cloak.id %]', 'reject', '[% c.controller.token(c) %]');return false;" class="btn btn-primary" />
+        <div class="row">
+            <label class="col-xs-6">[% cloak.cloak %]</label>
+            <div class="btn-group col-xs-6 row">
+                <button type="submit" class="btn btn-success col-xs-6" name="action" onclick="approveCloak('[% cloak.id%]', 'approve', '[% c.controller.token(c) %]');return false;">
+                    approve
+                </button>
+                <button type="submit" class="btn btn-danger col-xs-6" name="action" onclick="approveCloak('[% cloak.id %]', 'reject', '[% c.controller.token(c) %]');return false;">
+                    reject
+                </button>
+            </div>
+        </div>
     </form>
 [% END %]

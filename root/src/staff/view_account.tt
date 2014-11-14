@@ -1,17 +1,17 @@
 [% META title = 'User View' %]
 
 [% IF account.dropped %]
-<p><b>Note:</b> The account is no longer registered. Below is the most recent information:</p>
+<p class="alert alert-danger"><strong>Note:</strong> The account is no longer registered. Below is the most recent information:</p>
 [% END %]
 
 <p>[% account.accountname %]'s contact information:</p>
 
-<table>
-  <tr> <td>Account name:</td> <td>[% account.accountname | html %]</td> </tr>
-  <tr> <td>Real name:</td> <td>[% account.contact.name | html %]</td> </tr>
-  <tr> <td>E-mail Address:</td> <td>[% account.contact.email | html %]</td> </tr>
+<table class="table table-condensed">
+  <tr> <td class="text-right"><strong>Account name</strong></td> <td>[% account.accountname | html %]</td> </tr>
+  <tr> <td class="text-right"><strong>Real name</strong></td> <td>[% account.contact.name | html %]</td> </tr>
+  <tr> <td class="text-right"><strong>E-mail Address</strong></td> <td>[% account.contact.email | html %]</td> </tr>
   [% IF admin -%]
-  <tr> <td>Telephone:</td> <td>[% account.contact.active_change.phone | html %]</td> </tr>
+  <tr> <td class="text-right"><strong>Telephone</strong></td> <td>[% account.contact.active_change.phone | html %]</td> </tr>
   [% END %]
 </table>
 

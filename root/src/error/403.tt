@@ -1,3 +1,3 @@
 [% META title = 'Access denied' %]
 
-<p>You do not have permission to access the requested page.</p>
+<p class="alert alert-danger">You do not have permission to access the requested page.</p>

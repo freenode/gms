@@ -1,53 +1,58 @@
 [% META title = 'Edit group contact information' %]
 
-<form method="post" action="[% c.uri_for("/group/${group.id}/edit_gc/submit") %]">
-<input type="hidden" name="group_contacts"
-    value="[% FOREACH gc IN group_contacts %][% gc.contact.id %] [% END %]" />
+<form method="post" action="[% c.uri_for("/group/${group.id}/edit_gc/submit") %]" class="form-horizontal">
+    <input type="hidden" name="group_contacts" value="[% FOREACH gc IN group_contacts %][% gc.contact.id %] [% END %]" />
 
-<p>Group Contacts:</p>
+    <h2>Group Contacts</h2>
 
-<table class="fullwidth">
-<tr>
-  <th class="td20">Contact</th>
-  <th class="td20">Status</th>
-  <th class="td20">Primary?</th>
-  <th class="td20">Change</th>
-  <th class="td20">Hold</th>
-</tr>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th>Contact</th>
+              <th class="col-xs-2">Status</th>
+              <th>Primary?</th>
+              <th>Change</th>
+              <th>Hold</th>
+            </tr>
+        </thead>
+        <tbody>
 
-[% FOREACH group_contact IN group_contacts -%]
+        [% FOREACH group_contact IN group_contacts -%]
 
-[%
-  IF group_contact.last_change.change_type == 'request';
-    change = group_contact.last_change;
-    status_msg = "At least one of the group's contacts has a change request pending. As a result, information from the current request is used instead of the active change for those contacts.";
-  ELSE;
-    change = group_contact.active_change;
-  END;
-%]
+        [%
+          IF group_contact.last_change.change_type == 'request';
+            change = group_contact.last_change;
+            status_msg = "At least one of the group's contacts has a change request pending. As a result, information from the current request is used instead of the active change for those contacts.";
+          ELSE;
+            change = group_contact.active_change;
+          END;
+        %]
 
-  <tr>
-    <td>
-    [% group_contact.contact.name | html %] ([% group_contact.contact.account.accountname | html %])
-    [% IF group_contact.contact.account.dropped %]
-      ( dropped )
-    [% END %]
-    </td>
-    <td>
-    <select style="width:80%" name="status_[% group_contact.contact.id %]">
-      <option value="active" [% IF change.status.is_active %] selected [% END %]>active</option>
-      <option value="retired" [% IF change.status.is_retired %] selected [% END %]>retired</option>
-    </select>
-    </td>
-    <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF change.primary %] checked [% END %] /></td>
-    <td><input type="radio" name="action_[% group_contact.contact.id %]" value="change" /></td>
-    <td><input type="radio" name="action_[% group_contact.contact.id %]" value="hold" checked="checked" /></td>
-  </tr>
-[% END -%]
-</table>
+          <tr>
+            <td>
+            [% group_contact.contact.name | html %] ([% group_contact.contact.account.accountname | html %])
+            [% IF group_contact.contact.account.dropped %]
+              ( <span class="text-danger">dropped</span> )
+            [% END %]
+            </td>
+            <td>
+            <select class="form-control" name="status_[% group_contact.contact.id %]">
+              <option value="active" [% IF change.status.is_active %] selected [% END %]>active</option>
+              <option value="retired" [% IF change.status.is_retired %] selected [% END %]>retired</option>
+            </select>
+            </td>
+            <td><input type="checkbox" name="primary_[% group_contact.contact.id %]" value="1" [% IF change.primary %] checked [% END %] /></td>
+            <td><input type="radio" name="action_[% group_contact.contact.id %]" value="change" /></td>
+            <td><input type="radio" name="action_[% group_contact.contact.id %]" value="hold" checked="checked" /></td>
+          </tr>
+        [% END -%]
+        </tbody>
+    </table>
 
-<p>
-  <input type="submit" value="Submit" class="btn btn-primary" />
-</p>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 
 </form>

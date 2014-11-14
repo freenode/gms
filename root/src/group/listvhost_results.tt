@@ -2,9 +2,9 @@
 
 <h3>Active cloaks</h3>
 [% results.size %] result(s):<br/>
-<ul>
+<ul class="list-group">
     [% FOREACH result IN results.pairs %]
-        <li>[% result.key | html %] - [% result.value | html %]</li>
+        <li class="list-group-item">[% result.key | html %] - [% result.value | html %]</li>
     [% END %]
 </ul>
 

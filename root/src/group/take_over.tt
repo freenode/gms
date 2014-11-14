@@ -1,43 +1,50 @@
 [% META title = 'Take Over Channels' %]
 
 <form method="post" action="[% c.uri_for("/group/${group.id}/take_over/submit") %]" autocomplete="off">
-    Enter the channel name:<br/>
-    <input type="text" name="channel" id="channel" value="[% channel | html %]" /><br/><br />
-
+    <div class="form-group">
+        <label>Enter the channel name:</label>
+        <input type="text" name="channel" id="channel" value="[% channel | html %]" class="form-control" />
+    </div>
     <p>What would you like to do?</p>
     <ul>
-    <li>
-    <label><input type="radio" id="action_transfer" name="action" value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a user.</label>
-    <div id="transfer">
-    Which user should it be transferred to?
-    <p>
-        <b>Group Contacts</b><br/>
-        <select name="target_gc">
-            [% FOREACH contact IN group.active_contacts %]
-                <option value="[% contact.account.id | html %]">[% contact.account.accountname | html %] [% IF contact.account.dropped %] ( dropped ) [% END %]</option>
-            [% END %]
-        </select>
-    </p>
-    <p>
-        <b>Or, any other user</b><br/>
-        Accountname:<br/>
-        <input name="target" value="[% target | html %]" type="text" >
-        [% IF info %]
-            <br/><br/>
-            <b>Please confirm that this is the user that you think it is</b><br/>
-            [% info %]<br/>
-            <label><input type="checkbox" name="confirm" value="1" /> This is who I think it is</label>
-        [% END %]
-    </p>
-    </div>
-    </li>
-
-    <li>
-    <label><input type="radio" id="action_drop" name="action" value="2" [% IF action == 2 %] checked [% END %] /> Drop the channel.</label><br/ >
-    </li>
+        <li>
+            <div class="radio">
+                <label><input type="radio" id="action_transfer" name="action" value="1" [% IF !action || action == 1 %] checked [% END %] /> Transfer the channel to a user.</label>
+            </div>
+            <div>
+                <p>Which user should it be transferred to?</p>
+                <div class="form-group">
+                    <label>Group Contacts</label>
+                    <select name="target_gc" class="form-control">
+                    [% FOREACH contact IN group.active_contacts %]
+                        <option value="[% contact.account.id | html %]">[% contact.account.accountname | html %] [% IF contact.account.dropped %] ( dropped ) [% END %]</option>
+                    [% END %]
+                    </select>
+                </div>
+                <p>Or, any other user</p>
+                <div class="form-group">
+                    <label>Accountname</label>
+                    <input name="target" value="[% target | html %]" type="text" class="form-control" />
+                </div>
+                [% IF info %]
+                    <p class="help-block">Please confirm that this is the user that you think it is <br /> [% info %]</p>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="confirm" value="1" /> This is who I think it is</label>*
+                    </div>
+                [% END %]
+            </div>
+        </li>
+        <li>
+            <div class="radio">
+                <label><input type="radio" id="action_drop" name="action" value="2" [% IF action == 2 %] checked [% END %] /> Drop the channel.</label>
+            </div>
+        </li>
     </ul>
-
-    <p><input type="submit" value="submit" class="btn btn-primary" /></p>
+    <div class="row">
+        <div class="col-xs-offset-8 col-xs-4">
+            <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+        </div>
+    </div>
 </form>
 
 <script>

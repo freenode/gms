@@ -2,10 +2,10 @@
 
 <p>Your contact information is on file as follows:</p>
 
-<table>
-<tr> <td>Name:</td><td>[% user_name | html %]</td> </tr>
-<tr> <td>Email:</td><td>[% user_email | html %]</td> </tr>
-<tr> <td>Telephone</td><td>[% phone |html %]</td> </tr>
+<table class="table table-condensed">
+<tr> <td class="text-right"><strong>Name</strong></td><td>[% user_name | html %]</td> </tr>
+<tr> <td class="text-right"><strong>Email</strong></td><td>[% user_email | html %]</td> </tr>
+<tr> <td class="text-right"><strong>Telephone</strong></td><td>[% phone |html %]</td> </tr>
 </table>
 
 <p><a href="[% c.uri_for ("/userinfo/edit/") %]">Edit Contact Information</a></p>

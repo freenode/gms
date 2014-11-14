@@ -1,25 +1,28 @@
 [% META title = 'Search Users' %]
 
-<form method="post" action="[% c.uri_for('/staff/search_users/submit') %]">
+<form method="post" action="[% c.uri_for('/staff/search_users/submit') %]" class="form-horizontal">
 
 <p>
   Enter the search criteria. Empty box matches errything.
 </p>
 
-<table class='fullwidth'>
-  <tr>
-    <td><label for="accname">Account name</label></td>
-    <td><input type='text' id="accname" class='accname' name='accountname' /></td>
-  </tr>
-  <tr>
-    <td><label for="fullname">Full name</label></td>
-    <td><input id="fullname" class='fullname' type='text' name='fullname' /></td>
-  </tr>
-</table>
-
-<p>
-  <input class='btn btn-primary btn-large' type='submit' value='Submit' />
-</p>
+<div class="form-group">
+    <label for="accname" class="col-sm-3 control-label">Account name</label>
+    <div class="col-sm-9">
+        <input type="text" id="accname" class="accname" name="accountname" class="form-control"/>
+    </div>
+</div>
+<div class="form-group">
+    <label for="fullname" class="col-sm-3 control-label">Full name</label>
+    <div class="col-sm-9">
+        <input type="text" id="fullname" class="fullname" name="fullname" class="form-control"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-offset-8 col-xs-4">
+        <input type="submit" class="btn btn-primary btn-block" name="submit" value="Submit" />
+    </div>
+</div>
 
 </form>
 <script src="[% c.uri_for ('/static/js/jquery.js') %]" type="text/javascript"></script>
