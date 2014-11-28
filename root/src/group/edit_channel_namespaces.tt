@@ -1,6 +1,6 @@
 [% META title = 'Channel Namespaces' %]
 
-<h2>Channel Namespaces for [% group.group_name | html %]</h2>
+<h2>Active Channel Namespaces for [% group.group_name | html %]</h2>
 
 [% group.group_name | html %]'s current active namespaces are:<br/><br/>
 
@@ -48,6 +48,21 @@
 [% ELSE %]
     <p class="alert alert-info">Your group currently has no channel namespaces, but you can add another.</p>
 [% END %]
+
+[% IF pending_namespaces.size != 0 %]
+    <h2>Pending namespaces for [% group.group_name | html %]</h2>
+
+    [% group.group_name | html %] has the following namespaces pending staff approval:<br/><br/>
+
+    <ul>
+        [% FOREACH namespace IN pending_namespaces %]
+            <li>
+                [% namespace.namespace | html %]
+            </li>
+        [% END %]
+    </ul>
+[% END %]
+
     <div class="form-group">
         <label class="col-sm-3 control-label">Add a new namespace</label>
         <div class="col-sm-9">
