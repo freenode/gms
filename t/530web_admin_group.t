@@ -54,13 +54,13 @@ $ua->content_contains("You are now logged in as admin01", "Check we can log in")
 $ua->get_ok("http://localhost/admin/group/1/view", "View group page works");
 
 $ua->content_contains ("<h2>Group01</h2>", "View group page works");
-$ua->content_contains ("<tr> <td>Type</td>              <td>informal</td> </tr>");
-$ua->content_contains ("<tr> <td>URL</td>               <td>http://www.example.com/</td> </tr>");
-$ua->content_contains ("<tr> <td>Status</td>            <td>active</td> </tr>");
-$ua->content_contains ("<tr> <td>Verification URL</td>  <td>http://www.example.com//dhxtohuj.txt</td> </tr>");
-$ua->content_contains ("<tr> <td>Verification token</td><td>yficqfvmxpra</td> </tr>");
-$ua->content_contains ("<tr> <td>DNS pointing to freenode.net</td> <td>freenode-odwnvkm.example.com</td> </tr>");
-$ua->content_contains ("Tester 1 (test01)", "Contacts are displayed");
+$ua->text_like (qr#Type.*informal#);
+$ua->text_like (qr#URL.*http://www.example.com#);
+$ua->text_like (qr#Status.*active#);
+$ua->text_like (qr#Verification URL.*http://www.example.com//dhxtohuj.txt#);
+$ua->text_like (qr#Verification token.*yficqfvmxpra#);
+$ua->text_like (qr#DNS pointing to freenode.net.*freenode-odwnvkm.example.com#);
+$ua->text_contains ("Tester 1 (test01)", "Contacts are displayed");
 
 $ua->get_ok("http://localhost/admin/group/38/view", "View group page works");
 
