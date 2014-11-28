@@ -42,9 +42,9 @@ $ua->get_ok("http://localhost/staff/account/AAAAAAAAP/view", "View account page 
 
 $ua->content_contains("test01's contact information", "Account viewing page works");
 
-$ua->content_contains ("<tr> <td>Account name:</td> <td>test01</td> </tr>", "Account viewing page works");
-$ua->content_contains ("<tr> <td>Real name:</td> <td>test01</td> </tr>", "Account viewing page works");
-$ua->content_contains ("<tr> <td>E-mail Address:</td> <td>test01\@example.com</td> </tr>", "Account viewing page works");
+$ua->text_like (qr#Account name.*test01#, "Account viewing page works");
+$ua->text_like (qr#Real name.*test01#, "Account viewing page works");
+$ua->text_like (qr#E-mail Address.*test01\@example.com#, "Account viewing page works");
 
 $ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
 
