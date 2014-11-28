@@ -55,7 +55,7 @@
                           <a href="[% c.uri_for('/group/new') %]" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> Register a new group</a>
                     </div>
                 </div>
-                <div id="main" class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
+                <div id="main" class="content col-xs-12 col-sm-8 col-md-9 col-lg-9">
                     <div class="alert alert-danger [% IF !error_msg %] hidden [% END %]">
                         [% error_msg | html %]
                     </div>
