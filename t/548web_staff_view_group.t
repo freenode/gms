@@ -63,13 +63,13 @@ $ua->get_ok("http://localhost/staff", "Staff page works");
 
 $ua->get_ok("http://localhost/staff/group/38/view");
 
-$ua->content_contains ("<h2>group122</h2>", "View group page works");
-$ua->content_contains ("<tr> <td>Type</td>              <td>informal</td> </tr>");
-$ua->content_contains ("<tr> <td>URL</td>               <td>http://group122.example</td> </tr>");
-$ua->content_contains ("<tr> <td>Status</td>            <td>pending_web</td> </tr>");
-$ua->content_contains ("<tr> <td>Verification URL</td>  <td>http://group122.example/fgkyobfk.txt</td> </tr>");
-$ua->content_contains ("<tr> <td>Verification token</td><td>eubatkisggkd</td> </tr>");
-$ua->content_contains ("<tr> <td>DNS pointing to freenode.net</td> <td>freenode-yfaynqp.group122.example</td> </tr>");
+$ua->text_contains ("group122", "View group page works");
+$ua->text_like (qr#Type.*informal#);
+$ua->text_like (qr#URL.*http://group122.example#);
+$ua->text_like (qr#Status.*pending_web#);
+$ua->text_like (qr#Verification URL.*http://group122.example/fgkyobfk.txt#);
+$ua->text_like (qr#Verification token.*eubatkisggkd#);
+$ua->text_like (qr#DNS pointing to freenode.net.*freenode-yfaynqp.group122.example#);
 
 $ua->content_lacks ("Historical/Inactive Contacts", "Staff don't see historical/inactive contacts");
 

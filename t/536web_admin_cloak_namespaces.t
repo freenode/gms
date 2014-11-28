@@ -92,7 +92,7 @@ is $ns->status->is_deleted, 1, 'Admin changes are applied.';
 
 $ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 
-$ua->content_contains("'deleted'  selected", 'Deleted option is selected, pending change status is shown');
+$ua->content_like(qr/deleted.*selected/, 'Deleted option is selected, pending change status is shown');
 
 $ua->get_ok("http://localhost/admin/group/1/edit_cloak_namespaces", "Edit cloak namespaces page works");
 

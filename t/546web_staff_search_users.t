@@ -87,8 +87,8 @@ $ua->content_contains("Name 16", "Searching works");
 
 $ua->content_contains("Next page", "We can go to next page");
 $ua->content_lacks("Previous page", "We can't go to previous page");
-$ua->content_contains("name='last_page' value='3'", "There are 3 pages");
-$ua->content_contains("name='current_page' value='1'", "We're at first page");
+$ua->content_like(qr/name=.last_page.*3/, "There are 3 pages");
+$ua->content_like(qr/current_page.*1/, "We're at first page");
 
 $ua->submit_form(
     fields => {
@@ -96,7 +96,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("name='current_page' value='1'", "Invalid paging request is ignored");
+$ua->content_like(qr/current_page.*1/, "Invalid paging request is ignored");
 
 $ua->click_button(
     value => 'Next page'
@@ -106,14 +106,14 @@ $ua->content_contains("Name 25", "paging works");
 
 $ua->content_contains("Next page", "We can go to next page");
 $ua->content_contains("Previous page", "We can go to previous page");
-$ua->content_contains("name='current_page' value='2'", "We're at 2nd page");
+$ua->content_like(qr/current_page.*2/, "We're at 2nd page");
 
 $ua->click_button(
     value => 'Previous page'
 );
 
 $ua->content_contains("Name 16", "Paging works");
-$ua->content_contains("name='current_page' value='1'", "We're at first page");
+$ua->content_like(qr/current_page.*1/, "We're at first page");
 
 $ua->click_button(
     value => 'Last page'
@@ -123,14 +123,14 @@ $ua->content_contains("Tester 1", "Paging works");
 
 $ua->content_lacks("Next page", "We can't go to next page");
 $ua->content_contains("Previous page", "We can go to previous page");
-$ua->content_contains("name='current_page' value='3'", "We're at third page");
+$ua->content_like(qr/current_page.*3/, "We're at third page");
 
 $ua->click_button(
     value => 'First page'
 );
 
 $ua->content_contains("Name 16", "Paging works");
-$ua->content_contains("name='current_page' value='1'", "We're at first page");
+$ua->content_like(qr/current_page.*1/, "We're at first page");
 
 $ua->select ('page', 2 );
 $ua->click_button(
@@ -138,7 +138,7 @@ $ua->click_button(
 );
 
 $ua->content_contains("Name 25", "paging works");
-$ua->content_contains("name='current_page' value='2'", "We're at 2nd page");
+$ua->content_like(qr/current_page.*2/, "We're at 2nd page");
 
 $ua->get("http://localhost/staff/search_users");
 
