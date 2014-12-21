@@ -2,7 +2,7 @@
 
 <h3>Current channels</h3>
 
-[% total = 0 %]<br/>
+[% total = 0 %]
 
 [% FOREACH namespace IN results.keys %]
     [% NEXT IF !results.$namespace.size %]
@@ -22,15 +22,15 @@
 
 <h3>Pending requests</h3>
 
-[% total = 0 %]<br/>
+[% total = 0 %]
 
 [% FOREACH namespace IN pending.keys %]
     [% NEXT IF !pending.$namespace.size %]
 
     <h3>[% namespace %]</h3>
-    <ul>
+    <ul class="list-group">
     [% FOREACH channel IN pending.$namespace %]
-        <li>[% channel %]</li>
+        <li class="list-group-item">[% channel %]</li>
         [% total = total + 1 %]
     [% END %]
     </ul>
@@ -40,7 +40,7 @@
     <b>[% total %]</b> result(s).
 </p>
 
-
+<br/>
 
 
 
