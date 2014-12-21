@@ -54,16 +54,16 @@
 
     [% group.group_name | html %] has the following namespaces pending staff approval:<br/><br/>
 
-    <ul>
+    <ul class="list-group">
         [% FOREACH namespace IN pending_namespaces %]
-            <li>
+            <li class="list-group-item">
                 [% namespace.namespace | html %]
             </li>
         [% END %]
     </ul>
 [% END %]
-
-    <div class="form-group">
+    <hr/>
+    <div class="form-group margin30">
         <label class="col-sm-3 control-label">Add a new namespace</label>
         <div class="col-sm-9">
             <input type="text" name="namespace" value="[% prev_namespace | html %]" class="form-control" />

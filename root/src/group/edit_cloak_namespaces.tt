@@ -52,16 +52,16 @@
 <h2>Pending namespaces for [% group.group_name | html %]</h2>
 
 [% IF pending_namespaces.size != 0 %]
-    <ul>
+    <ul class="list-group">
     [% FOREACH namespace IN pending_namespaces %]
-        <li>[% namespace.namespace %]</li>
+        <li class="list-group-item">[% namespace.namespace %]</li>
     [% END %]
     </ul>
 [% ELSE %]
     No namespaces currently pending.
 [% END %]
-
-    <div class="form-group">
+    <hr/>
+    <div class="form-group margin30">
         <label class="col-sm-3 control-label">Add a new namespace</label>
         <div class="col-sm-9">
             <input type='text' name='namespace' value="[% prev_namespace | html %]" class="form-control" />
