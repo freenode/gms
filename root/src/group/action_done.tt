@@ -2,4 +2,8 @@
 
 [% msg %]
 <br/>
-<a href="[% c.uri_for ("/group/${group.id}/view") %]">View group status</a>
+[% IF NOT custom_link %]
+    <a href="[% c.uri_for ("/group/${group.id}/view") %]">View group status</a>
+[% ELSE %]
+    <a href="[% custom_link %]">[% custom_link_text %]</a>
+[% END %]

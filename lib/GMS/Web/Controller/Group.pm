@@ -264,6 +264,9 @@ sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
         $group->group_name . " - " . $c->uri_for("/admin/approve")
     );
 
+    $c->stash->{custom_link} = $c->uri_for('/group/');
+    $c->stash->{custom_link_text} = "View your groups.";
+
     $c->stash->{template} = 'group/action_done.tt';
 }
 
@@ -283,6 +286,8 @@ sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0)
 
     notice_staff_chan($c, $c->user->account->accountname . " rejected the addition as a gc to " . $group->group_name);
 
+    $c->stash->{custom_link} = $c->uri_for('/group/');
+    $c->stash->{custom_link_text} = "View your groups.";
     $c->stash->{template} = 'group/action_done.tt';
 }
 
