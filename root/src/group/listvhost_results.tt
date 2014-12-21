@@ -1,7 +1,7 @@
 [% META title = 'List cloaks' %]
 
 <h3>Active cloaks</h3>
-[% results.size %] result(s):<br/>
+<div class="alert alert-info">[% results.size %] result(s):</div>
 <ul class="list-group">
     [% FOREACH result IN results.pairs %]
         <li class="list-group-item">[% result.key | html %] - [% result.value | html %]</li>
@@ -9,8 +9,8 @@
 </ul>
 
 <h3>Requested cloaks</h3>
-[% pending.size %] result(s):<br/>
-<ul>
+<div class="alert alert-info">[% pending.size %] result(s):</div>
+<ul class="list-group">
     [% FOREACH cloak IN pending %]
         [% IF cloak.status == 'offered' %]
             [% status = 'Waiting user approval' %]
@@ -18,7 +18,7 @@
             [% status = 'Waiting staff approval' %]
         [% END %]
 
-        <li>[% cloak.target.accountname | html %] - [% cloak.cloak | html %] ([% status %])</li>
+        <li class="list-group-item">[% cloak.target.accountname | html %] - [% cloak.cloak | html %] ([% status %])</li>
     [% END %]
 </ul>
 
