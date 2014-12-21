@@ -12,7 +12,7 @@ to help us verify your registration.</p>
   (Address fields are only required if the group has a registered address).
 </p>
 
-<form method="post" action="[% c.uri_for('/group/new/submit') %]" class="form-horizontal">
+<form method="post"  action="[% c.uri_for('/group/new/submit') %]" class="form-horizontal grf">
     <h4>Group Information</h4>
     <div class="form-group">
         <label for="group_type" class="col-sm-3 control-label">* Group Type</label>
