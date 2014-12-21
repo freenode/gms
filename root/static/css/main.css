@@ -43,3 +43,7 @@ html, body {
 	padding:0.5em;
 	border:1px solid gray;
 }
+
+.alignleft {
+    text-align: left;
+}

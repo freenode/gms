@@ -1,46 +1,60 @@
 [% META title = 'Approval Page' -%]
 <form action="" method="post">
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="group" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve group registrations
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="group" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class='badge'>[% pending_groups %]</span>
+        Approve group registrations
     </button>
     <div id="response_group" class="clearfix"></div>
 </div>
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="cns" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve Channel namespaces
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="cns" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class="badge">[% pending_channel_namespaces %]</span>
+        Approve Channel namespaces
     </button>
     <div id="response_cns" class="clearfix"></div>
 </div>
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="clns" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve Cloak namespaces
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="clns" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class="badge">[% pending_cloak_namespaces %]</span>
+        Approve Cloak namespaces
     </button>
     <div id="response_clns" class="clearfix"></div>
 </div>
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="gca" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve Group Contact Additions
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="gca" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class="badge">[% pending_gc %]</span>
+        Approve Group Contact Additions
     </button>
     <div id="response_gca" class="clearfix"></div>
 </div>
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="changes" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve Changes
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="changes" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class="badge">[% pending_changes %]</span>
+        Approve Changes
     </button>
     <div id="response_changes" class="clearfix"></div>
 </div>
 
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="cloaks" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve Cloak Changes
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="cloaks" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class="badge">[% pending_cloaks %]</span>
+        Approve Cloak Changes
     </button>
     <div id="response_cloaks" class="clearfix"></div>
 </div>
 
 <div class="form-group">
-    <button type="button" class="btn btn-default col-sm-4" href="javascript:;" value="channels" name="expand_approve">
-        <i class="glyphicon glyphicon-play-circle"></i> Approve Channel Takeover and Drop Requests
+    <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="channels" name="expand_approve">
+        <i class="glyphicon glyphicon-play-circle"></i>
+        <span class="badge">[% pending_channels %]</span>
+        Approve Channel Takeover and Drop Requests
     </button>
     <div id="response_channels" class="clearfix"></div>
 </div>
