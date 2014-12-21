@@ -15,6 +15,7 @@
         <td class="text-right"><strong>Status</strong></td>
         <td colspan="2">[% group.status %]</td>
     </tr>
+    [% IF group.status == 'submitted' || group.status == 'pending_web' || group.status == 'pending_staff' || group.status == 'pending_auto' %]
     <tr>
         <td class="text-right"><strong>Verification URL</strong></td>
         <td colspan="2">[% group.verify_url | html %]</td>
@@ -29,6 +30,7 @@
     <tr>
         <td colspan="3">The DNS verification can be either a TXT on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong> or aliasing <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>.</td>
     </tr>
+    [% END %]
 
     [% IF group.git_url %]
         <tr>
@@ -38,7 +40,7 @@
     [% END %]
 </table>
 
-[% IF group.verify_freetext %]
+[% IF group.verify_freetext && ( group.status == 'submitted' || group.status == 'pending_web' || group.status == 'pending_staff' || group.status == 'pending_auto' )  %]
     <p class="alert alert-info">
     <strong>This group can't be verified by another method because:</strong><br />
     [% group.verify_freetext | html %]
