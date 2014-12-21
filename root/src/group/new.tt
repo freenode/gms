@@ -46,7 +46,7 @@ to help us verify your registration.</p>
         <label for="group_cns" class="col-sm-3 control-label">* Channel Namespace</label>
         <div class="input-group col-sm-9">
             <input type="text" required id="group_cns" name="channel_namespace" class="form-control" value="[% channel_namespace | html %]" />
-            <span class="input-group-addon" onmouseover="tooltip(this, 3)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
+            <span class="input-group-addon" onmouseover="tooltip(this, 4)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
         </div>
     </div>
     [% IF confirm %]
