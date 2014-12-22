@@ -52,18 +52,18 @@ var __ID_USERCLOAK            = 'usercloak';
 var __ID_VERIFY               = 'verify_';
 var __ID_VERIFY_ALL           = 'verify_all_';
 
-var __CLASS_16                = 'div16';
-var __CLASS_25                = 'div25';    /* class name of an elem taking up 25% width */
-var __CLASS_50                = 'div50';    /* as above except s/25/50/ */
-var __CLASS_66                = 'div66';
-var __CLASS_90                = 'div90'     /* as above except s/50/90/ */
+var __CLASS_16                = 'col-xs-2';
+var __CLASS_25                = 'col-xs-3';    /* class name of an elem taking up 25% width */
+var __CLASS_50                = 'col-xs-4';    /* as above except s/25/50/ */
+var __CLASS_66                = 'col-xs-8';
+var __CLASS_90                = 'col-xs-6'     /* as above except s/50/90/ */
 var __CLASS_ACCOUNTNAME       = 'accname';
 var __CLASS_ARROW_DOWN        = 'hand icon-chevron-down';
 var __CLASS_ARROW_UP          = 'hand icon-chevron-up';
 var __CLASS_CLOAK             = 'margin0';
-var __CLASS_CONTAINER         = 'fullwidth'; /* class name of the container */
+var __CLASS_CONTAINER         = 'fullwidth clearfix'; /* class name of the container */
 var __CLASS_ERROR             = 'alert alert-error';
-var __CLASS_FULLWIDTH         = 'fullwidth';
+var __CLASS_FULLWIDTH         = 'row';
 var __CLASS_FULLNAME          = 'fullname';
 var __CLASS_GROUPNAME         = 'gname';
 var __CLASS_HEIGHT_100PX      = 'h100';
@@ -537,17 +537,29 @@ var __STATUS_CHANGED          = __STATUS + '%old_status ---> %new_status' + __BR
 var __TYPE_CHANGED            = __TYPE + '%old_type ---> %new_type' + __BR;
 var __URL_CHANGED             = __URL  + '<a href="%old_url">%old_url</a> ---> <a href="%new_url">%new_url</a>' + __BR;
 
-var __TEMPLATE_CHANGES         =
-"<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_GCC + "'>" + __GROUP_CONTACT_CHANGES + "</a> (%pending_gcc pending)" +
+var __TEMPLATE_CHANGES        =
+"<button name='" + __NAME_EXPAND_APPROVE + "' value='" + __TYPE_GCC + "' type='button' class='ml30 btn margin10 btn-default alignleft col-sm-12'> " +
+    "<i class='glyphicon glyphicon-play-circle'></i> " +
+    "<span class='badge'>%pending_gcc</span> " +__GROUP_CONTACT_CHANGES +
+"</button>" +
 "<div id='" + __PREFIX_RESPONSE + __TYPE_GCC + "'></div>" +
 
-"<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_GC + "'>" + __GROUP_CHANGES + "</a> (%pending_gc pending)" +
+"<button name='" + __NAME_EXPAND_APPROVE + "' value='" + __TYPE_GC + "' type='button' class='ml30 btn margin10 btn-default alignleft col-sm-12'> " +
+    "<i class='glyphicon glyphicon-play-circle'></i> " +
+    "<span class='badge'>%pending_gc</span> " + __GROUP_CHANGES +
+"</button>" +
 "<div id='" + __PREFIX_RESPONSE + __TYPE_GC + "'></div>" +
 
-"<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_CNC + "'>" + __CNC + "</a> (%pending_cnc pending)" +
+"<button name='" + __NAME_EXPAND_APPROVE + "' value='" + __TYPE_CNC + "' type='button' class='ml30 btn margin10 btn-default alignleft col-sm-12'> " +
+    "<i class='glyphicon glyphicon-play-circle'></i> " +
+    "<span class='badge'>%pending_cnc</span> " + __CNC +
+"</button>" +
 "<div id='" + __PREFIX_RESPONSE + __TYPE_CNC + "'></div>" +
 
-"<a name='" + __NAME_EXPAND_APPROVE + "' href='javascript:;' value='" + __TYPE_CLNC + "'>" + __CLNC + "</a> (%pending_clnc pending)" +
+"<button name='" + __NAME_EXPAND_APPROVE + "' value='" + __TYPE_CLNC + "' type='button' class='ml30 btn margin10 btn-default alignleft col-sm-12'> " +
+    "<i class='glyphicon glyphicon-play-circle'></i> " +
+    "<span class='badge'>%pending_clnc</span> " + __CLNC +
+"</button>" +
 "<div id='" + __PREFIX_RESPONSE + __TYPE_CLNC + "'></div>" ;
 
 /* contact change info */
