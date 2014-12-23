@@ -570,6 +570,9 @@ sub TO_JSON {
         'target_id'         => $target_id,
         'target_name'       => $target_name,
         'target_dropped'    => $target_dropped,
+        'namespace'         => $self->namespace->namespace,
+        'group_name'        => $self->namespace->group->group_name,
+        'group_url'         => $self->namespace->group->url,
     }
 }
 1;

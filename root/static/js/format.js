@@ -114,6 +114,10 @@ function format_channel ( request ) {
     html = html.replace (/\%fail_reason/g, request.change_freetext);
     html = html.replace (/\%request_type/g, type);
 
+    html = html.replace (/\%group_name/g, request.group_name);
+    html = html.replace (/\%group_url/g, request.group_url);
+    html = html.replace (/\%namespace/g, request.namespace);
+
     if ( !request.target_mark ) {
         html = html.replace (/\%marked/g, '');
     } else {

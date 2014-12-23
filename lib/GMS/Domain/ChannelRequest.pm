@@ -13,7 +13,7 @@ use TryCatch;
 has _dbic_channel_request_row => (
     is      => 'ro',
     isa     => 'DBIx::Class::Row',
-    handles => [ qw (id request_type requestor channel request_data active_change) ]
+    handles => [ qw (id request_type requestor channel request_data active_change namespace) ]
 );
 
 =head1 PACKAGE
@@ -121,6 +121,9 @@ sub TO_JSON {
         'target_name'       => $target_name,
         'target_dropped'    => $target_dropped,
         'target_mark'       => $target_mark,
+        'namespace'         => $self->namespace->namespace,
+        'group_name'        => $self->namespace->group->group_name,
+        'group_url'         => $self->namespace->group->url,
     }
 }
 

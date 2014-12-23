@@ -122,6 +122,7 @@ var __INITIAL_NAMESPACE       = 'Initial namespace: ';
 var __HIDDEN_PLACEHOLDER      = 'Optional freetext about the change.';
 var __MARK                    = '<b>Note:</b> the account has been <b>marked</b> by <b>%setter</b> on %time:' + __BR + '<b>%mark</b>';
 var __NAME                    = 'Name: ';
+var __NAMESPACE               = 'Namespace: ';
 var __NO                      = 'No';
 var __NOT_FAILED              = ' ( Not failed )';
 var __NO_CLOAK_CHANGES        = 'No cloak changes.';
@@ -381,6 +382,9 @@ var __TEMPLATE_DROP_INFO      =
         "%request_type" +
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
+    __GROUP + "%group_name" + __BR +
+    __URL + '%group_url' + __BR +
+    __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" +
     "</blockquote>" +
 "</div>";
@@ -398,6 +402,9 @@ var __TEMPLATE_DROP_FAILED    =
         "%request_type" +
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
+    __GROUP + "%group_name" + __BR +
+    __URL + '%group_url' + __BR +
+    __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" +
     __BR + __PREVIOUSLY_FAILED + __BR
     "</blockquote>" +
@@ -417,6 +424,9 @@ var __TEMPLATE_TRANSFER_INFO      =
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
+    __GROUP + "%group_name" + __BR +
+    __URL + '%group_url' + __BR +
+    __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" + __BR +
     "%target_account_dropped" +
     "</blockquote>" +
@@ -436,6 +446,9 @@ var __TEMPLATE_TRANSFER_FAILED      =
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
+    __GROUP + "%group_name" + __BR +
+    __URL + '%group_url' + __BR +
+    __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" + __BR +
     "%target_account_dropped" +
     __BR + __PREVIOUSLY_FAILED +
@@ -484,7 +497,27 @@ var __TEMPLATE_CNS_INFO       =
             __TEMPLATE_CHECKBOX +
             "<a target='_blank' href='" + __URL_GROUP + "'>" +
                 "%group_name" +
-            "</a> - %requested_namespace" +
+            "</a> - #%requested_namespace / #%requested_namespace-*" +
+        "</p>" +
+        "<small>" +
+            "<a target='_blank' href='%group_url'>%group_url</a>" +
+        "</small>" +
+        __REQUESTOR + "%requestor_name" + __BR +
+        __REQUESTED_NAMESPACE + "%requested_namespace" + __BR +
+        "%requestor_account_dropped" + __BR +
+    "</blockquote>" +
+"</div>";
+
+/* cloak namespace info */
+
+var __TEMPLATE_CLNS_INFO       =
+"<div class='" + __CLASS_66 + "'>" +
+    "<blockquote>" +
+        "<p>" +
+            __TEMPLATE_CHECKBOX +
+            "<a target='_blank' href='" + __URL_GROUP + "'>" +
+                "%group_name" +
+            "</a> - %requested_namespace/*" +
         "</p>" +
         "<small>" +
             "<a target='_blank' href='%group_url'>%group_url</a>" +
@@ -709,7 +742,12 @@ __TEMPLATE_CONTAINER_END      +
 __TEMPLATE_HIDDENDIV;
 
 var __TEMPLATE_CLNS           =
-__TEMPLATE_CNS;
+__TEMPLATE_CONTAINER          +
+__TEMPLATE_CLNS_INFO          +
+__TEMPLATE_APPROVE            +
+__TEMPLATE_REJECT             +
+__TEMPLATE_CONTAINER_END      +
+__TEMPLATE_HIDDENDIV;
 
 var __TEMPLATE_FAILED_DROP    =
 __TEMPLATE_CONTAINER          +

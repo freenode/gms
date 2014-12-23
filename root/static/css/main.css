@@ -63,3 +63,7 @@ html, body {
 .ml30 {
     margin-left: 30px;
 }
+
+blockquote small {
+    font-size: 100% !important;
+}
