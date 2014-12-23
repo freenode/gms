@@ -105,7 +105,10 @@ sub TO_JSON {
         $target_name     = $self->target->accountname;
         $target_dropped  = $self->target->is_dropped;
         $target_id       = $self->target->id;
-        $target_mark     = $self->target->mark;
+
+        if (!$target_dropped) {
+            $target_mark     = $self->target->mark;
+        }
     }
 
     return {
