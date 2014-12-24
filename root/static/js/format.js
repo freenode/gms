@@ -163,6 +163,9 @@ function format_cloak ( request ) {
     html = html.replace (/\%account_id/g, request.target_id);
     html = html.replace (/\%target_name/g, request.target_name);
     html = html.replace (/\%fail_reason/g, request.change_freetext);
+    html = html.replace(/\%namespace/g, request.namespace);
+    html = html.replace(/\%group_name/g, request.group_name);
+    html = html.replace(/\%group_url/g, request.group_url);
 
     if ( !request.target_mark ) {
         html = html.replace (/\%marked/g, '');
@@ -366,16 +369,18 @@ function format_name_change ( new_name, old_name ) {
 
 function format_nsc ( change, type ) {
     var html = __TEMPLATE_NSC;
+    var name = change.namespace_name;
 
     if ( type === __TYPE_CNC ) {
-        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CNC);;
+        html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CNC);
+        html = html.replace (/\%namespace_name/g, "#" + name + " / #" + name + "-*");
     } else {
         html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CLNC);
+        html = html.replace (/\%namespace_name/g, name + "/*");
     }
 
     html = html.replace (/\%id/g, change.id);
     html = html.replace (/\%group_name/g, change.group.name);
-    html = html.replace (/\%namespace_name/g, change.namespace_name);
     html = html.replace (/\%group_id/g, change.group.id);
 
     if ( change.status !== change.namespace_status ) {

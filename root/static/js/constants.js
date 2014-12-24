@@ -383,7 +383,7 @@ var __TEMPLATE_DROP_INFO      =
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
     __GROUP + "%group_name" + __BR +
-    __URL + '%group_url' + __BR +
+    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" +
     "</blockquote>" +
@@ -403,7 +403,7 @@ var __TEMPLATE_DROP_FAILED    =
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
     __GROUP + "%group_name" + __BR +
-    __URL + '%group_url' + __BR +
+    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" +
     __BR + __PREVIOUSLY_FAILED + __BR
@@ -425,7 +425,7 @@ var __TEMPLATE_TRANSFER_INFO      =
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
     __GROUP + "%group_name" + __BR +
-    __URL + '%group_url' + __BR +
+    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" + __BR +
     "%target_account_dropped" +
@@ -447,7 +447,7 @@ var __TEMPLATE_TRANSFER_FAILED      =
     "</small>" +
     __REQUESTOR + "%requestor_name" + __BR +
     __GROUP + "%group_name" + __BR +
-    __URL + '%group_url' + __BR +
+    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
     "%requestor_account_dropped" + __BR +
     "%target_account_dropped" +
@@ -467,6 +467,9 @@ var __TEMPLATE_CLOAK_INFO     =
         "<small>" +
             "%cloak" +
         "</small>" +
+        __NAMESPACE + "%namespace/*" + __BR +
+        __GROUP + "%group_name" + __BR +
+        __URL + "<a href='%group_url' target='_blank'>%group_url</a>" + __BR +
         "%target_account_dropped" +
     "</blockquote>" +
 "</div>";
@@ -483,6 +486,9 @@ var __TEMPLATE_CLOAK_FAILED =
         "<small>" +
             "%cloak" +
         "</small>" +
+        __NAMESPACE + "%namespace/*" + __BR +
+        __GROUP + "%group_name" + __BR +
+        __URL + "<a href='%group_url' target='_blank'>%group_url</a>" + __BR +
         "%target_account_dropped" + __BR +
         __PREVIOUSLY_FAILED +
     "</blockquote>" +
@@ -544,7 +550,7 @@ var __TEMPLATE_GROUP_INFO     =
         "</small>" +
         "%group_type" + __GROUP_TYPE + __BR +
         __INITIAL_CONTACT + "%group_initial_contact" + __BR +
-        __INITIAL_NAMESPACE + "%group_initial_namespace" + __BR +
+        __INITIAL_NAMESPACE + "#%group_initial_namespace / #%group_initial_namespace-*" + __BR +
         "%requestor_account_dropped" +
     "</blockquote>" +
 "</div>";

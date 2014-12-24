@@ -505,7 +505,10 @@ sub TO_JSON {
         'target_recent_cloak_changes' => \@recent,
         'status'                      => $self->active_change->status->value,
         'change_freetext'             => $self->active_change->change_freetext,
-        'change_time' => $self->active_change->time
+        'change_time'                 => $self->active_change->time,
+        'group_name'                  => $self->namespace->group->group_name,
+        'group_url'                   => $self->namespace->group->url,
+        'namespace'                   => $self->namespace->namespace,
     }
 }
 
