@@ -1,6 +1,6 @@
 [% META title = 'Search Results' %]
 
-<table class='fullwidth'>
+<table class='table table-condensed'>
 <tr>
   <th>ID</th>
   <th>Namespace</th>
@@ -52,35 +52,41 @@
 
 <p><b>Navigation</b></p>
 <p>
-  <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post'>
+  <form action='[% c.uri_for ("/admin/search_changes/submit") %]' method='post' class="form-inline">
     <input type='hidden' name='namespace' value='[% namespace | html %]' />
     <input type='hidden' name='groupname' value='[% groupname | html %]' />
     <input type='hidden' name='current_page' value='[% current_page %]' />
     <input type='hidden' name='change_item' value='[% change_item %]' />
     <input type='hidden' name='last_page' value='[% last_page %]' />
 
-    <input type='submit' name='next' value='First page' />
+    <button type='submit' name='next' value='First page' class='btn btn-default'>
+        <i class="glyphicon glyphicon-step-backward"></i>
+    </button>
     [% IF current_page != 1 %]
-      <input type='submit' name='next' value='Previous page' />
+        <button type='submit' name='next' value='Previous page' class="btn btn-default">
+            <i class="glyphicon glyphicon-backward"></i>
+        </button>
     [% END %]
     [% IF current_page != last_page %]
-      <input type='submit' name='next' value='Next page' />
+        <button type="submit" name="next" value="Next page" class="btn btn-default" ><i class="glyphicon glyphicon-forward"></i></button>
     [% END %]
-    <input type='submit' name='next' value='Last page' /><br />
+    <button type="submit" name="next" value="Last page" class="btn btn-default" ><i class="glyphicon glyphicon-fast-forward"></i></button>
 
-    <br/>
-    Or, jump to page:<br/>
-    <select name='page'>
-      <option value=''>Select a page...</option>
-      [%
-        FOR i IN [ 1 .. last_page ]
-      %]
-        <option value='[% i %]' [% IF i == current_page %] selected='selected' [% END %]>[% i %]</option>
-      [%
-        END
-      %]
-    </select><br/>
-    <input type='submit' value='Go' />
+    <div class="col-xs-3">
+      <select name="page">
+        <option value="">Select a page...</option>
+        [%
+          FOR i IN [ 1 .. last_page ]
+        %]
+          <option value="[% i %]" [% IF i == current_page %] selected="selected" [% END %]>[% i %]</option>
+        [%
+          END
+        %]
+      </select>
+    </div>
+
+    <input type='submit' value='Go' class='btn btn-primary' />
+
   </form>
   <a href='[% c.uri_for ("/admin/search_changes") %]'>Back to search</a>
 </p>

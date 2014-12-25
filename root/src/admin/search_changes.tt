@@ -7,7 +7,7 @@
 
 
     <div class="form-group">
-        <input name="change_item" value="1" type="radio" checked="checked" id="gcc" />
+        <input name="change_item" value="1" type="radio"  id="gcc" />
         <label class=" control-label" for="gcc">Group Contact Changes</label>
     </div>
 
@@ -28,7 +28,7 @@
     </div>
 
     <div class="form-group">
-        <input name="change_item" value="2" type="radio" checked="checked" id="gc" />
+        <input name="change_item" value="2" type="radio"  id="gc" />
         <label class=" control-label" for="gc">Group Changes</label>
     </div>
 
@@ -42,7 +42,7 @@
     </div>
 
     <div class="form-group">
-        <input name="change_item" value="4" type="radio" checked="checked" id="cnsc" />
+        <input name="change_item" value="4" type="radio"  id="cnsc" />
         <label class=" control-label" for="cnsc">Channel Namespace Changes</label>
     </div>
 
@@ -60,7 +60,7 @@
     </div>
 
     <div class="form-group">
-        <input name="change_item" value="5" type="radio" checked="checked" id="clnsc" />
+        <input name="change_item" value="5" type="radio"  id="clnsc" />
         <label class=" control-label" for="clnsc">Cloak Namespace Changes</label>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div class="form-group">
-        <input name="change_item" value="7" type="radio" checked="checked" id="crc" />
+        <input name="change_item" value="7" type="radio"  id="crc" />
         <label class=" control-label" for="crc">Channel Request Changes</label>
     </div>
 
