@@ -30,16 +30,6 @@
     <td><input class='gname' id="gname" type='text' name='group_name' /></td>
   </tr>
   <tr>
-    <td></td>
-  </tr>
-  <tr>
-    <td colspan="2"><input name="change_item" value="3" type="radio" id="radio3"/> <label class='inline' for="radio3">Contact Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="cname">Contact name:</label class='inline'></td>
-    <td><input class='accname' type='text' id="cname" name='accname' /></td>
-  </tr>
-  <tr>
     <td colspan="2"><input name="change_item" value="4" type="radio" id="radio4"/> <label class='inline' for="radio4">Channel Namespace Changes</label class='inline'></td>
   </tr>
   <tr>
