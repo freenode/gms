@@ -1,84 +1,107 @@
 [% META title = 'Search Changes' %]
 
-<form method="post" action="[% c.uri_for('/admin/search_changes/submit') %]">
+<form method="post" action="[% c.uri_for('/admin/search_changes/submit') %]" class="form-horizontal">
+    <p>
+      Enter the search criteria. Empty box matches errything.
+    </p>
 
-<p>
-  Enter the search criteria. Empty box matches errything.
-</p>
 
-<table class='fullwidth'>
-  <tr>
-    <td colspan="2"><input name="change_item" value="1" type="radio" checked="checked" id="radio1" /> <label  class='inline' for="radio1">Group Contact Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="gc_accname">Group Contact Account name:</label class='inline'></td>
-    <td><input class='accname' type='text' id="gc_accname" name='gc_accname' /></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="gc_gname">Group Name:</label class='inline'></td>
-    <td><input class='gname' type='text' id="gc_gname" name='gc_groupname' /></td>
-  </td>
-  </tr>
-  <tr>
-    <td></td>
-  </tr>
-  <tr>
-    <td colspan="2"><input name="change_item" value="2" type="radio" id="radio2" /> <label class='inline' for="radio2">Group Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="gname">Group name:</label class='inline'></td>
-    <td><input class='gname' id="gname" type='text' name='group_name' /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><input name="change_item" value="4" type="radio" id="radio4"/> <label class='inline' for="radio4">Channel Namespace Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="cns">Namespace name:</label class='inline'></td>
-    <td><input class='ns' type='text' id="cns" name='namespace' /></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="cn_gname">Group name:</label class='inline'></td>
-    <td><input class='gname' id="cn_gname" type='text' name='groupname' /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><input name="change_item" value="5" type="radio" id="radio5"/> <label class='inline' for="radio5">Cloak Namespace Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="clns">Namespace name:</label class='inline'></td>
-    <td><input  class='ns' id="clns" type='text' name='cloak_namespace' /></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="cl_gname">Group name:</label class='inline'></td>
-    <td><input class='gname' id="cl_gname" type='text' name='cloak_groupname' /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><input name="change_item" value="6" type="radio" id="radio6"/> <label class='inline' for="radio6">Cloak Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="cl_accname">Account name:</label class='inline'></td>
-    <td><input class='accname' id="cl_accname" type='text' name='cloak_accountname' /></td>
-  </tr>
-  <tr>
-    <td colspan="2"><input name="change_item" value="7" type="radio" id="radio7"/> <label class='inline' for="radio7">Channel Request Changes</label class='inline'></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="channel">Channel:</label class='inline'></td>
-    <td><input id="channel" type='text' name='channel' /></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="req">Requestor:</label class='inline'></td>
-    <td><input class='accname' id="req" type='text' name='requestor' /></td>
-  </tr>
-  <tr>
-    <td><label class='inline' for="target">Target:</label class='inline'></td>
-    <td><input class='accname' id="target" type='text' name='target' /></td>
-  </tr>
+    <div class="form-group">
+        <input name="change_item" value="1" type="radio" checked="checked" id="gcc" />
+        <label class=" control-label" for="gcc">Group Contact Changes</label>
+    </div>
 
-</table>
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="gc_accname">
+            Group Contact Account name:
+        </label>
+        <div class="col-sm-9">
+            <input type="text" id="gc_accname" name="gc_accname" />
+        </div>
 
-<p>
-  <input type='submit' value='Submit' class='btn btn-primary' />
-</p>
+        <label class="col-sm-3 control-label" for="gc_gname">
+            Group Name:
+        </label>
+        <div class="col-sm-9">
+            <input type="text" id="gc_gname" name="gc_groupname" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input name="change_item" value="2" type="radio" checked="checked" id="gc" />
+        <label class=" control-label" for="gc">Group Changes</label>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="gname">
+            Group name:
+        </label>
+        <div class="col-sm-9">
+            <input type="text" id="gname" name="group_name" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input name="change_item" value="4" type="radio" checked="checked" id="cnsc" />
+        <label class=" control-label" for="cnsc">Channel Namespace Changes</label>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="cns">Namespace name:</label>
+        <div class="col-sm-9">
+            <input type="text" id="cns" name="namespace" />
+        </div>
+        <label class="col-sm-3 control-label" for="cn_gname">
+            Group name:
+        </label>
+        <div class="col-sm-9">
+            <input type="text" id="cn_gname" name="group_name" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input name="change_item" value="5" type="radio" checked="checked" id="clnsc" />
+        <label class=" control-label" for="clnsc">Cloak Namespace Changes</label>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="clns">Namespace name:</label>
+        <div class="col-sm-9">
+            <input type="text" id="clns" name="cloak_namespace" />
+        </div>
+        <label class="col-sm-3 control-label" for="cl_gname">
+            Group name:
+        </label>
+        <div class="col-sm-9">
+            <input type="text" id="cl_gname" name="cloak_groupname" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input name="change_item" value="7" type="radio" checked="checked" id="crc" />
+        <label class=" control-label" for="crc">Channel Request Changes</label>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="channel">Channel:</label>
+        <div class="col-sm-9">
+            <input type="text" id="channel" name="channel" />
+        </div>
+
+        <label class="col-sm-3 control-label" for="req">Requestor:</label>
+        <div class="col-sm-9">
+            <input type="text" id="req" name="requestor" />
+        </div>
+
+        <label class="col-sm-3 control-label" for="target">Target:</label>
+        <div class="col-sm-9">
+            <input type="text" id="target" name="target" />
+        </div>
+    </div>
+
+    <div>
+      <input type='submit' value='Submit' class='btn btn-primary' />
+    </div>
 
 </form>
 
