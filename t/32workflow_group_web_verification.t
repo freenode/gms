@@ -45,6 +45,9 @@ $content = $group->verify_token;
 
 # Start an HTTPD in a high port and test web verification.
 __PACKAGE__->new(51000)->background;
+
+sleep 1;
+
 is $group->auto_verify ($user), 1, 'Web verification works';
 
 ok $group->status->is_pending_auto, 'Group status is now pending-auto after passing automatic verification';
