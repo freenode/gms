@@ -55,7 +55,7 @@
             Group name:
         </label>
         <div class="col-sm-9">
-            <input type="text" id="cn_gname" name="group_name" />
+            <input type="text" id="cn_gname" name="groupname" />
         </div>
     </div>
 
