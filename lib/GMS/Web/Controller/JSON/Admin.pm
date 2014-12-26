@@ -229,6 +229,7 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
                 my $gc = $rs->find_by_id($contact_id);
                 my $action = $params->{"action_$contact_id"} || 'hold';
                 my $freetext = $params->{"freetext_$contact_id"};
+                my $group = $gc->group;
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving group contact id $contact_id for group " . $gc->group->id . " (" .
@@ -406,15 +407,20 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                 my $action = $params->{"action_$change_id"} || 'hold';
                 my $freetext = $params->{"freetext_$change_id"};
                 my $target;
+                my $group;
 
                 if ($change_item eq 'gcc') { #group contact change
                     $target = $change->group_contact->contact->account->accountname . " ( for " . $change->group_contact->group->group_name . " ) ";
+                    $group = $change->group_contact->group;
                 } elsif ($change_item eq 'gc') { #group change
                     $target = $change->group->group_name;
+                    $group = $change->group;
                 } elsif ($change_item eq 'cnc') { #channel namespace change
                     $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
+                    $group = $change->group;
                 } elsif ($change_item eq 'clnc') { #cloak namespace change
                     $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
+                    $group = $change->group;
                 }
 
                 if ($action eq 'approve') {
@@ -448,7 +454,6 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                         $group->group_name . " has been rejected."
                     );
 
->>>>>>> 49e1562... memo gcs on request approval.
                     notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected $type $target");
                 } elsif ($action eq 'hold') {
                     next;
@@ -529,6 +534,7 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"} || 'hold';
                 my $freetext = $params->{"freetext_$change_id"};
+                my $group = $change->namespace->group;
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving CloakChange id $change_id" .
@@ -579,11 +585,8 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                     $change->reject ($c->user->account, $freetext);
                     push @rejected_changes, $change_id;
 
-                    notice_staff_chan (
+                    memo_gcs (
                         $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " rejected group cloak " .  $change->cloak . " for " .
-                        $change->target->accountname
                         $group,
                         $change->active_change->changed_by,
                         "Your request for a the " . $change->cloak . " cloak " .
@@ -678,6 +681,7 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                 my $request = $req_rs->find({ id => $req_id });
                 my $action = $params->{"action_$req_id"} || 'hold';
                 my $freetext = $params->{"freetext_$req_id"};
+                my $group = $request->namespace->group;
 
                 my $req_txt = "";
 
@@ -845,6 +849,7 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                 my $namespace = $namespace_rs->find({ id => $namespace_id });
                 my $action = $params->{"action_$namespace_id"} || 'hold';
                 my $freetext = $params->{"freetext_$namespace_id"};
+                my $group = $namespace->group;
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving $type id $namespace_id" .
