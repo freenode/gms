@@ -141,7 +141,8 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains ("If the group has its own address, then a valid address must be specified.", "Invalid address errors are shown");
+
+$ua->content_contains ("The address provided is not valid. Please fill in all required fields.", "Invalid address errors are shown");
 $ua->content_contains ("Telephone number contains non-digit characters", "Invalid address errors are shown");
 
 $ua->submit_form(

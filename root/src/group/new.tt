@@ -201,7 +201,7 @@ to help us verify your registration.</p>
 
     <div class="hidden" id="tooltipText5">
         <strong>Address</strong><br/>
-        The address where the group is located, if applicable.<br/>
+        The address where the group is located.<br/>
     </div>
 
     <div class="hidden" id="tooltipText6">

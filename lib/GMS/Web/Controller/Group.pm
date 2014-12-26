@@ -380,7 +380,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = [
-            "If the group has its own address, then a valid address must be specified.",
+            "The address provided is not valid. Please fill in all required fields.",
             @{$e->message}
         ];
         %{$c->stash} = ( %{$c->stash}, %$p );
@@ -1243,7 +1243,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
     }
     catch (GMS::Exception::InvalidAddress $e) {
         $c->stash->{errors} = [
-            "If the group has its own address, then a valid address must be specified.",
+            "The address provided is not valid. Please fill in all required fields.",
             @{$e->message}
         ];
         %{$c->stash} = ( %{$c->stash}, %$p );

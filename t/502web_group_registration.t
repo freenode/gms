@@ -145,6 +145,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains ("If the group has its own address, then a valid address must be specified.", "Errors are shown");
+
+$ua->content_contains ("The address provided is not valid. Please fill in all required fields.", "Errors are shown");
 
 done_testing;
