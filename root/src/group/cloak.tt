@@ -51,14 +51,14 @@
                 <div class="col-sm-9 input-group">
                     <div class="row">
                         <div class="col-xs-5">
-                            <select id="cloakns" name="cloak_namespace_[% i %]" class="form-control">
+                            <select name="cloak_namespace_[% i %]" class="form-control">
                                 [% FOREACH namespace IN cloak_namespaces %]
                                     <option value="[% namespace.namespace | html %]" [% IF req.namespace == namespace.namespace %] selected [% END %]>[% namespace.namespace | html %]</option>
                                 [% END %]
                             </select>
                         </div>
                         <div class="col-xs-5">
-                            <input type="text" id="usercloak" name="cloak_[% i %]" value="[% req.cloak %]" class="form-control" />
+                            <input type="text"  name="cloak_[% i %]" value="[% req.cloak %]" class="form-control" />
                         </div>
                         <div class="col-xs-2">
                             <button type="button" class="btn btn-danger" onclick="removeBox(this)"><i class="glyphicon glyphicon-trash"></i></button>
