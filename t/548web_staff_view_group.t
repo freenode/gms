@@ -66,7 +66,7 @@ $ua->get_ok("http://localhost/staff/group/38/view");
 $ua->text_contains ("group122", "View group page works");
 $ua->text_like (qr#Type.*informal#);
 $ua->text_like (qr#URL.*http://group122.example#);
-$ua->text_like (qr#Status.*pending_web#);
+$ua->text_like (qr#Status.*Submitted, awaiting verification by Group Contact#);
 $ua->text_like (qr#Verification URL.*http://group122.example/fgkyobfk.txt#);
 $ua->text_like (qr#Verification token.*eubatkisggkd#);
 $ua->text_like (qr#DNS pointing to freenode.net.*freenode-yfaynqp.group122.example#);

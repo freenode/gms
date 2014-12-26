@@ -13,7 +13,7 @@
     </tr>
     <tr>
         <td class="text-right"><strong>Status</strong></td>
-        <td colspan="2">[% group.status %]</td>
+        <td colspan="2">[% friendly_status %]</td>
     </tr>
     [% IF group.status == 'submitted' || group.status == 'pending_web' || group.status == 'pending_staff' || group.status == 'pending_auto' %]
     <tr>

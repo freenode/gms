@@ -15,7 +15,7 @@
     </tr>
     <tr>
         <td class="text-right"><strong>Status</strong></td>
-        <td colspan="2">[% group.status | html%]</td>
+        <td colspan="2">[% friendly_status | html%]</td>
     </tr>
     <tr>
         <td class="text-right"><strong>Verification URL</strong></td>

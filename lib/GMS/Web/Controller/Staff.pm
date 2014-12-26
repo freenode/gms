@@ -434,6 +434,21 @@ Displays information about a single group.
 sub view :Chained('single_group') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
+    my $group = $c->stash->{group};
+
+    if ($group->status eq 'submitted' || $group->status eq 'pending_web') {
+        $c->stash->{friendly_status} = "Submitted, awaiting verification by Group Contact.";
+    }
+    elsif ($group->status eq "pending_auto" || $group->status eq "pending_staff" || $group->status eq "verified") {
+        $c->stash->{friendly_status} = "Awaiting staff decision.";
+    }
+    elsif ($group->status eq "active") {
+        $c->stash->{friendly_status} = "The group is active.";
+    }
+    elsif ($group->status eq "deleted") {
+        $c->stash->{friendly_status} = "The group has been deleted.";
+    }
+
     $c->stash->{template} = 'staff/view_group.tt';
 }
 
