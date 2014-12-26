@@ -53,10 +53,13 @@ sub new {
     $self->{_rpcsession} = RPC::Atheme::Session->new(
         $config->{hostname},
         $config->{port},
-        $config->{service}
+        $config->{service},
+        { persistent => $config{persistent} },
     );
 
     $self->{_rpcsession}->login($user, $pass, $self->{_source});
+
+    $self->{_authcookie} = $self->{_rpcsession}->authcookie;
 
     $self->{_db} = GMS::Schema->do_connect;
 
@@ -90,6 +93,17 @@ this login session.
 sub account {
     my ($self) = @_;
     return $self->{_account};
+}
+
+=head2 authcookie
+
+Returns an authcookie that can be used to communicate with Atheme as the user.
+
+=cut
+
+sub authcookie {
+    my ($self) = @_;
+    return $self->{_authcookie};
 }
 
 1;

@@ -27,7 +27,9 @@
                     <input name="target" value="[% target | html %]" type="text" class="form-control" />
                 </div>
                 [% IF info %]
-                    <p class="help-block">Please confirm that this is the user that you think it is <br /> [% info %]</p>
+                    <p class="help-block">Please confirm that this is the user that you think it is:
+                    <pre>[% info %]</pre>
+                    </p>
                     <div class="checkbox">
                         <label><input type="checkbox" name="confirm" value="1" /> This is who I think it is</label>*
                     </div>

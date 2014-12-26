@@ -207,6 +207,30 @@ sub private {
     return ( $private == 1 );
 }
 
+=head2 info
+
+Returns /ns info result.
+
+=cut
+
+sub info {
+    my ($self, $account) = @_;
+    my $session = $self->{_session};
+
+    if (!$account) {
+        die GMS::Exception->new ("Please provide an account name.");
+    }
+
+    # We want to use the session's stored log in, so we can do this as the
+    # currently logged in user and not leak any info. Therefore, we don't want
+    # it to try to attempt to re-login on its own if it fails due to expired
+    # authcookie, because we need to manually ask the user their password.
+
+    my $result_str = $session->command_no_login ('NickServ', 'info', $account);
+    return $result_str;
+
+}
+
 =head2 listvhost
 
 Returns a list of vhosts matching a pattern.
