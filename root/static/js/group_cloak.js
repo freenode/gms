@@ -8,7 +8,7 @@ function removeBox (elem) {
         return;
     }
 
-   var parent = elem.parentNode.parentNode;
+    var parent = elem.parentNode.parentNode.parentNode.parentNode.parentNode;
 
     if ( parent.id !== __ID_CLOAK ) {
         remove(parent);
