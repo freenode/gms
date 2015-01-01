@@ -511,9 +511,29 @@ the change to staff.
 sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0) {
     my ($self, $c) = @_;
 
+    my $pass = $c->req->body_params->{__auth_pass};
+    my $user = $c->user->account->accountname;
+
     my $p = $c->request->params;
 
+    if ($pass) {
+        if (!$c->authenticate({ username => $user, password => $pass })) {
+            $c->stash->{params} = $p;
+            $c->stash->{action} = './submit';
+            $c->stash->{error_msg} = 'Incorrect password.';
+            $c->stash->{template} = 'get_password.tt';
+
+            $c->res->status(403);
+            $c->detach;
+        }
+    }
+
     my $channel = $p->{channel};
+
+    if (!$channel) {
+        $c->stash->{error_msg} = "Please provide a channel";
+        $c->detach('take_over');
+    }
 
     $channel =~ /#([A-Za-z0-9_\.]+)-?/;
     my $namespace = $1;
@@ -552,18 +572,24 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
             }
 
             if ($p->{target} && !$p->{confirm}) {
-                my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+                my $atheme_conf = $c->config->{'Model::Atheme'};
+
+                my $session = RPC::Atheme::Session->new(
+                    $atheme_conf->{hostname},
+                    $atheme_conf->{port},
+                    $atheme_conf->{service},
+                    {
+                        authcookie => $c->user->authcookie,
+                        username   => $c->user->account->accountname,
+                        persistent => 'yes please',
+                    }
+                );
+
+                my $client = GMS::Atheme::Client->new ($session);
                 %{$c->stash} = ( %{$c->stash}, %$p );
-                my $reg = scalar localtime $client->registered($account->id);
-                my $login = $client->lastseen ($account->id);
+                my $info = $client->info("?" . $account->id);
 
-                $c->stash->{info} = "Nick: " . $p->{target} . "<br/>"
-                .                   "Account: " . $account->accountname . "<br/>"
-                .                   "Registered: " . $reg . "<br/>";
-
-                if (!$client->private ($account->id)) {
-                    $c->stash->{info} .= "Last seen: " . $login . "<br/>";
-                }
+                $c->stash->{info} = $info;
 
                 $c->detach ('take_over');
             }
@@ -614,6 +640,18 @@ sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0)
         $c->detach ('take_over');
     }
     catch (RPC::Atheme::Error $e) {
+        if ($e->code == RPC::Atheme::Error::badauthcookie) {
+            # If we wound up here, we need the user's password to get a new
+            # auth cookie for the un-privileged Atheme session.
+
+            $c->stash->{params} = $p;
+            $c->stash->{action} = './submit';
+            $c->stash->{template} = 'get_password.tt';
+
+            $c->res->status(403);
+            $c->detach;
+        }
+
         $c->stash->{error_msg} = $e->description;
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach ('take_over');

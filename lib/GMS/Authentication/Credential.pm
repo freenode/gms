@@ -53,10 +53,11 @@ sub authenticate {
         my $session = GMS::Session->new(
             $authinfo->{username},
             $authinfo->{password},
-            $controlsession
+            $controlsession,
+            (persistent=>1),
         );
 
-        return GMS::Authentication::User->new($session->account);
+        return GMS::Authentication::User->new($session->account, $session->authcookie);
     } catch (RPC::Atheme::Error $e) {
         $c->log->debug("Couldn't log in to atheme as user " . $authinfo->{username} . ": $e");
         return undef;

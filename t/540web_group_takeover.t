@@ -55,9 +55,24 @@ $mockAtheme->mock ( 'command', sub {
 $mockAtheme->mock ('login', sub {
         1;
     });
+$mockAtheme->mock ('info', sub {
+        "Information on admin01 (account admin01):
+        Registered : Nov 20 22:10:17 2014 (5w 6d 19h ago)
+        Last seen  : (about 5 weeks ago)
+        User seen  : (about 0 weeks ago)
+        Flags      : HideMail, Private
+        *** End of Info ***";
+    });
+
+$mockAtheme->mock('chanexists', sub { 1; });
+$mockAtheme->mock('chanregistered', sub { 0; });
+$mockAtheme->mock('notice_staff_chan', sub { } );
 
 my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
 $mockModel->mock ('session' => sub { $mockAtheme });
+
+my $mockClient = new Test::MockModule ('GMS::Atheme::Client');
+$mockClient->mock ('new' => sub { $mockAtheme });
 
 $ua->get_ok("http://localhost/", "Check root page");
 
@@ -101,6 +116,8 @@ $ua->submit_form(
 );
 
 $ua->content_contains ("This namespace does not belong in your Group's namespaces.", "Errors are shown");
+
+$mockAtheme->mock('chanregistered', sub { 1; });
 
 $ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
 

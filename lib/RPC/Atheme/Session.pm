@@ -38,7 +38,7 @@ commands. Throws L<RPC::Atheme::Error> on failure.
 =cut
 
 sub new {
-    my ($class, $host, $port, $service, %attrs) = @_;
+    my ($class, $host, $port, $service, $attrs) = @_;
 
     $class = ref $class || $class;
 
@@ -55,14 +55,32 @@ sub new {
     die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, $RPC::XML::ERROR)
         unless $self->{__client};
 
+    $self->{__authcookie} = $attrs->{'authcookie'} if $attrs->{'authcookie'};
+    $self->{__username} = $attrs->{'username'} if $attrs->{'username'};
+    $self->{__persistent} = $attrs->{'persistent'} || 0;
+
+    $self->{__source} = '::0';
+
     bless $self, $class;
 }
 
 sub DESTROY {
     my ($self) = @_;
-    if ($self->{__authcookie}) {
+    if ($self->{__authcookie} && !$self->{__persistent}) {
         $self->logout;
     }
+}
+
+=head2 authcookie
+
+Returns the authcookie.
+
+=cut
+
+sub authcookie {
+    my ($self) = @_;
+
+    return $self->{__authcookie};
 }
 
 =head2 login
@@ -82,7 +100,7 @@ sub login {
 
     $self->{__username} = $user if $user;
     $self->{__password} = $pass if $pass;
-    $self->{__source} = $source || $self->{__source} || "::0";
+    $self->{__source} = $source || $self->{__source};
 
     my $response = $self->{__client}->simple_request(
         'atheme.login', $self->{__username}, $self->{__password}, $self->{__source}
@@ -132,6 +150,19 @@ sub command {
         $result = $self->do_command(@args);
     }
     return $result;
+}
+
+=head2 command_no_login
+
+Same as L</command>, except dies for any reason, even if the authcookie is not
+valid.
+
+=cut
+
+sub command_no_login {
+    my ($self, @args) = @_;
+
+    return $self->do_command(@args);
 }
 
 =head2 do_command
