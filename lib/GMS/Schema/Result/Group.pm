@@ -363,6 +363,17 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->many_to_many(active_contacts => 'active_group_contacts', 'contact');
 
+__PACKAGE__->has_many(
+    "primary_group_contacts",
+    "GMS::Schema::Result::GroupContact",
+    { "foreign.group_id" => "self.id" },
+    { 'join' => 'active_change',
+      'where' => { 'active_change.primary' => 'true' }
+    }
+);
+
+__PACKAGE__->many_to_many(primary_contacts => 'primary_group_contacts', 'contact');
+
 #GroupContacts can edit the information for active and retired contacts.
 __PACKAGE__->has_many(
     "editable_group_contacts",
@@ -958,6 +969,7 @@ sub invite_contact {
         $self->add_to_group_contacts({
                 contact => $contact,
                 account => $inviter,
+                primary => 0,
                 %$args
             });
     }

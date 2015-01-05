@@ -117,6 +117,15 @@ sub do_approve_groups :Chained('base') :PathPart('approve_groups/submit') :Args(
                     push @approved_groups, $group_id;
 
                     notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved group: " . $group->group_name);
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $group->last_change->changed_by,
+                        "Your request " .
+                        "for the group registration of " .
+                        $group->group_name . " has been approved."
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
@@ -125,6 +134,14 @@ sub do_approve_groups :Chained('base') :PathPart('approve_groups/submit') :Args(
                     push @rejected_groups, $group_id;
 
                     notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected group: " . $group->group_name);
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $group->last_change->changed_by,
+                        "Your request for the group registration of " .
+                        $group->group_name . " has been rejected."
+                    );
                 } elsif ($action eq 'verify') {
                     $c->log->info("Verifying group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
@@ -212,6 +229,7 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
                 my $gc = $rs->find_by_id($contact_id);
                 my $action = $params->{"action_$contact_id"} || 'hold';
                 my $freetext = $params->{"freetext_$contact_id"};
+                my $group = $gc->group;
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving group contact id $contact_id for group " . $gc->group->id . " (" .
@@ -226,6 +244,15 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
                         " approved gc :" .  $gc->contact->account->accountname .
                         " for " .  $gc->group->group_name
                     );
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $gc->last_change,
+                        "Your request for the addition of " .
+                        $gc->contact->account->accountname . " as a group " .
+                        "contact of " . $group->group_name . " has been approved."
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting group contact id $contact_id for group " . $gc->group->id . " (" .
                         $gc->contact->account->accountname . " rejected as group contact for " .
@@ -239,6 +266,15 @@ sub do_approve_new_gc :Chained('base') :PathPart('approve_new_gc/submit') :Args(
                         "[ADMIN]: " . $c->user->account->accountname .
                         " rejected gc :" . $gc->contact->account->accountname . "
                         for " . $gc->group->group_name
+                    );
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $gc->last_change,
+                        "Your request for the addition of " .
+                        $gc->contact->account->accountname . " as a group " .
+                        "contact of " . $group->group_name . " has been rejected."
                     );
                 } elsif ($action eq 'hold') {
                     next;
@@ -371,20 +407,33 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                 my $action = $params->{"action_$change_id"} || 'hold';
                 my $freetext = $params->{"freetext_$change_id"};
                 my $target;
+                my $group;
 
                 if ($change_item eq 'gcc') { #group contact change
                     $target = $change->group_contact->contact->account->accountname . " ( for " . $change->group_contact->group->group_name . " ) ";
+                    $group = $change->group_contact->group;
                 } elsif ($change_item eq 'gc') { #group change
                     $target = $change->group->group_name;
+                    $group = $change->group;
                 } elsif ($change_item eq 'cnc') { #channel namespace change
                     $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
+                    $group = $change->group;
                 } elsif ($change_item eq 'clnc') { #cloak namespace change
                     $target = $change->namespace->namespace . " ( for " . $change->group->group_name . " ) ";
+                    $group = $change->group;
                 }
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving $type id $change_id" .
                         " by " . $c->user->username . "\n");
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $change->changed_by,
+                        "Your request for a $type change for " .
+                        $group->group_name . " has been approved."
+                    );
 
                     $change->approve ($account, $freetext);
                     push @approved_changes, $change_id;
@@ -396,6 +445,14 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
 
                     push @rejected_changes, $change_id;
                     $change->reject ($account, $freetext);
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $change->changed_by,
+                        "Your request for a $type change for " .
+                        $group->group_name . " has been rejected."
+                    );
 
                     notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected $type $target");
                 } elsif ($action eq 'hold') {
@@ -477,6 +534,7 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"} || 'hold';
                 my $freetext = $params->{"freetext_$change_id"};
+                my $group = $change->namespace->group;
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving CloakChange id $change_id" .
@@ -492,6 +550,13 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                         $change->target->accountname
                     );
 
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $change->active_change->changed_by,
+                        "Your request for a the " . $change->cloak . " cloak " .
+                        "for " .  $change->target->accountname . " has been approved."
+                    );
                 } elsif ($action eq 'apply') {
                     $c->log->info ("Marking cloakChange id $change_id as applied" .
                         " by " . $c->user->username . "\n");
@@ -506,6 +571,13 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                         for " .  $change->target->accountname
                     );
 
+                   memo_gcs (
+                        $c,
+                        $group,
+                        $change->active_change->changed_by,
+                        "Your request for a the " . $change->cloak . " cloak " .
+                        "for " .  $change->target->accountname . " has been applied."
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
@@ -513,11 +585,12 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                     $change->reject ($c->user->account, $freetext);
                     push @rejected_changes, $change_id;
 
-                    notice_staff_chan (
+                    memo_gcs (
                         $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " rejected group cloak " .  $change->cloak . " for " .
-                        $change->target->accountname
+                        $group,
+                        $change->active_change->changed_by,
+                        "Your request for a the " . $change->cloak . " cloak " .
+                        "for " .  $change->target->accountname . " has been rejected."
                     );
                 } elsif ($action eq 'hold') {
                     next;
@@ -608,6 +681,7 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                 my $request = $req_rs->find({ id => $req_id });
                 my $action = $params->{"action_$req_id"} || 'hold';
                 my $freetext = $params->{"freetext_$req_id"};
+                my $group = $request->namespace->group;
 
                 my $req_txt = "";
 
@@ -628,6 +702,15 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                         " approved channel " .  $request->request_type . " $req_txt for "
                         .  $request->channel
                     );
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $request->requestor->account,
+                        "Your request for a the channel " .
+                        $request->request_type . " $req_txt " .  "for " .
+                        $request->channel . " has been approved."
+                    );
                 } elsif ($action eq 'apply') {
                     $c->log->info ("Marking ChannelRequest id $req_id as applied" .
                         " by " . $c->user->username . "\n");
@@ -641,6 +724,16 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                         " marked as applied " .  " channel " .
                         $request->request_type . " $req_txt for " .  $request->channel
                     );
+
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $request->requestor->account,
+                        "Your request for a the channel " .
+                        $request->request_type . " $req_txt " .  "for " .
+                        $request->channel . " has been applied."
+                    );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting ChannelRequest id $req_id" .
                         " by " . $c->user->username . "\n");
@@ -653,6 +746,15 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                         "[ADMIN]: " .  $c->user->account->accountname .
                         " rejected channel " .  $request->request_type . " $req_txt for "
                         .  $request->channel
+                    );
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $request->requestor->account,
+                        "Your request for a the channel " .
+                        $request->request_type . " $req_txt " .  "for " .
+                        $request->channel . " has been rejected."
                     );
                 } elsif ($action eq 'hold') {
                     next;
@@ -747,6 +849,7 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                 my $namespace = $namespace_rs->find({ id => $namespace_id });
                 my $action = $params->{"action_$namespace_id"} || 'hold';
                 my $freetext = $params->{"freetext_$namespace_id"};
+                my $group = $namespace->group;
 
                 if ($action eq 'approve') {
                     $c->log->info("Approving $type id $namespace_id" .
@@ -760,6 +863,15 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                         "[ADMIN]: " .  $c->user->account->accountname .
                         " approved $type " . $namespace->namespace . " for " .
                         $namespace->group->group_name
+                    );
+
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $namespace->last_change->changed_by,
+                        "Your request for a the $type namespace " .
+                        $namespace->namespace . " for " .
+                        $namespace->group->group_name . " has been approved."
                     );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting $type id $namespace_id" .
@@ -775,6 +887,14 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                         $namespace->group->group_name
                     );
 
+                    memo_gcs (
+                        $c,
+                        $group,
+                        $namespace->last_change->changed_by,
+                        "Your request for a the $type namespace " .
+                        $namespace->namespace . " for " .
+                        $namespace->group->group_name . " has been rejected."
+                    );
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
@@ -809,6 +929,40 @@ sub notice_staff_chan {
         my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
 
         $client->notice_staff_chan(@notices);
+    };
+}
+
+=head2 memo_gcs
+
+Sends a memo to a group's primary GC's, as well as the requestor.
+
+=cut
+
+sub memo_gcs {
+    my ($c, $group, $requestor_account, $memo) = @_;
+
+    return if $group->status->is_deleted;
+
+    my @gcs = $group->primary_group_contacts->count > 0 ? $group->primary_group_contacts->all : $group->group_contacts->all;
+
+    eval {
+        my $client = GMS::Atheme::Client->new ( $c->model('Atheme')->session );
+
+        my $requestor_notified = 0;
+
+        # Always notify primary gcs.
+        foreach my $gc (@gcs) {
+            $client->memo($gc->contact->account->accountname, $memo);
+
+            if ($gc->contact->account->id eq $requestor_account->id) {
+                $requestor_notified = 1;
+            }
+        }
+
+        # If the requestor is a secondary gc and hasn't yet been memoed, memo them now.
+        if (!$requestor_notified) {
+            $client->memo($requestor_account->accountname, $memo);
+        }
     };
 }
 
