@@ -1,0 +1,222 @@
+GRVER 1 
+DBV 12 
+MDEP transport/rfc1459 
+MDEP protocol/base36uid 
+MDEP protocol/ts6-generic 
+MDEP protocol/charybdis 
+MDEP backend/corestorage 
+MDEP backend/opensex 
+MDEP crypto/posix 
+MDEP nickserv/main 
+MDEP nickserv/drop 
+MDEP nickserv/ghost 
+MDEP nickserv/group 
+MDEP nickserv/help 
+MDEP nickserv/list 
+MDEP nickserv/hold 
+MDEP nickserv/identify 
+MDEP nickserv/info 
+MDEP nickserv/listmail 
+MDEP nickserv/logout 
+MDEP nickserv/mark 
+MDEP nickserv/freeze 
+MDEP nickserv/listchans 
+MDEP nickserv/register 
+MDEP nickserv/resetpass 
+MDEP nickserv/return 
+MDEP nickserv/setpass 
+MDEP nickserv/sendpass_user 
+MDEP nickserv/set_core 
+MDEP nickserv/set_email 
+MDEP nickserv/set_emailmemos 
+MDEP nickserv/set_hidemail 
+MDEP nickserv/set_neverop 
+MDEP nickserv/set_nomemo 
+MDEP nickserv/set_noop 
+MDEP nickserv/set_password 
+MDEP nickserv/set_property 
+MDEP nickserv/set_quietchg 
+MDEP nickserv/set 
+MDEP nickserv/set_accountname 
+MDEP nickserv/status 
+MDEP nickserv/taxonomy 
+MDEP nickserv/vacation 
+MDEP nickserv/verify 
+MDEP nickserv/vhost 
+MDEP chanserv/main 
+MDEP chanserv/akick 
+MDEP chanserv/ban 
+MDEP chanserv/close 
+MDEP chanserv/clear 
+MDEP chanserv/clear_bans 
+MDEP chanserv/clear_users 
+MDEP chanserv/count 
+MDEP chanserv/drop 
+MDEP chanserv/flags 
+MDEP chanserv/ftransfer 
+MDEP chanserv/getkey 
+MDEP chanserv/help 
+MDEP chanserv/hold 
+MDEP chanserv/info 
+MDEP chanserv/invite 
+MDEP chanserv/kick 
+MDEP chanserv/list 
+MDEP chanserv/mark 
+MDEP chanserv/op 
+MDEP chanserv/recover 
+MDEP chanserv/register 
+MDEP chanserv/set_core 
+MDEP chanserv/set_email 
+MDEP chanserv/set_entrymsg 
+MDEP chanserv/set_fantasy 
+MDEP chanserv/set_founder 
+MDEP chanserv/set_guard 
+MDEP chanserv/set_keeptopic 
+MDEP chanserv/set_mlock 
+MDEP chanserv/set_property 
+MDEP chanserv/set_restricted 
+MDEP chanserv/set_secure 
+MDEP chanserv/set_topiclock 
+MDEP chanserv/set_url 
+MDEP chanserv/set_verbose 
+MDEP chanserv/set 
+MDEP chanserv/status 
+MDEP chanserv/taxonomy 
+MDEP chanserv/template 
+MDEP chanserv/topic 
+MDEP chanserv/voice 
+MDEP chanserv/why 
+MDEP operserv/main 
+MDEP operserv/akill 
+MDEP operserv/compare 
+MDEP operserv/help 
+MDEP operserv/identify 
+MDEP operserv/ignore 
+MDEP operserv/jupe 
+MDEP operserv/mode 
+MDEP operserv/modinspect 
+MDEP operserv/modlist 
+MDEP operserv/modload 
+MDEP operserv/modunload 
+MDEP operserv/modreload 
+MDEP operserv/noop 
+MDEP operserv/rehash 
+MDEP operserv/restart 
+MDEP operserv/rmatch 
+MDEP operserv/rnc 
+MDEP operserv/rwatch 
+MDEP operserv/sgline 
+MDEP operserv/shutdown 
+MDEP operserv/specs 
+MDEP operserv/sqline 
+MDEP operserv/update 
+MDEP operserv/uptime 
+MDEP misc/httpd 
+MDEP transport/xmlrpc 
+MDEP scripting/perl 
+MDEP freenode/prevent_registration 
+MDEP memoserv/main 
+MDEP memoserv/send 
+MDEP memoserv/read 
+MDEP memoserv/list 
+MDEP memoserv/help 
+MDEP memoserv/sendops 
+MDEP memoserv/sendgroup 
+MDEP memoserv/forward 
+MDEP memoserv/delete 
+MDEP memoserv/ignore 
+LUID AAAAAAAAJ 
+CF +AFORVbefiorstv 
+MU AAAAAAAAH admin $1$bmrxgk$Siw9LW0dne1B6xGZx13Q0/ em@ai.l 1343918197 1420582473 +sC default 
+MDU admin private:host:actual ~errietta@127.0.0.1
+MDU admin private:host:vhost ~errietta@127.0.0.1
+ME admin admin 1420494232 0 fuck
+ME admin gms 1420494261 1 Your request                        for the group registration of mysecondgroup has been approved.
+ME admin gms 1420494713 1 Your request for a GroupContactChange change for mysecondgroup has been approved.
+ME admin gms 1420494742 1 Your request for a the CloakNamespace namespace fuuu for mysecondgroup has been approved.
+ME admin gms 1420494811 1 Your request for the addition of errietta as a group contact of mysecondgroup has been approved.
+ME admin gms 1420499298 1 Your request for a the fuuu/erry cloak for erry has been approved.
+ME admin gms 1420499372 1 Your request for a GroupContactChange change for mysecondgroup has been approved.
+ME admin gms 1420499400 1 Your request for a GroupChange change for mysecondgroup has been approved.
+ME admin gms 1420499691 1 Your request for a GroupChange change for mysecondgroup has been approved.
+ME admin gms 1420500492 1 Your request for a GroupChange change for mysecondgroup has been approved.
+MN admin admin 1343918197 1420499674 
+MU AAAAAAAAS admin01 $1$wbausr$Znx59akAMsafy.2du7DtO/ password@ed.com 1343050605 1344669657 +sCb default 
+MDU admin01 private:host:actual ~errietta@127.0.0.1
+MDU admin01 private:host:vhost ~errietta@127.0.0.1
+MN admin01 admin01 1343050605 1343050605 
+MU AAAAAAAAI errietta $1$wdpuua$OlFzFZCNX6xHtlLbN2DXn. 234W@wr.com 1420491725 1420582473 +sC default 
+MDU errietta private:host:actual ~errietta@127.0.0.1
+MDU errietta private:host:vhost ~errietta@127.0.0.1
+ME errietta gms 1420499691 1 Your request for a GroupChange change for mysecondgroup has been approved.
+ME errietta gms 1420500492 1 Your request for a GroupChange change for mysecondgroup has been approved.
+MN errietta errietta 1420491725 1420499674 
+MU AAAAAAAAJ erry $1$tfmgjr$y/LitBe85J8OXx6poR/TX1 234W@wr.com 1420491733 1420582473 +sC default 
+MDU erry private:host:actual ~errietta@127.0.0.1
+MDU erry private:host:vhost ~errietta@127.0.0.1
+MDU erry private:usercloak fuuu/erry
+MDU erry private:usercloak-assigner Perl API
+MDU erry private:usercloak-timestamp 1420499296
+ME erry gms 1420494742 1 Your request for a the CloakNamespace namespace fuuu for mysecondgroup has been approved.
+ME erry gms 1420494811 1 Your request for the addition of errietta as a group contact of mysecondgroup has been approved.
+ME erry gms 1420494836 1 You have a pending cloak request from mysecondgroup. Cloak: fuuu/erry. Please go to http://localhost:3000/cloak to accept or deny.
+ME erry gms 1420499263 1 You have a pending cloak request from mysecondgroup. Cloak: fuuu/erry. Please go to http://localhost:3000/cloak to accept or deny.
+ME erry gms 1420499298 1 Your request for a the fuuu/erry cloak for erry has been approved.
+ME erry gms 1420499372 1 Your request for a GroupContactChange change for mysecondgroup has been approved.
+ME erry gms 1420499691 1 Your request for a GroupChange change for mysecondgroup has been approved.
+ME erry gms 1420500492 1 Your request for a GroupChange change for mysecondgroup has been approved.
+MN erry erry 1420491733 1420499674 
+MU AAAAAAAAB gms $1$krjzee$Iw2cT0.IMtKKQAOUshuTz/ iu2@d.com 1342872107 1420500721 +sC default 
+MDU gms private:host:actual ~errietta@127.0.0.1
+MDU gms private:host:vhost ~errietta@127.0.0.1
+MDU gms private:mark:reason hi
+MDU gms private:mark:setter admin
+MDU gms private:mark:timestamp 1346509100
+MDU gms private:usercloak hi
+ME gms MemoServ 1420494271 0 admin has read a memo from you sent at Jan 05 21:44:21 2015
+ME gms MemoServ 1420494717 0 admin has read a memo from you sent at Jan 05 21:51:53 2015
+ME gms MemoServ 1420494749 0 admin has read a memo from you sent at Jan 05 21:52:22 2015
+ME gms MemoServ 1420494758 0 erry has read a memo from you sent at Jan 05 21:52:22 2015
+ME gms MemoServ 1420494815 0 admin has read a memo from you sent at Jan 05 21:53:31 2015
+ME gms MemoServ 1420494818 0 erry has read a memo from you sent at Jan 05 21:53:31 2015
+ME gms MemoServ 1420494852 0 erry has read a memo from you sent at Jan 05 21:53:56 2015
+ME gms MemoServ 1420499290 0 erry has read a memo from you sent at Jan 05 23:07:43 2015
+ME gms MemoServ 1420499301 0 admin has read a memo from you sent at Jan 05 23:08:18 2015
+ME gms MemoServ 1420499327 0 erry has read a memo from you sent at Jan 05 23:08:18 2015
+ME gms MemoServ 1420499376 0 erry has read a memo from you sent at Jan 05 23:09:32 2015
+ME gms MemoServ 1420499379 0 admin has read a memo from you sent at Jan 05 23:09:32 2015
+ME gms MemoServ 1420499405 0 admin has read a memo from you sent at Jan 05 23:10:00 2015
+ME gms MemoServ 1420499714 0 erry has read a memo from you sent at Jan 05 23:14:51 2015
+ME gms MemoServ 1420499719 0 admin has read a memo from you sent at Jan 05 23:14:51 2015
+ME gms MemoServ 1420499723 0 errietta has read a memo from you sent at Jan 05 23:14:51 2015
+ME gms MemoServ 1420500502 0 admin has read a memo from you sent at Jan 05 23:28:12 2015
+ME gms MemoServ 1420500506 0 erry has read a memo from you sent at Jan 05 23:28:12 2015
+ME gms MemoServ 1420500516 0 errietta has read a memo from you sent at Jan 05 23:28:12 2015
+MN gms gms 1342872107 1346509630 
+MU AAAAAAAAP test01 $1$xsaard$/E83Hy0mh8gF.uFCB1pju/ 2323@324.com 1342872147 1345793409 +sCb default 
+MDU test01 private:host:actual ~errietta@127.0.0.1
+MDU test01 private:host:vhost ~errietta@127.0.0.1
+MDU test01 private:loginfail:failnum 1
+MDU test01 private:loginfail:lastfailaddr <xmlrpc>
+MDU test01 private:loginfail:lastfailtime 1343918679
+MDU test01 private:usercloak example/test01
+MN test01 test01 1342872147 1342875333 
+MU AAAAAAAAQ test02 $1$mqnnqe$mN/RkcISCmfR1rRgBwF7i. oppoi@edo.com 1343029630 1344081835 +sCb default 
+MDU test02 private:host:actual ~errietta@127.0.0.1
+MDU test02 private:host:vhost ~errietta@127.0.0.1
+MN test02 test02 1343029630 1343029632 
+MU AAAAAAAAR test03 $1$oxoile$mMfnSErhBlQSc2iyffc8Y. i@e.com 1343032786 1343916188 +sCb default 
+MDU test03 private:host:actual ~errietta@127.0.0.1
+MDU test03 private:host:vhost ~errietta@127.0.0.1
+MN test03 test03 1343032786 1343032787 
+MU AAAAAAAAT test04 $1$lwotso$dT292hsMhn2QC/WRMddCC0 test@example.com 1343918009 1343996840 +sCb default 
+MDU test04 private:host:actual ~errietta@127.0.0.1
+MDU test04 private:host:vhost ~errietta@127.0.0.1
+MN test04 test04 1343918009 1343918009 
+MC #test 1346508158 1346508782 +vgn 272 6 0  
+CA #test admin +AFORefiorstv 1346508158 admin 
+CA #test gms +b 1346509117 admin 
+MDC #test private:channelts 1345226214
+KID 0 
+XID 0 
+QID 0 
