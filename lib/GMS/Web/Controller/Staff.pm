@@ -96,14 +96,57 @@ sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
 
     my $account;
 
+    my $pass = $c->req->params->{__auth_pass};
+    my $user = $c->user->account->accountname;
+
+    if ($pass) {
+        if (!$c->authenticate({ username => $user, password => $pass })) {
+            $c->stash->{error_msg} = 'Incorrect password.';
+            $c->stash->{template} = 'get_password.tt';
+            $c->res->status(403);
+            $c->detach;
+        }
+    }
+
     try {
         $account = $c->model('Accounts')->find_by_uid ( $account_id );
+
+        my $atheme_conf = $c->config->{'Model::Atheme'};
+
+        my $session = RPC::Atheme::Session->new(
+            $atheme_conf->{hostname},
+            $atheme_conf->{port},
+            $atheme_conf->{service},
+            {
+                authcookie => $c->user->authcookie,
+                username   => $c->user->account->accountname,
+                persistent => 1,
+            }
+        );
+
+        my $client = GMS::Atheme::Client->new ($session);
+
+        if ($account) {
+            my $info = $client->info('?' . $account->id);
+
+            $c->stash->{info} = $info;
+        }
     }
     catch (GMS::Exception $e) {
         $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->message . ". Data displayed below may not be current.";
         $account = $c->model('DB::Account')->find({ id => $account_id });
     }
     catch (RPC::Atheme::Error $e) {
+        if ($e->code == RPC::Atheme::Error::badauthcookie) {
+            # If we wound up here, we need the user's password to get a new
+            # auth cookie for the user's Atheme session.
+
+            $c->stash->{template} = 'get_password.tt';
+
+            $c->res->status(403);
+            $c->detach;
+        }
+
         $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
         $account = $c->model('DB::Account')->find({ id => $account_id });
     }

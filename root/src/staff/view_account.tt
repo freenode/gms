@@ -15,6 +15,15 @@
   [% END %]
 </table>
 
+[% IF info %]
+    <p>
+        <b>User information:</b>
+    </p>
+    <pre>
+        [% info %]
+    </pre>
+[% END %]
+
 [% IF admin -%]
 <p><a href="[% c.uri_for ("/admin/account/${account.id}/edit") %]">Edit contact information</a></p>
 [% END %]
