@@ -45,9 +45,9 @@ $HOME/gms/atheme. If you chose a different directory, then the subsequent
 commands will vary accordingly.
 
 
-Next, place the ircd.conf file from http://errietta.me/ircd.conf in
-$HOME/gms/ircd/etc, and the atheme.conf fromhttp://errietta.me/atheme.conf
-and http://errietta.me/services.db files into $HOME/gms/atheme/etc. 
+Next, place the ircd.conf file from etc/ in this repository in
+$HOME/gms/ircd/etc, and the atheme.conf and services.db files from the same
+directory into $HOME/gms/atheme/etc.
 
 Run::
 
