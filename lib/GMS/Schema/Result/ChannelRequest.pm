@@ -566,6 +566,7 @@ sub TO_JSON {
         'status'            => $self->active_change->status->value,
         'change_freetext'   => $self->active_change->change_freetext,
         'requestor_name'    => $self->requestor->account->accountname,
+        'requestor_id'      => $self->requestor->account->id,
         'requestor_dropped' => $self->requestor->account->is_dropped,
         'target_id'         => $target_id,
         'target_name'       => $target_name,

@@ -120,6 +120,7 @@ sub TO_JSON {
         'change_freetext'   => $self->active_change->change_freetext,
         'requestor_name'    => $self->requestor->account->accountname,
         'requestor_dropped' => $self->requestor->account->is_dropped,
+        'requestor_id'      => $self->requestor->account->id,
         'target_id'         => $target_id,
         'target_name'       => $target_name,
         'target_dropped'    => $target_dropped,

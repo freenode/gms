@@ -186,10 +186,12 @@ sub TO_JSON {
     my $accountname = undef;
     my $dropped = undef;
     my $initial = undef;
+    my $id      = undef;
 
     if ($first) {
         $accountname = $first->contact->account->accountname;
         $dropped = $first->contact->account->is_dropped;
+        $id      = $first->contact->account->id;
     }
 
     if ($self->channel_namespaces->first) {
@@ -203,6 +205,7 @@ sub TO_JSON {
         'type'                            => $self->group_type->value,
         'status'                          => $self->status->value,
         'initial_contact_account_name'    => $accountname,
+        'initial_contact_account_id'      => $id,
         'initial_contact_account_dropped' => $dropped,
         'initial_namespace_name'          => $initial,
     }
