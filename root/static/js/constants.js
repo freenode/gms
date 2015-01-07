@@ -381,7 +381,7 @@ var __TEMPLATE_DROP_INFO      =
     "<small>" +
         "%request_type" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" + __BR +
+    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
     __GROUP + "%group_name" + __BR +
     __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
@@ -401,7 +401,7 @@ var __TEMPLATE_DROP_FAILED    =
     "<small>" +
         "%request_type" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" + __BR +
+    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
     __GROUP + "%group_name" + __BR +
     __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
@@ -423,7 +423,7 @@ var __TEMPLATE_TRANSFER_INFO      =
         "%request_type" +
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" + __BR +
+    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
     __GROUP + "%group_name" + __BR +
     __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
@@ -445,7 +445,7 @@ var __TEMPLATE_TRANSFER_FAILED      =
         "%request_type" +
         " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
     "</small>" +
-    __REQUESTOR + "%requestor_name" + __BR +
+    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
     __GROUP + "%group_name" + __BR +
     __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
     __NAMESPACE + "%namespace" + __BR +
@@ -508,7 +508,7 @@ var __TEMPLATE_CNS_INFO       =
         "<small>" +
             "<a target='_blank' href='%group_url'>%group_url</a>" +
         "</small>" +
-        __REQUESTOR + "%requestor_name" + __BR +
+        __REQUESTOR + "<a target='_blank' href='" + __URL_USER + "'>%requestor_name</a>" + __BR +
         __REQUESTED_NAMESPACE + "%requested_namespace" + __BR +
         "%requestor_account_dropped" + __BR +
     "</blockquote>" +
@@ -528,7 +528,7 @@ var __TEMPLATE_CLNS_INFO       =
         "<small>" +
             "<a target='_blank' href='%group_url'>%group_url</a>" +
         "</small>" +
-        __REQUESTOR + "%requestor_name" + __BR +
+        __REQUESTOR + "<a target='_blank' href='" + __URL_USER + "'>%requestor_name</a>" + __BR +
         __REQUESTED_NAMESPACE + "%requested_namespace" + __BR +
         "%requestor_account_dropped" + __BR +
     "</blockquote>" +
@@ -549,7 +549,7 @@ var __TEMPLATE_GROUP_INFO     =
             "<a target='_blank' href='%group_url'>%group_url</a>" +
         "</small>" +
         "%group_type" + __GROUP_TYPE + __BR +
-        __INITIAL_CONTACT + "%group_initial_contact" + __BR +
+        __INITIAL_CONTACT + "<a target='_blank' href='" + __URL_USER + "'>%group_initial_contact</a>" + __BR +
         __INITIAL_NAMESPACE + "#%group_initial_namespace / #%group_initial_namespace-*" + __BR +
         "%requestor_account_dropped" +
     "</blockquote>" +

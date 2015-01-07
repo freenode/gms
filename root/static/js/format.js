@@ -111,6 +111,7 @@ function format_channel ( request ) {
     html = html.replace (/\%account_id/g, request.target_id);
     html = html.replace (/\%target_name/g, request.target_name);
     html = html.replace (/\%requestor_name/g, request.requestor_name);
+    html = html.replace (/\%requestor_id/g, request.requestor_id);
     html = html.replace (/\%fail_reason/g, request.change_freetext);
     html = html.replace (/\%request_type/g, type);
 
@@ -285,6 +286,7 @@ function format_group ( group ) {
     html = html.replace (/\%group_id/g, group.id);
     html = html.replace (/\%group_name/g, group.name);
     html = html.replace (/\%group_initial_contact/g, group.initial_contact_account_name);
+    html = html.replace (/\%account_id/g, group.initial_contact_account_id);
     html = html.replace (/\%group_initial_namespace/g, group.initial_namespace_name);
     html = html.replace (/\%group_url/g, group.url);
     html = html.replace (/\%group_type/g, group.type);
@@ -415,6 +417,7 @@ function format_namespace ( namespace, type ) {
     html = html.replace (/\%requested_namespace/g, namespace.namespace_name);
     html = html.replace (/\%group_url/g, namespace.group_url);
     html = html.replace (/\%requestor_name/g, namespace.requestor_account_name);
+    html = html.replace (/\%account_id/g, namespace.requestor_account_id);
 
     if ( namespace.requestor_account_dropped ) {
         html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( namespace.requestor_account_name ) );
