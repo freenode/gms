@@ -105,11 +105,6 @@ then cd to atheme and run
 make
 make install
 
-Edit your Atheme config file, and uncomment this line:
-
-loadscript "modules/freenode/gmsserv.pl";
-loadmodule "modules/freenode/freenode_prevent_registration";
-
 Then restart atheme.
 
 You now have the atheme-based parts of GMS in place and running.
