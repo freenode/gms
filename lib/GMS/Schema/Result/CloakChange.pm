@@ -229,14 +229,9 @@ sub new {
         push @errors, "target must be specified";
         $valid = 0;
     }
+
     if (!$args->{cloak}) {
         push @errors, "Cloak must be provided";
-        $valid = 0;
-    } elsif ($args->{cloak} =~ /[^a-zA-Z0-9\-\/]/) {
-        push @errors, "The cloak contains invalid characters.";
-        $valid = 0;
-    } elsif (length $args->{cloak} > 63) {
-        push @errors, "The cloak is too long.";
         $valid = 0;
     } else {
         my $cloak = $args->{cloak};
@@ -244,12 +239,22 @@ sub new {
 
         my ($ns, $role) = @parts;
 
-        if (!$ns || !$role) {
-            push @errors, "The cloak provided is invalid; it should be in the format of group/(role/)user";
+        if(!$role) {
+            push @errors, "(Role/)user must be provided";
             $valid = 0;
-        }
-
-        if ( (split '', $parts[-1])[0] =~ /[0-9]/ ) {
+        } elsif(!$ns) {
+            push @errors, "Cloak namespace must be provided";
+            $valid = 0;
+        } elsif ($ns =~ /[^a-zA-Z0-9\.]/) {
+            push @errors, "The cloak namespace contains invalid characters.";
+            $valid = 0;
+        } elsif ($role =~ /[^a-zA-Z0-9\-\/]/) {
+            push @errors, "The role/user contains invalid characters. Only alphanumeric characters, dash and slash are allowed.";
+            $valid = 0;
+        } elsif (length $args->{cloak} > 63) {
+            push @errors, "The cloak is too long.";
+            $valid = 0;
+        } elsif ( (split '', $parts[-1])[0] =~ /[0-9]/ ) {
             push @errors, "The cloak provided looks like a CIDR mask.";
             $valid = 0;
         }
