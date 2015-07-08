@@ -78,15 +78,16 @@ is_deeply $error->message, [
 throws_ok {
     $schema->resultset('CloakChange')->create({
             'target'     => '3EAB67EC',
-            'cloak'      => '@#!$@_',
+            'cloak'      => 'ns/@#!$@_',
             'changed_by' => '3EAB67EC',
+            'group'      => $group,
         })
-} qr/The cloak contains invalid characters/;
+} qr/The role\/user contains invalid characters. Only alphanumeric characters, dash and slash are allowed./;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
             'target'     => '3EAB67EC',
-            'cloak'      => 'LoremipsumdolorsitametconsecteturadipiscingelitMaurisegetrutrummf',
+            'cloak'      => 'ns/LoremipsumdolorsitametconsecteturadipiscingelitMaurisegetrutrummf',
             'changed_by' => '3EAB67EC',
         })
 } qr/The cloak is too long/;
@@ -97,7 +98,7 @@ throws_ok {
             'cloak'      => 'cloak/',
             'changed_by' => '3EAB67EC',
         })
-} qr/The cloak provided is invalid/;
+} qr#\(Role/\)user must be provided#;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
