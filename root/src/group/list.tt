@@ -1,5 +1,6 @@
 [% META title = 'Group List' -%]
 
+[% IF groups.size > 0 %]
 <p>You are a <strong>member</strong> of the following groups</p>
 
 <ul class="list-group">
@@ -9,7 +10,11 @@
   </li>
 [% END %]
 </ul>
+[% ELSE %]
+<p>You have no group membership.<p>
+[% END %]
 
+[% IF pendinggroups.size > 0 %]
 <p>You have the following group applications <strong>pending</strong></p>
 
 <ul class="list-group">
@@ -19,7 +24,11 @@
   </li>
 [% END %]
 </ul>
+[% ELSE %]
+<p>You have no pending group application.</p>
+[% END %]
 
+[% IF invitedgroups.size > 0 %]
 <p>You have been <strong>invited</strong> to the following groups</p>
 
 <ul class="list-group">
@@ -39,4 +48,6 @@
   </li>
 [% END %]
 </ul>
-
+[% ELSE %]
+<p> You have no pending group invitation.</p>
+[% END %]

@@ -1,5 +1,6 @@
 [% META title = 'Pending Cloaks' -%]
 
+[% IF cloaks.size > 0 %]
 <p>You have the following group cloaks pending:</p>
 
 [% FOREACH cloak IN cloaks -%]
@@ -16,4 +17,7 @@
             </div>
         </div>
     </form>
+[% END %]
+[% ELSE %]
+<p>You have no cloak pending.</p>
 [% END %]
