@@ -44,6 +44,7 @@
                     </div>
                     <p></p>
                     <div class="btn-group-vertical btn-block">
+                    [% IF c.user_exists -%]
                         [% IF  c.check_user_roles('admin')  %]
                           <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin</a>
                         [% ELSIF c.check_user_roles ('staff') %]
@@ -53,6 +54,9 @@
                           <a href="[% c.uri_for('/userinfo') %]" class="btn btn-default"><i class="glyphicon glyphicon-user"></i> Your contact info</a>
                           <a href="[% c.uri_for('/cloak') %]" class="btn btn-default"><i class="glyphicon glyphicon-exclamation-sign"></i> Your pending group cloaks</a>
                           <a href="[% c.uri_for('/group/new') %]" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> Register a new group</a>
+                    [% ELSE %]
+                        <a href="[% c.uri_for('/login') %]" class="btn btn-default">Log in</a>
+                    [% END %]
                     </div>
                 </div>
                 <div id="main" class="content col-xs-12 col-sm-8 col-md-9 col-lg-9">
