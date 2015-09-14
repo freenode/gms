@@ -33,6 +33,7 @@ requires 'JSON::XS';
 requires 'Net::DNS';
 requires 'FCGI';
 requires 'FCGI::ProcManager';
+requires 'Daemon::Control';
 
 requires 'Catalyst::Plugin::StackTrace';
 requires 'LWP::Protocol::https';

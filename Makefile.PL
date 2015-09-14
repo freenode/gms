@@ -40,6 +40,7 @@ requires 'JSON::XS';
 requires 'Net::DNS';
 requires 'FCGI';
 requires 'FCGI::ProcManager';
+requires 'Daemon::Control';
 
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
