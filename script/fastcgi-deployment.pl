@@ -44,8 +44,8 @@ exit Daemon::Control->new(
         $nprocs
     ],
     pid_file    => $pid_file,
-    stderr_file => "/var/log/vhosts/localhost-gms/error/catalyst.log.%Y.%m.%d",
-    stdout_file => "/var/log/vhosts/localhost-gms/log/catalyst.log.%Y.%m.%d",
+    stderr_file => "/var/log/vhosts/localhost-gms/error/catalyst.log",
+    stdout_file => "/var/log/vhosts/localhost-gms/log/catalyst.log",
     user        => $gms_user,
 
     fork        => 2,
