@@ -1,5 +1,5 @@
 This is freenode's Group Management System. It's still in development, and not
-exactly useful yet.
+exactly useful yet, but most parts are working now.
 
 If you're interested in development of it, then further information is in the
 doc/ subdirectory.
@@ -7,8 +7,22 @@ doc/ subdirectory.
 INSTALLING:
 ==========
 
+Before anything else
+--------------------
+
+You need the packages build-essential and perl5.
+For these who have trouble making atheme with perl aborting at perl:
+ln -l /usr/lib/libperl.so.5.18.2 /usr/lib/libperl.so.5 (assuming you have perl 5.18.2 installed)
+ln -l /usr/lib/libperl.so.5.18.2 /usr/lib/libperl.so
+
 IRCd and Atheme
 ---------------
+
+TO BE ABSOLUTELY SURE:
+Make yourself a directory where all the SOURCES get in,
+and make yourself a directory where all the BUILDS (that path with --prefix=...) get in,
+as the ATHEME-SERVICES won't compile when the prefix is the same location as
+the source directory!
 
 GMS needs to talk to a running Atheme instance. Atheme needs an IRC server to
 link to. Thus, somewhat annoyingly, you need an ircd running to hack on 
@@ -53,6 +67,8 @@ Run::
 
 $HOME/gms/ircd/bin/ircd
 $HOME/gms/atheme/bin/atheme-services
+
+(They'll automatically run in the background)
 
 Then start up your IRC client of choice and connect to 127.0.0.1 port 6667.
 Check that you can oper up and identify to nickserv:
@@ -109,16 +125,29 @@ Then restart atheme.
 
 You now have the atheme-based parts of GMS in place and running.
 
-Now edit gms_web.conf, in the top level of the GMS source tree.
+Putting the db in-place
+-----------------------
 
-The Model::DB section contains a DBI-style connection string that needs 
+Currently GMS is developed with PostgreSQL; others may work but are untested.
+So, we need to install PostgreSQL first:
+
+apt-get install postgresql
+
+Then setup the user and db:
+
+sudo -u postgres createuser -D -A -P gms (default configured pass: mypass)
+sudo -u postgres createdb -O gms gmstest
+
+(For more, see: https://help.ubuntu.com/community/PostgreSQL)
+
+And finally configure it:
+To do this, edit gms_web.conf, which is in the top level of the GMS source tree.
+
+The Model::DB section contains a DBI-style connection string that needs
 to refer to a usable database and username. Once the tables have been set up,
-it  should only require insert, update and delete access to all tables in the 
+it  should only require insert, update and delete access to all tables in the
 database. To create the tables, permission to create tables,
 sequences and indexes will  obviously be required.
-Currently GMS is developed with PostgreSQL; others may work but are untested.
-https://help.ubuntu.com/community/PostgreSQL is a decent guide for
-installing postgresql on ubuntu.
 
 The Model::Atheme section contains the settings required to log in to 
 Atheme's XML-RPC server. The master_account and master_password
@@ -138,8 +167,18 @@ Once all this is done, start the GMS development web server by running
 `./script/gms_web_server.pl'. At this point begins the job of tracking 
 down what doesn't work and why.
 
+After having logged in for the first time with your user, setup yourself a admin and/or staff acount by executing
+
+bin/manage_user_roles.pl [username, probably admin] --add=admin
+-or, to add a staff--
+bin/manage_user_roles.pl [username of staff] --add=staff
+
+Do not wonder about the notice of a newly created role.
+
+You can remove admin/staff by turning the --add to --remove.
+
 Updating
----------
+--------
 
 `git pull` will pull latest from github. If files in lib/gms/Schema/Result
 have been changed you need to update the schema: `./bin/deploy.pl upgrade`
