@@ -29,9 +29,9 @@
             </div>
             <div class="navbar-right">
                 [% IF c.user_exists -%]
-                You are logged in as [% c.user.username | html %] (<a href="[% c.uri_for('/logout') %]" class="logout">log out</a>).
+                You are logged in as [% c.user.username | html %] (<a href="[% c.uri_for('/logout') %]" class="logout"><i class="glyphicon glyphicon-log-out"></i> Log out</a>).
                 [% ELSE -%]
-                You are not logged in (<a href="[% c.uri_for('/login') %]" class="login">log in</a>).
+                You are not logged in (<a href="[% c.uri_for('/login') %]" class="login"><i class="glyphicon glyphicon-log-in"></i> Log in</a>).
                 [% END %]
             </div>
         </div>
@@ -55,7 +55,7 @@
                           <a href="[% c.uri_for('/cloak') %]" class="btn btn-default"><i class="glyphicon glyphicon-exclamation-sign"></i> Your pending group cloaks</a>
                           <a href="[% c.uri_for('/group/new') %]" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> Register a new group</a>
                     [% ELSE %]
-                        <a href="[% c.uri_for('/login') %]" class="btn btn-default">Log in</a>
+                        <a href="[% c.uri_for('/login') %]" class="btn btn-default"><i class="glyphicon glyphicon-log-in"></i> Log in</a>
                     [% END %]
                     </div>
                 </div>
