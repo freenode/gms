@@ -12,7 +12,9 @@ use TryCatch;
 
 my ($accountname, @roles_to_do) = @ARGV;
 
-die "Usage: $0 <account name> [--add=role]  [--remove=role]\n        You can use --add=role and --remove=role multiple times" if ! $accountname;
+my $shalllist = 0;
+
+die "Usage: $0 <account name> [--add=role] [--remove=role] [--list]\n        You can use --add=role and --remove=role multiple times\n        --list prints out the roles after the modifications" if ! $accountname;
 
 my $atheme_config = GMS::Config->atheme;
 my $db = GMS::Schema->do_connect;
@@ -28,6 +30,10 @@ my $account = $db->resultset('Account')->find({ id => $accountid });
 print "Found account ID ", $account->id, ", named ", $account->accountname, "\n";
 
 foreach my $item (@roles_to_do) {
+    if (lc($item) eq "--list") {
+        $shalllist = 1;
+        next;
+    }
     my ($action, $rolename) = split("=", $item, 2);
     $action = lc $action;  # Lowercasing for easier parsing
     $rolename = lc $rolename; # Roles are normally lower case, right?
@@ -57,3 +63,8 @@ foreach my $item (@roles_to_do) {
     }
 }
 
+if ($shalllist) {
+    foreach my $role ($account->roles) {
+        print "$accountname has role ", $role->name, "\n";
+    }
+}
