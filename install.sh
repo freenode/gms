@@ -7,9 +7,15 @@ read -s -p "To continue, press enter. Otherwise, press CTRL+C"
 echo Downloading and installing requirements...
 
 # Installing requirements
-apt-get install perl5=5.18.2 build-essential gcc flex bison
+sudo apt-get update
+sudo apt-get install build-essential gcc flex bison
+sudo apt-get install perl=5.18.2-2ubuntu1
 
-Download all
+echo If there was an error that perl was not found, instal perl5 version 5.18.2 yourself from apt.
+
+read -s -p "If not, do that now. Otherwise continue with ENTER"
+
+# Download all
 cd $HOME
 mkdir freenode
 cd freenode
