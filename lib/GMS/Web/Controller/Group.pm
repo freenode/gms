@@ -740,11 +740,8 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
             push @reqs, $req;
             next;
         }
-        
-        my $firstcloakchar = substr($completecloak, 0, 1);
-        my $lastcloakchar = substr($completecloak, length($completecloak) - 1, 1);
 
-        if (!($completecloak =~ /^[a-z0-9A-Z\-\/\.\:]+$/i) || $firstcloakchar eq "." || $firstcloakchar eq "/" || $firstcloakchar eq ":" || $lastcloakchar eq "/") {
+        if (($completecloak !~ /^[a-z0-9A-Z\-\/\.\:]+$/ || $completecloak =~ /^[./:]/ || $completecloak =~ /[:/]$/)) {
             push (@errors, "The cloak ($completecloak) provided is invalid");
             push @reqs, $req;
             next;
@@ -803,10 +800,7 @@ sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
                 next;
             }
 
-            my $firstcloakchar = substr($cloak, 0, 1);
-            my $lastcloakchar = substr($cloak, length($cloak) - 1, 1);
-
-            if (!($cloak =~ /^[a-z0-9A-Z\-\/\.\:]+$/i) || $firstcloakchar eq "." || $firstcloakchar eq "/" || $firstcloakchar eq ":" || $lastcloakchar eq "/") {
+            if ($cloak !~ /^[a-z0-9A-Z\-\/\.\:]+$/ || $cloak =~ /^[./:]/ || $cloak =~ /[:/]$/) {
                 push (@errors, "The cloak ($cloak) provided is invalid");
                 push @reqs, $req;
                 next;
