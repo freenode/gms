@@ -1,8 +1,20 @@
 #!/bin/bash
 
 echo "This will install ATHEME, IRCD-SEVEN (charybdis) AND GMS!"
+echo
+echo "Read now the README"
+
+echo
+
+curl "https://raw.githubusercontent.com/freenode/gms/master/README" | more 
+
+echo
+echo This script does all the installation described in the README in an automated way.
+echo But be sure to have read the \"Before anything else\" section.
+echo
 
 read -s -p "To continue, press enter. Otherwise, press CTRL+C" 
+echo
 
 echo Downloading and installing requirements...
 
@@ -11,12 +23,8 @@ sudo apt-get update
 sudo apt-get install build-essential gcc flex bison
 sudo apt-get install perl=5.18.2-2ubuntu1
 
-echo If there was an error that perl was not found, install perl5 version 5.18.2 yourself from apt.
-
-read -s -p "If not, do that now. Otherwise continue with ENTER"
-
-ln -l /usr/lib/libperl.so.5.18.2 /usr/lib/libperl.so.5
-ln -l /usr/lib/libperl.so.5.18.2 /usr/lib/libperl.so
+read -s -p "Continue with ENTER"
+echo
 
 # Download all
 cd $HOME
@@ -28,10 +36,12 @@ mkdir ircd
 cd src
 git clone https://github.com/atheme/atheme.git
 git clone https://github.com/atheme/charybdis.git ircd-seven
-git clone https://github.com/freenode/gms.git
+git clone https://github.com/decontamin4t0R/gms.git
 cd atheme
 
+echo
 echo Making and installing atheme...
+echo
 
 # Making and installing atheme
 
@@ -41,7 +51,9 @@ git submodule update
 make
 make install
 
-echo Making and installing ircd (charybdis)
+echo
+echo "Making and installing ircd (charybdis)"
+echo
 
 # Making and installing ircd (charybdis)
 
@@ -52,7 +64,9 @@ make install
 
 cd ..
 
+echo
 echo Copying gms configurations...
+echo
 
 # Putting configuration
 
@@ -63,16 +77,20 @@ cp etc/services.db $HOME/freenode/atheme/etc/
 
 # Running the services
 
+echo
 echo Now we will start the services. After this, connect with irc to the server,
 echo do /oper admin password
 echo and do /msg NickServ IDENTIFY admin password
+echo
 
 $HOME/freenode/ircd/bin/ircd
 $HOME/freenode/atheme/bin/atheme-services
 
+echo
 echo Now we will install gms and \"hook\" into Atheme
 
 read -p "Continue with ENTER" -s
+echo
 
 cd atheme
 mv Makefile Makefile.old
@@ -81,16 +99,16 @@ cp Makefile.gms-auto Makefile
 make
 make install
 
+echo
 echo That should have worked.
 echo Now, restart the atheme-services using /msg OperServ RESTART
 echo Note that a normal rehash will not work.
+echo
 
 read -p "Waiting for a restart... To continue, press ENTER." -s
 
-$username = "admin"  # Set by default of ircd.conf and services.db....
-
 cd ..
-bin/modify_user_roles.pl $username --add=admin --add=staff  # One day in the future, there will be also a --add=accountmanager...
+bin/modify_user_roles.pl admin --add=admin --add=staff  # One day in the future, there will be also a --add=accountmanager...
 
 echo "Now go ahead and start the gms server by running script/gms_web_server.pl"
 
