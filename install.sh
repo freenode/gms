@@ -11,9 +11,12 @@ sudo apt-get update
 sudo apt-get install build-essential gcc flex bison
 sudo apt-get install perl=5.18.2-2ubuntu1
 
-echo If there was an error that perl was not found, instal perl5 version 5.18.2 yourself from apt.
+echo If there was an error that perl was not found, install perl5 version 5.18.2 yourself from apt.
 
 read -s -p "If not, do that now. Otherwise continue with ENTER"
+
+ln -l /usr/lib/libperl.so.5.18.2 /usr/lib/libperl.so.5
+ln -l /usr/lib/libperl.so.5.18.2 /usr/lib/libperl.so
 
 # Download all
 cd $HOME
