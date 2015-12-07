@@ -20,8 +20,15 @@ echo Downloading and installing requirements...
 
 # Installing requirements
 sudo apt-get update
-sudo apt-get install build-essential gcc flex bison
+sudo apt-get install build-essential gcc flex bison libexpat-dev libpq-dev
 sudo apt-get install perl=5.18.2-2ubuntu1
+
+wget -O- http://cpanmin.us | perl - -l ~/perl5 App::cpanminus local::lib
+eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
+
+echo "eval \`perl -I ~/perl5/lib/perl5 -Mlocal::lib\`" >> $HOME/.bashrc
+
+cpanm --installdeps .
 
 read -s -p "Continue with ENTER"
 echo
