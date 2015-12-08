@@ -1,3 +1,5 @@
+[% META title = 'Staff Index' %]
+
 <h3>Staff Page</h3>
 
 <ul class="list-group">

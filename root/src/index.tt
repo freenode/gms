@@ -1,3 +1,5 @@
+[% META title = 'Index' %]
+
 <h3>Welcome to the Group Management System.</h3>
 
 <p> There isn't much here just now. </p>

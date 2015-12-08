@@ -1,3 +1,5 @@
+[% META title = 'Finish group registration' %]
+
 Your group [% group.group_name %] has been registered.
 
 To verify your association with the project, please create a file at
