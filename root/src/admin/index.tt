@@ -1,3 +1,5 @@
+[% META title = 'Admin Index' %]
+
 <h3>Administration Centre</h3>
 
 <ul class="list-group">
