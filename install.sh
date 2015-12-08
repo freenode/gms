@@ -16,12 +16,8 @@ echo
 read -s -p "To continue, press enter. Otherwise, press CTRL+C" 
 echo
 
-echo Downloading and installing requirements...
-
-# Installing requirements
-sudo apt-get update
-sudo apt-get install build-essential gcc flex bison libexpat-dev libpq-dev
-sudo apt-get install perl=5.18.2-2ubuntu1
+echo "Have you installed all requirements (build-essential gcc flex bison libexpat-dev libpq-dev perl)?"
+read -s -p "If not, abort using CTRL+C. Otherwise, press ENTER"
 
 wget -O- http://cpanmin.us | perl - -l ~/perl5 App::cpanminus local::lib
 eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
@@ -43,7 +39,7 @@ mkdir ircd
 cd src
 git clone https://github.com/atheme/atheme.git
 git clone https://github.com/atheme/charybdis.git ircd-seven
-git clone https://github.com/decontamin4t0R/gms.git
+git clone https://github.com/freenode/gms.git
 cd atheme
 
 echo
