@@ -95,7 +95,27 @@ sub end : ActionClass('RenderView') {
 
     if ( $c->request->path =~ /^json\// ) {
         $c->forward('View::JSON');
+    } 
+
+    if ( $c->check_user_roles("admin") ) {
+        $c->stash->{pending_admin} = $c->model('DB::Group')->search_verified_groups->count +
+                                     $c->model('DB::Group')->search_submitted_groups->count +
+                                     $c->model('DB::GroupContact')->search_pending->count +
+                                     $c->model('DB::ChannelNamespace')->search_pending->count +
+                                     $c->model('DB::CloakNamespace')->search_pending->count +
+                                     $c->model('DB::GroupContactChange')->active_requests->count +
+                                     $c->model('DB::GroupChange')->active_requests->count +
+                                     $c->model('DB::ChannelNamespaceChange')->active_requests->count +
+                                     $c->model('DB::CloakNamespaceChange')->active_requests->count +
+                                     $c->model('DB::CloakChange')->search_pending->count +
+                                     $c->model('DB::CloakChange')->search_unapplied->count +
+                                     $c->model('DB::CloakChange')->search_failed->count +
+                                     $c->model('DB::ChannelRequest')->search_pending->count +
+                                     $c->model('DB::ChannelRequest')->search_unapplied->count +
+                                     $c->model('DB::ChannelRequest')->search_failed->count;
+        $c->log->debug("Pending requests: ".$c->stash->{pending_admin});
     }
+
 }
 
 =head2 auto

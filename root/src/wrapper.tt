@@ -46,7 +46,7 @@
                     <div class="btn-group-vertical btn-block">
                     [% IF c.user_exists -%]
                         [% IF  c.check_user_roles('admin')  %]
-                          <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin</a>
+                          <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin <span class="badge">[% pending_admin %]</span></a>
                         [% ELSIF c.check_user_roles ('staff') %]
                           <a href="[% c.uri_for('/staff/') %]" class="btn btn-default">Staff</a>
                         [% END %]
