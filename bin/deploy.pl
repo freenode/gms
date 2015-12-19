@@ -26,7 +26,12 @@ BEGIN {
                 schema => GMS::Schema->do_connect,
                 script_directory => 'share/ddl',
                 databases => [ 'PostgreSQL' ],
-                sql_translator_args => { quote_field_names => 1 },
+                sql_translator_args => {
+                  quote_field_names => 1,
+                  producer_args => {
+                    postgres_version => 9
+                  },
+                },
             })
     }
 
