@@ -358,6 +358,22 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
     my $group = $c->stash->{group};
     my $address;
 
+    # Verify group type (#81)
+    if ( $p->{group_type} ne "informal" &&
+         $p->{group_type} ne "corporation" &&
+         $p->{group_type} ne "education" &&
+         $p->{group_type} ne "government" &&
+         $p->{group_type} ne "nfp" &&
+         $p->{group_type} ne "internal" ) {
+        $c->stash->{errors} = [
+            "The group type is not valid. Please check your input."
+        ];
+        %{$c->stash} = ( %{$c->stash}, %$p );
+        $c->stash->{form_submitted} = 1;
+        $c->detach('edit');
+    }
+
+
     try {
         if ( $p->{has_address} && $p->{update_address} && $p->{has_address} eq 'y' && $p->{update_address} eq 'y' ) {
             $address = $c->model('DB::Address')->create({
@@ -1186,6 +1202,17 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
         $c->stash->{error_msg} = "This group name is already taken.";
         %{$c->stash} = ( %{$c->stash}, %$p );
         $c->detach('new_form');
+    }
+
+    # Verify group type (#81)
+    if ( $p->{group_type} ne "informal" &&
+         $p->{group_type} ne "corporation" &&
+         $p->{group_type} ne "education" &&
+         $p->{group_type} ne "government" &&
+         $p->{group_type} ne "nfp" &&
+         $p->{group_type} ne "internal" ) {
+        push @errors, "The group type is not valid. Please check your input.";
+        
     }
 
     my @channels = split /, */, $p->{channel_namespace};
