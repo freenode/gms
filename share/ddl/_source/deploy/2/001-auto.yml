@@ -249,17 +249,8 @@ schema:
           size:
             - 0
         change_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: channel_namespace_changes_change_type_type
-            list:
-              - create
-              - request
-              - approve
-              - reject
-              - admin
-              - workflow_change
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -309,14 +300,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: channel_namespace_changes_status_type
-            list:
-              - active
-              - deleted
-              - pending_staff
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -466,14 +451,8 @@ schema:
           size:
             - 50
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: channel_namespace_status_type
-            list:
-              - active
-              - deleted
-              - pending_staff
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -578,16 +557,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: channel_request_status
-            list:
-              - pending_staff
-              - approved
-              - rejected
-              - applied
-              - error
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -751,14 +722,8 @@ schema:
           size:
             - 0
         request_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: request_type
-            list:
-              - flags
-              - transfer
-              - drop
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -777,16 +742,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: channel_request_status
-            list:
-              - pending_staff
-              - approved
-              - rejected
-              - applied
-              - error
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -911,17 +868,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: cloak_change_status
-            list:
-              - offered
-              - accepted
-              - approved
-              - rejected
-              - applied
-              - error
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1062,17 +1010,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: cloak_change_status
-            list:
-              - offered
-              - accepted
-              - approved
-              - rejected
-              - applied
-              - error
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1197,17 +1136,8 @@ schema:
           size:
             - 0
         change_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: cloak_namespace_changes_change_type_type
-            list:
-              - create
-              - request
-              - approve
-              - reject
-              - admin
-              - workflow_change
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1257,14 +1187,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: cloak_namespace_changes_status_type
-            list:
-              - active
-              - deleted
-              - pending_staff
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1414,14 +1338,8 @@ schema:
           size:
             - 63
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: channel_namespace_status_type
-            list:
-              - active
-              - deleted
-              - pending_staff
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1518,17 +1436,8 @@ schema:
           size:
             - 0
         change_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: change_type
-            list:
-              - create
-              - request
-              - approve
-              - reject
-              - admin
-              - workflow_change
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1865,17 +1774,8 @@ schema:
           size:
             - 0
         change_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: change_type
-            list:
-              - create
-              - request
-              - approve
-              - reject
-              - admin
-              - workflow_change
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1904,17 +1804,8 @@ schema:
           size:
             - 0
         group_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_type
-            list:
-              - informal
-              - corporation
-              - education
-              - government
-              - nfp
-              - internal
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -1934,18 +1825,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_status
-            list:
-              - submitted
-              - verified
-              - active
-              - deleted
-              - pending_web
-              - pending_staff
-              - pending_auto
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -2075,17 +1956,8 @@ schema:
           size:
             - 0
         change_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: change_type
-            list:
-              - create
-              - request
-              - approve
-              - reject
-              - admin
-              - workflow_change
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -2146,16 +2018,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_contact_status
-            list:
-              - invited
-              - retired
-              - active
-              - deleted
-              - pending_staff
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -2292,16 +2156,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_contact_status
-            list:
-              - invited
-              - retired
-              - active
-              - deleted
-              - pending_staff
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -2388,16 +2244,8 @@ schema:
           size:
             - 0
         verification_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_verifications_verification_type_type
-            list:
-              - web_url
-              - web_token
-              - git
-              - dns
-              - freetext
           is_nullable: 1
           is_primary_key: 0
           is_unique: 0
@@ -2521,17 +2369,8 @@ schema:
           size:
             - 32
         group_type:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_type
-            list:
-              - informal
-              - corporation
-              - education
-              - government
-              - nfp
-              - internal
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -2551,18 +2390,8 @@ schema:
           size:
             - 0
         status:
-          data_type: enum
+          data_type: varchar
           default_value: ~
-          extra:
-            custom_type_name: group_status
-            list:
-              - submitted
-              - verified
-              - active
-              - deleted
-              - pending_web
-              - pending_staff
-              - pending_auto
           is_nullable: 0
           is_primary_key: 0
           is_unique: 0
@@ -2775,4 +2604,4 @@ translator:
   producer_type: SQL::Translator::Producer::YAML
   show_warnings: 0
   trace: 0
-  version: 0.11020
+  version: 0.11021
