@@ -33,7 +33,7 @@ static void can_register(hook_channel_register_check_t *hdata) {
         !has_priv(si, PRIV_CHAN_ADMIN) &&
         ( strlen(name) < 2 || *(name + 1) != '#' )
     ) {
-        command_fail(si, fault_noprivs, _("\2%s\2 cannot be registered outside of GMS.\nFor more information, see http://freenode.net/policy.shtml#channelnaming"), name);
+        command_fail(si, fault_noprivs, _("\2%s\2 cannot be registered outside of GMS. For more information, see http://freenode.net/policy.shtml#channelnaming"), name);
         hdata->approved = 1;
     } else {
         hdata->approved = 0;
