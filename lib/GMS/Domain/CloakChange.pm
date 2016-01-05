@@ -106,13 +106,28 @@ sub TO_JSON {
         }
     }
 
+    my $target_name    = undef;
+    my $target_dropped = undef;
+    my $target_id      = undef;
+    my $target_mark    = undef;
+
+    if ( $self->target ) {
+        $target_name     = $self->target->accountname;
+        $target_dropped  = $self->target->is_dropped;
+        $target_id       = $self->target->id;
+
+        if (!$target_dropped) {
+            $target_mark     = $self->target->mark;
+        }
+    }
+
     return {
         'id'                          => $self->id,
         'cloak'                       => $self->cloak,
-        'target_id'                   => $self->target->id,
-        'target_name'                 => $self->target->accountname,
-        'target_dropped'              => $self->target->is_dropped,
-        'target_mark'                 => $self->target->mark,
+        'target_id'                   => $target_id,
+        'target_name'                 => $target_name,
+        'target_dropped'              => $target_dropped,
+        'target_mark'                 => $target_mark,
         'target_recent_cloak_changes' => \@recent,
         'status'                      => $self->active_change->status->value,
         'change_freetext'             => $self->active_change->change_freetext,
