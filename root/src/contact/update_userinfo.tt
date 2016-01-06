@@ -2,7 +2,7 @@
 
 <p>Use this form to update your personal information</p>
 
-<p>We may use the information you provide here to contact you about your group and it's registration.</p>
+<p>We may use the information you provide here to contact you about your group and its registration.</p>
 
 <form method="post" action="[% c.uri_for('/userinfo/update') %]" class="form-horizontal">
     <div class="form-group">
