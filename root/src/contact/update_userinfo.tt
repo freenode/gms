@@ -2,6 +2,8 @@
 
 <p>Use this form to update your personal information</p>
 
+<p>We may use the information you provide here to contact you about your group and it's registration.</p>
+
 <form method="post" action="[% c.uri_for('/userinfo/update') %]" class="form-horizontal">
     <div class="form-group">
         <label for="username" class="col-sm-3 control-label">Name</label>
@@ -16,7 +18,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="phone" class="col-sm-3 control-label">Telephone</label>
+        <label for="phone" class="col-sm-3 control-label">Telephone (Optional)</label>
         <div class="col-xs-9">
             <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" id="phone"  type="text" name="phone" value="[% phone | html %]" class="form-control" />
         </div>
