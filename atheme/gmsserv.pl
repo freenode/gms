@@ -104,7 +104,7 @@ $Services{GMSServ}->bind_command(
 );
 
 $Services{GMSServ}->bind_command(
-    name => "private",
+    name => "PRIVATE",
     desc => "Returns if an account is private",
     help_path => "gmsserv/private",
     handler => \&gms_private,
@@ -112,11 +112,18 @@ $Services{GMSServ}->bind_command(
 );
 
 $Services{GMSServ}->bind_command(
-    name => "noticechan",
+    name => "NOTICECHAN",
     desc => "Notice a channel",
     help_path => "gmsserv/noticechan",
     handler => \&gms_noticechan,
     access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
+    name => "HELP",
+    desc => "Displays contextual help information.",
+    help_path => "gmsserv/help",
+    handler => \&gms_help
 );
 
 sub gms_uid {
@@ -371,4 +378,10 @@ sub gms_noticechan {
         $chan->notice ('GMSServ', $notice);
         $source->success ('Success');
     }
+}
+
+sub gms_help {
+    my ($source, @argv) = @_;
+
+    $source->fail (Atheme::Fault::noprivs(), "This service has no public interface.");
 }
