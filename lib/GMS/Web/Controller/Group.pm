@@ -34,6 +34,8 @@ sub base :Chained('/') :PathPart('group') :CaptureArgs(0) :Local :VerifyToken {
                                   "Use this form to enter it before registering a new group.";
         $c->session->{redirect_to} = $c->request->uri;
         $c->response->redirect($c->uri_for('/userinfo'));
+
+        $c->detach();
         return;
     }
 }
