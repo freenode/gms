@@ -30,9 +30,11 @@ sub index :Path :Args(0) :Local :VerifyToken {
     my $account = $c->user->account;
 
     if (! $account->contact) {
+        my $client = GMS::Atheme::Client->new ($c->model('Atheme')->session);
         $c->stash->{status_msg} = "You don't yet have any contact information defined.\n" .
                                   "Use the form below to define it.";
 
+        $c->stash->{user_email} = $client->email($account->id);
         $c->stash->{template} = 'contact/update_userinfo.tt';
     } else {
         my $contact = $account->contact;
