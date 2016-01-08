@@ -48,6 +48,10 @@ html, body {
     text-align: left;
 }
 
+.long-row-title {
+    min-width: 30%;
+}
+
 .grf {
     margin-bottom: 20px;
 }
