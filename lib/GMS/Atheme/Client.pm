@@ -108,6 +108,26 @@ sub metadata {
     }
 }
 
+=head2 email
+
+Returns an account's email
+
+=cut
+
+sub email {
+    my ($self, $uid) = @_;
+    my $session = $self->{_session};
+
+    try {
+        my $data = $session->command($session->service, 'email', $uid);
+
+        return $data;
+    }
+    catch (RPC::Atheme::Error $e) {
+        die $e if ( $e->code != RPC::Atheme::Error::nosuchkey() );
+    }
+}
+
 =head2 mark
 
 Returns an account's mark, if there is one

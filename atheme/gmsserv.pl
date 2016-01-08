@@ -56,6 +56,14 @@ $Services{GMSServ}->bind_command(
 );
 
 $Services{GMSServ}->bind_command(
+    name => "EMAIL",
+    desc => "Returns a user's email",
+    help_path => "gmssrv/email",
+    handler => \&gms_email,
+    access => "special:gms"
+);
+
+$Services{GMSServ}->bind_command(
     name => "CHANEXISTS",
     desc => "Returns 1 if a channel exists, -1 if not.",
     help_path => "gmsserv/chanexists",
@@ -268,6 +276,20 @@ sub gms_accountname {
         $source->fail (Atheme::Fault::nosuch_target(), "No such account");
     } else {
         $source->success ($acc->name);
+    }
+}
+
+sub gms_email {
+    my ($source, @argv) = @_;
+
+    my $uid = shift @argv;
+
+    my $acc = $Atheme::Accounts{'?' . $uid};
+
+    if (!$acc) {
+        $source->fail (Atheme::Fault::nosuch_target(), "No such account");
+    } else {
+        $source->success ($acc->email);
     }
 }
 
