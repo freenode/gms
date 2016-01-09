@@ -25,10 +25,8 @@
         <td colspan="2">[% group.verify_token %]</td>
     </tr>
     <tr>
-        <td colspan="3"><strong>DNS verification:</strong></td>
-    </tr>
-    <tr>
-        <td colspan="3">The DNS verification can be either a TXT on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong> or aliasing <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>.</td>
+        <td class="text-right long-row-title"><strong>DNS verification</strong></td>
+        <td colspan="2">The DNS verification can be either a TXT on <strong>[% group.verify_dns | html %]</strong> with text also <strong>[% group.verify_dns | html %]</strong> or aliasing <strong>[% group.verify_dns | html %]</strong> to <strong>127.0.0.127</strong>.</td>
     </tr>
     [% END %]
 
