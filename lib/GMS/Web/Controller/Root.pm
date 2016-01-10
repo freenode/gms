@@ -93,6 +93,13 @@ Attempt to render a view, if needed.
 sub end : ActionClass('RenderView') {
     my ($self, $c) = @_;
 
+    if ( scalar @{ $c->error } ) {
+        $c->stash->{template} = 'error/500.tt';
+        $c->response->status(500);
+        $c->clear_errors;
+        return;
+    }
+
     if ( $c->request->path =~ /^json\// ) {
         $c->forward('View::JSON');
     } 
