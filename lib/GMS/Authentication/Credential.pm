@@ -59,6 +59,7 @@ sub authenticate {
 
         return GMS::Authentication::User->new($session->account, $session->authcookie);
     } catch (RPC::Atheme::Error $e) {
+        die $e if $e->code == RPC::Atheme::Error::notverified;
         $c->log->debug("Couldn't log in to atheme as user " . $authinfo->{username} . ": $e");
         return undef;
     }

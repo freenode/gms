@@ -148,6 +148,20 @@ sub mark {
     }
 }
 
+=head2 verified
+
+Checks whether an account is verified
+
+=cut
+
+sub verified {
+    my ($self, $uid) = @_;
+
+    my $key = $self->metadata ($uid, 'private:verify:register:key');
+
+    return !defined $key;
+}
+
 =head2 chanexists
 
 Returns if a channel has been created
