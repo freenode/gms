@@ -1,0 +1,3 @@
+[% META title = 'Internal Server Error' %]
+
+<p class="alert alert-danger">The server encountered an internal error and was unable to complete your request.</p>
