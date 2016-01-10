@@ -264,8 +264,6 @@ sub new {
     my @errors;
     my $valid=1;
 
-    $args->{phone} ||= undef;
-
     if (!$args->{name}) {
         push @errors, "Your name can't be empty.";
         $valid = 0;
@@ -278,6 +276,10 @@ sub new {
         $valid = 0;
     } elsif (length $args->{email} > 255) {
         push @errors, "Your email can be up to 255 characters.";
+        $valid = 0;
+    }
+    if (defined $args->{phone} && length $args->{phone} > 32) {
+        push @errors, "Your phone can be up to 32 characters.";
         $valid = 0;
     }
 
