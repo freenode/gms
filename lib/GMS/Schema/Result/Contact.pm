@@ -296,9 +296,9 @@ sub change {
     my %change_args = (
         changed_by => $account,
         change_type => $change_type,
-        name => $args->{name} || $change->name,
-        phone => $args->{phone} || $change->phone,
-        email => $args->{email} || $change->email,
+        name => defined $args->{name} ? $args->{name} : $change->name,
+        phone => defined $args->{phone} ? $args->{phone} : $change->phone,
+        email => defined $args->{email} ? $args->{email} : $change->email,
         change_freetext => $args->{change_freetext}
     );
 
@@ -307,9 +307,9 @@ sub change {
     if ($change_type ne 'request') {
         $self->active_change($ret);
 
-        $self->name($args->{name} || $change->name);
-        $self->phone($args->{phone} || $change->phone);
-        $self->email($args->{email} || $change->email);
+        $self->name($change_args{name});
+        $self->phone($change_args{phone});
+        $self->email($change_args{email});
     }
 
     $self->update;

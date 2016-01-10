@@ -264,8 +264,6 @@ sub new {
     my @errors;
     my $valid=1;
 
-    $args->{phone} ||= undef;
-
     if (!$args->{name}) {
         push @errors, "Your name can't be empty.";
         $valid = 0;

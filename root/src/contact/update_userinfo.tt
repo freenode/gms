@@ -20,7 +20,7 @@
     <div class="form-group">
         <label for="phone" class="col-sm-3 control-label">Telephone (Optional)</label>
         <div class="col-xs-9">
-            <input pattern="[0-9 \+-]+" title="Please enter a valid telephone!" maxlength="32" id="phone" type="text" name="phone" value="[% phone | html %]" class="form-control" />
+            <input title="Please enter a valid telephone!" maxlength="32" id="phone" type="text" name="phone" value="[% phone | html %]" class="form-control" />
         </div>
     </div>
     <div class="row">
