@@ -81,6 +81,7 @@
                     [% content %]
                 </div>
             </div>
+        </div>
       </body>
     </html>
 [% ELSE -%]
