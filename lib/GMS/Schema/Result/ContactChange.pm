@@ -280,6 +280,10 @@ sub new {
         push @errors, "Your email can be up to 255 characters.";
         $valid = 0;
     }
+    if (defined $args->{phone} && length $args->{phone} > 32) {
+        push @errors, "Your phone can be up to 32 characters.";
+        $valid = 0;
+    }
 
     if (!$valid) {
         die GMS::Exception::InvalidChange->new(\@errors);
