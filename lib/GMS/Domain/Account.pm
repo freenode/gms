@@ -84,6 +84,19 @@ sub mark {
     return $client->mark ($self->id);
 }
 
+=head2 verified
+
+Checks whether the account is verified.
+
+=cut
+
+sub verified {
+    my ($self) = @_;
+
+    my $client = GMS::Atheme::Client->new ($self->{_session});
+    return $client->verified ($self->id);
+}
+
 =head2 is_dropped
 
 Returns if the account is dropped

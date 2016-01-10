@@ -77,6 +77,9 @@ sub new {
     } catch (RPC::Atheme::Error $e) {
         die $e;
     }
+    if(!$account->verified) {
+        die RPC::Atheme::Error->new(RPC::Atheme::Error::notverified, "$user has not completed registration verification");
+    }
 
     $self->{_account} = $account;
 
