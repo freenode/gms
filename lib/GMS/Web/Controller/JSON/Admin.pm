@@ -383,16 +383,16 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
 
     if ($change_item eq 'gcc') { #group contact change
         $change_rs = $c->model('DB::GroupContactChange');
-        $type = "GroupContactChange";
+        $type = "group contact change";
     } elsif ($change_item eq 'gc') { #group change
         $change_rs = $c->model('DB::GroupChange');
-        $type = "GroupChange";
+        $type = "group information change";
     } elsif ($change_item eq 'cnc') { #channel namespace change
         $change_rs = $c->model('DB::ChannelNamespaceChange');
-        $type = "ChannelNamespaceChange";
+        $type = "channel namespace change";
     } elsif ($change_item eq 'clnc') { #cloak namespace change
         $change_rs = $c->model('DB::CloakNamespaceChange');
-        $type = "CloakNamespaceChange";
+        $type = "cloak namespace change";
     }
 
     my $account = $c->user->account;
@@ -431,7 +431,7 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                         $c,
                         $group,
                         $change->changed_by,
-                        "Your request for a $type change for " .
+                        "Your request for a $type for " .
                         $group->group_name . " has been approved."
                     );
 
@@ -450,7 +450,7 @@ sub do_approve_change :Chained('base') :PathPart('approve_change/submit') :Args(
                         $c,
                         $group,
                         $change->changed_by,
-                        "Your request for a $type change for " .
+                        "Your request for a $type for " .
                         $group->group_name . " has been rejected."
                     );
 
@@ -554,7 +554,7 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                         $c,
                         $group,
                         $change->active_change->changed_by,
-                        "Your request for a the " . $change->cloak . " cloak " .
+                        "Your request for the " . $change->cloak . " cloak " .
                         "for " .  $change->target->accountname . " has been approved."
                     );
                 } elsif ($action eq 'apply') {
@@ -575,7 +575,7 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                         $c,
                         $group,
                         $change->active_change->changed_by,
-                        "Your request for a the " . $change->cloak . " cloak " .
+                        "Your request for the " . $change->cloak . " cloak " .
                         "for " .  $change->target->accountname . " has been applied."
                     );
                 } elsif ($action eq 'reject') {
@@ -589,7 +589,7 @@ sub do_approve_cloak :Chained('base') :PathPart('approve_cloak/submit') :Args(0)
                         $c,
                         $group,
                         $change->active_change->changed_by,
-                        "Your request for a the " . $change->cloak . " cloak " .
+                        "Your request for the " . $change->cloak . " cloak " .
                         "for " .  $change->target->accountname . " has been rejected."
                     );
                 } elsif ($action eq 'hold') {
@@ -699,17 +699,17 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                     notice_staff_chan (
                         $c,
                         "[ADMIN]: " .  $c->user->account->accountname .
-                        " approved channel " .  $request->request_type . " $req_txt for "
-                        .  $request->channel
+                        " approved " .  $request->request_type . " of " .
+                        $request->channel . $req_txt
                     );
 
                     memo_gcs (
                         $c,
                         $group,
                         $request->requestor->account,
-                        "Your request for a the channel " .
-                        $request->request_type . " $req_txt " .  "for " .
-                        $request->channel . " has been approved."
+                        "Your request for the " .
+                        $request->request_type . " of " . $request->channel .
+                        $req_txt . " has been approved."
                     );
                 } elsif ($action eq 'apply') {
                     $c->log->info ("Marking ChannelRequest id $req_id as applied" .
@@ -721,8 +721,8 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                     notice_staff_chan (
                         $c,
                         "[ADMIN]: " .  $c->user->account->accountname .
-                        " marked as applied " .  " channel " .
-                        $request->request_type . " $req_txt for " .  $request->channel
+                        " marked " .  $request->request_type . " of " .
+                        $request->channel . $req_txt . " as applied"
                     );
 
 
@@ -730,9 +730,9 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                         $c,
                         $group,
                         $request->requestor->account,
-                        "Your request for a the channel " .
-                        $request->request_type . " $req_txt " .  "for " .
-                        $request->channel . " has been applied."
+                        "Your request for the " .
+                        $request->request_type . " of " . $request->channel .
+                        $req_txt . " has been applied."
                     );
                 } elsif ($action eq 'reject') {
                     $c->log->info("Rejecting ChannelRequest id $req_id" .
@@ -744,17 +744,17 @@ sub do_approve_channel_requests :Chained('base') :PathPart('approve_channel_requ
                     notice_staff_chan (
                         $c,
                         "[ADMIN]: " .  $c->user->account->accountname .
-                        " rejected channel " .  $request->request_type . " $req_txt for "
-                        .  $request->channel
+                        " rejected " .  $request->request_type . " of " .
+                        $request->channel . $req_txt
                     );
 
                     memo_gcs (
                         $c,
                         $group,
                         $request->requestor->account,
-                        "Your request for a the channel " .
-                        $request->request_type . " $req_txt " .  "for " .
-                        $request->channel . " has been rejected."
+                        "Your request for the " .
+                        $request->request_type . " of " . $request->channel .
+                        $req_txt . " has been rejected"
                     );
                 } elsif ($action eq 'hold') {
                     next;
@@ -832,10 +832,10 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
 
     if ($approve_item eq 'cns') { #channel namespaces
         $namespace_rs = $c->model ("DB::ChannelNamespace");
-        $type = "ChannelNamespace";
+        $type = "channel namespace";
     } elsif ($approve_item eq 'clns') { #cloak namespces
         $namespace_rs = $c->model ("DB::CloakNamespace");
-        $type = "CloakNamespace";
+        $type = "cloak namespace";
     }
 
     my $account = $c->user->account;
@@ -869,7 +869,7 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                         $c,
                         $group,
                         $namespace->last_change->changed_by,
-                        "Your request for a the $type namespace " .
+                        "Your request for the $type " .
                         $namespace->namespace . " for " .
                         $namespace->group->group_name . " has been approved."
                     );
@@ -891,7 +891,7 @@ sub do_approve_namespaces :Chained('base') :PathPart('approve_namespaces/submit'
                         $c,
                         $group,
                         $namespace->last_change->changed_by,
-                        "Your request for a the $type namespace " .
+                        "Your request for the $type " .
                         $namespace->namespace . " for " .
                         $namespace->group->group_name . " has been rejected."
                     );
