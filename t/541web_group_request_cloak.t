@@ -120,7 +120,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("The cloak contains invalid characters", "Can't have invalid cloak");
+$ua->content_contains("The role/user contains invalid characters", "Can't have invalid cloak");
 
 $ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
 
@@ -173,6 +173,19 @@ $ua->submit_form(
 );
 
 $ua->content_contains("The cloak provided looks like a CIDR mask", "Can't have invalid cloak");
+
+$ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
+
+$ua->submit_form(
+    fields => {
+        'num_cloaks' => 1,
+        'accountname_0' => 'account0',
+        'cloak_namespace_0' => 'group0',
+        'cloak_0' => 'foo/bar/'
+    }
+);
+
+$ua->content_contains("The cloak cannot end with a slash", "Can't have invalid cloak");
 
 $ua->get_ok("http://localhost/group/2/cloak", "cloak page works");
 
