@@ -94,6 +94,10 @@ sub end : ActionClass('RenderView') {
     my ($self, $c) = @_;
 
     if ( scalar @{ $c->error } ) {
+        for my $error ( @{ $c->error } ) {
+            $c->log->error($error);
+        }
+
         $c->stash->{template} = 'error/500.tt';
         $c->response->status(500);
         $c->clear_errors;
