@@ -55,6 +55,32 @@ __PACKAGE__->config(
                 class => '+GMS::Authentication::Store'
             }
         }
+    },
+
+    error_handler => {
+        actions => [
+            {
+                id => 'log-error',
+                type => 'Log',
+                level => 'error'
+            }
+        ],
+        handlers => {
+            400 => {
+                template => 'error/400.tt',
+            },
+            403 => {
+                template => 'error/403.tt',
+            },
+            404 => {
+                template => 'error/404.tt',
+            },
+            500 => {
+                template => 'error/500.tt',
+                actions => ['log-error']
+            }
+        },
+        enable => 1
     }
 );
 
