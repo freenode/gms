@@ -7,6 +7,7 @@ requires 'Catalyst::Plugin::Authorization::Roles';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Action::RenderView';
+requires 'Catalyst::Action::RenderView::ErrorHandler';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::View::JSON';
 requires 'Catalyst::View::Email::Template';

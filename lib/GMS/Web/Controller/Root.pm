@@ -47,8 +47,8 @@ error page.
 
 sub default :Path {
     my ( $self, $c ) = @_;
-    $c->stash->{template} = 'error/404.tt';
     $c->response->status(404);
+    $c->response->body('');
 }
 
 =head2 forbidden
@@ -63,8 +63,8 @@ It presents a 403 error page.
 
 sub forbidden :Path('403') :Args(0) {
     my ($self, $c) = @_;
-    $c->stash->{template} = 'error/403.tt';
     $c->response->status(403);
+    $c->response->body('');
 }
 
 =head2 bad_request
@@ -79,8 +79,8 @@ It presents a 400 error page.
 
 sub bad_request :Path('400') :Args(0) {
     my ($self, $c) = @_;
-    $c->stash->{template} = 'error/400.tt';
     $c->response->status(400);
+    $c->response->body('');
 }
 
 
@@ -90,19 +90,8 @@ Attempt to render a view, if needed.
 
 =cut
 
-sub end : ActionClass('RenderView') {
+sub end : ActionClass('RenderView::ErrorHandler') {
     my ($self, $c) = @_;
-
-    if ( scalar @{ $c->error } ) {
-        for my $error ( @{ $c->error } ) {
-            $c->log->error($error);
-        }
-
-        $c->stash->{template} = 'error/500.tt';
-        $c->response->status(500);
-        $c->clear_errors;
-        return;
-    }
 
     if ( $c->request->path =~ /^json\// ) {
         $c->forward('View::JSON');
