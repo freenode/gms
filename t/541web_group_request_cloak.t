@@ -120,7 +120,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("The cloak contains invalid characters", "Can't have invalid cloak");
+$ua->content_contains("The role/user contains invalid characters", "Can't have invalid cloak");
 
 $ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
 
