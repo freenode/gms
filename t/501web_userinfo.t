@@ -3,12 +3,17 @@
 use strict;
 use warnings;
 use Test::More;
+use Test::MockModule;
 
 use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
 need_database 'three_groups';
+
+# Mock atheme model so we don't use real one.
+my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
+$mockModel->mock ('session' => sub { die RPC::Atheme::Error->new(RPC::Atheme::Error::rpc_error, ""); });
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
