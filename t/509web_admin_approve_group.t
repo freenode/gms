@@ -84,15 +84,15 @@ my $group3 = $rs->find({ id => 3 });
 ok $group2->status->is_verified, 'verified group is verified';
 ok $group3->status->is_active, 'approved group is active';
 
-my @channel_namespaces = $group2->channel_namespaces;
-my @cloak_namespaces = $group2->cloak_namespaces;
+my @channel_namespaces = $group2->channel_namespaces->search({}, { order_by => 'id' });
+my @cloak_namespaces = $group2->cloak_namespaces->search({}, { order_by => 'id' });
 
 ok $channel_namespaces[0]->status eq 'pending_staff';
-ok $channel_namespaces[1]->status eq 'pending_staff';
-ok $channel_namespaces[2]->status eq 'active';
+ok $channel_namespaces[1]->status eq 'active';
+ok $channel_namespaces[2]->status eq 'pending_staff';
 
-ok $cloak_namespaces[0]->status eq 'pending_staff';
-ok $cloak_namespaces[1]->status eq 'active';
+ok $cloak_namespaces[0]->status eq 'active';
+ok $cloak_namespaces[1]->status eq 'pending_staff';
 
 $ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
     {
