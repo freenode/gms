@@ -252,7 +252,10 @@ sub new {
         } elsif (length $args->{cloak} > 63) {
             push @errors, "The cloak is too long.";
             $valid = 0;
-        } elsif ( (split '', $parts[-1])[0] =~ /[0-9]/ ) {
+        } elsif ($role =~ qr|/$|) {
+            push @errors, "The cloak cannot end with a slash.";
+            $valid = 0;
+        } elsif ($parts[-1] =~ /^[0-9]/) {
             push @errors, "The cloak provided looks like a CIDR mask.";
             $valid = 0;
         }

@@ -103,6 +103,14 @@ throws_ok {
 throws_ok {
     $schema->resultset('CloakChange')->create({
             'target'     => '3EAB67EC',
+            'cloak'      => 'cloak/foo/bar/',
+            'changed_by' => '3EAB67EC',
+        })
+} qr/The cloak cannot end with a slash/;
+
+throws_ok {
+    $schema->resultset('CloakChange')->create({
+            'target'     => '3EAB67EC',
             'cloak'      => 'cloak/42',
             'changed_by' => '3EAB67EC',
         })
