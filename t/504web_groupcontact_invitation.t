@@ -135,4 +135,11 @@ $ua->get("http://localhost/group/1/view");
 
 $ua->text_like(qr/Pending Contacts.*test03/, "Pending staff contacts still show.");
 
+$admin = $schema->resultset('Account')->find({ accountname => 'admin01' });
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+
+$ua->get_ok("http://localhost/group/1/invite", "Invitation page works");
+$ua->content_contains("The group is not active.", "Inactive groups can't invite");
+
 done_testing;
