@@ -35,11 +35,11 @@ my $group = GMS::Domain::Group->new ( $mockSession, $row );
 
 use Data::Dumper;
 
-my @gcs = $group->group_contacts;
+my @gcs = sort { $a->id cmp $b->id } $group->group_contacts;
 is scalar @gcs, 2;
 
-is $gcs[0]->contact->account->accountname, 'account49';
-is $gcs[1]->contact->account->accountname, 'admin';
+is $gcs[0]->contact->account->accountname, 'admin';
+is $gcs[1]->contact->account->accountname, 'account49';
 
 my @active_gcs = $group->active_group_contacts;
 
