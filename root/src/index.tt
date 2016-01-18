@@ -2,4 +2,15 @@
 
 <h3>Welcome to the Group Management System.</h3>
 
-<p> There isn't much here just now. </p>
+<p>GMS allows groups to manage their groups, take over channels, assign cloaks, and more.</p>
+<p>Need help? Staff are around in #freenode.</p>
+<p>
+You can report bugs and issues on the <a href="https://github.com/freenode/gms" target="_blank">Github project page.</a>
+</p>
+
+[% IF !c.user_exists %]
+  <p>Please log in with your Atheme username and password on the top right to use GMS.</p>
+[% ELSE %]
+  <p>Please use the buttons to the left to choose an option.</p>
+
+[% END %]
