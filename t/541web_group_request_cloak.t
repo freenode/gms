@@ -198,6 +198,15 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("Successfully requested 1 cloak(s)", "Requesting cloak wokrs");
+$ua->content_contains("Successfully requested 1 cloak(s)", "Requesting cloak works");
+
+my $group = $schema->resultset('Group')->find({ group_name => 'group020' });
+my $admin = $schema->resultset('Account')->find({ accountname => 'admin' });
+
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+$ua->get_ok("http://localhost/group/2/cloak", "Cloak page works");
+$ua->content_contains("The group is not active", "Can't set cloaks on inactive group");
+
 
 done_testing;

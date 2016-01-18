@@ -127,4 +127,14 @@ $ua->submit_form (
 
 $ua->content_contains ("Test error", "Errors are shown");
 
+
+my $group = $schema->resultset('Group')->find({ group_name => 'group020' });
+my $admin = $schema->resultset('Account')->find({ accountname => 'admin' });
+
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+$ua->get_ok("http://localhost/group/2/listvhost", "List Cloak page works");
+$ua->content_contains("The group is not active", "Can't list cloaks on inactive group");
+
+
 done_testing;
