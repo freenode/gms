@@ -757,6 +757,7 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
         my $accountname = $p->{'accountname_' . $i};
         my $namespace = $p->{'cloak_namespace_' . $i};
         my $cloak = $p->{'cloak_' . $i};
+        my $completecloak= "$namespace/$cloak";
 
         my $req = {
             accountname => $accountname,
@@ -783,22 +784,28 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
             push @reqs, $req;
             next;
         }
+        
+        if($completecloak !~ /[^a-z0-9A-Z\-\/\.\:]+$/ || $completecloak =~ /^[\.\/\:]/ || $completecloak =~ /[\:\/]$/) {
+            push (@errors, "The cloak ($completecloak) provided is invalid");
+            push @reqs, $req;
+            next;
+        }
 
         try {
-            $change_rs->create ({ target => $account->id, cloak => "$namespace/$cloak", changed_by => $c->user->account, group => $group });
+            $change_rs->create ({ target => $account->id, cloak => "$completecloak", changed_by => $c->user->account, group => $group });
             ++$success_count;
 
             notice_staff_chan(
                 $c,
                 "Cloak request for " . $group->group_name . ": " .
-                $account->accountname . " -> $namespace/$cloak"
+                $account->accountname . " -> $completecloak"
             );
 
             memo(
                 $c,
                 $account->accountname,
                 "You have a pending cloak request from " . $group->group_name .
-                ". Cloak: $namespace/$cloak. Please go to " .
+                ". Cloak: $completecloak. Please go to " .
                 $c->uri_for('/cloak') . " to accept or deny."
             );
         }
@@ -834,6 +841,12 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
             catch (RPC::Atheme::Error $e) {
                 push (@errors, $e->description);
                 $cloaks .= "$req\n";
+                next;
+            }
+
+            if ($cloak !~ /[^a-z0-9A-Z\-\/\.\:]+$/ || $cloak =~ /^[\.\/\:]/ || $cloak =~ /[\:\/]$/) {
+                push (@errors, "The cloak ($cloak) provided is invalid");
+                push @reqs, $req;
                 next;
             }
 
