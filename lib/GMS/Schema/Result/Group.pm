@@ -747,7 +747,8 @@ sub auto_verify {
 
         if ($dns_query) {
             foreach my $result ($dns_query->answer) {
-                if ($result->{char_str_list} && $result->{char_str_list}->[0] eq $self->verify_dns) {
+                my @txts = $result->char_str_list;
+                if (scalar @txts == 1 && $txts[0] eq $self->verify_dns) {
                     $self->change (
                         $account,
                         'workflow_change', { status => 'pending_auto' }
@@ -762,7 +763,7 @@ sub auto_verify {
 
         if ($dns_query) {
             foreach my $result ($dns_query->answer) {
-                if ($result->{address} && $result->{address} eq '127.0.0.127') {
+                if (defined $result->address && $result->address eq '127.0.0.127') {
                     $self->change (
                         $account,
                         'workflow_change', { status => 'pending_auto' }

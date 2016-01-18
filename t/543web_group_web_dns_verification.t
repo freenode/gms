@@ -80,16 +80,17 @@ $ua->submit_form;
 
 $ua->content_contains ("successfully verified", "Web verification worked");
 
-my $mock = Test::MockObject->new;
-
 $group = $schema->resultset('Group')->find({ id => 7 });
 
-$mock->mock ('answer' => sub { { 'char_str_list' => [ $group->verify_dns ] } });
+my $mockRecord = Test::MockObject->new;
+$mockRecord->mock ('char_str_list' => sub { $group->verify_dns });
 
-my $search;
+my $mockResponse = Test::MockObject->new;
+$mockResponse->mock ('answer' => sub { $mockRecord });
 
 my $mockDNS = Test::MockModule->new ('Net::DNS::Resolver');
-$mockDNS->mock ('search', sub { shift @_; $search = $_[0]; $mock });
+my $search;
+$mockDNS->mock ('search', sub { $search = $_[1]; $mockResponse });
 
 $ua->get_ok ("http://localhost/group/7/verify", "Verification page works");
 $ua->submit_form;
