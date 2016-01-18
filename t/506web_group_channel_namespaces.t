@@ -136,4 +136,13 @@ $ua->submit_form(
 );
 $ua->content_contains("Channel namespaces must contain only alphanumeric characters, underscores, and dots", "Errors are shown");
 
+
+my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
+my $admin = $schema->resultset('Account')->find({ accountname => 'admin01' });
+
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+$ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Channel namespace page works");
+$ua->content_contains("The group is not active", "Can't assign channel namespaces on inactive group");
+
 done_testing;
