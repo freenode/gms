@@ -79,17 +79,19 @@
 
 <h3>Actions:</h3>
 <ul class="list-group">
-[% IF group.status.is_pending_web -%]
+[% IF group.status.is_submitted || group.status.is_pending_web || group.status.is_pending_staff %]
 <li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/verify"); %]">Verify Group</a>
 </li>
 [% END %]
-[% IF group.status.is_active -%]
-<li class="list-group-item">
-<a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
-</li>
+[% IF !group.status.is_deleted %]
 <li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/edit"); %]">Edit Group Information</a>
+</li>
+[% END %]
+[% IF group.status.is_active %]
+<li class="list-group-item">
+<a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
 </li>
 <li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/take_over"); %]">Take over a channel that's in the group's namespace.</a>
