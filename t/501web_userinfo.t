@@ -42,7 +42,11 @@ ok($account, "Check account exists");
 
 ok !$account->contact, "Account doesn't yet have contact info";
 
-$ua->submit_form;
+$ua->submit_form(
+    fields => {
+        user_email => ''
+    }
+);
 
 $ua->content_contains("Your name can't be empty", "Errors are shown");
 $ua->content_contains("Your email can't be empty", "Errors are shown");
