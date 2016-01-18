@@ -87,12 +87,12 @@ ok $group3->status->is_active, 'approved group is active';
 my @channel_namespaces = $group2->channel_namespaces->search({}, { order_by => 'id' });
 my @cloak_namespaces = $group2->cloak_namespaces->search({}, { order_by => 'id' });
 
-ok $channel_namespaces[0]->status eq 'pending_staff';
-ok $channel_namespaces[1]->status eq 'active';
-ok $channel_namespaces[2]->status eq 'pending_staff';
+is $channel_namespaces[0]->status, 'pending_staff';
+is $channel_namespaces[1]->status, 'active';
+is $channel_namespaces[2]->status, 'pending_staff';
 
-ok $cloak_namespaces[0]->status eq 'active';
-ok $cloak_namespaces[1]->status eq 'pending_staff';
+is $cloak_namespaces[0]->status, 'active';
+is $cloak_namespaces[1]->status, 'pending_staff';
 
 $ua->post_ok ('http://localhost/json/admin/approve_groups/submit/',
     {
@@ -105,12 +105,12 @@ $group2->discard_changes;
 @channel_namespaces = $group2->channel_namespaces;
 @cloak_namespaces = $group2->cloak_namespaces;
 
-ok $channel_namespaces[0]->status eq 'deleted', 'all namespaces are deleted';
-ok $channel_namespaces[1]->status eq 'deleted', 'all namespaces are deleted';
-ok $channel_namespaces[2]->status eq 'deleted', 'all namespaces are deleted';
+is $channel_namespaces[0]->status, 'deleted', 'all namespaces are deleted';
+is $channel_namespaces[1]->status, 'deleted', 'all namespaces are deleted';
+is $channel_namespaces[2]->status, 'deleted', 'all namespaces are deleted';
 
-ok $cloak_namespaces[0]->status eq 'deleted', 'all namespaces are deleted';
-ok $cloak_namespaces[1]->status eq 'deleted', 'all namespaces are deleted';
+is $cloak_namespaces[0]->status, 'deleted', 'all namespaces are deleted';
+is $cloak_namespaces[1]->status, 'deleted', 'all namespaces are deleted';
 
 
 ok $group2->status->is_deleted, 'group is now deleted';

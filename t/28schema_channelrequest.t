@@ -166,7 +166,7 @@ is $schema->resultset('ChannelRequest')->search_failed->count, 1, ' 1 failed req
 
 my $pending = $schema->resultset('ChannelRequest')->search_pending;
 
-ok $pending->count == 17, "17 pending requests";
+is $pending->count, 17, "17 pending requests";
 
 my $req = $pending->find({ "namespace.namespace" => "group0" }, { join => "namespace" });
 
@@ -179,7 +179,7 @@ $req = $pending->find({ "namespace.namespace" => "group0" }, { join => "namespac
 
 ok !$req, 'Request is not valid anymore, since the namespace is gone';
 
-ok $pending->count == 16;
+is $pending->count, 16;
 
 
 

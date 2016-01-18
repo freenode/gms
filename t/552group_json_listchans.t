@@ -70,7 +70,7 @@ my $json = decode_json($ua->content);
 
 $ua->get("http://localhost/json/group/2/listchans", "Listing channels page");
 
-ok $ua->response->code == 404, "Can't access nonexistant group";
+is $ua->response->code, 404, "Can't access nonexistant group";
 
 my $json = decode_json($ua->content);
 ok !$json->{json_success};
@@ -86,6 +86,6 @@ $ua->get("http://localhost/json/group/1/listchans", "Listing channels page");
 my $json = decode_json($ua->content);
 ok !$json->{json_success};
 
-ok $json->{json_error} eq 'Could not talk to Atheme: Test error', 'Error is shown';
+is $json->{json_error}, 'Could not talk to Atheme: Test error', 'Error is shown';
 
 done_testing;

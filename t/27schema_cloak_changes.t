@@ -144,7 +144,7 @@ lives_ok {
 
 my $pending = $schema->resultset('CloakChange')->search_pending;
 
-ok $pending->count == 17, "17 pending requests";
+is $pending->count, 17, "17 pending requests";
 
 my $req = $pending->find({ "namespace.namespace" => "group40" }, { join => "namespace" });
 
@@ -157,7 +157,7 @@ $req = $pending->find({ "namespace.namespace" => "group0" }, { join => "namespac
 
 ok !$req, 'Request is not valid anymore, since the namespace is gone';
 
-ok $pending->count == 16;
+is $pending->count, 16;
 
 warn $pending->count;
 

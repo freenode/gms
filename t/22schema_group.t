@@ -512,16 +512,16 @@ my $cloak_namespace = $group->add_to_cloak_namespaces ({
     });
 
 ok $namespace;
-ok $namespace->status eq 'active';
+is $namespace->status, 'active';
 
 ok $cloak_namespace;
-ok $cloak_namespace->status eq 'active';
+is $cloak_namespace->status, 'active';
 
 ok $group->change ( $adminaccount, 'admin', { 'status' => 'deleted' });
 $namespace->discard_changes;
 $cloak_namespace->discard_changes;
 
-ok $namespace->status eq 'deleted', 'namespaces are deleted when deleting a group';
-ok $cloak_namespace->status eq 'deleted', 'namespaces are deleted when deleting a group';
+is $namespace->status, 'deleted', 'namespaces are deleted when deleting a group';
+is $cloak_namespace->status, 'deleted', 'namespaces are deleted when deleting a group';
 
 done_testing;

@@ -36,26 +36,26 @@ my $group = GMS::Domain::Group->new ( $mockSession, $row );
 use Data::Dumper;
 
 my @gcs = $group->group_contacts;
-ok scalar @gcs eq 2;
+is scalar @gcs, 2;
 
-ok $gcs[0]->contact->account->accountname eq 'account49';
-ok $gcs[1]->contact->account->accountname eq 'admin';
+is $gcs[0]->contact->account->accountname, 'account49';
+is $gcs[1]->contact->account->accountname, 'admin';
 
 my @active_gcs = $group->active_group_contacts;
 
-ok scalar @active_gcs eq 1;
+is scalar @active_gcs, 1;
 
-ok $active_gcs[0]->contact->account->accountname eq 'account49';
+is $active_gcs[0]->contact->account->accountname, 'account49';
 
 my @editable_gcs = $group->editable_group_contacts;
 
-ok scalar @editable_gcs eq 2, 'Retired gcs should show up here';
+is scalar @editable_gcs, 2, 'Retired gcs should show up here';
 
 my @active_contacts = $group->active_contacts;
 
-ok scalar @active_contacts eq 1;
+is scalar @active_contacts, 1;
 
-ok $active_contacts[0]->account->accountname eq 'account49';
+is $active_contacts[0]->account->accountname, 'account49';
 
 $mockGroupContact->mock ('new', sub {
         die GMS::Exception->new ("Test error");

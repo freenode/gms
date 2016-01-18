@@ -58,9 +58,9 @@ $ua->content_contains("Your contact information has been updated", "Check defini
 my $contact = $account->contact;
 ok($contact, "Check contact exists");
 
-ok($contact->name eq 'Contact Test', "Check contact has the right name");
-ok($contact->email eq 'test01@example.com', "Check contact has the right email");
-ok($contact->active_change->phone eq '1234', "Check phone is correct");
+is $contact->name, 'Contact Test', "Check contact has the right name";
+is $contact->email, 'test01@example.com', "Check contact has the right email";
+is $contact->active_change->phone, '1234', "Check phone is correct";
 
 $ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
 
@@ -73,8 +73,8 @@ $ua->content_contains("Successfully changed contact info", "Check editing contac
 
 $contact->discard_changes;
 
-ok $contact->name eq 'Second Contact Test', 'Changing info works';
-ok $contact->email eq 'test03@example.com';
+is $contact->name, 'Second Contact Test', 'Changing info works';
+is $contact->email, 'test03@example.com';
 
 $ua->get_ok("http://localhost/userinfo/edit", "Check contact info editing form");
 
