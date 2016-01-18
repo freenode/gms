@@ -14,7 +14,7 @@ $mock->mock('new', sub { });
 $mock->mock('notice_staff_chan', sub {});
 
 
-need_database 'approved_group';
+my $schema = need_database 'approved_group';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 
@@ -80,5 +80,13 @@ ok $ua->content_contains ("Successfully requested the GroupContactChanges", "Sub
 $ua->get_ok("http://localhost/group/1/edit_gc", "Edit group contacts page works");
 
 ok $ua->content_contains ('name="primary_2" value="1"  checked  />', "Primary checkbox is checked.");
+
+my $admin = $schema->resultset('Account')->find({ accountname => 'admin01' });
+my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
+
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+$ua->get_ok("http://localhost/group/1/edit_gc", "Edit group contacts page works");
+$ua->content_contains("The group is not active", "Can't edit gcs of inactive groups");
 
 done_testing;

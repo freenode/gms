@@ -142,4 +142,23 @@ $group->change( $admin, 'workflow_change', { status => 'pending_staff' });
 $ua->get_ok("http://localhost/group/1/invite", "Invitation page works");
 $ua->content_contains("The group is not active.", "Inactive groups can't invite");
 
+$ua->get("http://localhost/logout");
+$ua->get_ok("http://localhost/login", "Check login page works");
+
+$ua->submit_form(
+    fields => {
+        username => 'test03',
+        password => 'tester03'
+    }
+);
+
+$ua->content_contains("You are now logged in as test03", "Check we can log in");
+
+$ua->get_ok("http://localhost/group/1/invite/accept", "Accept invitation page works");
+$ua->content_contains("The group is not active.", "Can't accept invitations to inactive groups");
+
+$ua->get_ok("http://localhost/group/1/invite/decline", "Accept invitation page works");
+$ua->content_contains("The group is not active.", "Can't accept invitations to inactive groups");
+
+
 done_testing;
