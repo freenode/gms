@@ -101,4 +101,12 @@ $ua->submit_form(
 
 $ua->content_contains('example2-3', 'Pending requests are shown');
 
+my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
+my $admin = $schema->resultset('Account')->find({ accountname => 'admin01' });
+
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+$ua->get_ok("http://localhost/group/1/listchans", "Listchans page works");
+$ua->content_contains("The group is not active", "Can't list channels on inactive group");
+
 done_testing;

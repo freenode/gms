@@ -14,7 +14,7 @@ $mock->mock('notice_staff_chan', sub {});
 my $mockDNS = Test::MockModule->new ('Net::DNS::Resolver');
 $mockDNS->mock ('search', sub { });
 
-need_database 'three_groups';
+my $db = need_database 'three_groups';
 
 # We don't want this right now.
 
@@ -68,5 +68,14 @@ $ua->submit_form(
 );
 
 $ua->content_contains("Please wait for staff to verify", "Submitting verification form works");
+
+my $admin = $db->resultset('Account')->find({ accountname => 'admin01' });
+my $group = $db->resultset('Group')->find({ id => 3 });
+
+$group->verify($admin, '');
+
+$ua->get_ok ("http://localhost/group/3/verify", "Verification page works");
+$ua->content_contains("The group has already been verified", "Can't verify verified groups.");
+
 
 done_testing;

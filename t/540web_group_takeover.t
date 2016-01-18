@@ -166,4 +166,12 @@ $ua->submit_form(
 
 $ua->content_contains ("Successfully requested the channel take over", "Transfer works");
 
+my $group = $schema->resultset('Group')->find({ group_name => 'group01' });
+my $admin = $schema->resultset('Account')->find({ accountname => 'admin01' });
+
+$group->change( $admin, 'workflow_change', { status => 'pending_staff' });
+
+$ua->get_ok("http://localhost/group/1/take_over", "Take over page works");
+$ua->content_contains("The group is not active", "Can't take over on inactive group");
+
 done_testing;

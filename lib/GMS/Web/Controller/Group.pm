@@ -112,6 +112,38 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
     }
 }
 
+=head2 active_group
+
+Handler for active groups. Redirects to the view page with an error message
+if the selected group is not active.
+
+=cut
+
+sub active_group :Chained('single_group') :PathPart('') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+    my $group = $c->stash->{group};
+    if ( !$group->status->is_active ) {
+        $c->stash->{error_msg} = 'The group is not active.';
+        $c->detach('view');
+    }
+}
+
+=head2 verifiable_group
+
+Handler for groups that can request verification. Redirects to the view page
+with an error message if the selected group is already verified.
+
+=cut
+
+sub verifiable_group :Chained('single_group') :PathPart('') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+    my $group = $c->stash->{group};
+    if ( !$group->status->is_submitted && !$group->status->is_pending_web && !$group->status->is_pending_staff) {
+        $c->stash->{error_msg} = 'The group has already been verified.';
+        $c->detach('view');
+    }
+}
+
 =head2 view
 
 Displays a group's information to one of its contacts.
@@ -145,7 +177,7 @@ Presents the form with the available verification methods.
 
 =cut
 
-sub verify :Chained('single_group') :PathPart('verify') :Args(0) {
+sub verify :Chained('verifiable_group') :PathPart('verify') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'group/verify.tt';
@@ -159,7 +191,7 @@ been left empty.
 
 =cut
 
-sub verify_submit :Chained('single_group') :PathPart('verify/submit') :Args(0) {
+sub verify_submit :Chained('verifiable_group') :PathPart('verify/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -199,7 +231,7 @@ Presents the form to invite a group contact to the group.
 
 =cut
 
-sub invite :Chained('single_group') :PathPart('invite') :Args(0) {
+sub invite :Chained('active_group') :PathPart('invite') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'group/invite.tt';
@@ -212,7 +244,7 @@ as having been invited.
 
 =cut
 
-sub invite_submit :Chained('single_group') :PathPart('invite/submit') :Args(0) {
+sub invite_submit :Chained('active_group') :PathPart('invite/submit') :Args(0) {
     my ($self, $c) = @_;
     my $account;
 
@@ -260,7 +292,7 @@ as pending staff approval.
 
 =cut
 
-sub invite_accept :Chained('single_group') :PathPart('invite/accept') :Args(0) {
+sub invite_accept :Chained('active_group') :PathPart('invite/accept') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -286,7 +318,7 @@ Allows the group contact to reject the invitation to the group.
 
 =cut
 
-sub invite_decline :Chained('single_group') :PathPart('invite/decline') :Args(0) {
+sub invite_decline :Chained('active_group') :PathPart('invite/decline') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -431,7 +463,7 @@ GroupContacts can edit information for active and retired contacts.
 
 =cut
 
-sub edit_gc :Chained('single_group') :PathPart('edit_gc') :Args(0) {
+sub edit_gc :Chained('active_group') :PathPart('edit_gc') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -449,7 +481,7 @@ GroupContactChange with 'request' as the change type.
 
 =cut
 
-sub do_edit_gc :Chained('single_group') :PathPart('edit_gc/submit') :Args(0) {
+sub do_edit_gc :Chained('active_group') :PathPart('edit_gc/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -500,7 +532,7 @@ Displays the form to take over channels for the group.
 
 =cut
 
-sub take_over :Chained('single_group') :PathPart('take_over') :Args(0) {
+sub take_over :Chained('active_group') :PathPart('take_over') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -520,7 +552,7 @@ the change to staff.
 
 =cut
 
-sub do_take_over :Chained('single_group') :PathPart('take_over/submit') :Args(0) {
+sub do_take_over :Chained('active_group') :PathPart('take_over/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $pass = $c->req->body_params->{__auth_pass};
@@ -684,7 +716,7 @@ Displays the form to request a group cloak for the user.
 
 =cut
 
-sub cloak :Chained('single_group') :PathPart('cloak') :Args(0) {
+sub cloak :Chained('active_group') :PathPart('cloak') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -706,7 +738,7 @@ Processes the form to request a group cloak for a user.
 
 =cut
 
-sub do_cloak :Chained('single_group') :PathPart('cloak/submit') :Args(0) {
+sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group_row};
@@ -874,7 +906,7 @@ the group's cloak namespaces.
 
 =cut
 
-sub listvhost :Chained('single_group') :PathPart('listvhost') :Args(0) {
+sub listvhost :Chained('active_group') :PathPart('listvhost') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -899,7 +931,7 @@ are cloaked under one of the group's cloak namespaces.
 
 =cut
 
-sub do_listvhost :Chained('single_group') :PathPart('listvhost/submit') :Args(0) {
+sub do_listvhost :Chained('active_group') :PathPart('listvhost/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -952,7 +984,7 @@ request changes or request a new namespace.
 
 =cut
 
-sub edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces') :Args(0) {
+sub edit_channel_namespaces :Chained('active_group') :PathPart('edit_channel_namespaces') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -970,7 +1002,7 @@ Processes the form to edit channel namespaces or add a new channel namespace for
 
 =cut
 
-sub do_edit_channel_namespaces :Chained('single_group') :PathPart('edit_channel_namespaces/submit') :Args(0) {
+sub do_edit_channel_namespaces :Chained('active_group') :PathPart('edit_channel_namespaces/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -1062,7 +1094,7 @@ request changes or request a new namespace.
 
 =cut
 
-sub edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces') :Args(0) {
+sub edit_cloak_namespaces :Chained('active_group') :PathPart('edit_cloak_namespaces') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -1080,7 +1112,7 @@ Processes the form to edit cloak namespaces or add a new cloak namespace for the
 
 =cut
 
-sub do_edit_cloak_namespaces :Chained('single_group') :PathPart('edit_cloak_namespaces/submit') :Args(0) {
+sub do_edit_cloak_namespaces :Chained('active_group') :PathPart('edit_cloak_namespaces/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -1344,7 +1376,7 @@ Displays a list of channels under the group's channel namespaces
 
 =cut
 
-sub listchans :Chained('single_group') :PathPart('listchans') :Args(0) {
+sub listchans :Chained('active_group') :PathPart('listchans') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
@@ -1368,7 +1400,7 @@ Process the L</listchans> form.
 
 =cut
 
-sub do_listchans :Chained('single_group') :PathPart('listchans/submit') :Args(0) {
+sub do_listchans :Chained('active_group') :PathPart('listchans/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $group = $c->stash->{group};
