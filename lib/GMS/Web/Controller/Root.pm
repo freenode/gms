@@ -45,7 +45,7 @@ error page.
 
 =cut
 
-sub default :Path {
+sub default :Private {
     my ( $self, $c ) = @_;
     $c->response->status(404);
     $c->response->body('');
@@ -61,7 +61,7 @@ It presents a 403 error page.
 
 =cut
 
-sub forbidden :Path('403') :Args(0) {
+sub forbidden :Private {
     my ($self, $c) = @_;
     $c->response->status(403);
     $c->response->body('');
@@ -77,7 +77,7 @@ It presents a 400 error page.
 
 =cut
 
-sub bad_request :Path('400') :Args(0) {
+sub bad_request :Private {
     my ($self, $c) = @_;
     $c->response->status(400);
     $c->response->body('');
