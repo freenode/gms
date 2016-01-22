@@ -190,18 +190,11 @@ sub new {
     if (! $args->{phone}) {
         push @errors, "Telephone number is missing";
         $valid = 0;
-    } elsif ($args->{phone} =~ /[^0-9 \+-]/) {
-        push @errors, "Telephone number contains non-digit characters";
-        $valid = 0;
     } elsif (length $args->{phone} > 32) {
         push @errors, "Phone can be up to 32 characters.";
         $valid = 0;
     }
 
-    if ($args->{phone2} && $args->{phone2} =~ /[^0-9 \+-]/) {
-        push @errors, "Alternate telephone number contains non-digit characters";
-        $valid = 0;
-    }
     if ($args->{phone2} && length $args->{phone2} > 32) {
         push @errors, "Alternate Phone can be up to 32 characters.";
         $valid = 0;

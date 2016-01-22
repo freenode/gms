@@ -82,25 +82,6 @@ $ua->get_ok("http://localhost/admin/group/1/edit", "Edit group page works");
 
 $ua->submit_form(
     fields => {
-        has_address => 'y',
-        update_address => 'y',
-        address_one => 'new_address',
-        city => 'city',
-        state => 'state',
-        code => '001',
-        country => 'country',
-        phone => 'invalid'
-    }
-);
-
-$ua->content_contains ("The address provided is not valid. Please fill in all required fields.", "Invalid address errors are shown");
-
-$ua->content_contains ("Telephone number contains non-digit characters", "Invalid address errors are shown");
-
-$ua->get_ok("http://localhost/admin/group/1/edit", "Edit group page works");
-
-$ua->submit_form(
-    fields => {
         url => 'http://example.org',
         has_address => 'y',
         update_address => 'y',

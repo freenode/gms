@@ -25,25 +25,6 @@ is_deeply $error->message, [
 
 eval {
     $schema->resultset('Address')->create({
-            address_one => 'test',
-            address_two => 'test',
-            city => 'test',
-            country => 'test',
-            phone => 'invalid',
-            phone2 => 'invalid'
-        });
-};
-$error = $@;
-isa_ok $error, 'GMS::Exception::InvalidAddress';
-
-is_deeply $error->message, [
-    "Telephone number contains non-digit characters",
-    "Alternate telephone number contains non-digit characters",
-], "Test more field validation";
-
-
-eval {
-    $schema->resultset('Address')->create({
         address_one => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in dui dolor, vitae interdum lacus. Mauris rhoncus pretium sem, vel euismod quam vehicula eu. Suspendisse vitae erat ipsum, non venenatis leo. Donec diam odio, tincidunt sit amet congue nullam.',
         address_two => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in dui dolor, vitae interdum lacus. Mauris rhoncus pretium sem, vel euismod quam vehicula eu. Suspendisse vitae erat ipsum, non venenatis leo. Donec diam odio, tincidunt sit amet congue nullam.',
         city => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in dui dolor, vitae interdum lacus. Mauris rhoncus pretium sem, vel euismod quam vehicula eu. Suspendisse vitae erat ipsum, non venenatis leo. Donec diam odio, tincidunt sit amet congue nullam.',
@@ -73,7 +54,7 @@ ok $schema->resultset ('Address')->create({
         city => 'Valid data',
         state => 'Valid data',
         code => 'Valid data',
-        phone => '0123456789',
+        phone => '+0(123)45-67 ex 89 ',
         country => 'Valid data',
     }), 'Inserting valid data works';
 
