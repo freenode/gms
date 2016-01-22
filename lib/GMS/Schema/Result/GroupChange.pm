@@ -346,7 +346,7 @@ sub new {
     } else {
         if ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
             push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
-                       "0-9, :_+-/)";
+                       "0-9, :./_+-)";
             $valid = 0;
         }
         if (length $args->{url} > 64) {

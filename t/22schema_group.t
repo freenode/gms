@@ -50,7 +50,7 @@ $error = $@;
 isa_ok $error, 'GMS::Exception::InvalidGroup';
 is_deeply $error->message, [
     "Group name must contain only alphanumeric characters, space, underscores, hyphens and dots.",
-    "Group URL contains invalid characters (valid characters are a-z, A-Z, 0-9, :_+-/)"
+    "Group URL contains invalid characters (valid characters are a-z, A-Z, 0-9, :./_+-)"
 ], "Test more group validation";
 
 #
@@ -375,7 +375,7 @@ $error = $@;
 ok $error;
 
 is_deeply $error->message, [
-    "Group URL contains invalid characters (valid characters are a-z, A-Z, 0-9, :_+-/)"
+    "Group URL contains invalid characters (valid characters are a-z, A-Z, 0-9, :./_+-)"
 ];
 
 eval {

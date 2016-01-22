@@ -443,7 +443,7 @@ sub new {
     }
     elsif ($args->{url} !~ /^[a-zA-Z0-9:\.\/_?+-]*$/) {
         push @errors, "Group URL contains invalid characters (valid characters are a-z, A-Z, " .
-                       "0-9, :_+-/)";
+                       "0-9, :./_+-)";
         $valid = 0;
     } elsif (length $args->{url} > 64) {
         push @errors, "Group URL must be up to 64 characters.";

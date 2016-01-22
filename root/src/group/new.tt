@@ -31,21 +31,21 @@ to help us verify your registration.</p>
     <div class="form-group">
         <label for="group_name" class="col-sm-3 control-label">* Group Name</label>
         <div class="input-group col-sm-9">
-            <input type="text" required id="group_name" name="group_name" class="form-control" value="[% group_name | html %]" />
+            <input type="text" required pattern="[A-Za-z0-9 _\.-]*$" maxlength="32" title="Group name must contain only alphanumeric characters, space, underscores, hyphens and dots" id="group_name" name="group_name" class="form-control" value="[% group_name | html %]" />
             <span class="input-group-addon" onmouseover="tooltip(this, 2)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
         </div>
     </div>
     <div class="form-group">
         <label for="group_url" class="col-sm-3 control-label">* Group URL</label>
         <div class="input-group col-sm-9">
-            <input type="text" required id="group_url" name="group_url" class="form-control" value="[% group_url | html %]" />
+            <input type="text" required pattern="[a-zA-Z0-9:\./_?+-]*$" maxlength="64" title="Group URL must contain only alphanumeric characters, and ./:_?+-" id="group_url" name="group_url" class="form-control" value="[% group_url | html %]" />
             <span class="input-group-addon" onmouseover="tooltip(this, 3)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
         </div>
     </div>
     <div class="form-group">
         <label for="group_cns" class="col-sm-3 control-label">* Channel Namespace</label>
         <div class="input-group col-sm-9">
-            <input type="text" required id="group_cns" name="channel_namespace" class="form-control" value="[% channel_namespace | html %]" />
+            <input type="text" required pattern="#?[A-Za-z0-9_\.]*(-\*)?$" maxlength="50" title="Channel namespaces must contain only alphanumeric characters, underscores, and dots" id="group_cns" name="channel_namespace" class="form-control" value="[% channel_namespace | html %]" />
             <span class="input-group-addon" onmouseover="tooltip(this, 4)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
         </div>
     </div>
@@ -71,37 +71,37 @@ to help us verify your registration.</p>
     <div class="form-group" name="addr_hide">
         <label for="addr1" class="col-sm-3 control-label">* Address 1</label>
         <div class="col-sm-9">
-            <input id="addr1" type="text" name="address_one" class="form-control" value="[% address_one | html %]" />
+            <input id="addr1" type="text" maxlength="255" name="address_one" class="form-control" value="[% address_one | html %]" />
         </div>
     </div>
     <div class="form-group" name="addr_hide">
         <label for="addr2" class="col-sm-3 control-label">Address 2</label>
         <div class="col-sm-9">
-            <input id="addr2" type="text" name="address_two" class="form-control" value="[% address_two | html %]" />
+            <input id="addr2" type="text" maxlength="255" name="address_two" class="form-control" value="[% address_two | html %]" />
         </div>
     </div>
     <div class="form-group" name="addr_hide">
         <label for="addr2" class="col-sm-3 control-label">* City</label>
         <div class="col-sm-9">
-            <input id="city" type="text" name="city" class="form-control" value="[% city | html %]" />
+            <input id="city" type="text" maxlength="255" name="city" class="form-control" value="[% city | html %]" />
         </div>
     </div>
     <div class="form-group" name="addr_hide">
         <label for="state" class="col-sm-3 control-label">State</label>
         <div class="col-sm-9">
-            <input id="state" type="text" name="state" class="form-control" value="[% state | html %]" />
+            <input id="state" type="text" maxlength="255" name="state" class="form-control" value="[% state | html %]" />
         </div>
     </div>
     <div class="form-group" name="addr_hide"> 
         <label for="pcode" class="col-sm-3 control-label">Postal Code</label>
         <div class="col-sm-9">
-            <input id="pcode" type="text" name="postcode" class="form-control" value="[% postcode | html %]" />
+            <input id="pcode" type="text" maxlength="32" name="postcode" class="form-control" value="[% postcode | html %]" />
         </div>
     </div>
     <div class="form-group" name="addr_hide">
         <label for="country" class="col-sm-3 control-label">* Country</label>
         <div class="col-sm-9">
-            <input id="country" type="text" name="country" class="form-control" value="[% country | html %]" />
+            <input id="country" type="text" maxlength="64" name="country" class="form-control" value="[% country | html %]" />
         </div>
     </div>
     <div class="form-group" name="addr_hide">

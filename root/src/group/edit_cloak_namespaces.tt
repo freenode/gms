@@ -64,7 +64,7 @@
     <div class="form-group margin30">
         <label class="col-sm-3 control-label">Add a new namespace</label>
         <div class="col-sm-9">
-            <input type='text' name='namespace' value="[% prev_namespace | html %]" class="form-control" />
+            <input type='text' pattern="@?[A-Za-z0-9][A-Za-z0-9\.]*[/\*]*$" maxlength="63" title="Cloak namespaces must contain only alphanumeric characters and dots, but may not begin with a dot" name='namespace' value="[% prev_namespace | html %]" class="form-control" />
         </div>
     </div>
   [% IF confirm %]
