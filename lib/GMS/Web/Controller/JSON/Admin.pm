@@ -31,7 +31,8 @@ sub base :Chained('/') :PathPart('json/admin') :CaptureArgs(0) {
     if (! $c->check_user_roles('admin')) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You are not an administrator.";
-        $c->detach('/default');
+        $c->response->status(403);
+        $c->detach;
     }
 
     $c->stash->{json_admin} = 1;

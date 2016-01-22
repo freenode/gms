@@ -31,7 +31,8 @@ sub base :Chained('/') :PathPart('json/group') :CaptureArgs(0) :Local :VerifyTok
     if (! $c->user->account || ! $c->user->account->contact) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You are not logged in or have no contact info.";
-        $c->detach('/default');
+        $c->response->status(403);
+        $c->detach;
     }
 }
 
@@ -60,12 +61,13 @@ sub single_group :Chained('base') :PathPart('') :CaptureArgs(1) {
         catch (RPC::Atheme::Error $e) {
             $c->stash->{json_success} = 0;
             $c->stash->{json_error} = "Could not talk to Atheme: " . $e->description;
-            $c->detach('/default');
+            $c->detach;
         }
     } else {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "That group doesn't exist or you can't access it.";
-        $c->detach('/default');
+        $c->response->status(404);
+        $c->detach;
     }
 }
 

@@ -31,7 +31,8 @@ sub base :Chained('/') :PathPart('json/staff') :CaptureArgs(0) {
     if (! $c->check_user_roles('staff') && ! $c->check_user_roles('admin') ) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You are not staff.";
-        $c->detach('/default');
+        $c->response->status(403);
+        $c->detach;
     }
 
     $c->stash->{json_staff} = 1;

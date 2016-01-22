@@ -94,7 +94,7 @@ sub end : ActionClass('RenderView::ErrorHandler') {
     my ($self, $c) = @_;
 
     if ( $c->request->path =~ /^json\// ) {
-        $c->forward('View::JSON');
+        $c->detach('View::JSON');
     } 
 
     if ( $c->check_user_roles("admin") ) {
