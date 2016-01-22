@@ -1,7 +1,7 @@
 package GMS::Web::View::JSON;
 use base qw( Catalyst::View::JSON );
 use JSON::XS ();
-use JSON -convert_blessed_universally;
+use JSON -convert_blessed_universally,-no_export;
 
 sub encode_json {
     my( $self, $c, $data ) = @_;
