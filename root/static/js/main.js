@@ -164,6 +164,11 @@ function sendAjaxRequest (url, method, params, func) {
         return;
     }
 
+    if (!url.match(/\?/))
+      url += "?r=" + (new Date()).getTime();
+    else
+      url += "&r=" + (new Date()).getTime();
+
     xmlHttp.open (method, url, true); //the url and method (GET/POST)
 
     xmlHttp.onreadystatechange =  //the state of the request has changed
