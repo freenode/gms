@@ -1031,4 +1031,27 @@ sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(
 
     $c->stash->{results} = \@results;
 }
+
+=head2 admin
+
+Lists users and roles
+
+=cut
+
+sub admin :Chained('base') :PathPart('admin') {
+    my ($self, $c) = @_;
+
+    my @admins = $c->model('DB::UserRole')->search(
+      {
+        'role.name' => ['admin','staff']
+      },
+      {
+        join => [ 'role', 'account' ]
+      }
+    );
+
+    $c->stash->{admins} = \@admins;
+    $c->stash->{user_id} = $c->user->account->id;
+}
+
 1;

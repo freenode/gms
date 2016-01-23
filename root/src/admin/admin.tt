@@ -1,0 +1,23 @@
+[% META title = 'Administrator management' %]
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th colspan='2'>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+[% FOREACH admin = admins -%]
+    <tr>
+      <td><a href="[% c.uri_for ("/staff/account/${admin.account.id}/view") %]">[% admin.account.accountname | html %]</a></td>
+      <td>[% admin.role.name | html %]</td>
+      <td>
+        [% IF admin.account.id != user_id %]
+          <i class='glyphicon glyphicon-remove'></i>
+        [% END %]
+      </td>
+    </tr>
+[% END -%]
+</tbody>
+</table>
