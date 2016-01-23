@@ -71,3 +71,7 @@ html, body {
 blockquote small {
     font-size: 100% !important;
 }
+
+.clicky {
+  cursor: pointer;
+}

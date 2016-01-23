@@ -14,7 +14,15 @@
       <td>[% admin.role.name | html %]</td>
       <td>
         [% IF admin.account.id != user_id %]
-          <i class='glyphicon glyphicon-remove'></i>
+          <form action="[% c.uri_for ("/admin/admin/delete") %]" method="post">
+          <input type="hidden" name="role" value="[% admin.role.id %]" />
+          <input type="hidden" name="account" value="[% admin.account.id %]" />
+
+          <label for="submit">
+            <i class='glyphicon clicky glyphicon-remove'></i>
+          </label>
+
+          <input type='submit' id='submit' class='hidden' />
         [% END %]
       </td>
     </tr>

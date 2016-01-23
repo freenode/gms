@@ -1054,4 +1054,35 @@ sub admin :Chained('base') :PathPart('admin') {
     $c->stash->{user_id} = $c->user->account->id;
 }
 
+=head2 del_admin
+
+Removes a role from a user.
+
+=cut
+
+sub del_admin :Chained('base') :PathPart('admin/delete') {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+
+    if ($p->{'role'} && $p->{'account'}) {
+        my $admin = $c->model('DB::UserRole')->find({
+            'role_id'     => $p->{'role'},
+            'account_id'  => $p->{'account'}
+          });
+
+        if ($admin) {
+            $admin->delete;
+            $c->flash->{status_msg} = "Successfully removed role.";
+        } else {
+            $c->flash->{error_msg} = "Role not found.";
+        }
+    } else {
+        $c->flash->{error_msg} = "You did not provide a role and user.";
+    }
+
+
+    $c->response->redirect($c->uri_for('/admin/admin'));
+}
+
 1;
