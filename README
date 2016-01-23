@@ -7,6 +7,16 @@ doc/ subdirectory.
 INSTALLING:
 ==========
 
+The New(TM) Easy(TM) way:
+-------------------------
+Follow instructions at  https://github.com/errietta/overlord-deployment/
+(Based on Debian 8, but should also easily work (maybe with few adjustments) on any Debian derivative)
+
+
+The manual way:
+--------------
+
+
 Before anything else
 --------------------
 
