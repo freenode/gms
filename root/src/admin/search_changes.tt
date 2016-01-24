@@ -18,7 +18,8 @@
         <div class="col-sm-9">
             <input type="text" id="gc_accname" name="gc_accname" />
         </div>
-
+    </div>
+    <div class="form-group">
         <label class="col-sm-3 control-label" for="gc_gname">
             Group Name:
         </label>
@@ -51,6 +52,9 @@
         <div class="col-sm-9">
             <input type="text" id="cns" name="namespace" />
         </div>
+    </div>
+    
+    <div class="form-group">
         <label class="col-sm-3 control-label" for="cn_gname">
             Group name:
         </label>
@@ -69,6 +73,8 @@
         <div class="col-sm-9">
             <input type="text" id="clns" name="cloak_namespace" />
         </div>
+    </div>
+    <div class="form-group">
         <label class="col-sm-3 control-label" for="cl_gname">
             Group name:
         </label>
@@ -87,12 +93,14 @@
         <div class="col-sm-9">
             <input type="text" id="channel" name="channel" />
         </div>
-
+    </div>
+    <div class="form-group">
         <label class="col-sm-3 control-label" for="req">Requestor:</label>
         <div class="col-sm-9">
             <input type="text" id="req" name="requestor" />
         </div>
-
+    </div>
+    <div class="form-group">
         <label class="col-sm-3 control-label" for="target">Target:</label>
         <div class="col-sm-9">
             <input type="text" id="target" name="target" />
