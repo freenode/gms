@@ -1050,7 +1050,11 @@ sub admin :Chained('base') :PathPart('admin') {
       }
     );
 
+    my @roles = $c->model('DB::Role')->all;
+
     $c->stash->{admins} = \@admins;
+    $c->stash->{roles} = \@roles;
+
     $c->stash->{user_id} = $c->user->account->id;
 }
 
@@ -1081,6 +1085,63 @@ sub del_admin :Chained('base') :PathPart('admin/delete') {
         $c->flash->{error_msg} = "You did not provide a role and user.";
     }
 
+
+    $c->response->redirect($c->uri_for('/admin/admin'));
+}
+
+
+=head2 add_admin
+
+Adds a role from a user.
+
+=cut
+
+sub add_admin :Chained('base') :PathPart('admin/add') {
+    my ($self, $c) = @_;
+
+    my $p = $c->request->params;
+
+    if ($p->{'role'} && $p->{'account'}) {
+        my $account = $c->model('DB::Account')->find({
+            'accountname' => $p->{'account'}
+        });
+
+        if (!$account) {
+            $c->flash->{error_msg} = "Account not found";
+            $c->response->redirect($c->uri_for('/admin/admin'));
+            $c->detach;
+        }
+
+        my $role = $c->model('DB::Role')->find({
+            'id'     => $p->{'role'},
+          });
+
+        if (!$role) {
+            $c->flash->{error_msg} = "Role not found";
+            $c->response->redirect($c->uri_for('/admin/admin'));
+            $c->detach;
+        }
+
+        my $user_role = $c->model('DB::UserRole')->find({
+            'role_id'     => $role->id,
+            'account_id'  => $account->id,
+        });
+
+        if ($user_role) {
+            $c->flash->{error_msg} = "This user already has this role";
+            $c->response->redirect($c->uri_for('/admin/admin'));
+            $c->detach;
+        }
+
+        $c->model('DB::UserRole')->create({
+                'account_id' => $account->id,
+                'role_id'    => $role->id,
+            });
+
+        $c->flash->{status_msg} = "Successfully added role.";
+    } else {
+        $c->flash->{error_msg} = "You did not provide a role and user.";
+    }
 
     $c->response->redirect($c->uri_for('/admin/admin'));
 }
