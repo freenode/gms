@@ -1038,11 +1038,11 @@ sub get_change_string {
 
     my $str = '';
 
-    $str .= "Type: " . $self->group_type . " -> " . $change->{group_type} . ", "
-    if $self->group_type ne $change->{group_type};
+    $str .= "Type: " . $self->group_type . " -> " . $change->group_type . ", "
+    if $self->group_type ne $change->group_type;
 
-    $str .= "URL: " . $self->url . " -> " . $change->{url} . ", "
-    if $self->url ne $change->{url};
+    $str .= "URL: " . $self->url . " -> " . $change->url . ", "
+    if $self->url ne $change->url;
 
     my $current_addr = $self->address || "None";
     my $new_addr = ( $address && $address ne "-1" ) ? $address : "None";

@@ -401,8 +401,8 @@ sub get_change_string {
 
     my $str = '';
 
-    $str .= "Status: " . $self->status . " -> " . $change->{status} . ", "
-    if $self->status ne $change->{status};
+    $str .= "Status: " . $self->status . " -> " . $change->status . ", "
+    if $self->status ne $change->status;
 
     # Get rid of trailing ,
     $str =~ s/,\s*$//;

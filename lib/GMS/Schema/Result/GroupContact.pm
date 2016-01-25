@@ -437,14 +437,14 @@ sub get_change_string {
 
     my $str = '';
 
-    $str .= "Status: " . $self->status . " -> " . $change->{status} . ", "
-    if $self->status ne $change->{status};
+    $str .= "Status: " . $self->status . " -> " . $change->status . ", "
+    if $self->status ne $change->status;
 
     my $curPrimary = $self->is_primary ? "primary" : "secondary";
-    my $newPrimary = $change->{primary} != -1 ? "primary" : "secondary";
+    my $newPrimary = $change->primary ? "primary" : "secondary";
 
     $str .= "Primary: " . $curPrimary . " -> " . $newPrimary . ", "
-    if $self->is_primary != $change->{primary};
+    if $self->is_primary != $change->primary;
 
     # Get rid of trailing ,
     $str =~ s/,\s*$//;

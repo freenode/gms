@@ -424,7 +424,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
             $address = -1;
         }
 
-        $group->change ($c->user->account->id, 'request', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
+        my $chg = $group->change ($c->user->account->id, 'request', { 'group_type' => $p->{group_type}, 'url' => $p->{url}, address => $address });
 
         notice_staff_chan(
             $c,
@@ -432,7 +432,7 @@ sub do_edit :Chained('single_group') :PathPart('edit/submit') :Args(0) {
                 $c->user->account->accountname . " has requested a change for " .
                 " the group information for " . $group->group_name . " - " .
                 $c->uri_for("/admin/approve"),
-                $group->group_name . " changes: " . $group->get_change_string($p, $address)
+                $group->group_name . " changes: " . $group->get_change_string($chg, $address)
             )
         );
     }
@@ -510,11 +510,11 @@ sub do_edit_gc :Chained('active_group') :PathPart('edit_gc/submit') :Args(0) {
 
             my $change = { 'status' => $status, 'primary' => $primary };
 
-            $contact->change ($c->user->account->id, 'request', $change);
+            my $chg = $contact->change ($c->user->account->id, 'request', $change);
 
             notice_staff_chan(
                 $c,
-                $contact->contact->account->accountname . ": " . $contact->get_change_string($change)
+                $contact->contact->account->accountname . ": " . $contact->get_change_string($chg)
             );
         } elsif ($action eq 'hold') {
             next;
@@ -1022,7 +1022,7 @@ sub do_edit_channel_namespaces :Chained('active_group') :PathPart('edit_channel_
             my $status = $p->{"status_$namespace_id"};
             my $change = { 'status' => $status };
 
-            $namespace->change ($c->user->account, 'request', $change);
+            my $chg = $namespace->change ($c->user->account, 'request', $change);
             ++$changes;
 
             notice_staff_chan(
@@ -1030,7 +1030,7 @@ sub do_edit_channel_namespaces :Chained('active_group') :PathPart('edit_channel_
                 (
                     $c->user->account->accountname . " has requested a channel " .
                     "namespace change for " . $group->group_name . "/" . $namespace->namespace,
-                    $namespace->get_change_string($change)
+                    $namespace->get_change_string($chg)
                 )
             );
         }
@@ -1133,14 +1133,14 @@ sub do_edit_cloak_namespaces :Chained('active_group') :PathPart('edit_cloak_name
             my $status = $p->{"status_$namespace_id"};
             my $change = { 'status' => $status };
 
-            $namespace->change ($c->user->account, 'request', $change);
+            my $chg = $namespace->change ($c->user->account, 'request', $change);
 
             notice_staff_chan(
                 $c,
                 (
                     $c->user->account->accountname . " has requested a " .
                     "cloak namespace change for " . $group->group_name . "/" . $namespace->namespace,
-                    $namespace->get_change_string($change)
+                    $namespace->get_change_string($chg)
                 )
             );
         }
