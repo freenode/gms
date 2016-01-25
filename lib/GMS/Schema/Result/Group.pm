@@ -563,7 +563,7 @@ sub change {
 
     my $ret = $self->add_to_group_changes(\%change_args);
 
-    if (!$self->status->is_verified && !$self->status->is_active && $self->url && $self->url ne $change_args{url}) {
+    if (!$self->status->is_verified && !$self->status->is_active && $self->url && $self->url ne $ret->url) {
         my $ver = $self->group_verifications->find_or_new(
             {
                 'verification_type' => 'web_url'
@@ -571,12 +571,12 @@ sub change {
         );
 
         $ver->verification_data(
-            $change_args{url} . "/" . random_string("ccccccc") . ".txt"
+            $ret->url . "/" . random_string("ccccccc") . ".txt"
         );
 
         $ver->insert_or_update;
 
-        my $url = URI->new ($change_args{url});
+        my $url = URI->new ($ret->url);
         my $domain = $url->host || '';
 
         if ($domain) {
@@ -597,7 +597,7 @@ sub change {
 
         $self->status($change_args{status});
         $self->address($change_args{address});
-        $self->url($change_args{url});
+        $self->url($ret->url);
         $self->group_type($change_args{group_type});
 
     }
