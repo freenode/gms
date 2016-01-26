@@ -1027,6 +1027,8 @@ sub admin :Chained('/admin/admin_only') :PathPart('admin') {
     $c->stash->{roles} = \@roles;
 
     $c->stash->{user_id} = $c->user->account->id;
+
+    $c->stash->{template} = 'admin/admin.tt';
 }
 
 =head2 del_admin
