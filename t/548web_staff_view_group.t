@@ -61,7 +61,7 @@ $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
 $ua->get_ok("http://localhost/admin", "Admin page works");
 
-$ua->get_ok("http://localhost/staff/group/38/view");
+$ua->get_ok("http://localhost/admin/group/38/view");
 
 $ua->text_contains ("group122", "View group page works");
 $ua->text_like (qr#Type.*informal#);

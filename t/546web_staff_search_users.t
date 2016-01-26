@@ -46,7 +46,7 @@ $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
 $ua->get_ok("http://localhost/admin", "Admin page works");
 
-$ua->get_ok("http://localhost/staff/search_users", "Search users page works");
+$ua->get_ok("http://localhost/admin/search_users", "Search users page works");
 
 $ua->submit_form(
     fields => {
@@ -64,7 +64,7 @@ $ua->submit_form(
 
 $ua->content_contains("test24", "Search works");
 
-$ua->get_ok("http://localhost/staff/search_users", "Search users page works");
+$ua->get_ok("http://localhost/admin/search_users", "Search users page works");
 
 $ua->submit_form(
     fields => {
@@ -74,7 +74,7 @@ $ua->submit_form(
 
 $ua->content_contains("Unable to find any users that match your search criteria. Please try again.", "Error is shown when there are no search results");
 
-$ua->get_ok("http://localhost/staff/search_users", "Search users page works");
+$ua->get_ok("http://localhost/admin/search_users", "Search users page works");
 
 $ua->submit_form(
     fields => {
@@ -140,7 +140,7 @@ $ua->click_button(
 $ua->content_contains("Name 25", "paging works");
 $ua->content_like(qr/current_page.*2/, "We're at 2nd page");
 
-$ua->get("http://localhost/staff/search_users");
+$ua->get("http://localhost/admin/search_users");
 
 $ua->submit_form(
     fields => {

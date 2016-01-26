@@ -25,7 +25,7 @@ $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
 $ua->get_ok("http://localhost/admin", "Admin page works");
 
-$ua->get_ok("http://localhost/staff/search_namespaces", "Search namespaces page works");
+$ua->get_ok("http://localhost/admin/search_namespaces", "Search namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -36,7 +36,7 @@ $ua->submit_form(
 
 $ua->content_contains ('test120', 'Namespace exists');
 
-$ua->get_ok("http://localhost/staff/search_namespaces", "Search namespaces page works");
+$ua->get_ok("http://localhost/admin/search_namespaces", "Search namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -47,7 +47,7 @@ $ua->submit_form(
 
 $ua->content_contains ('test120', 'Searching cloak namespaces works');
 
-$ua->get_ok("http://localhost/staff/search_namespaces", "Search namespaces page works");
+$ua->get_ok("http://localhost/admin/search_namespaces", "Search namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -58,7 +58,7 @@ $ua->submit_form(
 
 $ua->content_contains ("Unable to find any namespaces that match your search criteria. Please try again", "Error is shown if there is no match");
 
-$ua->get_ok("http://localhost/staff/search_namespaces", "Search namespaces page works");
+$ua->get_ok("http://localhost/admin/search_namespaces", "Search namespaces page works");
 
 $ua->submit_form(
     fields => {
@@ -124,7 +124,7 @@ $ua->click_button(
 $ua->content_contains("test101", "paging works");
 $ua->content_like(qr/current_page.*2/, "We're at 2nd page");
 
-$ua->get("http://localhost/staff/search_namespaces");
+$ua->get("http://localhost/admin/search_namespaces");
 
 $ua->submit_form(
     fields => {

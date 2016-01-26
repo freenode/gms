@@ -203,7 +203,7 @@ sub verify_submit :Chained('verifiable_group') :PathPart('verify/submit') :Args(
             $c,
             "Automagical verification of " . $group->group_name . " by " .
             $c->user->account->accountname . ": " .
-            $c->uri_for("/staff/group/" . $group->id . "/view")
+            $c->uri_for("/admin/group/" . $group->id . "/view")
         );
     }
     elsif ($result == 0) {
@@ -212,7 +212,7 @@ sub verify_submit :Chained('verifiable_group') :PathPart('verify/submit') :Args(
         notice_staff_chan(
             $c,
             $group->group_name . " is pending manual verification - " .
-            $c->uri_for("/staff/group/" . $group->id . "/view")
+            $c->uri_for("/admin/group/" . $group->id . "/view")
         );
 
     }
@@ -1339,7 +1339,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 $c,
                 "New group registration by " . $account->accountname . ": " .
                 $group->group_name . " (" . $group->url . ") - " .
-                $c->uri_for("/staff/group/" . $group->id . "/view")
+                $c->uri_for("/admin/group/" . $group->id . "/view")
             );
         });
     }

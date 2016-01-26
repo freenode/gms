@@ -68,7 +68,7 @@ $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
 $ua->get_ok("http://localhost/admin", "Admin page works");
 
-$ua->get_ok("http://localhost/staff/search_groups", "Search groups page works");
+$ua->get_ok("http://localhost/admin/search_groups", "Search groups page works");
 
 $ua->submit_form(
     fields => {
@@ -81,7 +81,7 @@ $ua->submit_form(
 $ua->content_contains("Group02", "Both matching groups are shown");
 $ua->content_contains("Group03", "Both matching groups are shown");
 
-$ua->get_ok("http://localhost/staff/search_groups", "Search groups page works");
+$ua->get_ok("http://localhost/admin/search_groups", "Search groups page works");
 
 $ua->submit_form(
     fields => {
@@ -101,7 +101,7 @@ $ua->submit_form(
 
 $ua->content_contains ('group1', 'searching by gc accountname works');
 
-$ua->get_ok("http://localhost/staff/search_groups", "Search groups page works");
+$ua->get_ok("http://localhost/admin/search_groups", "Search groups page works");
 
 $ua->submit_form(
     fields => {
@@ -111,7 +111,7 @@ $ua->submit_form(
 
 $ua->content_contains("Group03", "Searching by group status works");
 
-$ua->get_ok("http://localhost/staff/search_groups", "Search groups page works");
+$ua->get_ok("http://localhost/admin/search_groups", "Search groups page works");
 
 $ua->submit_form(
     fields => {
@@ -176,7 +176,7 @@ $ua->click_button(
 $ua->content_contains("group111", "paging works");
 $ua->content_like(qr/name=.current_page.*value=.2/, "We're at 2nd page");
 
-$ua->get("http://localhost/staff/search_groups");
+$ua->get("http://localhost/admin/search_groups");
 
 $ua->submit_form(
     fields => {

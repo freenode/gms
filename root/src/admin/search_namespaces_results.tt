@@ -11,7 +11,7 @@
   <tbody>
 [% FOREACH ns = results -%]
     <tr>
-      <td><a href="[% c.uri_for ("/staff/group/${ns.group.id}/view") %]">[% ns.group.group_name | html %]</a></td>
+      <td><a href="[% c.uri_for ("/admin/group/${ns.group.id}/view") %]">[% ns.group.group_name | html %]</a></td>
       <td>[% ns.namespace | html %]</td>
       <td>[% ns.status %]</td>
     </tr>
@@ -20,7 +20,7 @@
 </table>
 
 
-  <form action="[% c.uri_for ("/staff/search_namespaces/submit") %]" method="post" class="form-inline">
+  <form action="[% c.uri_for ("/admin/search_namespaces/submit") %]" method="post" class="form-inline">
     <input type="hidden" name="namespace" value="[% namespace | html %]" />
     <input type="hidden" name="search_item" value="[% search_item  | html %]" />
 
@@ -49,5 +49,5 @@
     </div>
     <input type="submit" class="btn btn-primary" value="Go" />
   </form>
-  <p><a href="[% c.uri_for ("/staff/search_namespaces") %]">Back to search</a></p>
+  <p><a href="[% c.uri_for ("/admin/search_namespaces") %]">Back to search</a></p>
 

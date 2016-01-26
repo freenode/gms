@@ -176,7 +176,7 @@ var __URL_STAFF_ACCOUNTNAME   = __ROOT + '/json/staff/search_account_name';
 var __URL_STAFF_FULLNAME      = __ROOT + '/json/staff/search_full_name';
 var __URL_STAFF_GROUPNAME     = __ROOT + '/json/staff/search_group_name';
 var __URL_STAFF_NS            = __ROOT + '/json/staff/search_ns_name';
-var __URL_USER                = __ROOT + '/staff/account/%account_id/view';
+var __URL_USER                = __ROOT + '/admin/account/%account_id/view';
 var __URL_USER_ACCEPT_CLOAK   = __ROOT + '/cloak/%id/approve';
 
 /* HTML templates */

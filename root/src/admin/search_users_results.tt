@@ -10,7 +10,7 @@
 [% FOREACH account = results -%]
 <tr>
   <td>
-    <a href="[% c.uri_for ("/staff/account/${account.id}/view") %]">[% account.accountname | html %]</a>
+    <a href="[% c.uri_for ("/admin/account/${account.id}/view") %]">[% account.accountname | html %]</a>
     [% IF account.dropped %]
       ( <strong class="text-danger">dropped</strong> )
     [% END %]
@@ -21,7 +21,7 @@
 </table>
 
 
-<form action="[% c.uri_for ("/staff/search_users/submit") %]" method="post" class="form-inline">
+<form action="[% c.uri_for ("/admin/search_users/submit") %]" method="post" class="form-inline">
   <input type="hidden" name="accountname" value="[% accountname | html %]" />
   <input type="hidden" name="fullname" value="[% fullname | html %]" />
   <input type="hidden" name="current_page" value="[% current_page %]" />
@@ -49,5 +49,5 @@
   </div>
   <input type="submit" class="btn btn-primary" value="Go" />
 </form>
-<p><a href="[% c.uri_for ("/staff/search_users") %]">Back to search</a></p>
+<p><a href="[% c.uri_for ("/admin/search_users") %]">Back to search</a></p>
 

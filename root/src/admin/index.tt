@@ -15,13 +15,13 @@
 </li>
 [% END %]
 <li class="list-group-item">
-  <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
+  <a href="[% c.uri_for("/admin/search_groups") %]">Search Groups</a>
 </li>
 <li class="list-group-item">
-  <a href="[% c.uri_for("/staff/search_users") %]">Search Users</a>
+  <a href="[% c.uri_for("/admin/search_users") %]">Search Users</a>
 </li>
 <li class="list-group-item">
-  <a href="[% c.uri_for("/staff/search_namespaces") %]">Search Namespaces</a>
+  <a href="[% c.uri_for("/admin/search_namespaces") %]">Search Namespaces</a>
 </li>
 
 </ul>
