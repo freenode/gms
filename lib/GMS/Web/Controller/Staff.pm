@@ -40,18 +40,6 @@ sub base :Chained('/') :PathPart('staff') :CaptureArgs(0) :Local :VerifyToken {
     }
 }
 
-=head2 index
-
-Staff index page
-
-=cut
-
-sub index :Chained('base') :PathPart('') :Args(0) {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'staff/index.tt';
-}
-
 =head2 single_group
 
 Chained method to select a single group. Similar to

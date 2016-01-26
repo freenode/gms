@@ -31,19 +31,35 @@ This controller contains handlers for the administrative pages.
 
 =head2 base
 
-Base method for all the handler chains. Verifies that the user has the 'admin'
-role, and presents an error page if not.
+Base method for all the handler chains. Verifies that the user has the admin
+or staff role, and presents an error page if not.
 
 =cut
 
 sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin')) {
+    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff')) {
         $c->detach('/forbidden');
     }
 
-    $c->stash->{admin} = 1;
+    if ($c->check_user_roles('admin')) {
+        $c->stash->{admin} = 1;
+    }
+}
+
+=head2 admin_only
+
+Actions only allowed for the admin role.
+
+=cut
+
+sub admin_only :Chained('base') :PathPart('') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    if (! $c->check_user_roles('admin')) {
+        $c->detach('/forbidden');
+    }
 }
 
 =head2 index
@@ -66,7 +82,7 @@ for which the user is a contact.
 
 =cut
 
-sub single_group :Chained('base') :PathPart('group') :CaptureArgs(1) {
+sub single_group :Chained('admin_only') :PathPart('group') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
     my $group_row = $c->model('DB::Group')->find({ id => $group_id });
@@ -117,7 +133,7 @@ Chained method to select an account.
 
 =cut
 
-sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
+sub account :Chained('admin_only') :PathPart('account') :CaptureArgs(1) {
     my ($self, $c, $account_id) = @_;
 
     my $account;
@@ -148,7 +164,7 @@ Presents the approval page.
 
 =cut
 
-sub approve: Chained('base') :PathPart('approve') :Args(0) {
+sub approve: Chained('admin_only') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;
@@ -642,7 +658,7 @@ Presents the form to search changes.
 
 =cut
 
-sub search_changes :Chained('base') :PathPart('search_changes') :Args(0) {
+sub search_changes :Chained('admin_only') :PathPart('search_changes') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'admin/search_changes.tt';
@@ -655,7 +671,7 @@ and displays the results.
 
 =cut
 
-sub do_search_changes :Chained('base') :PathPart('search_changes/submit') :Args(0) {
+sub do_search_changes :Chained('admin_only') :PathPart('search_changes/submit') :Args(0) {
     my ($self, $c) = @_;
     my ($change_rs, $rs, $page, @results);
 
@@ -1038,7 +1054,7 @@ Lists users and roles
 
 =cut
 
-sub admin :Chained('base') :PathPart('admin') {
+sub admin :Chained('admin_only') :PathPart('admin') {
     my ($self, $c) = @_;
 
     my @admins = $c->model('DB::UserRole')->search(
@@ -1064,7 +1080,7 @@ Removes a role from a user.
 
 =cut
 
-sub del_admin :Chained('base') :PathPart('admin/delete') {
+sub del_admin :Chained('admin_only') :PathPart('admin/delete') {
     my ($self, $c) = @_;
 
     my $p = $c->request->params;
@@ -1096,7 +1112,7 @@ Adds a role from a user.
 
 =cut
 
-sub add_admin :Chained('base') :PathPart('admin/add') {
+sub add_admin :Chained('admin_only') :PathPart('admin/add') {
     my ($self, $c) = @_;
 
     my $p = $c->request->params;

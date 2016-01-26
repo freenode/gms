@@ -23,7 +23,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
-$ua->get_ok("http://localhost/staff", "Staff page works");
+$ua->get_ok("http://localhost/admin", "Admin page works");
 
 $ua->get_ok("http://localhost/staff/search_namespaces", "Search namespaces page works");
 
