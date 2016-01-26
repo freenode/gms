@@ -747,6 +747,8 @@ sub auto_verify {
 
         if ($dns_query) {
             foreach my $result ($dns_query->answer) {
+                next unless $result->type eq 'TXT';
+
                 my @txts = $result->char_str_list;
                 if (scalar @txts == 1 && $txts[0] eq $self->verify_dns) {
                     $self->change (
@@ -763,6 +765,8 @@ sub auto_verify {
 
         if ($dns_query) {
             foreach my $result ($dns_query->answer) {
+                next unless $result->type eq 'A';
+
                 if (defined $result->address && $result->address eq '127.0.0.127') {
                     $self->change (
                         $account,
