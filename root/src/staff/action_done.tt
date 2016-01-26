@@ -1,9 +1,0 @@
-[% META title = 'Action Complete' %]
-
-<p class="alert alert-info">
-[% msg %]
-</p>
-
-<p>
-<a href="[% c.uri_for ("/staff") %]">Back to staff page</a>
-</p>

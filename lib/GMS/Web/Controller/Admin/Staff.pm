@@ -1,4 +1,4 @@
-package GMS::Web::Controller::Staff;
+package GMS::Web::Controller::Admin::Staff;
 
 use strict;
 use warnings;
@@ -11,46 +11,13 @@ use GMS::Exception;
 
 =head1 NAME
 
-GMS::Web::Controller::Staff - Controller for GMS::Web
+GMS::Web::Controller::Admin::Staff - Controller for GMS::Web
 
 =head1 DESCRIPTION
 
 This controller contains handlers for the staff pages.
 
 =head1 METHODS
-
-=head2 base
-
-Verifies the user has the 'staff' role and presents an
-error page if not.
-
-=cut
-
-sub base :Chained('/') :PathPart('staff') :CaptureArgs(0) :Local :VerifyToken {
-    my ($self, $c) = @_;
-
-    if (! $c->check_user_roles('staff') && ! $c->check_user_roles('admin')) {
-        $c->detach ('/forbidden');
-    }
-
-    $c->stash->{staff} = 1;
-
-    if ($c->check_user_roles('admin')) {
-        $c->stash->{admin} = 1;
-    }
-}
-
-=head2 index
-
-Staff index page
-
-=cut
-
-sub index :Chained('base') :PathPart('') :Args(0) {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'staff/index.tt';
-}
 
 =head2 single_group
 
@@ -60,7 +27,7 @@ for which the user is a contact.
 
 =cut
 
-sub single_group :Chained('base') :PathPart('group') :CaptureArgs(1) {
+sub single_group :Chained('/admin/base') :PathPart('group') :CaptureArgs(1) {
     my ($self, $c, $group_id) = @_;
 
     my $group_row = $c->model('DB::Group')->find({ id => $group_id });
@@ -91,7 +58,7 @@ Chained method to select an account.
 
 =cut
 
-sub account :Chained('base') :PathPart('account') :CaptureArgs(1) {
+sub account :Chained('/admin/base') :PathPart('account') :CaptureArgs(1) {
     my ($self, $c, $account_id) = @_;
 
     my $account;
@@ -164,10 +131,10 @@ Presents the form to search groups.
 
 =cut
 
-sub search_groups :Chained('base') :PathPart('search_groups') :Args(0) {
+sub search_groups :Chained('/admin/base') :PathPart('search_groups') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{template} = "staff/search_groups.tt";
+    $c->stash->{template} = "admin/search_groups.tt";
 }
 
 =head2 do_search_groups
@@ -176,7 +143,7 @@ Performs a search with the criteria provided and displays the groups found.
 
 =cut
 
-sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0) {
+sub do_search_groups :Chained('/admin/base') :PathPart('search_groups/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $p = $c->request->params;
@@ -269,7 +236,7 @@ sub do_search_groups :Chained('base') :PathPart('search_groups/submit') :Args(0)
     }
 
     $c->stash->{results} = \@results;
-    $c->stash->{template} = 'staff/search_groups_results.tt';
+    $c->stash->{template} = 'admin/search_groups_results.tt';
 }
 
 =head2 search_users
@@ -278,10 +245,10 @@ Presents the form to search users.
 
 =cut
 
-sub search_users :Chained('base') :PathPart('search_users') :Args(0) {
+sub search_users :Chained('/admin/base') :PathPart('search_users') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{template} = 'staff/search_users.tt';
+    $c->stash->{template} = 'admin/search_users.tt';
 }
 
 =head2 do_search_users
@@ -290,7 +257,7 @@ Performs a search with the criteria provided and displays the users found.
 
 =cut
 
-sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
+sub do_search_users :Chained('/admin/base') :PathPart('search_users/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $p = $c->request->params;
@@ -386,7 +353,7 @@ sub do_search_users :Chained('base') :PathPart('search_users/submit') :Args(0) {
     }
 
     $c->stash->{results} = \@results;
-    $c->stash->{template} = "staff/search_users_results.tt";
+    $c->stash->{template} = "admin/search_users_results.tt";
 
 }
 
@@ -396,10 +363,10 @@ Presents the form to search namespaces.
 
 =cut
 
-sub search_namespaces :Chained('base') :PathPart('search_namespaces') :Args(0) {
+sub search_namespaces :Chained('/admin/base') :PathPart('search_namespaces') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{template} = 'staff/search_namespaces.tt';
+    $c->stash->{template} = 'admin/search_namespaces.tt';
 }
 
 =head2 do_search_namespaces
@@ -408,7 +375,7 @@ Performs a search with the criteria provided and displays the namespaces found.
 
 =cut
 
-sub do_search_namespaces :Chained('base') :PathPart('search_namespaces/submit') :Args(0) {
+sub do_search_namespaces :Chained('/admin/base') :PathPart('search_namespaces/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $p = $c->request->params;
@@ -464,7 +431,7 @@ sub do_search_namespaces :Chained('base') :PathPart('search_namespaces/submit') 
     }
 
     $c->stash->{results} = \@results;
-    $c->stash->{template} = "staff/search_namespaces_results.tt";
+    $c->stash->{template} = "admin/search_namespaces_results.tt";
 
 }
 
@@ -492,7 +459,7 @@ sub view :Chained('single_group') :PathPart('view') :Args(0) {
         $c->stash->{friendly_status} = "The group has been deleted.";
     }
 
-    $c->stash->{template} = 'staff/view_group.tt';
+    $c->stash->{template} = 'admin/view_group.tt';
 }
 
 =head2 view_account
@@ -502,10 +469,10 @@ admins can view more information than staff.
 
 =cut
 
-sub view_account :Chained('account'):PathPart('view') :Args(0) {
+sub view_account :Chained('account') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{template} = 'staff/view_account.tt';
+    $c->stash->{template} = 'admin/view_account.tt';
 }
 
 1;

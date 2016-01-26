@@ -60,6 +60,6 @@ $ua->content_contains("You are now logged in as staff", "Check we can log in");
 
 my $response = $ua->get("http://localhost/admin");
 
-is $response->code, 403, "Staff can't access admin page.";
+is $response->code, 200, "Staff can access admin page.";
 
 done_testing;

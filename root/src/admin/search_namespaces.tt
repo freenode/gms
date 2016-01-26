@@ -1,6 +1,6 @@
 [% META title = 'Search Namespaces' %]
 
-<form method="post" action="[% c.uri_for('/staff/search_namespaces/submit') %]">
+<form method="post" action="[% c.uri_for('/admin/search_namespaces/submit') %]">
 
 <p>
   Enter the search criteria.

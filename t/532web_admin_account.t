@@ -38,7 +38,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/staff/account/AAAAAAAAP/view", "View account page works");
+$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/view", "View account page works");
 
 $ua->content_contains("test01's contact information", "Account viewing page works");
 
@@ -60,7 +60,7 @@ $ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info
 $ua->content_contains("Second Contact Test", "The input fields have the new information for editing");
 $ua->content_contains('test03@example.com', "The input fields have the new information for editing");
 
-$ua->get_ok("http://localhost/staff/account/AAAAAAAAP/view", "View account page works");
+$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/view", "View account page works");
 
 $ua->content_contains("Second Contact Test", "Info has changed");
 $ua->content_contains('test03@example.com', "Info has changed");

@@ -45,7 +45,7 @@ is $resp->code, 404, 'Trying to view a group that does not exist is 404';
 $resp = $ua->get("http://localhost/admin/address/999/view");
 is $resp->code, 404, 'Trying to view an address that does not exist is 404';
 
-$resp = $ua->get("http://localhost/staff/account/999/view");
+$resp = $ua->get("http://localhost/admin/account/999/view");
 is $resp->code, 404, 'Trying to view an account that does not exist is 404';
 
 $resp = $ua->get("http://localhost/admin/account/999/edit");
@@ -81,7 +81,7 @@ $ua->submit_form(
     }
 );
 
-#$request = $ua->get("http://localhost/staff/9999/view");
+#$request = $ua->get("http://localhost/admin/9999/view");
 #is $request->code, 404, "Nonexistant group is 404";
 
 done_testing;

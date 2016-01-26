@@ -13,7 +13,7 @@
   <tbody>
 [% FOREACH group = results -%]
     <tr>
-      <td><a href="[% c.uri_for ("/staff/group/${group.id}/view") %]">[% group.group_name | html %]</a></td>
+      <td><a href="[% c.uri_for ("/admin/group/${group.id}/view") %]">[% group.group_name | html %]</a></td>
       <td>[% group.group_type %]</td>
       <td>[% group.status %]</td>
     </tr>
@@ -21,7 +21,7 @@
   </tbody>
 </table>
 
-  <form action="[% c.uri_for ("/staff/search_groups/submit") %]" method="post" class="form-inline">
+  <form action="[% c.uri_for ("/admin/search_groups/submit") %]" method="post" class="form-inline">
     <input type="hidden" name="group_name" value="[% group_name | html %]" />
     <input type="hidden" name="gc_accname" value="[% gc_accname | html %]" />
     <input type="hidden" name="group_type" value="[% group_type | html %]" />
@@ -54,5 +54,5 @@
     </div>
     <input type="submit" class="btn btn-primary" value="Go" />
   </form>
-  <p><a href="[% c.uri_for ("/staff/search_groups") %]">Back to search</a></p>
+  <p><a href="[% c.uri_for ("/admin/search_groups") %]">Back to search</a></p>
 

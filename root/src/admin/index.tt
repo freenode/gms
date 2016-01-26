@@ -3,23 +3,25 @@
 <h3>Administration Centre</h3>
 
 <ul class="list-group">
+[% IF admin %]
 <li class="list-group-item">
   <a href="[% c.uri_for('/admin/approve') %]">Review and approve changes</a>
-</li>
-<li class="list-group-item">
-  <a href="[% c.uri_for("/staff/search_groups") %]">Search Groups</a>
-</li>
-<li class="list-group-item">
-  <a href="[% c.uri_for("/staff/search_users") %]">Search Users</a>
-</li>
-<li class="list-group-item">
-  <a href="[% c.uri_for("/staff/search_namespaces") %]">Search Namespaces</a>
 </li>
 <li class="list-group-item">
   <a href="[% c.uri_for("/admin/search_changes") %]">View and search Changes history</a>
 </li>
 <li class="list-group-item">
   <a href="[% c.uri_for("/admin/admin") %]">Add or remove admin and staff roles</a>
+</li>
+[% END %]
+<li class="list-group-item">
+  <a href="[% c.uri_for("/admin/search_groups") %]">Search Groups</a>
+</li>
+<li class="list-group-item">
+  <a href="[% c.uri_for("/admin/search_users") %]">Search Users</a>
+</li>
+<li class="list-group-item">
+  <a href="[% c.uri_for("/admin/search_namespaces") %]">Search Namespaces</a>
 </li>
 
 </ul>
