@@ -1,5 +1,6 @@
 [% META title = 'Approval Page' -%]
 <form action="" method="post">
+[% IF admin %]
 <div class="form-group">
     <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="group" name="expand_approve">
         <i class="glyphicon glyphicon-play-circle"></i>
@@ -40,6 +41,7 @@
     </button>
     <div id="response_changes" class="clearfix"></div>
 </div>
+[% END %]
 
 <div class="form-group">
     <button type="button" class="btn btn-default alignleft col-sm-12" href="javascript:;" value="cloaks" name="expand_approve">

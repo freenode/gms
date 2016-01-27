@@ -47,6 +47,8 @@
                     [% IF c.user_exists -%]
                         [% IF  c.check_user_roles('admin')  %]
                           <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin <span class="badge">[% pending_admin %]</span></a>
+                        [% ELSIF c.check_user_roles ('approver') %]
+                          <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin <span class="badge">[% pending_approver %]</span></a>
                         [% ELSIF c.check_user_roles ('staff') %]
                           <a href="[% c.uri_for('/admin/') %]" class="btn btn-default">Admin</a>
                         [% END %]

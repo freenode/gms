@@ -119,7 +119,7 @@ Presents the approval page.
 
 =cut
 
-sub approve: Chained('/admin/admin_only') :PathPart('approve') :Args(0) {
+sub approve: Chained('/admin/approver_only') :PathPart('approve') :Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{pending_groups} = $c->model('DB::Group')->search_verified_groups->count + $c->model('DB::Group')->search_submitted_groups->count;

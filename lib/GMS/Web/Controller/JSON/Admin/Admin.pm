@@ -449,7 +449,7 @@ Presents the form to approve cloak changes.
 
 =cut
 
-sub approve_cloak :Chained('/json/admin/admin_only') :PathPart('approve_cloak') :Args(0) {
+sub approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cloak') :Args(0) {
     my ($self, $c) = @_;
 
     my $change_rs = $c->model('DB::CloakChange');
@@ -483,7 +483,7 @@ Processes the form to approve cloak changes and grants the cloaks to the users.
 
 =cut
 
-sub do_approve_cloak :Chained('/json/admin/admin_only') :PathPart('approve_cloak/submit') :Args(0) {
+sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cloak/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $params = $c->request->params;
@@ -606,7 +606,7 @@ Presents the form to approve channel requests.
 
 =cut
 
-sub approve_channel_requests :Chained('/json/admin/admin_only') :PathPart('approve_channel_requests') :Args(0) {
+sub approve_channel_requests :Chained('/json/admin/approver_only') :PathPart('approve_channel_requests') :Args(0) {
     my ($self, $c) = @_;
 
     my $req_rs = $c->model('DB::ChannelRequest');
@@ -637,7 +637,7 @@ and attempts to carry out the changes in Atheme.
 
 =cut
 
-sub do_approve_channel_requests :Chained('/json/admin/admin_only') :PathPart('approve_channel_requests/submit') :Args(0) {
+sub do_approve_channel_requests :Chained('/json/admin/approver_only') :PathPart('approve_channel_requests/submit') :Args(0) {
     my ($self, $c) = @_;
 
     my $params = $c->request->params;

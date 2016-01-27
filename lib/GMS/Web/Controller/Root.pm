@@ -97,7 +97,7 @@ sub end : ActionClass('RenderView::ErrorHandler') {
         $c->detach('View::JSON');
     } 
 
-    if ( $c->check_user_roles("admin") ) {
+    if ( $c->check_user_roles("admin") || $c->check_user_roles("approver") ) {
         $c->stash->{pending_admin} = $c->model('DB::Group')->search_verified_groups->count +
                                      $c->model('DB::Group')->search_submitted_groups->count +
                                      $c->model('DB::GroupContact')->search_pending->count +
@@ -113,7 +113,13 @@ sub end : ActionClass('RenderView::ErrorHandler') {
                                      $c->model('DB::ChannelRequest')->search_pending->count +
                                      $c->model('DB::ChannelRequest')->search_unapplied->count +
                                      $c->model('DB::ChannelRequest')->search_failed->count;
-        $c->log->debug("Pending requests: ".$c->stash->{pending_admin});
+        $c->stash->{pending_approver} = $c->model('DB::CloakChange')->search_pending->count +
+                                        $c->model('DB::CloakChange')->search_unapplied->count +
+                                        $c->model('DB::CloakChange')->search_failed->count +
+                                        $c->model('DB::ChannelRequest')->search_pending->count +
+                                        $c->model('DB::ChannelRequest')->search_unapplied->count +
+                                        $c->model('DB::ChannelRequest')->search_failed->count;
+        $c->log->debug("Pending requests: " . $c->stash->{pending_admin} . " (" . $c->stash->{pending_approver} . " approver)");
     }
 
 }

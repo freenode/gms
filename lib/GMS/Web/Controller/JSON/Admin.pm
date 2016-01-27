@@ -20,15 +20,15 @@ This controller contains handlers for the administrative pages.
 
 =head2 base
 
-Base method for all the handler chains. Verifies that the user has an admin
-or staff role, and presents an error page if not.
+Base method for all the handler chains. Verifies that the user has an appropriate
+role, and presents an error page if not.
 
 =cut
 
 sub base :Chained('/') :PathPart('json/admin') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff')) {
+    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff') && ! $c->check_user_roles('approver')) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You do not have permission to access the requested page.";
         $c->response->status(403);
@@ -37,6 +37,10 @@ sub base :Chained('/') :PathPart('json/admin') :CaptureArgs(0) {
 
     if ($c->check_user_roles('admin')) {
         $c->stash->{json_admin} = 1;
+    }
+
+    if ($c->check_user_roles('approver')) {
+        $c->stash->{json_approver} = 1;
     }
 }
 
@@ -50,6 +54,23 @@ sub admin_only :Chained('base') :PathPart('') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
     if (! $c->check_user_roles('admin')) {
+        $c->stash->{json_success} = 0;
+        $c->stash->{json_error} = "You do not have permission to access the requested page.";
+        $c->response->status(403);
+        $c->detach;
+    }
+}
+
+=head2 approver_only
+
+Actions only allowed for the approver role.
+
+=cut
+
+sub approver_only :Chained('base') :PathPart('') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('approver')) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You do not have permission to access the requested page.";
         $c->response->status(403);

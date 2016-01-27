@@ -20,20 +20,24 @@ This is the root controller for administrative pages.
 
 =head2 base
 
-Base method for all the handler chains. Verifies that the user has the admin
-or staff role, and presents an error page if not.
+Base method for all the handler chains. Verifies that the user has the neccessary
+role, and presents an error page if not.
 
 =cut
 
 sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff')) {
+    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff') && ! $c->check_user_roles('approver')) {
         $c->detach('/forbidden');
     }
 
     if ($c->check_user_roles('admin')) {
         $c->stash->{admin} = 1;
+    }
+
+    if ($c->check_user_roles('approver')) {
+        $c->stash->{approver} = 1;
     }
 }
 
@@ -47,6 +51,20 @@ sub admin_only :Chained('base') :PathPart('') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
     if (! $c->check_user_roles('admin')) {
+        $c->detach('/forbidden');
+    }
+}
+
+=head2 approver_only
+
+Actions only allowed for the approver role.
+
+=cut
+
+sub approver_only :Chained('base') :PathPart('') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('approver')) {
         $c->detach('/forbidden');
     }
 }
