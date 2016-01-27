@@ -83,6 +83,7 @@ $ua->content_contains ("successfully verified", "Web verification worked");
 $group = $schema->resultset('Group')->find({ id => 7 });
 
 my $mockRecord = Test::MockObject->new;
+$mockRecord->mock ('type' => sub { 'TXT' });
 $mockRecord->mock ('char_str_list' => sub { $group->verify_dns });
 
 my $mockResponse = Test::MockObject->new;

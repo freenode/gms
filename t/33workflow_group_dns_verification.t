@@ -34,6 +34,7 @@ my $group = $schema->resultset('Group')->create({
 isa_ok $group, "GMS::Schema::Result::Group";
 
 my $mockRecord = Test::MockObject->new;
+$mockRecord->mock ('type' => sub { 'TXT' });
 $mockRecord->mock ('char_str_list' => sub { $group->verify_dns });
 
 my $mockResponse = Test::MockObject->new;
@@ -61,6 +62,7 @@ $mockRecord->mock ('address' => sub { });
 
 is $group->auto_verify ($user), -1, 'Wrong DNS returns -1';
 
+$mockRecord->mock ('type' => sub { 'A' });
 $mockRecord->mock ('address' => sub { '127.0.0.127' });
 
 is $group->auto_verify ($user), 1, 'Verifying group with A record works';
