@@ -1014,7 +1014,7 @@ sub admin :Chained('/admin/admin_only') :PathPart('admin') {
 
     my @admins = $c->model('DB::UserRole')->search(
       {
-        'role.name' => ['admin','staff']
+        'role.name' => ['admin', 'staff', 'approver']
       },
       {
         join => [ 'role', 'account' ]

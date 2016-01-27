@@ -13,7 +13,7 @@
   <a href="[% c.uri_for("/admin/search_changes") %]">View and search Changes history</a>
 </li>
 <li class="list-group-item">
-  <a href="[% c.uri_for("/admin/admin") %]">Add or remove admin and staff roles</a>
+  <a href="[% c.uri_for("/admin/admin") %]">Add or remove roles</a>
 </li>
 [% END %]
 <li class="list-group-item">
