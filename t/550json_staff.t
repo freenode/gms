@@ -23,7 +23,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin", "Check we can log in");
 
-$ua->post_ok ('http://localhost/json/staff/search_group_name',
+$ua->post_ok ('http://localhost/json/admin/search_group_name',
     {
         name => 'group'
     }
@@ -31,7 +31,7 @@ $ua->post_ok ('http://localhost/json/staff/search_group_name',
 
 $ua->content_contains('group0', 'json output works');
 
-$ua->post_ok ('http://localhost/json/staff/search_account_name',
+$ua->post_ok ('http://localhost/json/admin/search_account_name',
     {
         name => 'account'
     }
@@ -39,7 +39,7 @@ $ua->post_ok ('http://localhost/json/staff/search_account_name',
 
 $ua->content_contains('account48', 'json output works');
 
-$ua->post_ok ('http://localhost/json/staff/search_full_name',
+$ua->post_ok ('http://localhost/json/admin/search_full_name',
     {
         name => 'name'
     }
@@ -47,7 +47,7 @@ $ua->post_ok ('http://localhost/json/staff/search_full_name',
 
 $ua->content_contains('Name2', 'json output works');
 
-$ua->post_ok ('http://localhost/json/staff/search_ns_name',
+$ua->post_ok ('http://localhost/json/admin/search_ns_name',
     {
         name => 'group'
     }

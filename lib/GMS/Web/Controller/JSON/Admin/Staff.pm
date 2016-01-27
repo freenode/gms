@@ -1,4 +1,4 @@
-package GMS::Web::Controller::JSON::Staff;
+package GMS::Web::Controller::JSON::Admin::Staff;
 
 use strict;
 use warnings;
@@ -18,33 +18,13 @@ This controller contains handlers for the staff pages.
 
 =head1 METHODS
 
-=head2 base
-
-Base method for all the handler chains. Verifies that the user has the 'staff'
-role, and presents an error page if not.
-
-=cut
-
-sub base :Chained('/') :PathPart('json/staff') :CaptureArgs(0) {
-    my ($self, $c) = @_;
-
-    if (! $c->check_user_roles('staff') && ! $c->check_user_roles('admin') ) {
-        $c->stash->{json_success} = 0;
-        $c->stash->{json_error} = "You are not staff.";
-        $c->response->status(403);
-        $c->detach;
-    }
-
-    $c->stash->{json_staff} = 1;
-}
-
 =head2 search_group_name
 
 Returns a list of groups matching a partial name.
 
 =cut
 
-sub search_group_name :Chained('base') :PathPart('search_group_name') :Args(0) {
+sub search_group_name :Chained('/json/admin/base') :PathPart('search_group_name') :Args(0) {
     my ($self, $c) = @_;
 
     my $rs = $c->model('DB::Group');
@@ -75,7 +55,7 @@ Returns a list of accounts matching a partial name.
 
 =cut
 
-sub search_account_name :Chained('base') :PathPart('search_account_name') :Args(0) {
+sub search_account_name :Chained('/json/admin/base') :PathPart('search_account_name') :Args(0) {
     my ($self, $c) = @_;
 
     my $rs = $c->model('DB::Account');
@@ -106,7 +86,7 @@ Returns a list of contacts matching a partial fullname.
 
 =cut
 
-sub search_full_name :Chained('base') :PathPart('search_full_name') :Args(0) {
+sub search_full_name :Chained('/json/admin/base') :PathPart('search_full_name') :Args(0) {
     my ($self, $c) = @_;
 
     my $rs = $c->model('DB::Contact');
@@ -141,7 +121,7 @@ Returns a list of namespaces matching a partial name.
 
 =cut
 
-sub search_ns_name :Chained('base') :PathPart('search_ns_name') :Args(0) {
+sub search_ns_name :Chained('/json/admin/base') :PathPart('search_ns_name') :Args(0) {
     my ($self, $c) = @_;
 
     my $channel_rs = $c->model('DB::ChannelNamespace');
