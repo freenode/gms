@@ -1,0 +1,4 @@
+$HASH1 = {
+           account_id => 'AAAAAAAAY',
+           role_id    => 3
+         };

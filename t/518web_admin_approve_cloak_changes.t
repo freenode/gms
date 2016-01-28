@@ -5,6 +5,8 @@ use Test::More;
 use Test::MockObject;
 use Test::MockModule;
 
+use JSON::XS;
+
 # We don't want this right now.
 
 my $mock = Test::MockModule->new('GMS::Atheme::Client');
@@ -72,12 +74,36 @@ $ua->content_contains("Login to GMS", "Check login page works");
 
 $ua->submit_form(
     fields => {
-        username => 'admin',
-        password => 'admin001'
+        username => 'account0',
+        password => 'tester01'
     }
 );
 
-$ua->content_contains("You are now logged in as admin", "Check we can log in");
+$ua->content_contains("You are now logged in as account0", "Check we can log in");
+
+
+my $response = $ua->post('http://localhost/json/admin/approve_cloak/submit',
+{
+    approve_changes => '5 10',
+    action_5 => 'approve'
+});
+
+my $json = decode_json($ua->content);
+is $json->{json_error}, 'You do not have permission to access the requested page.', 'Normal users can\'t approve cloaks.';
+is $response->code, 403, "403 code";
+
+
+$ua->get('http://localhost/logout');
+$ua->get('http://localhost/login');
+
+$ua->submit_form(
+    fields => {
+        username => 'approver',
+        password => 'approver01'
+    }
+);
+
+$ua->content_contains("You are now logged in as approver", "Check we can log in");
 
 $ua->post_ok('http://localhost/json/admin/approve_cloak/submit',
     {
@@ -88,7 +114,7 @@ $ua->post_ok('http://localhost/json/admin/approve_cloak/submit',
 
 $change5->discard_changes;
 
-ok $change5->active_change->status->is_applied, 'change has been applid';
+ok $change5->active_change->status->is_applied, 'change has been applied - approver role can approve';
 
 $ua->post_ok('http://localhost/json/admin/approve_cloak/submit',
     {
