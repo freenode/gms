@@ -59,10 +59,10 @@ sub for_session {
 sub from_session {
     my ($self, $c, $frozenuser) = @_;
 
-    return GMS::Authentication::User->new(
-        $c->model('DB::Account')->find({id => $frozenuser->{'id'}}),
-        $frozenuser->{authcookie},
-    );
+    my $account = $c->model('DB::Account')->find({id => $frozenuser->{'id'}});
+    return if !$account;
+
+    return GMS::Authentication::User->new($account, $frozenuser->{authcookie});
 }
 
 1;
