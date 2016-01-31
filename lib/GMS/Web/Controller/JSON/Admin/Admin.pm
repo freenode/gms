@@ -519,7 +519,7 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                     memo_gcs (
                         $c,
                         $group,
-                        $change->active_change->changed_by,
+                        $change->requestor,
                         "Your request for the " . $change->cloak . " cloak " .
                         "for " .  $change->target->accountname . " has been approved."
                     );
@@ -540,7 +540,7 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                    memo_gcs (
                         $c,
                         $group,
-                        $change->active_change->changed_by,
+                        $change->requestor,
                         "Your request for the " . $change->cloak . " cloak " .
                         "for " .  $change->target->accountname . " has been applied."
                     );
@@ -561,7 +561,7 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                     memo_gcs (
                         $c,
                         $group,
-                        $change->active_change->changed_by,
+                        $change->requestor,
                         "Your request for the " . $change->cloak . " cloak " .
                         "for " .  $change->target->accountname . " has been rejected."
                     );
