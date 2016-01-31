@@ -71,6 +71,7 @@ ok $error;
 
 is_deeply $error->message, [
     "target must be specified",
+    "requestor must be specified",
     "Cloak must be provided",
     "Changed by must be provided"
 ];
@@ -78,6 +79,7 @@ is_deeply $error->message, [
 throws_ok {
     $schema->resultset('CloakChange')->create({
             'target'     => '3EAB67EC',
+            'requestor'  => '3EAB67EC',
             'cloak'      => 'ns/@#!$@_',
             'changed_by' => '3EAB67EC',
             'group'      => $group,
@@ -136,6 +138,7 @@ throws_ok {
 lives_ok {
     $schema->resultset('CloakChange')->create({
             'target'     => '3EAB67EC',
+            'requestor'  => '3EAB67EC',
             'cloak'      => 'group0/42/is-ok',
             'group'      => $group,
             'changed_by' => '3EAB67EC',

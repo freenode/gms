@@ -31,6 +31,10 @@ $mockSchema->mock ('target', sub {
         $mockSchema;
     });
 
+$mockSchema->mock ('requestor', sub {
+        $mockSchema;
+    });
+
 $mockSchema->mock ('id', sub {
     });
 
