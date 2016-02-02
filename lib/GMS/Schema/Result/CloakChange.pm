@@ -51,13 +51,6 @@ __PACKAGE__->table("cloak_changes");
   is_nullable: 0
   size: 32
 
-=head2 requestor
-
-  data_type: 'varchar'
-  is_foreign_key: 1
-  is_nullable: 0
-  size: 32
-
 =head2 cloak
 
   data_type: 'varchar'
@@ -94,8 +87,6 @@ __PACKAGE__->add_columns(
     sequence          => "cloak_changes_id_seq",
   },
   "target",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 32 },
-  "requestor",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 32 },
   "cloak",
   { data_type => "varchar", is_nullable => 0, size => 63 },
@@ -193,21 +184,6 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
-=head2 requestor
-
-Type: belongs_to
-
-Related object: L<GMS::Schema::Result::Contact>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "requestor",
-  "GMS::Schema::Result::Account",
-  { id => "requestor" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
-);
-
 =head2 target
 
 Type: belongs_to
@@ -251,11 +227,6 @@ sub new {
 
     if (!$args->{target}) {
         push @errors, "target must be specified";
-        $valid = 0;
-    }
-
-    if (!$args->{requestor}) {
-        push @errors, "requestor must be specified";
         $valid = 0;
     }
 

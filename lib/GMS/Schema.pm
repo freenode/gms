@@ -71,7 +71,7 @@ Do nothing for now.
 
 sub install_defaults { }
 
-our $VERSION = 5;
+our $VERSION = 3;
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

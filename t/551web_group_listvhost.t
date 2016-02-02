@@ -75,7 +75,6 @@ my $cloak = $schema->resultset("CloakChange")->create({
         cloak => 'group0/user',
         group => $group,
         target => 'AAAAAAAAH',
-        requestor => 'AAAAAAAAH',
         changed_by => 'AAAAAAAAH'
     });
 

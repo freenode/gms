@@ -54,7 +54,6 @@ my $req = $schema->resultset('CloakChange')->create({
         group        => $group,
         changed_by   => $user,
         target       => $user,
-        requestor    => $user,
         status       => 'accepted',
     });
 
