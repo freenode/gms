@@ -785,7 +785,21 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
         }
 
         try {
-            $change_rs->create ({ target => $account->id, cloak => "$namespace/$cloak", changed_by => $c->user->account, group => $group });
+            my $change = {
+                    requestor => $c->user->account->id,
+                    target => $account->id,
+                    cloak => "$namespace/$cloak",
+                    changed_by => $c->user->account,
+                    group => $group
+                };
+
+                if ($account->id eq $c->user->account->id) {
+                    # User doesn't have to OK cloaks they
+                    # request on themselves...
+                    $change->{status} = 'accepted';
+                }
+
+            $change_rs->create($change);
             ++$success_count;
 
             notice_staff_chan(
@@ -794,13 +808,15 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                 $account->accountname . " -> $namespace/$cloak"
             );
 
-            memo(
-                $c,
-                $account->accountname,
-                "You have a pending cloak request from " . $group->group_name .
-                ". Cloak: $namespace/$cloak. Please go to " .
-                $c->uri_for('/cloak') . " to accept or deny."
-            );
+            if ($account->id != $c->user->account->id) {
+                memo(
+                    $c,
+                    $account->accountname,
+                    "You have a pending cloak request from " . $group->group_name .
+                    ". Cloak: $namespace/$cloak. Please go to " .
+                    $c->uri_for('/cloak') . " to accept or deny."
+                );
+            }
         }
         catch (GMS::Exception::InvalidCloakChange $e) {
             push (@errors, @{$e->message});

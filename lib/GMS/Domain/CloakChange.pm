@@ -55,11 +55,16 @@ sub new {
     );
 
     try {
-        my $account = $accounts->find_by_uid (
+        my $target_account = $accounts->find_by_uid (
             $row->target->id
         );
 
-        $self->{_target} = $account;
+        my $requestor_account = $accounts->find_by_uid(
+            $row->requestor->id
+        );
+
+        $self->{_target} = $target_account;
+        $self->{_requestor} = $requestor_account;
     }
     catch (GMS::Exception $e) {
         die $e;
@@ -69,6 +74,20 @@ sub new {
     }
 
     bless $self, $class;
+}
+
+=head2 requestor
+
+Returns a GMS::Domain::Account object
+representing the requestor's
+services account.
+
+=cut
+
+sub requestor {
+    my ($self) = @_;
+
+    return $self->{_requestor};
 }
 
 =head2 target
@@ -111,6 +130,11 @@ sub TO_JSON {
     my $target_id      = undef;
     my $target_mark    = undef;
 
+    my $req_name    = undef;
+    my $req_dropped = undef;
+    my $req_id      = undef;
+    my $req_mark    = undef;
+
     if ( $self->target ) {
         $target_name     = $self->target->accountname;
         $target_dropped  = $self->target->is_dropped;
@@ -121,14 +145,31 @@ sub TO_JSON {
         }
     }
 
+    if ( $self->requestor ) {
+        $req_name     = $self->requestor->accountname;
+        $req_dropped  = $self->requestor->is_dropped;
+        $req_id       = $self->requestor->id;
+
+        if (!$req_dropped) {
+            $req_mark     = $self->requestor->mark;
+        }
+    }
+
     return {
         'id'                          => $self->id,
         'cloak'                       => $self->cloak,
+
         'target_id'                   => $target_id,
         'target_name'                 => $target_name,
         'target_dropped'              => $target_dropped,
         'target_mark'                 => $target_mark,
         'target_recent_cloak_changes' => \@recent,
+
+        'requestor_id'                => $req_id,
+        'requestor_name'              => $req_name,
+        'requestor_dropped'           => $req_dropped,
+        'requestor_mark'              => $req_mark,
+
         'status'                      => $self->active_change->status->value,
         'change_freetext'             => $self->active_change->change_freetext,
         'change_time'                 => $self->active_change->time,
