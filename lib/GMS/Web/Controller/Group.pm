@@ -298,7 +298,7 @@ sub invite_accept :Chained('active_group') :PathPart('invite/accept') :Args(0) {
     my $group = $c->stash->{group};
     my $gc = $c->user->account->contact->group_contacts->find ({ 'group_id' => $group->id });
     $gc->accept_invitation();
-    $c->stash->{msg} = "Successfully accepted the group invitation. Please wait for staff to accept this.<br/>";
+    $c->stash->{msg} = "Successfully accepted the group invitation. Please wait for staff to approve this.<br/>";
 
     notice_staff_chan(
         $c,
@@ -493,7 +493,7 @@ sub do_edit_gc :Chained('active_group') :PathPart('edit_gc/submit') :Args(0) {
     (
         $c,
         $c->user->account->accountname . " has requested a change for " .
-        $group->group_name . "s gc information - " .
+        $group->group_name . "'s gc information - " .
         $c->uri_for("/admin/approve"),
     );
 
@@ -522,7 +522,7 @@ sub do_edit_gc :Chained('active_group') :PathPart('edit_gc/submit') :Args(0) {
     }
 
 
-    $c->stash->{msg} = "Successfully requested the GroupContactChanges.";
+    $c->stash->{msg} = "Successfully submitted the group contact change request. Please wait for staff to approve the change.";
     $c->stash->{template} = 'group/action_done.tt';
 }
 
@@ -1098,7 +1098,7 @@ sub do_edit_channel_namespaces :Chained('active_group') :PathPart('edit_channel_
         );
     }
 
-    $c->stash->{msg} = 'Namespace updates requested successfully,';
+    $c->stash->{msg} = "Successfully submitted the channel namespace change request. Please wait for staff to approve the change.";
 
     $c->stash->{template} = 'group/action_done.tt';
 }
@@ -1209,7 +1209,7 @@ sub do_edit_cloak_namespaces :Chained('active_group') :PathPart('edit_cloak_name
         );
     }
 
-    $c->stash->{msg} = 'Namespace updates requested successfully,';
+    $c->stash->{msg} = "Successfully submitted the cloak namespace change request. Please wait for staff to approve the change.";
     $c->stash->{template} = 'group/action_done.tt';
 }
 
