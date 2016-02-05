@@ -36,7 +36,7 @@ Returns a ResultSet of channel requests pending staff action.
 sub search_pending {
     my ($self) = @_;
 
-    return $self->_search_channel_request_status ( ['pending_staff', 'error'] );
+    return $self->_search_channel_request_status ( ['pending_staff', 'error', 'approved'] );
 }
 
 =head2 search_unapplied

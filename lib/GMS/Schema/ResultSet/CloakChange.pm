@@ -75,7 +75,7 @@ Returns a ResultSet of cloak changes pending staff action.
 sub search_pending {
     my ($self) = @_;
 
-    return $self->_search_cloak_change_status ( [ 'accepted', 'error' ] );
+    return $self->_search_cloak_change_status ( [ 'accepted', 'error', 'approved' ] );
 }
 
 =head2 last_change
