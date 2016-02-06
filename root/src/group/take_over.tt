@@ -28,7 +28,7 @@
                 </div>
                 [% IF info %]
                     <p class="help-block">Please confirm that this is the user that you think it is:
-                    <pre>[% info %]</pre>
+                    <pre>[% info | html %]</pre>
                     </p>
                     <div class="checkbox">
                         <label><input type="checkbox" name="confirm" value="1" /> This is who I think it is</label>*
