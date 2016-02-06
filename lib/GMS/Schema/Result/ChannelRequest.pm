@@ -261,7 +261,6 @@ __PACKAGE__->add_columns(
 );
 
 use TryCatch;
-use Text::Glob qw/match_glob/;
 use GMS::Atheme::Client;
 
 =head1 METHODS
@@ -319,7 +318,7 @@ sub new {
             $args->{namespace_id} = $namespace->id;
         }
 
-        if ( $channel ne "#$namespace_name" && !match_glob ("#$namespace_name-*", $channel) ) {
+        if ( $channel ne "#$namespace_name" && index($channel, "#$namespace_name-") != 0) {
             push @errors, "This channel does not belong in that namespace.";
             $valid = 0;
         }
