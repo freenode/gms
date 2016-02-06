@@ -19,9 +19,7 @@
     <p>
         <b>User information:</b>
     </p>
-    <pre>
-        [% info %]
-    </pre>
+    <pre>[% info %]</pre>
 [% END %]
 
 [% IF admin -%]
