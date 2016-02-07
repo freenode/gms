@@ -70,7 +70,6 @@ sub account :Chained('/admin/base') :PathPart('account') :CaptureArgs(1) {
         if (!$c->authenticate({ username => $user, password => $pass })) {
             $c->stash->{error_msg} = 'Incorrect password.';
             $c->stash->{template} = 'get_password.tt';
-            $c->res->status(403);
             $c->detach;
         }
     }
@@ -109,8 +108,6 @@ sub account :Chained('/admin/base') :PathPart('account') :CaptureArgs(1) {
             # auth cookie for the user's Atheme session.
 
             $c->stash->{template} = 'get_password.tt';
-
-            $c->res->status(403);
             $c->detach;
         }
 
