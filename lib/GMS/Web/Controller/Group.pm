@@ -566,8 +566,6 @@ sub do_take_over :Chained('active_group') :PathPart('take_over/submit') :Args(0)
             $c->stash->{action} = './submit';
             $c->stash->{error_msg} = 'Incorrect password.';
             $c->stash->{template} = 'get_password.tt';
-
-            $c->res->status(403);
             $c->detach;
         }
     }
@@ -691,8 +689,6 @@ sub do_take_over :Chained('active_group') :PathPart('take_over/submit') :Args(0)
             $c->stash->{params} = $p;
             $c->stash->{action} = './submit';
             $c->stash->{template} = 'get_password.tt';
-
-            $c->res->status(403);
             $c->detach;
         }
 
