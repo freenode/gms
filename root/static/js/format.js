@@ -1,21 +1,36 @@
+//http://stackoverflow.com/a/4835406/5875631
+function escapeHtml(text) {
+  text = "" + text;
+
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
 function format_account_drop ( account ) {
     var html = __TEMPLATE_ACCOUNT_DROPPED;
 
-    html = html.replace (/%dropped_account/g, account);
+    html = html.replace (/%dropped_account/g, escapeHtml(account));
     return html;
 }
 
 function format_address ( address ) {
     var html = __TEMPLATE_ADDRESS;
 
-    html = html.replace (/\%addr1/g, address.address_one);
-    html = html.replace (/\%addr2/g, address.address_two);
-    html = html.replace (/\%city/g, address.city);
-    html = html.replace (/\%state/g, address.state);
-    html = html.replace (/\%code/g, address.code);
-    html = html.replace (/\%country/g, address.country);
-    html = html.replace (/\%phone2/g, address.phone2);
-    html = html.replace (/\%phone/g, address.phone);
+    html = html.replace (/\%addr1/g, escapeHtml(address.address_one));
+    html = html.replace (/\%addr2/g, escapeHtml(address.address_two));
+    html = html.replace (/\%city/g, escapeHtml(address.city));
+    html = html.replace (/\%state/g, escapeHtml(address.state));
+    html = html.replace (/\%code/g, escapeHtml(address.code));
+    html = html.replace (/\%country/g, escapeHtml(address.country));
+    html = html.replace (/\%phone2/g,  escapeHtml(address.phone2));
+    html = html.replace (/\%phone/g, escapeHtml(address.phone));
 
     return html;
 }
@@ -43,9 +58,9 @@ function format_cc ( change ) {
     var html = __TEMPLATE_CC;
 
     html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CC);
-    html = html.replace (/\%id/g, change.id);
-    html = html.replace (/\%account_id/g, change.contact_account_id);
-    html = html.replace (/\%account_name/g, change.contact_account_name);
+    html = html.replace (/\%id/g, escapeHtml(change.id));
+    html = html.replace (/\%account_id/g, escapeHtml(change.contact_account_id));
+    html = html.replace (/\%account_name/g, escapeHtml(change.contact_account_name));
 
     if ( change.name !== change.contact_name ) {
         html = html.replace (/\%name_changed/g, format_name_change ( change.name, change.contact_name ) );
@@ -77,11 +92,11 @@ function format_cc ( change ) {
 function format_change ( json ) {
     var html = __TEMPLATE_CHANGES;
 
-    html = html.replace (/\%pending_gcc/, json.json_pending_groupcontact);
-    html = html.replace (/\%pending_gc/, json.json_pending_group);
-    html = html.replace (/\%pending_cc/, json.json_pending_contact);
-    html = html.replace (/\%pending_cnc/, json.json_pending_cns);
-    html = html.replace (/\%pending_clnc/, json.json_pending_clns);
+    html = html.replace (/\%pending_gcc/, escapeHtml(json.json_pending_groupcontact));
+    html = html.replace (/\%pending_gc/, escapeHtml(json.json_pending_group));
+    html = html.replace (/\%pending_cc/, escapeHtml(json.json_pending_contact));
+    html = html.replace (/\%pending_cnc/, escapeHtml(json.json_pending_cns));
+    html = html.replace (/\%pending_clnc/, escapeHtml(json.json_pending_clns));
 
     return html;
 }
@@ -106,18 +121,18 @@ function format_channel ( request ) {
     }
 
     html = html.replace (/\%req_type/g, __TYPE_CHANNEL);
-    html = html.replace (/\%channel_name/g, request.channel);
-    html = html.replace (/\%id/g, request.id);
-    html = html.replace (/\%account_id/g, request.target_id);
-    html = html.replace (/\%target_name/g, request.target_name);
-    html = html.replace (/\%requestor_name/g, request.requestor_name);
-    html = html.replace (/\%requestor_id/g, request.requestor_id);
-    html = html.replace (/\%fail_reason/g, request.change_freetext);
-    html = html.replace (/\%request_type/g, type);
+    html = html.replace (/\%channel_name/g, escapeHtml(request.channel));
+    html = html.replace (/\%id/g, escapeHtml(request.id));
+    html = html.replace (/\%account_id/g, escapeHtml(request.target_id));
+    html = html.replace (/\%target_name/g, escapeHtml(request.target_name));
+    html = html.replace (/\%requestor_name/g, escapeHtml(request.requestor_name));
+    html = html.replace (/\%requestor_id/g, escapeHtml(request.requestor_id));
+    html = html.replace (/\%fail_reason/g, escapeHtml(request.change_freetext));
+    html = html.replace (/\%request_type/g, escapeHtml(type));
 
-    html = html.replace (/\%group_name/g, request.group_name);
-    html = html.replace (/\%group_url/g, request.group_url);
-    html = html.replace (/\%namespace/g, request.namespace);
+    html = html.replace (/\%group_name/g, escapeHtml( request.group_name));
+    html = html.replace (/\%group_url/g,  escapeHtml(request.group_url));
+    html = html.replace (/\%namespace/g, escapeHtml(request.namespace));
 
     if ( !request.target_mark ) {
         html = html.replace (/\%marked/g, '');
@@ -142,8 +157,8 @@ function format_channel ( request ) {
 
 function format_cloak_change ( change ) {
     var html = __TEMPLATE_CLOAK_CHANGE;
-    html = html.replace (/\%cloak/, change.cloak);
-    html = html.replace (/\%time/, change.change_time);
+    html = html.replace (/\%cloak/, escapeHtml(change.cloak));
+    html = html.replace (/\%time/, escapeHtml(change.change_time));
 
     return html;
 }
@@ -159,14 +174,14 @@ function format_cloak ( request ) {
     }
 
     html = html.replace (/\%req_type/g, __TYPE_CLOAK);
-    html = html.replace (/\%cloak/g, request.cloak);
-    html = html.replace (/\%id/g, request.id);
-    html = html.replace (/\%account_id/g, request.target_id);
-    html = html.replace (/\%target_name/g, request.target_name);
-    html = html.replace (/\%fail_reason/g, request.change_freetext);
-    html = html.replace(/\%namespace/g, request.namespace);
-    html = html.replace(/\%group_name/g, request.group_name);
-    html = html.replace(/\%group_url/g, request.group_url);
+    html = html.replace (/\%cloak/g, escapeHtml(request.cloak));
+    html = html.replace (/\%id/g,  escapeHtml(request.id));
+    html = html.replace (/\%account_id/g, escapeHtml(request.target_id));
+    html = html.replace (/\%target_name/g, escapeHtml(request.target_name));
+    html = html.replace (/\%fail_reason/g, escapeHtml(request.change_freetext));
+    html = html.replace(/\%namespace/g, escapeHtml(request.namespace));
+    html = html.replace(/\%group_name/g, escapeHtml(request.group_name));
+    html = html.replace(/\%group_url/g,  escapeHtml(request.group_url));
 
     if ( !request.target_mark ) {
         html = html.replace (/\%marked/g, '');
@@ -202,10 +217,10 @@ function format_gc ( change ) {
     var html = __TEMPLATE_GC;
 
     html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_GC);
-    html = html.replace (/\%id/g, change.id);
-    html = html.replace (/\%group_id/g, change.group_id);
-    html = html.replace (/\%group_name/g, change.group_name);
-    html = html.replace (/\%group_url/g, change.group_url);
+    html = html.replace (/\%id/g, escapeHtml(change.id));
+    html = html.replace (/\%group_id/g, escapeHtml(change.group_id));
+    html = html.replace (/\%group_name/g, escapeHtml(change.group_name));
+    html = html.replace (/\%group_url/g, escapeHtml(change.group_url));
 
     if ( change.type !== change.group_type ) {
         html = html.replace (/\%type_changed/g, format_type_change ( change.type, change.group_type ) );
@@ -232,12 +247,12 @@ function format_gcc ( change ) {
     var html = __TEMPLATE_GCC;
 
     html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_GCC);
-    html = html.replace (/\%id/g, change.id);
-    html = html.replace (/\%account_id/g, change.contact_account_id);
-    html = html.replace (/\%account_name/g, change.contact_account_name);
-    html = html.replace (/\%group_id/g, change.group_id);
-    html = html.replace (/\%group_name/g, change.group_name);
-    html = html.replace (/\%group_url/g, change.group_url);
+    html = html.replace (/\%id/g, escapeHtml(change.id));
+    html = html.replace (/\%account_id/g, escapeHtml(change.contact_account_id));
+    html = html.replace (/\%account_name/g, escapeHtml(change.contact_account_name));
+    html = html.replace (/\%group_id/g, escapeHtml(change.group_id));
+    html = html.replace (/\%group_name/g, escapeHtml(change.group_name));
+    html = html.replace (/\%group_url/g, escapeHtml(change.group_url));
 
     if ( change.status !== change.gc_status ) {
         html = html.replace ( /\%status_changed/, format_status_change ( change.status, change.gc_status ) );
@@ -263,11 +278,11 @@ function format_gcc ( change ) {
 function format_group_change ( new_group, old_group ) {
     var html = __GROUP_CHANGED;
 
-    html = html.replace (/\%old_group_id/g, old_group.id);
-    html = html.replace (/\%old_group/g, old_group.name);
+    html = html.replace (/\%old_group_id/g, escapeHtml(old_group.id));
+    html = html.replace (/\%old_group/g, escapeHtml(old_group.name));
 
-    html = html.replace (/\%new_group_id/g, new_group.id);
-    html = html.replace (/\%new_group/g, new_group.name);
+    html = html.replace (/\%new_group_id/g, escapeHtml(new_group.id));
+    html = html.replace (/\%new_group/g, escapeHtml(new_group.name));
 
     return html;
 }
@@ -282,14 +297,14 @@ function format_group ( group ) {
     }
 
     html = html.replace (/\%req_type/g, __TYPE_GROUP);
-    html = html.replace (/\%id/g, group.id);
-    html = html.replace (/\%group_id/g, group.id);
-    html = html.replace (/\%group_name/g, group.name);
-    html = html.replace (/\%group_initial_contact/g, group.initial_contact_account_name);
-    html = html.replace (/\%account_id/g, group.initial_contact_account_id);
-    html = html.replace (/\%group_initial_namespace/g, group.initial_namespace_name);
-    html = html.replace (/\%group_url/g, group.url);
-    html = html.replace (/\%group_type/g, group.type);
+    html = html.replace (/\%id/g, escapeHtml(group.id));
+    html = html.replace (/\%group_id/g, escapeHtml(group.id));
+    html = html.replace (/\%group_name/g, escapeHtml(group.name));
+    html = html.replace (/\%group_initial_contact/g, escapeHtml(group.initial_contact_account_name));
+    html = html.replace (/\%account_id/g, escapeHtml(group.initial_contact_account_id));
+    html = html.replace (/\%group_initial_namespace/g, escapeHtml(group.initial_namespace_name));
+    html = html.replace (/\%group_url/g, escapeHtml(group.url));
+    html = html.replace (/\%group_type/g, escapeHtml(group.type));
 
     if ( group.initial_contact_account_dropped ) {
         html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( group.initial_contact_account_name ) );
@@ -301,15 +316,15 @@ function format_group ( group ) {
 }
 
 function format_group_id (text, group_id) {
-    text = text.replace(/\%group_id/g, group_id);
+    text = text.replace(/\%group_id/g, escapeHtml(group_id));
     return text;
 }
 
 function format_email_change ( new_email, old_email ) {
     var html = __EMAIL_CHANGED;
 
-    html = html.replace (/\%old_email/g, old_email);
-    html = html.replace (/\%new_email/g, new_email);
+    html = html.replace (/\%old_email/g, escapeHtml(old_email));
+    html = html.replace (/\%new_email/g, escapeHtml(new_email));
 
     return html;
 }
@@ -321,9 +336,9 @@ function format_mark ( mark_obj ) {
     var mark_setter = mark_obj[1];
     var mark_time = parseInt (mark_obj[2], 10) * 1000;
 
-    html = html.replace (/\%setter/, mark_setter);
+    html = html.replace (/\%setter/, escapeHtml(mark_setter));
     html = html.replace (/\%time/, new Date(mark_time));
-    html = html.replace (/\%mark/, mark);
+    html = html.replace (/\%mark/, escapeHtml(mark));
 
     return html;
 }
@@ -363,15 +378,15 @@ function format_mass_action ( obj_type, type  ) {
 function format_name_change ( new_name, old_name ) {
     var html = __NAME_CHANGED;
 
-    html = html.replace (/\%old_name/g, old_name);
-    html = html.replace (/\%new_name/g, new_name);
+    html = html.replace (/\%old_name/g, escapeHtml(old_name));
+    html = html.replace (/\%new_name/g, escapeHtml(new_name));
 
     return html;
 }
 
 function format_nsc ( change, type ) {
     var html = __TEMPLATE_NSC;
-    var name = change.namespace_name;
+    var name = escapeHtml(change.namespace_name);
 
     if ( type === __TYPE_CNC ) {
         html = html.replace (/\%req_type/g, __TYPE_CHANGE + "_" + __TYPE_CNC);
@@ -381,9 +396,9 @@ function format_nsc ( change, type ) {
         html = html.replace (/\%namespace_name/g, name + "/*");
     }
 
-    html = html.replace (/\%id/g, change.id);
-    html = html.replace (/\%group_name/g, change.group.name);
-    html = html.replace (/\%group_id/g, change.group.id);
+    html = html.replace (/\%id/g, escapeHtml(change.id));
+    html = html.replace (/\%group_name/g, escapeHtml(change.group.name));
+    html = html.replace (/\%group_id/g, escapeHtml(change.group.id));
 
     if ( change.status !== change.namespace_status ) {
         html = html.replace (/\%status_changed/g, format_status_change ( change.status, change.namespace_status));
@@ -411,13 +426,13 @@ function format_namespace ( namespace, type ) {
         html = html.replace (/\%req_type/g, __TYPE_NS2);
     }
 
-    html = html.replace (/\%group_id/g, namespace.group_id);
-    html = html.replace (/\%id/g, namespace.id);
-    html = html.replace (/\%group_name/g, namespace.group_name);
-    html = html.replace (/\%requested_namespace/g, namespace.namespace_name);
-    html = html.replace (/\%group_url/g, namespace.group_url);
-    html = html.replace (/\%requestor_name/g, namespace.requestor_account_name);
-    html = html.replace (/\%account_id/g, namespace.requestor_account_id);
+    html = html.replace (/\%group_id/g, escapeHtml(namespace.group_id));
+    html = html.replace (/\%id/g, escapeHtml(namespace.id));
+    html = html.replace (/\%group_name/g, escapeHtml(namespace.group_name));
+    html = html.replace (/\%requested_namespace/g, escapeHtml(namespace.namespace_name));
+    html = html.replace (/\%group_url/g, escapeHtml(namespace.group_url));
+    html = html.replace (/\%requestor_name/g, escapeHtml(namespace.requestor_account_name));
+    html = html.replace (/\%account_id/g, escapeHtml(namespace.requestor_account_id));
 
     if ( namespace.requestor_account_dropped ) {
         html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( namespace.requestor_account_name ) );
@@ -432,11 +447,11 @@ function format_new_gc ( gc ) {
     var html = __TEMPLATE_AGC;
 
     html = html.replace (/\%req_type/g, __TYPE_NEW_GC);
-    html = html.replace (/\%id/g, gc.id);
-    html = html.replace (/\%group_id/g, gc.group_id);
-    html = html.replace (/\%group_name/g, gc.group_name);
-    html = html.replace (/\%account_id/g, gc.contact_account_id);
-    html = html.replace (/\%gc_name/g, gc.contact_account_name);
+    html = html.replace (/\%id/g, escapeHtml(gc.id));
+    html = html.replace (/\%group_id/g, escapeHtml(gc.group_id));
+    html = html.replace (/\%group_name/g, escapeHtml(gc.group_name));
+    html = html.replace (/\%account_id/g, escapeHtml(gc.contact_account_id));
+    html = html.replace (/\%gc_name/g, escapeHtml(gc.contact_account_name));
 
     if ( gc.contact_account_dropped ) {
         html = html.replace ( /\%target_account_dropped/g, format_account_drop ( gc.contact_account_name ) );
@@ -482,8 +497,8 @@ function format_no_requests ( type ) {
 function format_phone_change (new_phone, old_phone) {
     var html = __PHONE_CHANGED;
 
-    html = html.replace (/\%old_phone/g, old_phone);
-    html = html.replace (/\%new_phone/g, new_phone);
+    html = html.replace (/\%old_phone/g, escapeHtml(old_phone));
+    html = html.replace (/\%new_phone/g, escapeHtml(new_phone));
 
     return html;
 }
@@ -503,8 +518,8 @@ function format_primary_change ( new_primary, old_primary ) {
 
     var html = __PRIMARY_CHANGED;
 
-    html = html.replace (/\%old_primary/, old_primary);
-    html = html.replace (/\%new_primary/, new_primary);
+    html = html.replace (/\%old_primary/, escapeHtml(old_primary));
+    html = html.replace (/\%new_primary/, escapeHtml(new_primary));
 
     return html;
 }
@@ -512,8 +527,8 @@ function format_primary_change ( new_primary, old_primary ) {
 function format_status_change ( new_stats, old_stats ) {
     var html = __STATUS_CHANGED;
 
-    html = html.replace (/\%old_status/, old_stats);
-    html = html.replace (/\%new_status/, new_stats);
+    html = html.replace (/\%old_status/, escapeHtml(old_stats));
+    html = html.replace (/\%new_status/, escapeHtml(new_stats));
 
     return html;
 }
@@ -521,8 +536,8 @@ function format_status_change ( new_stats, old_stats ) {
 function format_type_change ( new_type, old_type ) {
     var html = __TYPE_CHANGED;
 
-    html = html.replace (/\%old_type/g, old_type);
-    html = html.replace (/\%new_type/g, new_type);
+    html = html.replace (/\%old_type/g, escapeHtml(old_type));
+    html = html.replace (/\%new_type/g, escapeHtml(new_type));
 
     return html;
 }
@@ -530,8 +545,8 @@ function format_type_change ( new_type, old_type ) {
 function format_url_change ( new_url, old_url ) {
     var html = __URL_CHANGED;
 
-    html = html.replace (/\%old_url/g, old_url);
-    html = html.replace (/\%new_url/g, new_url);
+    html = html.replace (/\%old_url/g, escapeHtml(old_url));
+    html = html.replace (/\%new_url/g, escapeHtml(new_url));
 
     return html;
 }
@@ -539,6 +554,6 @@ function format_url_change ( new_url, old_url ) {
 function format_user_cloak_url ( id ) {
     var url = __URL_USER_ACCEPT_CLOAK;
 
-    url = url.replace (/\%id/g, id);
+    url = url.replace (/\%id/g, escapeHtml(id));
     return url;
 }
