@@ -28,7 +28,7 @@ role, and presents an error page if not.
 sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) :Local :VerifyToken {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff') && ! $c->check_user_roles('approver')) {
+    if (! $c->check_any_user_role('admin', 'staff', 'approver')) {
         $c->detach('/forbidden');
     }
 
@@ -64,7 +64,7 @@ Actions only allowed for the approver role.
 sub approver_only :Chained('base') :PathPart('') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('approver')) {
+    if (! $c->check_any_user_role('admin', 'approver')) {
         $c->detach('/forbidden');
     }
 }

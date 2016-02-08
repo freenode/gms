@@ -97,7 +97,7 @@ sub end : ActionClass('RenderView::ErrorHandler') {
         $c->detach('View::JSON');
     } 
 
-    if ( $c->check_user_roles("admin") || $c->check_user_roles("approver") ) {
+    if ( $c->check_any_user_role("admin", "approver") ) {
         $c->stash->{pending_admin} = $c->model('DB::Group')->search_pending->count +
                                      $c->model('DB::ChannelNamespace')->search_pending->count +
                                      $c->model('DB::CloakNamespace')->search_pending->count +

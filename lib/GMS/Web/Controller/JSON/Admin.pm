@@ -28,7 +28,7 @@ role, and presents an error page if not.
 sub base :Chained('/') :PathPart('json/admin') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('staff') && ! $c->check_user_roles('approver')) {
+    if (! $c->check_any_user_role('admin', 'staff', 'approver')) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You do not have permission to access the requested page.";
         $c->response->status(403);
@@ -70,7 +70,7 @@ Actions only allowed for the approver role.
 sub approver_only :Chained('base') :PathPart('') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    if (! $c->check_user_roles('admin') && ! $c->check_user_roles('approver')) {
+    if (! $c->check_any_user_role('admin', 'approver')) {
         $c->stash->{json_success} = 0;
         $c->stash->{json_error} = "You do not have permission to access the requested page.";
         $c->response->status(403);
