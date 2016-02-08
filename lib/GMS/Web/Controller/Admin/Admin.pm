@@ -1000,14 +1000,7 @@ Lists users and roles
 sub admin :Chained('/admin/admin_only') :PathPart('admin') {
     my ($self, $c) = @_;
 
-    my @admins = $c->model('DB::UserRole')->search(
-      {
-        'role.name' => ['admin', 'staff', 'approver']
-      },
-      {
-        join => [ 'role', 'account' ]
-      }
-    );
+    my @admins = $c->model('DB::UserRole')->search({}, {join => ['role', 'account']});
 
     my @roles = $c->model('DB::Role')->all;
 
