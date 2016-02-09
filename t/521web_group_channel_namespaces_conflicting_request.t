@@ -78,7 +78,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("Namespace updates requested successfully", "Updating the namespace works");
+$ua->content_contains("Successfully submitted the channel namespace change request. Please wait for staff to approve the change", "Updating the namespace works");
 
 ok $ns->status->is_deleted, 'active change is still deleted';
 ok $ns->last_change->change_type->is_request, 'last change is request';

@@ -67,7 +67,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("Namespace updates requested successfully", "Editing namespaces works");
+$ua->content_contains("Successfully submitted the channel namespace change request. Please wait for staff to approve the change", "Editing namespaces works");
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
@@ -93,7 +93,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("Namespace updates requested successfully", "Adding a new namespace succeeds");
+$ua->content_contains("Successfully submitted the channel namespace change request. Please wait for staff to approve the change", "Adding a new namespace succeeds");
 
 is $group->channel_namespaces, 3, "Group now has 3 namespaces";
 
@@ -108,7 +108,7 @@ $ua->submit_form(
         namespace => 'test'
     }
 );
-$ua->content_contains("Namespace updates requested successfully", "We can re-add previously deleted namespace");
+$ua->content_contains("Successfully submitted the channel namespace change request. Please wait for staff to approve the change", "We can re-add previously deleted namespace");
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 
@@ -125,7 +125,7 @@ $ua->submit_form(
         do_confirm => 1
     }
 );
-$ua->content_contains("Namespace updates requested successfully", "We can request the namespace if we confirm we want to");
+$ua->content_contains("Successfully submitted the channel namespace change request. Please wait for staff to approve the change", "We can request the namespace if we confirm we want to");
 
 $ua->get_ok("http://localhost/group/1/edit_channel_namespaces", "Edit channel namespaces page works");
 

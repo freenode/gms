@@ -58,7 +58,7 @@ $ua->submit_form(
     }
 );
 
-ok $ua->content_contains ("Successfully requested the GroupContactChanges", "Submitting changes works");
+ok $ua->content_contains ("Successfully submitted the group contact change request. Please wait for staff to approve the change", "Submitting changes works");
 
 $ua->get_ok("http://localhost/group/1/edit_gc", "Edit group contacts page works");
 
@@ -75,7 +75,7 @@ $ua->submit_form(
     }
 );
 
-ok $ua->content_contains ("Successfully requested the GroupContactChanges", "Submitting changes works");
+ok $ua->content_contains ("Successfully submitted the group contact change request. Please wait for staff to approve the change", "Submitting changes works");
 
 $ua->get_ok("http://localhost/group/1/edit_gc", "Edit group contacts page works");
 
