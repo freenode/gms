@@ -789,11 +789,11 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                     group => $group
                 };
 
-                if ($account->id eq $c->user->account->id) {
-                    # User doesn't have to OK cloaks they
-                    # request on themselves...
-                    $change->{status} = 'accepted';
-                }
+            if ($account->id eq $c->user->account->id) {
+                # User doesn't have to OK cloaks they
+                # request on themselves...
+                $change->{status} = 'accepted';
+            }
 
             $change_rs->create($change);
             ++$success_count;
@@ -804,7 +804,7 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                 $account->accountname . " -> $namespace/$cloak"
             );
 
-            if ($account->id != $c->user->account->id) {
+            if ($account->id ne $c->user->account->id) {
                 memo(
                     $c,
                     $account->accountname,
@@ -850,7 +850,20 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
             }
 
             try {
-                $change_rs->create ({ target => $account->id, cloak => $cloak, changed_by => $c->user->account, group => $group });
+                my $change = $change_rs->create ({
+                    requestor => $c->user->account->id,
+                    target => $account->id,
+                    cloak => $cloak,
+                    changed_by => $c->user->account,
+                    group => $group
+                });
+
+                if ($account->id eq $c->user->account->id) {
+                    # User doesn't have to OK cloaks they
+                    # request on themselves...
+                    $change->{status} = 'accepted';
+                }
+
                 ++$success_count;
 
                 notice_staff_chan(
@@ -859,13 +872,15 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                     $account->accountname . " -> $cloak"
                 );
 
-                memo(
-                    $c,
-                    $account->accountname,
-                    "You have a pending cloak request from " . $group->group_name .
-                    ". Cloak: $cloak. Please go to " .
-                    $c->uri_for('/cloak') . " to accept or deny."
-                );
+                if ($account->id ne $c->user->account->id) {
+                    memo(
+                        $c,
+                        $account->accountname,
+                        "You have a pending cloak request from " . $group->group_name .
+                        ". Cloak: $cloak. Please go to " .
+                        $c->uri_for('/cloak') . " to accept or deny."
+                    );
+                }
             }
             catch (GMS::Exception::InvalidCloakChange $e) {
                 push (@errors, @{$e->message});
