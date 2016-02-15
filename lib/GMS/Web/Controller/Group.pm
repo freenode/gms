@@ -789,7 +789,8 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                     group => $group
                 };
 
-            if ($account->id eq $c->user->account->id) {
+            my $self = $account->id eq $c->user->account->id;
+            if ($self) {
                 # User doesn't have to OK cloaks they
                 # request on themselves...
                 $change->{status} = 'accepted';
@@ -804,7 +805,7 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                 $account->accountname . " -> $namespace/$cloak"
             );
 
-            if ($account->id ne $c->user->account->id) {
+            if (!$self) {
                 memo(
                     $c,
                     $account->accountname,
@@ -858,7 +859,8 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                     group => $group
                 });
 
-                if ($account->id eq $c->user->account->id) {
+                my $self = $account->id eq $c->user->account->id;
+                if ($self) {
                     # User doesn't have to OK cloaks they
                     # request on themselves...
                     $change->{status} = 'accepted';
@@ -872,7 +874,7 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
                     $account->accountname . " -> $cloak"
                 );
 
-                if ($account->id ne $c->user->account->id) {
+                if (!$self) {
                     memo(
                         $c,
                         $account->accountname,
@@ -890,15 +892,17 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
         }
     }
 
-    if (!@errors) {
-        $c->stash->{msg} = "Successfully requested $success_count cloak(s).";
-
+    if ($success_count) {
         notice_staff_chan(
             $c,
             $c->user->account->accountname . " has requested $success_count " .
             "cloak changes for " . $group->group_name . " - " .
             "Please wait for user approval."
         );
+    }
+
+    if (!@errors) {
+        $c->stash->{msg} = "Successfully requested $success_count cloak(s).";
 
         $c->stash->{template} = 'group/action_done.tt';
     }
@@ -910,15 +914,6 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
         $c->stash->{reqs} = \@reqs;
         $c->stash->{errors} = \@errors;
 
-
-        if ($success_count) {
-            notice_staff_chan(
-                $c,
-                $c->user->account->accountname . " has requested $success_count " .
-                "cloak changes for " .  $group->group_name . " - " .
-                "Please wait for user approval."
-            );
-        }
 
         $c->stash->{status_msg} = "Success: $success_count request(s). Failure: $error_count request(s).";
 
