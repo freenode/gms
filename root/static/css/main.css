@@ -29,7 +29,8 @@ html, body {
 }
 
 #header a.logout {
-	color:red;
+	color: #FFF;
+        text-decoration: underline;
 }
 
 #menu .btn {
