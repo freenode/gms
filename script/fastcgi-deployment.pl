@@ -4,8 +4,8 @@ use strict;
 use FindBin;
 
 use lib "$FindBin::Bin/../lib";
-use lib "$FindBin::Bin/../deps/lib";
-use lib "$FindBin::Bin/../deps/lib/perl5";
+use lib "$FindBin::Bin/../local/lib";
+use lib "$FindBin::Bin/../local/lib/perl5";
 
 use Daemon::Control;
 
@@ -32,7 +32,7 @@ exit Daemon::Control->new(
                     export PIDDIR=$pid_dir;
                     export NPROCS=$nprocs;
                     export GMSUSER=$gms_user;
-                    export PERL5LIB=$FindBin::Bin/../lib:$FindBin::Bin/../lib/perl5/:$FindBin::Bin/../deps/lib:$FindBin::Bin/../deps/lib/perl5",
+                    export PERL5LIB=$FindBin::Bin/../lib:$FindBin::Bin/../lib/perl5/:$FindBin::Bin/../local/lib:$FindBin::Bin/../local/lib/perl5",
     program_args => [
         "perl",
         $server,
