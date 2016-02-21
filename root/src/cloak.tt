@@ -19,5 +19,5 @@
     </form>
 [% END %]
 [% ELSE %]
-<p>You have no cloak pending.</p>
+<p>You have no cloaks pending.</p>
 [% END %]
