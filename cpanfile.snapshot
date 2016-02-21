@@ -870,6 +870,14 @@ DISTRIBUTIONS
       Test::Exception 0
       Test::More 0
       ok 0
+  Cpanel-JSON-XS-3.0211
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-3.0211.tar.gz
+    provides:
+      Cpanel::JSON::XS 3.0211
+    requirements:
+      ExtUtils::MakeMaker 0
+      Pod::Text 2.08
+      Pod::Usage 1.33
   DBD-Pg-3.4.1
     pathname: T/TU/TURNSTEP/DBD-Pg-3.4.1.tar.gz
     provides:

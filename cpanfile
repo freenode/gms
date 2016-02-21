@@ -40,7 +40,7 @@ requires 'Catalyst::Plugin::StackTrace';
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
 requires 'Text::Glob';
-
+requires 'Cpanel::JSON::XS';
 
 requires 'DBIx::Class::DeploymentHandler';
 requires 'MooseX::AttributeShortcuts';
