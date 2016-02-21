@@ -45,6 +45,8 @@ requires 'Cpanel::JSON::XS';
 requires 'DBIx::Class::DeploymentHandler';
 requires 'MooseX::AttributeShortcuts';
 
+requires 'Data::UUID';
+
 on 'test' => sub {
 
 requires 'Test::WWW::Mechanize::Catalyst';
