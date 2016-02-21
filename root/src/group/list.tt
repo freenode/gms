@@ -11,7 +11,7 @@
 [% END %]
 </ul>
 [% ELSE %]
-<p>You have no group membership.<p>
+<p>You have no group memberships.<p>
 [% END %]
 
 [% IF pendinggroups.size > 0 %]
@@ -25,7 +25,7 @@
 [% END %]
 </ul>
 [% ELSE %]
-<p>You have no pending group application.</p>
+<p>You have no pending group applications.</p>
 [% END %]
 
 [% IF invitedgroups.size > 0 %]
@@ -49,5 +49,5 @@
 [% END %]
 </ul>
 [% ELSE %]
-<p> You have no pending group invitation.</p>
+<p> You have no pending group invitations.</p>
 [% END %]
