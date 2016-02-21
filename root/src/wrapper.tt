@@ -29,7 +29,7 @@
             </div>
             <div class="navbar-right">
                 [% IF c.user_exists -%]
-                You are logged in as [% c.user.username | html %] (<a href="[% c.uri_for('/logout') %]" class="logout"><i class="glyphicon glyphicon-log-out"></i> Log out</a>).
+                You are logged in as [% c.user.username | html %] ( <a href="[% c.uri_for('/logout') %]" class="logout"><i class="glyphicon glyphicon-log-out"></i> Log out</a> ).
                 [% ELSE -%]
                 You are not logged in (<a href="[% c.uri_for('/login') %]" class="login"><i class="glyphicon glyphicon-log-in"></i> Log in</a>).
                 [% END %]
