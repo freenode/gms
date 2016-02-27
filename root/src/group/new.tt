@@ -127,7 +127,7 @@ to help us verify your registration.</p>
     <div class="form-group" id="gab">
         <label for="gab_email" class="col-sm-3 control-label">Email address for GAB mailing list</label>
         <div class="col-sm-9">
-            <input type="email" id="gab_email" name="gab_email" class="form-control" value="[% gab_email %]" />
+            <input type="email" id="gab_email" name="gab_email" class="form-control" value="[% gab_email | html %]" />
         </div>
     </div>
     <div class="form-group">
@@ -140,19 +140,19 @@ to help us verify your registration.</p>
     <div class="form-group" id="listing">
         <label for="listurl" class="col-sm-3 control-label">URL to be linked</label>
         <div class="col-sm-9">
-            <input id="listurl" type="text" name="listing_url" style="width:90%" value="[% listing_url %]" />
+            <input id="listurl" type="text" name="listing_url" style="width:90%" value="[% listing_url | html %]" />
         </div>
     </div>
     <div class="form-group">
         <label for="blurb" class="col-sm-3 control-label">Small blurb about the project</label>
         <div class="col-sm-9">
-            <textarea class="form-control" id="blurb" name="listing_blurb" >[% listing_blurb %]</textarea>
+            <textarea class="form-control" id="blurb" name="listing_blurb" >[% listing_blurb | html %]</textarea>
         </div>
     </div>
     <div class="form-group">
         <label for="other" class="col-sm-3 control-label">Any other information</label>
         <div class="col-sm-9">
-            <textarea class="form-control" name="other_info" id="other" >[% other_info %]</textarea>
+            <textarea class="form-control" name="other_info" id="other" >[% other_info | html %]</textarea>
         </div>
     </div>
     
