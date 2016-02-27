@@ -185,7 +185,6 @@ sub TO_JSON {
 
     my $accountname = undef;
     my $dropped = undef;
-    my $initial = undef;
     my $id      = undef;
 
     if ($first) {
@@ -194,8 +193,9 @@ sub TO_JSON {
         $id      = $first->contact->account->id;
     }
 
-    if ($self->channel_namespaces->first) {
-        $initial = $self->channel_namespaces->first->namespace;
+    my @namespaces;
+    foreach my $ns ($self->channel_namespaces) {
+        push @namespaces, $ns->namespace
     }
 
     return {
@@ -207,7 +207,7 @@ sub TO_JSON {
         'initial_contact_account_name'    => $accountname,
         'initial_contact_account_id'      => $id,
         'initial_contact_account_dropped' => $dropped,
-        'initial_namespace_name'          => $initial,
+        'channel_namespaces'              => \@namespaces
     }
 }
 

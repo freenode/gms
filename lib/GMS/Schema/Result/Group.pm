@@ -1088,6 +1088,11 @@ sub TO_JSON {
         $dropped = $first->contact->account->is_dropped;
     }
 
+    my @namespaces;
+    foreach my $ns ($self->channel_namespaces) {
+        push @namespaces, $ns->namespace
+    }
+
     return {
         'id'                              => $self->id,
         'name'                            => $self->group_name,
@@ -1097,7 +1102,7 @@ sub TO_JSON {
         'initial_contact_account_name'    => $accountname,
         'initial_contact_account_id'      => $id,
         'initial_contact_account_dropped' => $dropped,
-        'initial_namespace_name'          => $self->channel_namespaces->first->namespace,
+        'channel_namespaces'              => \@namespaces
     }
 }
 

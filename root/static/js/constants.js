@@ -118,7 +118,7 @@ var __GROUP_TYPE              = ' group';
 var __GROUP                   = 'Group: ';
 var __GROUPS                  = 'groups';
 var __INITIAL_CONTACT         = 'Initial contact: ';
-var __INITIAL_NAMESPACE       = 'Initial namespace: ';
+var __INITIAL_CHANNEL_NAMESPACES = 'Initial namespaces: ';
 var __HIDDEN_PLACEHOLDER      = 'Optional freetext about the change.';
 var __MARK                    = '<b>Note:</b> the account has been <b>marked</b> by <b>%setter</b> on %time:' + __BR + '<b>%mark</b>';
 var __NAME                    = 'Name: ';
@@ -550,7 +550,7 @@ var __TEMPLATE_GROUP_INFO     =
         "</small>" +
         "%group_type" + __GROUP_TYPE + __BR +
         __INITIAL_CONTACT + "<a target='_blank' href='" + __URL_USER + "'>%group_initial_contact</a>" + __BR +
-        __INITIAL_NAMESPACE + "#%group_initial_namespace / #%group_initial_namespace-*" + __BR +
+        __INITIAL_CHANNEL_NAMESPACES + "%initial_channel_namespaces" + __BR +
         "%requestor_account_dropped" +
     "</blockquote>" +
 "</div>";

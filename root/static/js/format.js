@@ -302,7 +302,7 @@ function format_group ( group ) {
     html = html.replace (/\%group_name/g, escapeHtml(group.name));
     html = html.replace (/\%group_initial_contact/g, escapeHtml(group.initial_contact_account_name));
     html = html.replace (/\%account_id/g, escapeHtml(group.initial_contact_account_id));
-    html = html.replace (/\%group_initial_namespace/g, escapeHtml(group.initial_namespace_name));
+    html = html.replace (/\%initial_channel_namespaces/g, escapeHtml(group.channel_namespaces.map(function(ns) { return "#" + ns; }).join(", ")));
     html = html.replace (/\%group_url/g, escapeHtml(group.url));
     html = html.replace (/\%group_type/g, escapeHtml(group.type));
 
