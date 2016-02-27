@@ -1271,7 +1271,8 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
         
     }
 
-    my @channels = split /, */, $p->{channel_namespace};
+    my $namespaces = $p->{channel_namespace};
+    my @channels = grep {$_ ne ""} (split /\s*,\s*/, $namespaces);
 
     foreach my $channel_ns ( @channels ) {
         $channel_ns =~ s/^\#//;

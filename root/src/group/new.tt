@@ -45,7 +45,7 @@ to help us verify your registration.</p>
     <div class="form-group">
         <label for="group_cns" class="col-sm-3 control-label">* Channel Namespace</label>
         <div class="input-group col-sm-9">
-            <input type="text" required pattern="#?[A-Za-z0-9_\.]*(-\*)?$" maxlength="50" title="Channel namespaces must contain only alphanumeric characters, underscores, and dots" id="group_cns" name="channel_namespace" class="form-control" value="[% channel_namespace | html %]" />
+            <input type="text" required pattern="\s*(#?[A-Za-z0-9_\.]*(-\*)?(,\s*)?)*\s*$" maxlength="50" title="Channel namespaces must contain only alphanumeric characters, underscores, and dots" id="group_cns" name="channel_namespace" class="form-control" value="[% channel_namespace | html %]" />
             <span class="input-group-addon" onmouseover="tooltip(this, 4)" onmouseout="untooltip()"><i class="glyphicon glyphicon-question-sign"></i></span>
         </div>
     </div>
