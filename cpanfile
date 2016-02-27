@@ -19,7 +19,7 @@ requires 'Config::General'; # This should reflect the config file format you've 
 requires 'MooseX::OneArgNew';
 requires 'TryCatch';
 requires 'RPC::XML';
-requires 'DBIx::Class' => '0.08124';
+requires 'DBIx::Class' => '>=0.08124';
 requires 'DBIx::Class::DeploymentHandler';
 requires 'DBIx::Class::Fixtures';
 requires 'DBIx::Class::InflateColumn::Object::Enum';
@@ -28,7 +28,7 @@ requires 'DBD::Pg';
 requires 'String::Random';
 requires 'Dir::Self';
 requires 'Config::JFDI';
-requires 'SQL::Translator' => '0.11002';
+requires 'SQL::Translator' => '>=0.11002';
 requires 'JSON::XS';
 
 requires 'Net::DNS';
@@ -40,10 +40,12 @@ requires 'Catalyst::Plugin::StackTrace';
 requires 'LWP::Protocol::https';
 requires 'Domain::PublicSuffix';
 requires 'Text::Glob';
-
+requires 'Cpanel::JSON::XS';
 
 requires 'DBIx::Class::DeploymentHandler';
 requires 'MooseX::AttributeShortcuts';
+
+requires 'Data::UUID';
 
 on 'test' => sub {
 
