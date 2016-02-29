@@ -744,6 +744,7 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
     my $num = $p->{num_cloaks};
 
     my @errors;
+    my $empty_count = 0;
     my $error_count = 0;
     my $success_count = 0;
 
@@ -763,7 +764,13 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
         my $account;
 
         if ( !$accountname || !$namespace || !$cloak ) {
+            $empty_count++;
             next;
+        }
+
+        if ( $i - $empty_count >= 8 ) {
+            # requests are limited by the UI; violation is not a reported error.
+            last;
         }
 
         try {

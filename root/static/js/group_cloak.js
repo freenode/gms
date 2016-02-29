@@ -1,6 +1,7 @@
 //function addEventHandler (elem, eventType, handler) {
 var count = 1;
 var numElems = 0;
+var maxElems = 8;
 
 function removeBox (elem) {
     if ( numElems == 0) {
@@ -29,6 +30,11 @@ function removeBox (elem) {
     }
 
     --numElems;
+
+    if ( numElems+1 <= maxElems ) {
+        var add_button = document.getElementById(__ID_BTN_ADD);
+        add_button.style.visibility = 'visible';
+    }
 }
 
 addEventHandler ( window, 'load', function() {
@@ -38,6 +44,10 @@ addEventHandler ( window, 'load', function() {
 });
 
 function addAnother() {
+    if ( numElems+1 >= maxElems ) {
+        return;
+    }
+
     var container = document.getElementById(__ID_CLOAK_CONTAINER);
     var cloak = document.getElementById(__ID_CLOAK);
 
@@ -67,10 +77,24 @@ function addAnother() {
 
     document.getElementById(__ID_NUM_CLOAKS).setAttribute('value', ++count);
     ++numElems;
+
+    if ( numElems+1 > maxElems ) {
+        var add_button = document.getElementById(__ID_BTN_ADD);
+        add_button.style.visibility = 'hidden';
+    }
+
+    setTimeout ( function() {
+        addButtonClick ()
+    }, 1 );
 }
 
 function addButtonClick() {
     var input = document.getElementById(__ID_BTN_ADD);
+
+    if ( numElems+1 >= maxElems ) {
+        input.style.visibility = 'hidden';
+    }
+
     addEventHandler ( input, 'click', function() {
         addAnother();
     } );
