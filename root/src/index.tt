@@ -9,7 +9,7 @@ You can report bugs and issues on the <a href="https://github.com/freenode/gms" 
 </p>
 
 [% IF !c.user_exists %]
-  <p>Please log in with your Atheme username and password on the top right to use GMS.</p>
+  <p>Please log in with your NickServ username and password on the top right to use GMS.</p>
 [% ELSE %]
   <p>Please use the buttons to the left to choose an option.</p>
 
