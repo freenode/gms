@@ -32,10 +32,9 @@ __PACKAGE__->table("contacts");
 
 =head2 account_id
 
-  data_type: 'text'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-  original: {data_type => "varchar"}
 
 =head2 active_change
 
@@ -74,10 +73,9 @@ __PACKAGE__->add_columns(
   },
   "account_id",
   {
-    data_type      => "text",
+    data_type      => "integer",
     is_foreign_key => 1,
     is_nullable    => 0,
-    original       => { data_type => "varchar" },
   },
   "active_change",
   {
@@ -146,7 +144,7 @@ __PACKAGE__->belongs_to(
   "account",
   "GMS::Schema::Result::Account",
   { id => "account_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "NO ACTION" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 active_change
