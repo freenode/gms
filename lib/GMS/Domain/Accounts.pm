@@ -124,7 +124,7 @@ sub find_by_name {
 
         my $row = $schema->resultset('Account')->find_or_new (
             {
-                'id' => $uid
+                'uuid' => $uid
             }
         );
 
