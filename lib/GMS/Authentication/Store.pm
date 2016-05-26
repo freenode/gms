@@ -51,7 +51,7 @@ sub for_session {
     my ($self, $c, $user) = @_;
 
     return {
-        'id'            => $user->get('uuid'),
+        'id'            => $user->get('id'),
         'authcookie'    => $user->get('authcookie'),
     };
 }
