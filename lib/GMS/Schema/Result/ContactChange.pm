@@ -45,10 +45,9 @@ __PACKAGE__->table("contact_changes");
 
 =head2 changed_by
 
-  data_type: 'text'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-  original: {data_type => "varchar"}
 
 =head2 name
 
@@ -106,10 +105,9 @@ __PACKAGE__->add_columns(
   },
   "changed_by",
   {
-    data_type      => "text",
+    data_type      => "integer",
     is_foreign_key => 1,
     is_nullable    => 0,
-    original       => { data_type => "varchar" },
   },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },

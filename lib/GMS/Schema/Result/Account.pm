@@ -25,6 +25,13 @@ __PACKAGE__->table("accounts");
 
 =head2 id
 
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+  sequence: 'accounts_id_seq'
+
+=head2 uuid
+
   data_type: 'varchar'
   is_nullable: 0
   size: 9
@@ -44,8 +51,15 @@ __PACKAGE__->table("accounts");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
+  "uuid",
   { data_type => "varchar", is_nullable => 0, size => 9 },
+  "id",
+  {
+    data_type         => "integer",
+    is_auto_increment => 1,
+    is_nullable       => 0,
+    sequence          => "accounts_id_seq",
+  },
   "accountname",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "dropped",
@@ -63,6 +77,21 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<unique_uuid>
+
+=over 4
+
+=item * L</uuid>
+
+=back
+
+=cut
+
+
+__PACKAGE__->add_unique_constraint("unique_uuid", ["uuid"]);
 
 =head1 RELATIONS
 

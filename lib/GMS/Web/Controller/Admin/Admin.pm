@@ -91,24 +91,18 @@ Chained method to select an account.
 sub account :Chained('/admin/admin_only') :PathPart('account') :CaptureArgs(1) {
     my ($self, $c, $account_id) = @_;
 
-    my $account;
-
     try {
-        $account = $c->model('Accounts')->find_by_uid ( $account_id );
-    }
-    catch (GMS::Exception $e) {
-        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->message . ". Data displayed below may not be current.";
-        $account = $c->model('DB::Account')->find({ id => $account_id });
-    }
-    catch (RPC::Atheme::Error $e) {
-        $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-        $account = $c->model('DB::Account')->find({ id => $account_id });
-    }
+        my $account = $c->model('Accounts')->find_by_uid ( $account_id );
 
-    if ($account) {
-        $c->stash->{account} = $account;
-    } else {
-        $c->detach('/default');
+        if ($account) {
+            if (ref $account eq 'GMS::Schema::Result::Account') {
+                $c->stash->{error_msg} = "An error occurred when attempting to communicate with atheme. Data displayed below may not be current.";
+            }
+
+            $c->stash->{account} = $account;
+        } else {
+            $c->detach('/default');
+        }
     }
 }
 
@@ -650,20 +644,14 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
                 my $uid = $account->id;
 
                 $account_search = $uid;
+
+                if (ref $account eq 'GMS::Schema::Result::Account') {
+                    $c->stash->{error_msg} = "An error occurred when attempting to communicate with atheme. Data displayed below may not be current.";
+                }
             }
             catch (RPC::Atheme::Error $e) {
-                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-
-                my $account_rs = $c->model('DB::Account');
-                my $account = $account_rs->find ({ accountname => $accname });
-
-                if (!$account) {
-                    $c->stash->{error_msg} = "Could not find an account with that account name.";
-                    $c->detach ('search_changes');
-                }
-
-                my $uid = $account->id;
-                $account_search = $uid;
+                $c->stash->{error_msg} = $e->description;
+                $c->detach('search_changes');
             }
             catch (GMS::Exception $e) {
                 $c->stash->{error_msg} = $e->message;
@@ -826,20 +814,14 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
                 my $uid = $account->id;
 
                 $account_search = $uid;
+
+                if (ref $account eq 'GMS::Schema::Result::Account') {
+                    $c->stash->{error_msg} = "An error occurred when attempting to communicate with atheme. Data displayed below may not be current.";
+                }
             }
             catch (RPC::Atheme::Error $e) {
-                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-
-                my $account_rs = $c->model('DB::Account');
-                my $account = $account_rs->find ({ accountname => $accountname });
-
-                if (!$account) {
-                    $c->stash->{error_msg} = "Could not find an account with that account name.";
-                    $c->detach ('search_changes');
-                }
-
-                my $uid = $account->id;
-                $account_search = $uid;
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
             }
             catch (GMS::Exception $e) {
                 $c->stash->{error_msg} = $e->message;
@@ -893,20 +875,14 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
                 my $uid = $account->id;
 
                 $target_search = $uid;
+
+                if (ref $account eq 'GMS::Schema::Result::Account') {
+                    $c->stash->{error_msg} = "An error occurred when attempting to communicate with atheme. Data displayed below may not be current.";
+                }
             }
             catch (RPC::Atheme::Error $e) {
-                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-
-                my $account_rs = $c->model('DB::Account');
-                my $account = $account_rs->find ({ accountname => $target });
-
-                if (!$account) {
-                    $c->stash->{error_msg} = "Could not find an account with that account name.";
-                    $c->detach ('search_changes');
-                }
-
-                my $uid = $account->id;
-                $target_search = $uid;
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
             }
             catch (GMS::Exception $e) {
                 $c->stash->{error_msg} = $e->message;
@@ -923,20 +899,14 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
                 my $uid = $account->id;
 
                 $requestor_search = $uid;
+
+                if (ref $account eq 'GMS::Schema::Result::Account') {
+                    $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme. Data displayed below may not be current.";
+                }
             }
             catch (RPC::Atheme::Error $e) {
-                $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
-
-                my $account_rs = $c->model('DB::Account');
-                my $account = $account_rs->find ({ accountname => $requestor });
-
-                if (!$account || !$account->contact) {
-                    $c->stash->{error_msg} = "Could not find an account with that account name.";
-                    $c->detach ('search_changes');
-                }
-
-                my $uid = $account->id;
-                $requestor_search = $uid;
+                $c->stash->{error_msg} = $e->message;
+                $c->detach('search_changes');
             }
             catch (GMS::Exception $e) {
                 $c->stash->{error_msg} = $e->message;

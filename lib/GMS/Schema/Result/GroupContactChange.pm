@@ -62,10 +62,9 @@ __PACKAGE__->table("group_contact_changes");
 
 =head2 changed_by
 
-  data_type: 'text'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-  original: {data_type => "varchar"}
 
 =head2 affected_change
 
@@ -121,10 +120,9 @@ __PACKAGE__->add_columns(
   },
   "changed_by",
   {
-    data_type      => "text",
+    data_type      => "integer",
     is_foreign_key => 1,
     is_nullable    => 0,
-    original       => { data_type => "varchar" },
   },
   "affected_change",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },

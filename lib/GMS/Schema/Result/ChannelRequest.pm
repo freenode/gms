@@ -64,10 +64,9 @@ __PACKAGE__->table("channel_requests");
 
 =head2 target
 
-  data_type: 'varchar'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
-  size: 32
 
 =head2 request_data
 
@@ -117,7 +116,7 @@ __PACKAGE__->add_columns(
   "channel",
   { data_type => "varchar", is_nullable => 0, size => 50 },
   "target",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 32 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "request_data",
   { data_type => "text", is_nullable => 1 },
   "active_change",
@@ -244,7 +243,7 @@ __PACKAGE__->belongs_to(
     is_deferrable => 1,
     join_type     => "LEFT",
     on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
+    on_update     => "CASCADE",
   },
 );
 

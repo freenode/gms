@@ -59,6 +59,7 @@ sub find_by_uid {
 
     my $schema = $self->{_schema};
     my $account_rs = $schema->resultset('Account');
+
     my $account = $account_rs->find ({ 'id' => $uid });
 
     return $account if $account && $account->dropped;
@@ -89,6 +90,9 @@ sub find_by_uid {
                 die GMS::Exception->new ("Could not find an account with the UID $uid.");
             }
         } else {
+            warn  "[GMS Atheme error] WARNING! Error talking to Atheme: " . $e->description . "\n";
+
+            return $account if $account;
             die $e;
         }
     }
@@ -124,7 +128,7 @@ sub find_by_name {
 
         my $row = $schema->resultset('Account')->find_or_new (
             {
-                'id' => $uid
+                'uuid' => $uid
             }
         );
 
@@ -136,6 +140,11 @@ sub find_by_name {
         if ($e->code == RPC::Atheme::Error::nosuchtarget) {
             die GMS::Exception->new ("Could not find an account with the account name $name.");
         } else {
+            warn  "[GMS Atheme Error] WARNING! Error talking to Atheme: " . $e->description . "\n";
+
+            my $account = $schema->resultset('Account')->find({ accountname => $name });
+            return $account if $account;
+
             die $e;
         }
     }

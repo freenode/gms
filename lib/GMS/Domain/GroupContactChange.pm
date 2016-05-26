@@ -119,6 +119,7 @@ sub TO_JSON {
         'group_name'              => $self->group_contact->group->group_name,
         'group_url'               => $self->group_contact->group->url,
         'contact_account_id'      => $self->group_contact->contact->account->id,
+        'contact_account_uuid'    => $self->group_contact->contact->account->uuid,
         'contact_account_name'    => $self->group_contact->contact->account->accountname,
         'contact_account_dropped' => $self->group_contact->contact->account->is_dropped,
         'status'                  => $self->status->value,
