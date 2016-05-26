@@ -61,8 +61,6 @@ Chained method to select an account.
 sub account :Chained('/admin/base') :PathPart('account') :CaptureArgs(1) {
     my ($self, $c, $account_id) = @_;
 
-    my $account;
-
     my $pass = $c->req->params->{__auth_pass};
     my $user = $c->user->account->accountname;
 
@@ -74,7 +72,7 @@ sub account :Chained('/admin/base') :PathPart('account') :CaptureArgs(1) {
         }
     }
 
-    my $account =  = $c->model('Accounts')->find_by_uid ( $account_id );
+    my $account = $c->model('Accounts')->find_by_uid ( $account_id );
 
     try {
 
@@ -348,7 +346,7 @@ sub do_search_users :Chained('/admin/base') :PathPart('search_users/submit') :Ar
         my $account = $c->model('Accounts')->find_by_uid ( $row->id );
 
         if (ref $account eq 'GMS::Schema::Result::Account') {
-            $c->stash->{error_msg} = "The following error occurred when attempting to communicate with atheme: " . $e->description . ". Data displayed below may not be current.";
+            $c->stash->{error_msg} = "An error occurred when attempting to communicate with atheme. Data displayed below may not be current.";
         }
         push @results, $account;
     }

@@ -116,10 +116,10 @@ sub find_by_name {
         die GMS::Exception->new("Please provide an account name");
     }
 
-    try {
-        my $session = $self->{_session};
-        my $schema = $self->{_schema};
+    my $session = $self->{_session};
+    my $schema = $self->{_schema};
 
+    try {
         my $uid = $session->command ($session->service, 'uid', $name);
 
         # get the account name from atheme, in case this was somehow
