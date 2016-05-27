@@ -6,4 +6,4 @@
 
 # Thanks to mst
 
-perl -pi -E 's/^(\s+)id\s+=>/${1}uuid =>/ and say "${1}id => ".++$i.","' t/etc/pending_changes/*/*.fix
+perl -pi -E 's/^(\s+)id\s+=>/${1}uuid =>/ and say "${1}id => ".++$i.","' t/etc/**/*.fix
