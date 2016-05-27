@@ -92,7 +92,7 @@ sub account :Chained('/admin/base') :PathPart('account') :CaptureArgs(1) {
         my $client = GMS::Atheme::Client->new ($session);
 
         if ($account) {
-            my $info = $client->info('?' . $account->id);
+            my $info = $client->info('?' . $account->uuid);
 
             $c->stash->{info} = $info;
         }

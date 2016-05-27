@@ -35,11 +35,12 @@ in the GMS::Domain::Account object.
 =cut
 
 sub new {
-    my ($class, $uid, $accountname, $session, $row) = @_;
+    my ($class, $id, $uuid, $accountname, $session, $row) = @_;
 
     my $self = { };
 
-    $self->{_id} = $uid;
+    $self->{_id} = $id;
+    $self->{_uuid} = $uuid;
     $self->{_accountname} = $accountname;
     $self->{_session} = $session;
     $self->{_dbic_account_row} = $row;
@@ -49,7 +50,7 @@ sub new {
 
 =head2 id
 
-Returns the account's uid.
+Returns the account's id.
 
 =cut
 
@@ -57,6 +58,18 @@ sub id {
     my ($self) = @_;
 
     $self->{_id};
+}
+
+=head2 uuid
+
+Returns the account's Atheme UUID.
+
+=cut
+
+sub uuid {
+    my ($self) = @_;
+
+    return $self->{_uuid};
 }
 
 =head2 accountname
@@ -81,7 +94,7 @@ sub mark {
     my ($self) = @_;
 
     my $client = GMS::Atheme::Client->new ($self->{_session});
-    return $client->mark ($self->id);
+    return $client->mark ($self->uuid);
 }
 
 =head2 verified
@@ -94,7 +107,7 @@ sub verified {
     my ($self) = @_;
 
     my $client = GMS::Atheme::Client->new ($self->{_session});
-    return $client->verified ($self->id);
+    return $client->verified ($self->uuid);
 }
 
 =head2 is_dropped
@@ -122,6 +135,7 @@ sub TO_JSON {
     return {
         accountname => $self->accountname,
         id          => $self->id,
+        uuid        => $self->uuid,
         mark        => $self->mark,
     };
 }
