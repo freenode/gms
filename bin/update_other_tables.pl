@@ -17,5 +17,5 @@ my %id_map = map +($_->{uuid} => $_->{id}), @accounts;
 
 foreach my $file (mapval { chomp } <STDIN>) {
     my $data = io->file($file)->all;
-    io->file($file)->print(replace($data, list2re(keys %id_map), sub { $id_map{$_[0]} }));
+    io->file($file)->print(replace($data, list2re(keys %id_map), sub { $id_map{$_[0]} }, 'g'));
 }
