@@ -2,5 +2,6 @@ $HASH1 = {
            accountname
                    => 'account17',
            dropped => 1,
-           id      => '474D60BC'
+           id => 39,
+           uuid => '474D60BC'
          };
