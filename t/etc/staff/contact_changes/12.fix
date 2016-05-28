@@ -6,7 +6,7 @@ $HASH1 = {
            change_type
                     => 'create',
            changed_by
-                    => '9B089948',
+                    => '89',
            contact_id
                     => 12,
            email    => 'user 16@example.com',

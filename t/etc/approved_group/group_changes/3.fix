@@ -7,7 +7,7 @@ $HASH1 = {
            change_type
                     => 'admin',
            changed_by
-                    => 'AAAAAAAAS',
+                    => '4',
            group_id => 1,
            group_type
                     => 'informal',

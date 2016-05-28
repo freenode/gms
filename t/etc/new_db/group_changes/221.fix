@@ -7,7 +7,7 @@ $HASH1 = {
            change_type
                     => 'create',
            changed_by
-                    => '4A494B6E',
+                    => '12',
            group_id => 70,
            group_type
                     => 'internal',
