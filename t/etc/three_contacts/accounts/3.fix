@@ -1,6 +1,5 @@
 $HASH1 = {
            accountname
                    => 'test03',
-           id => 105,
-           uuid => 3
+           id      => 3
          };

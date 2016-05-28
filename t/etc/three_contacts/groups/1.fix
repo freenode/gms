@@ -1,17 +1,7 @@
-$HASH103 = {
-           active_change
-                    => 1,
-           address  => undef,
-           deleted  => 0,
-           group_name
-                    => 'test',
-           group_type
-                    => 'informal',
-           id       => 1,
-           status   => 'submitted',
-           submitted
-                    => '2011-01-09 21:32:04.977421',
-           url      => 'http://example.com',
-           verify_auto
-                    => 0
+$HASH1 = {
+           active_change => 1,
+           group_name    => 'test',
+           id            => 1,
+           submitted     => '2011-01-09 21:32:04.977421',
+           verify_auto   => 0,
          };

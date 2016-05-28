@@ -1,10 +1,7 @@
-$HASH103 = {
+$HASH1 = {
            account_id
-                   => 1,
+                    => 1,
            active_change
-                   => 1,
-           email   => 'test@example.com',
-           id      => 1,
-           name    => 'Test Contact',
-           phone   => undef
+                    => 1,
+           id       => 1
          };

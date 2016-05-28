@@ -1,4 +1,4 @@
-$HASH103 = {
+$HASH1 = {
            id   => 1,
            name => 'admin'
          };
