@@ -128,17 +128,20 @@ sub TO_JSON {
     my $target_name    = undef;
     my $target_dropped = undef;
     my $target_id      = undef;
+    my $target_uuid    = undef;
     my $target_mark    = undef;
 
     my $req_name    = undef;
     my $req_dropped = undef;
     my $req_id      = undef;
+    my $req_uuid    = undef;
     my $req_mark    = undef;
 
     if ( $self->target ) {
         $target_name     = $self->target->accountname;
         $target_dropped  = $self->target->is_dropped;
         $target_id       = $self->target->id;
+        $target_uuid     = $self->target->uuid;
 
         if (!$target_dropped) {
             $target_mark     = $self->target->mark;
@@ -149,6 +152,7 @@ sub TO_JSON {
         $req_name     = $self->requestor->accountname;
         $req_dropped  = $self->requestor->is_dropped;
         $req_id       = $self->requestor->id;
+        $req_uuid     = $self->requestor->uuid;
 
         if (!$req_dropped) {
             $req_mark     = $self->requestor->mark;
@@ -160,12 +164,14 @@ sub TO_JSON {
         'cloak'                       => $self->cloak,
 
         'target_id'                   => $target_id,
+        'target_uuid'                 => $target_uuid,
         'target_name'                 => $target_name,
         'target_dropped'              => $target_dropped,
         'target_mark'                 => $target_mark,
         'target_recent_cloak_changes' => \@recent,
 
         'requestor_id'                => $req_id,
+        'requestor_uuid'              => $req_uuid,
         'requestor_name'              => $req_name,
         'requestor_dropped'           => $req_dropped,
         'requestor_mark'              => $req_mark,

@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'basic_db';
 use GMSTest::Database;
 
 need_database 'basic_db';

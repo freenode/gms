@@ -1,18 +1,15 @@
 $HASH1 = {
-           address  => undef,
-           affected_change
-                    => undef,
-           change_freetext
-                    => undef,
+           address => undef,
            change_type
-                    => 'create',
+                   => 'create',
            changed_by
-                    => 1,
-           group_id => 1,
+                   => 1,
+           group_id
+                   => 1,
            group_type
-                    => 'informal',
-           id       => 1,
-           status   => 'submitted',
-           time     => '2011-01-09 21:32:04.977421',
-           url      => 'http://example.com'
+                   => 'informal',
+           id      => 1,
+           status  => 'submitted',
+           time    => '2011-01-09 21:32:04.977421',
+           url     => 'http://example.com'
          };

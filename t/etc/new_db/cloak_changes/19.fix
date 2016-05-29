@@ -6,6 +6,6 @@ $HASH1 = {
            namespace_id
                    => 37,
            status  => 'applied',
-           target  => '47C952A8',
-           requestor => '47C952A8'
+           target  => '31',
+           requestor => '31'
          };

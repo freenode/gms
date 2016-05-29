@@ -41,42 +41,41 @@ sub new {
 
 =head2 find_by_uid
 
-Queries Atheme to find an account with the
-provided uid. The GMS database is updated
-accordingly, and a new GMS::Domain::Account
-object is returned.
-Throws an error if no such account could be
-found.
+Queries Atheme to find an account with the provided id. The Atheme UUID is
+retrieved from the account record.  The GMS database is updated accordingly,
+and a new GMS::Domain::Account object is returned.  Throws an error if no such
+account could be found.
 
 =cut
 
 sub find_by_uid {
-    my ($self, $uid) = @_;
+    my ($self, $id) = @_;
 
-    if (!$uid) {
+    if (!$id) {
         die GMS::Exception->new ("Please provide a user id");
     }
 
     my $schema = $self->{_schema};
     my $account_rs = $schema->resultset('Account');
-    my $account = $account_rs->find ({ 'id' => $uid });
+
+    my $account = $account_rs->find ({ 'id' => $id });
 
     return $account if $account && $account->dropped;
 
     try {
         my $session = $self->{_session};
-        my $name = $session->command ($session->service, 'accountname', $uid);
+        my $name = $session->command ($session->service, 'accountname', $account->uuid);
 
         my $row = $account_rs->find_or_new (
             {
-                'id' => $uid
+                'id' => $id
             }
         );
 
         $row->accountname ($name);
         my $result = $row->insert_or_update;
 
-        return GMS::Domain::Account->new ($uid, $name, $session, $result);
+        return GMS::Domain::Account->new ($id, $account->uuid, $name, $session, $result);
     } catch (RPC::Atheme::Error $e) {
         if ($e->code == RPC::Atheme::Error::nosuchtarget) {
             if ( $account ) {
@@ -86,9 +85,12 @@ sub find_by_uid {
             }
 
             else {
-                die GMS::Exception->new ("Could not find an account with the UID $uid.");
+                die GMS::Exception->new ("Could not find an account with the UUID " . $account->uuid);
             }
         } else {
+            warn  "[GMS Atheme error] WARNING! Error talking to Atheme: " . $e->description . "\n";
+
+            return $account if $account;
             die $e;
         }
     }
@@ -112,10 +114,10 @@ sub find_by_name {
         die GMS::Exception->new("Please provide an account name");
     }
 
-    try {
-        my $session = $self->{_session};
-        my $schema = $self->{_schema};
+    my $session = $self->{_session};
+    my $schema = $self->{_schema};
 
+    try {
         my $uid = $session->command ($session->service, 'uid', $name);
 
         # get the account name from atheme, in case this was somehow
@@ -124,18 +126,23 @@ sub find_by_name {
 
         my $row = $schema->resultset('Account')->find_or_new (
             {
-                'id' => $uid
+                'uuid' => $uid
             }
         );
 
         $row->accountname ($name);
         my $result = $row->insert_or_update;
 
-        return GMS::Domain::Account->new ($uid, $name, $session, $result);
+        return GMS::Domain::Account->new ($row->id, $uid, $name, $session, $result);
     } catch (RPC::Atheme::Error $e) {
         if ($e->code == RPC::Atheme::Error::nosuchtarget) {
             die GMS::Exception->new ("Could not find an account with the account name $name.");
         } else {
+            warn  "[GMS Atheme Error] WARNING! Error talking to Atheme: " . $e->description . "\n";
+
+            my $account = $schema->resultset('Account')->find({ accountname => $name });
+            return $account if $account;
+
             die $e;
         }
     }

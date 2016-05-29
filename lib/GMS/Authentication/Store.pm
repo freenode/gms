@@ -52,6 +52,7 @@ sub for_session {
 
     return {
         'id'            => $user->get('id'),
+        'uuid'          => $user->get('uuid'),
         'authcookie'    => $user->get('authcookie'),
     };
 }
@@ -59,7 +60,7 @@ sub for_session {
 sub from_session {
     my ($self, $c, $frozenuser) = @_;
 
-    my $account = $c->model('DB::Account')->find({id => $frozenuser->{'id'}});
+    my $account = $c->model('DB::Account')->find({uuid => $frozenuser->{'uuid'}});
     return if !$account;
 
     return GMS::Authentication::User->new($account, $frozenuser->{authcookie});

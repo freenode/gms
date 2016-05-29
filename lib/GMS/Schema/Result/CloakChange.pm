@@ -46,17 +46,15 @@ __PACKAGE__->table("cloak_changes");
 
 =head2 target
 
-  data_type: 'varchar'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-  size: 32
 
 =head2 requestor
 
-  data_type: 'varchar'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-  size: 32
 
 =head2 cloak
 
@@ -94,9 +92,9 @@ __PACKAGE__->add_columns(
     sequence          => "cloak_changes_id_seq",
   },
   "target",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 32 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "requestor",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 32 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cloak",
   { data_type => "varchar", is_nullable => 0, size => 63 },
   "active_change",
@@ -205,7 +203,7 @@ __PACKAGE__->belongs_to(
   "requestor",
   "GMS::Schema::Result::Account",
   { id => "requestor" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
 =head2 target
@@ -484,7 +482,7 @@ sub sync_to_atheme {
 
     foreach my $cloakChange (@unapplied) {
         my $cloak = $cloakChange->cloak;
-        my $uid = $cloakChange->target->id;
+        my $uid = $cloakChange->target->uuid;
 
         try {
             $client->cloak ( $uid, $cloak );

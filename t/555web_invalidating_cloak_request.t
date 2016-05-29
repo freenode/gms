@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'new_db';
 use GMSTest::Database;
 use Test::More;
 use Test::MockModule;
@@ -23,14 +23,14 @@ my $mockAtheme = new Test::MockObject;
 $mockAtheme->mock('service', sub { 'GMSServ' });
 $mockAtheme->mock('command', sub { } );
 
+
 $mockAccounts->mock ('find_by_uid', sub {
-        my ( $self, $uid ) = @_;
+        my ( $self, $id ) = @_;
 
-        my $account = $schema->resultset('Account')->find ({ id => $uid });
+        my $account = $schema->resultset('Account')->find ({ id => $id });
 
-        return GMS::Domain::Account->new( $uid, $account->accountname, $mockAtheme, $account );
+        return GMS::Domain::Account->new( $id,  $account->uuid, $account->accountname, $mockAtheme, $account );
     });
-
 
 my $mockModel = new Test::MockModule ('GMS::Web::Model::Atheme');
 $mockModel->mock ('session' => sub { $mockAtheme });

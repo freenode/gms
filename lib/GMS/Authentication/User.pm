@@ -76,6 +76,12 @@ sub id {
     return $self->{_account}->id;
 }
 
+sub uuid {
+    my ($self) = @_;
+
+    return $self->{_account}->uuid;
+}
+
 sub supported_features {
     return { session => 1, roles => 1 };
 }
@@ -84,6 +90,7 @@ sub get {
     my ($self, $fieldname) = @_;
 
     return $self->{_account}->id if $fieldname eq "id";
+    return $self->{_account}->uuid if $fieldname eq "uuid";
     return $self->{_authcookie} if $fieldname eq "authcookie";
     return $self->{_account}->accountname if $fieldname eq "name";
     return undef;

@@ -7,7 +7,7 @@
 # a conflict. Admins are then responsible to fix it.
 
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'pending_changes';
 use GMSTest::Database;
 use Test::More;
 use Test::MockModule;

@@ -6,12 +6,13 @@ $HASH1 = {
            change_type
                     => 'create',
            changed_by
-                    => 1,
+                    => '110',
            contact_id
                     => 1,
-           email    => 'test@example.com',
+           email    => 'test@localhost',
            id       => 1,
            name     => 'Test Contact',
            phone    => undef,
-           time     => '2010-11-20 23:52:38.1746'
+           time     => '2012-06-25 16:54:56.460899',
+           address  => 1
          };

@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'staff';
 use GMSTest::Database;
 use Test::More;
 use Test::More;
@@ -83,7 +83,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains("Name 16", "Searching works");
+$ua->content_contains("Name 10", "Searching works");
 
 $ua->content_contains("Next page", "We can go to next page");
 $ua->content_lacks("Previous page", "We can't go to previous page");
@@ -112,7 +112,7 @@ $ua->click_button(
     value => 'Previous page'
 );
 
-$ua->content_contains("Name 16", "Paging works");
+$ua->content_contains("Name 10", "Paging works");
 $ua->content_like(qr/current_page.*1/, "We're at first page");
 
 $ua->click_button(
@@ -129,7 +129,7 @@ $ua->click_button(
     value => 'First page'
 );
 
-$ua->content_contains("Name 16", "Paging works");
+$ua->content_contains("Name 10", "Paging works");
 $ua->content_like(qr/current_page.*1/, "We're at first page");
 
 $ua->select ('page', 2 );
@@ -148,7 +148,7 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains('Name 20', 'Wild card match is used.');
+$ua->content_contains('Name 24', 'Wild card match is used.');
 $ua->content_contains('Name 21', 'Wild card match is used.');
 
 done_testing;

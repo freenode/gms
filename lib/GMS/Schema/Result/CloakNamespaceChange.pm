@@ -51,10 +51,9 @@ __PACKAGE__->table("cloak_namespace_changes");
 
 =head2 changed_by
 
-  data_type: 'text'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-  original: {data_type => "varchar"}
 
 =head2 change_type
 
@@ -102,10 +101,9 @@ __PACKAGE__->add_columns(
   },
   "changed_by",
   {
-    data_type      => "text",
+    data_type      => "integer",
     is_foreign_key => 1,
     is_nullable    => 0,
-    original       => { data_type => "varchar" },
   },
   "change_type",
   {
@@ -184,7 +182,7 @@ __PACKAGE__->belongs_to(
   "changed_by",
   "GMS::Schema::Result::Account",
   { id => "changed_by" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
 =head2 cloak_namespace

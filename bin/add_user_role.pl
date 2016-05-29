@@ -21,7 +21,7 @@ $session->login($atheme_config->{master_account}, $atheme_config->{master_passwo
     or die "Couldn't log in to atheme";
 
 my $accountid = $session->command($atheme_config->{service}, 'uid', $accountname);
-my $account = $db->resultset('Account')->find({ id => $accountid });
+my $account = $db->resultset('Account')->find({ uuid => $accountid });
 
 print "Found account ID ", $account->id, ", named ", $account->accountname, "\n";
 

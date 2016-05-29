@@ -65,7 +65,7 @@ __PACKAGE__->table("channel_namespace_changes");
 
 =head2 changed_by
 
-  data_type: 'text'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
@@ -114,7 +114,7 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "changed_by",
-  { data_type => "text", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "change_type",
   {
     data_type => "enum",
@@ -192,7 +192,7 @@ __PACKAGE__->belongs_to(
   "changed_by",
   "GMS::Schema::Result::Account",
   { id => "changed_by" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
 =head2 channel_namespace

@@ -8,9 +8,10 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMS::Domain::Account;
 
-my $account = GMS::Domain::Account->new ( 'AAAAAAAAH', 'erry' );
+my $account = GMS::Domain::Account->new ( '1', 'AAAAAAAAH', 'erry' );
 
-is $account->id, 'AAAAAAAAH';
+is $account->id, 1;
+is $account->uuid, 'AAAAAAAAH';
 is $account->accountname, 'erry';
 
 my $mock = new Test::MockModule('GMS::Atheme::Client');

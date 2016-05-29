@@ -78,70 +78,70 @@ is_deeply $error->message, [
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
-            'requestor'  => '3EAB67EC',
+            'target'     => '9',
+            'requestor'  => '9',
             'cloak'      => 'ns/@#!$@_',
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
             'group'      => $group,
         })
 } qr/The role\/user contains invalid characters. Only alphanumeric characters, dash and slash are allowed./;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
+            'target'     => '9',
             'cloak'      => 'ns/LoremipsumdolorsitametconsecteturadipiscingelitMaurisegetrutrummf',
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 } qr/The cloak is too long/;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
+            'target'     => '9',
             'cloak'      => 'cloak/',
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 } qr#\(Role/\)user must be provided#;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
+            'target'     => '9',
             'cloak'      => 'cloak/foo/bar/',
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 } qr/The cloak cannot end with a slash/;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
+            'target'     => '9',
             'cloak'      => 'cloak/42',
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 } qr/The cloak provided looks like a CIDR mask/;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
+            'target'     => '9',
             'cloak'      => 'cloak/42/is-ok',
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 } qr/You need to provide a group/;
 
 throws_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
+            'target'     => '9',
             'cloak'      => 'cloak/42/is-ok',
             'group'      => $group,
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 } qr/does not belong in your Group's namespaces/;
 
 lives_ok {
     $schema->resultset('CloakChange')->create({
-            'target'     => '3EAB67EC',
-            'requestor'  => '3EAB67EC',
+            'target'     => '9',
+            'requestor'  => '9',
             'cloak'      => 'group0/42/is-ok',
             'group'      => $group,
-            'changed_by' => '3EAB67EC',
+            'changed_by' => '9',
         })
 };
 

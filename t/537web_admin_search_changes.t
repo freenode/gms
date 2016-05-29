@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'new_db';
 use GMSTest::Database;
 use Test::More;
 use Test::MockModule;
@@ -116,7 +116,7 @@ $ua->submit_form (
     }
 );
 
-$ua->content_contains ('group6/user6', 'Change is there');
+$ua->content_contains ('group6/user6', 'Change is there 8');
 $ua->content_contains ('applied', 'Change is there');
 
 $ua->get_ok("http://localhost/admin/search_changes", "Search changes page works");

@@ -629,7 +629,7 @@ sub do_take_over :Chained('active_group') :PathPart('take_over/submit') :Args(0)
 
                 my $client = GMS::Atheme::Client->new ($session);
                 %{$c->stash} = ( %{$c->stash}, %$p );
-                my $info = $client->info("?" . $account->id);
+                my $info = $client->info("?" . $account->uuid);
 
                 $c->stash->{info} = $info;
 

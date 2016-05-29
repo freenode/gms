@@ -117,6 +117,7 @@ sub TO_JSON {
     return {
         'id'                      => $self->id,
         'contact_account_id'      => $self->contact->account->id,
+        'contact_account_uuid'    => $self->contact->account->uuid,
         'contact_account_name'    => $self->contact->account->accountname,
         'name'                    => $self->name,
         'contact_name'            => $self->contact->name,

@@ -7,7 +7,7 @@ $HASH1 = {
            change_type
                     => 'workflow_change',
            changed_by
-                    => 'AAAAAAAAQ',
+                    => '108',
            group_id => 2,
            group_type
                     => 'informal',

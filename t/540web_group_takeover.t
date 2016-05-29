@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'approved_group';
 use GMSTest::Database;
 use Test::More;
 use Test::More;
@@ -94,7 +94,7 @@ $ua->submit_form(
     fields => {
         channel => '#example-test',
         action => 1,
-        target_gc => 'AAAAAAAAP',
+        target_gc => '1',
     }
 );
 
@@ -111,7 +111,7 @@ $ua->submit_form(
     fields => {
         channel => '#another-thing',
         action => 1,
-        target_gc => 'AAAAAAAAP'
+        target_gc => '1'
     }
 );
 
@@ -125,7 +125,7 @@ $ua->submit_form(
     fields => {
         channel => '#example-test',
         action => 2,
-        target_gc => 'AAAAAAAAP',
+        target_gc => '1',
     }
 );
 
@@ -137,7 +137,7 @@ $ua->submit_form(
     fields => {
         channel => '#another-thing',
         action => 2,
-        target_gc => 'AAAAAAAAP'
+        target_gc => '1'
     }
 );
 

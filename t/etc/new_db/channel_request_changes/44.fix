@@ -2,7 +2,7 @@ $HASH1 = {
            change_freetext
                      => '',
            changed_by
-                     => 'AAAAAAAAH',
+                     => '59',
            channel_request_id
                      => 26,
            id        => 44,

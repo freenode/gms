@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'new_db';
 use GMSTest::Database;
 use Test::More;
 use Test::More;
@@ -64,7 +64,7 @@ $ua->content_contains ("admin - group0/cloak", "Cloak is visible - no need for a
 $ua->content_contains ("user - group0/anothercloak", "Cloak is visible - no need for a form");
 
 my $group = $schema->resultset('Group')->find({ id => 2 });
-$group->add_to_cloak_namespaces({ namespace => 'group01', 'group_id' => 2, 'status' => 'active', 'account' => 'AAAAAAAAH'});
+$group->add_to_cloak_namespaces({ namespace => 'group01', 'group_id' => 2, 'status' => 'active', 'account' => '59'});
 
 $ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");
 
@@ -74,9 +74,9 @@ $ua->content_lacks ("user - group0/anothercloak", "need to choose namespace if m
 my $cloak = $schema->resultset("CloakChange")->create({
         cloak => 'group0/user',
         group => $group,
-        target => 'AAAAAAAAH',
-        requestor => 'AAAAAAAAH',
-        changed_by => 'AAAAAAAAH'
+        target => '59',
+        requestor => '59',
+        changed_by => '59'
     });
 
 $ua->submit_form (
@@ -91,7 +91,7 @@ $ua->content_contains ("admin - group0/cloak", "Cloak is visible after form");
 $ua->content_contains ("user - group0/anothercloak", "Cloak is visible after form");
 $ua->content_contains ("group0/user (Waiting user approval)", "pending cloaks are shown");
 
-my $admin = $schema->resultset('Account')->find({ id => 'AAAAAAAAH' });
+my $admin = $schema->resultset('Account')->find({ id => '59' });
 $cloak->accept($admin);
 
 $ua->get_ok("http://localhost/group/2/listvhost", "list cloak page works");

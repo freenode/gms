@@ -56,6 +56,8 @@ sub new {
 
     if ( $row->target ) {
         try {
+            warn $row->target->id;
+            warn "MEEP\n\n\n\n";
             my $account = $accounts->find_by_uid (
                 $row->target->id
             );

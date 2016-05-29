@@ -7,5 +7,5 @@ $HASH1 = {
            request_type  => 'drop',
            requestor     => 13,
            status        => 'pending_staff',
-           target        => '4451D654'
+           target        => '44'
          };

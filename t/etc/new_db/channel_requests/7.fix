@@ -7,5 +7,5 @@ $HASH1 = {
            request_type  => 'transfer',
            requestor     => 8,
            status        => 'applied',
-           target        => '41C2DB90'
+           target        => '25'
          };

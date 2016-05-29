@@ -64,10 +64,9 @@ __PACKAGE__->table("channel_requests");
 
 =head2 target
 
-  data_type: 'varchar'
+  data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
-  size: 32
 
 =head2 request_data
 
@@ -117,7 +116,7 @@ __PACKAGE__->add_columns(
   "channel",
   { data_type => "varchar", is_nullable => 0, size => 50 },
   "target",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 32 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "request_data",
   { data_type => "text", is_nullable => 1 },
   "active_change",
@@ -244,7 +243,7 @@ __PACKAGE__->belongs_to(
     is_deferrable => 1,
     join_type     => "LEFT",
     on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
+    on_update     => "CASCADE",
   },
 );
 
@@ -503,7 +502,7 @@ sub sync_to_atheme {
         my $contact_id = $channelRequest->requestor->id;
 
         my $contact = $contact_rs->find({ 'id' => $contact_id });
-        my $requestor_id = $contact->account->id;
+        my $requestor_id = $contact->account->uuid;
 
         my $request_type = $channelRequest->request_type;
 
@@ -511,7 +510,7 @@ sub sync_to_atheme {
             if ( $request_type->is_transfer) {
                 my $target = $channelRequest->target;
 
-                $client->take_over ( $channel, $target->id, $requestor_id );
+                $client->take_over ( $channel, $target->uuid, $requestor_id );
             } elsif ( $request_type->is_drop ) {
                 $client->drop ( $channel, $requestor_id );
             }

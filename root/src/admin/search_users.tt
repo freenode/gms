@@ -1,6 +1,6 @@
 [% META title = 'Search Users' %]
 
-<form method="post" action="[% c.uri_for('/admin/search_users/submit') %]" class="form-horizontal">
+<form method="post" action="[% c.uri_for('/admin/search_users/submit') %]" class="form-horizontal" autocomplete="off">
 
 <p>
   Enter the search criteria. Empty box matches errything.
