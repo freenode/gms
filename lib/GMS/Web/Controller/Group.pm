@@ -799,12 +799,6 @@ sub do_cloak :Chained('active_group') :PathPart('cloak/submit') :Args(0) {
             $change_rs->create($change);
             ++$success_count;
 
-            notice_staff_chan(
-                $c,
-                "Cloak request for " . $group->group_name . ": " .
-                $account->accountname . " -> $namespace/$cloak"
-            );
-
             if (!$self) {
                 memo(
                     $c,

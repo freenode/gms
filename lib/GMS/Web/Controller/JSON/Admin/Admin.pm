@@ -73,6 +73,10 @@ sub do_approve_groups :Chained('/json/admin/admin_only') :PathPart('approve_grou
 
     try {
         $c->model('DB')->schema->txn_do(sub {
+            my $approvals = 0;
+            my $rejections = 0;
+            my $verifications = 0;
+
             foreach my $group_id (@approve_groups, @verify_groups) {
                 my $group = $group_rs->find({ id => $group_id });
                 my $action = $params->{"action_$group_id"} || 'hold';
@@ -82,8 +86,7 @@ sub do_approve_groups :Chained('/json/admin/admin_only') :PathPart('approve_grou
                     $c->log->info("Approving group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
 
-                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved group: " . $group->group_name);
-
+                    $approvals++;
                     memo_gcs (
                         $c,
                         $group,
@@ -99,8 +102,7 @@ sub do_approve_groups :Chained('/json/admin/admin_only') :PathPart('approve_grou
                     $c->log->info("Rejecting group id $group_id (" .
                         $group->group_name . ") by " . $c->user->username . "\n");
 
-                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected group: " . $group->group_name);
-
+                    $rejections++;
                     memo_gcs (
                         $c,
                         $group,
@@ -118,13 +120,25 @@ sub do_approve_groups :Chained('/json/admin/admin_only') :PathPart('approve_grou
                     $group->verify($account, $freetext);
                     push @verified_groups, $group_id;
 
-                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " verified group: " . $group->group_name);
+                    $verifications++;
                 } elsif ($action eq 'hold') {
                     next;
                 } else {
                     $c->log->error("Got unknown action $action for group id
                         $group_id in Admin::do_approve_groups");
                 }
+            }
+
+            if ($approvals) {
+                notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved $approvals groups.");
+            }
+
+            if ($rejections) {
+                notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected $rejections groups.");
+            }
+
+            if ($verifications) {
+                notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved $verifications groups.");
             }
         });
 
@@ -194,6 +208,9 @@ sub do_approve_new_gc :Chained('/json/admin/admin_only') :PathPart('approve_new_
 
     try {
         $c->model('DB')->schema->txn_do(sub {
+            my $approvals = 0;
+            my $rejections = 0;
+
             foreach my $contact_id (@approve_contacts) {
                 my $gc = $rs->find_by_id($contact_id);
                 my $action = $params->{"action_$contact_id"} || 'hold';
@@ -205,11 +222,7 @@ sub do_approve_new_gc :Chained('/json/admin/admin_only') :PathPart('approve_new_
                         $gc->contact->account->accountname . " is now group contact for " .
                         $gc->group->group_name . ") by " . $c->user->username . "\n");
 
-                    notice_staff_chan($c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " approved gc :" .  $gc->contact->account->accountname .
-                        " for " .  $gc->group->group_name
-                    );
+                    $approvals++;
 
                     memo_gcs (
                         $c,
@@ -227,12 +240,7 @@ sub do_approve_new_gc :Chained('/json/admin/admin_only') :PathPart('approve_new_
                         $gc->contact->account->accountname . " rejected as group contact for " .
                         $gc->group->group_name . ") by " . $c->user->username . "\n");
 
-                    notice_staff_chan(
-                        $c,
-                        "[ADMIN]: " . $c->user->account->accountname .
-                        " rejected gc :" . $gc->contact->account->accountname . "
-                        for " . $gc->group->group_name
-                    );
+                    $rejections++;
 
                     memo_gcs (
                         $c,
@@ -252,6 +260,20 @@ sub do_approve_new_gc :Chained('/json/admin/admin_only') :PathPart('approve_new_
                         $contact_id (group $gc->group->id) in Admin::do_approve_new_gc");
                 }
             }
+
+            if ($approvals) {
+                notice_staff_chan($c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " approved $approvals group contacts.");
+            }
+
+            if ($rejections) {
+                notice_staff_chan($c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " approved $rejections group contacts.");
+            }
+
+
         });
 
         $c->stash->{json_approved} = \@approved_contacts;
@@ -371,6 +393,9 @@ sub do_approve_change :Chained('/json/admin/admin_only') :PathPart('approve_chan
 
     try {
         $c->model('DB')->schema->txn_do(sub {
+            my $approvals = 0;
+            my $rejections = 0;
+
             foreach my $change_id (@approve_changes) {
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"} || 'hold';
@@ -396,7 +421,8 @@ sub do_approve_change :Chained('/json/admin/admin_only') :PathPart('approve_chan
                     $c->log->info("Approving $type id $change_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved $type $target");
+
+                    $approvals++;
 
                     memo_gcs (
                         $c,
@@ -412,7 +438,7 @@ sub do_approve_change :Chained('/json/admin/admin_only') :PathPart('approve_chan
                     $c->log->info("Rejecting $type id $change_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " rejected $type $target");
+                    $rejections++;
 
                     memo_gcs (
                         $c,
@@ -430,6 +456,13 @@ sub do_approve_change :Chained('/json/admin/admin_only') :PathPart('approve_chan
                     $c->log->error("Got unknown action $action for $type id
                         $change_id in Admin::do_approve_change");
                 }
+            }
+
+            if ($approvals) {
+                notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved $approvals $type");
+            }
+            if ($rejections){
+                notice_staff_chan($c, "[ADMIN]: " . $c->user->account->accountname . " approved $rejections $type");
             }
         });
 
@@ -499,6 +532,10 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
         my $session = $c->model('Atheme')->session;
 
         $c->model('DB')->schema->txn_do(sub {
+            my $approvals = 0;
+            my $rejections = 0;
+            my $applications = 0;
+
             foreach my $change_id (@approve_changes) {
                 my $change = $change_rs->find({ id => $change_id });
                 my $action = $params->{"action_$change_id"} || 'hold';
@@ -509,12 +546,7 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                     $c->log->info("Approving CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " approved group cloak " .  $change->cloak . " for " .
-                        $change->target->accountname
-                    );
+                    $approvals++;
 
                     memo_gcs (
                         $c,
@@ -530,12 +562,7 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                     $c->log->info ("Marking cloakChange id $change_id as applied" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " marked as applied: group cloak " .  $change->cloak . "
-                        for " .  $change->target->accountname
-                    );
+                    $applications++;
 
                    memo_gcs (
                         $c,
@@ -551,12 +578,7 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                     $c->log->info("Rejecting CloakChange id $change_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " rejected cloak " .  $change->cloak . " for " .
-                        $change->target->accountname
-                    );
+                    $rejections++;
 
                     memo_gcs (
                         $c,
@@ -574,6 +596,30 @@ sub do_approve_cloak :Chained('/json/admin/approver_only') :PathPart('approve_cl
                     $c->log->error("Got unknown action $action for CloakChange id
                         $change_id in Admin::do_approve_cloak");
                 }
+            }
+
+            if ($approvals) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " approved $approvals cloaks"
+                );
+            }
+
+            if ($rejections) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " rejected $rejections cloaks"
+                );
+            }
+
+            if ($applications) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " applied $applications cloaks"
+                );
             }
         });
 
@@ -653,6 +699,10 @@ sub do_approve_channel_requests :Chained('/json/admin/approver_only') :PathPart(
         my $session = $c->model('Atheme')->session;
 
         $c->model('DB')->schema->txn_do(sub {
+            my $approvals = 0;
+            my $rejections = 0;
+            my $applications = 0;
+
             foreach my $req_id (@approve_requests) {
                 my $request = $req_rs->find({ id => $req_id });
                 my $action = $params->{"action_$req_id"} || 'hold';
@@ -669,12 +719,7 @@ sub do_approve_channel_requests :Chained('/json/admin/approver_only') :PathPart(
                     $c->log->info("Approving ChannelRequest id $req_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " approved " .  $request->request_type . " of " .
-                        $request->channel . $req_txt
-                    );
+                    $approvals++;
 
                     memo_gcs (
                         $c,
@@ -689,16 +734,9 @@ sub do_approve_channel_requests :Chained('/json/admin/approver_only') :PathPart(
                     push @approved_requests, $req_id;
                 } elsif ($action eq 'apply') {
                     $c->log->info ("Marking ChannelRequest id $req_id as applied" .
-                        " by " . $c->user->username . "\n");
+                    " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " marked " .  $request->request_type . " of " .
-                        $request->channel . $req_txt . " as applied"
-                    );
-
-
+                    $applications++;
                     memo_gcs (
                         $c,
                         $group,
@@ -714,13 +752,8 @@ sub do_approve_channel_requests :Chained('/json/admin/approver_only') :PathPart(
                     $c->log->info("Rejecting ChannelRequest id $req_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " rejected " .  $request->request_type . " of " .
-                        $request->channel . $req_txt
-                    );
 
+                    $rejections++;
                     memo_gcs (
                         $c,
                         $group,
@@ -739,6 +772,29 @@ sub do_approve_channel_requests :Chained('/json/admin/approver_only') :PathPart(
                         $req_id in Admin::do_approve_channel_requests");
                 }
             }
+
+            if ($approvals) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " approved $approvals channel requests."
+                );
+            }
+            if ($rejections) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " rejections $rejections channel requests."
+                );
+            }
+            if ($applications) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " applied $applications channel requests."
+                );
+            }
+
         });
 
         if (!$error) {
@@ -821,6 +877,9 @@ sub do_approve_namespaces :Chained('/json/admin/admin_only') :PathPart('approve_
 
     try {
         $c->model('DB')->schema->txn_do(sub {
+            my $approvals = 0;
+            my $rejections = 0;
+
             foreach my $namespace_id (@approve_namespaces) {
                 my $namespace = $namespace_rs->find({ id => $namespace_id });
                 my $action = $params->{"action_$namespace_id"} || 'hold';
@@ -831,12 +890,7 @@ sub do_approve_namespaces :Chained('/json/admin/admin_only') :PathPart('approve_
                     $c->log->info("Approving $type id $namespace_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " approved $type " . $namespace->namespace . " for " .
-                        $namespace->group->group_name
-                    );
+                    $approvals++;
 
                     memo_gcs (
                         $c,
@@ -853,12 +907,7 @@ sub do_approve_namespaces :Chained('/json/admin/admin_only') :PathPart('approve_
                     $c->log->info("Rejecting $type id $namespace_id" .
                         " by " . $c->user->username . "\n");
 
-                    notice_staff_chan (
-                        $c,
-                        "[ADMIN]: " .  $c->user->account->accountname .
-                        " rejected $type " . $namespace->namespace . " for " .
-                        $namespace->group->group_name
-                    );
+                    $rejections++;
 
                     memo_gcs (
                         $c,
@@ -877,6 +926,22 @@ sub do_approve_namespaces :Chained('/json/admin/admin_only') :PathPart('approve_
                     $c->log->error("Got unknown action $action for channel namespace id
                         $namespace_id in Admin::do_approve_channel_namespaces");
                 }
+            }
+
+            if ($approvals) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " approved $approvals namespaces."
+                );
+            }
+
+            if ($rejections) {
+                notice_staff_chan (
+                    $c,
+                    "[ADMIN]: " .  $c->user->account->accountname .
+                    " approved $rejections namespaces."
+                );
             }
         });
 
