@@ -8,7 +8,7 @@ use lib qw(t/lib);
 use GMSTest::Common;
 use GMSTest::Database;
 
-my $schema = need_database 'three_contacts';
+my $schema = need_database 'staff';
 
 my $account = $schema->resultset('Account')->search({ accountname => 'test01' })->single;
 isa_ok $account, 'GMS::Schema::Result::Account';
@@ -25,7 +25,7 @@ isa_ok $adminaccount, 'GMS::Schema::Result::Account';
 my $contact = $account->contact;
 isa_ok $contact, 'GMS::Schema::Result::Contact';
 
-my $group = $schema->resultset('Group')->search({ group_name => 'test' })->single;
+my $group = $schema->resultset('Group')->search({ group_name => 'Group01' })->single;
 isa_ok $group, 'GMS::Schema::Result::Group', 'Found group';
 
 #
@@ -42,13 +42,13 @@ is $group->active_contacts->count, 1;
 my $gc = $group->group_contacts->single;
 ok $gc;
 
-is $gc->id, '1_1', 'Make sure we find the right contact';
+is $gc->id, '2_1', 'Make sure we find the right contact';
 is $gc->is_primary, 1, 'First added contact is primary';
 
-$gc = $schema->resultset('GroupContact')->find_by_id ( '1_1' );
+$gc = $schema->resultset('GroupContact')->find_by_id ( '2_1' );
 ok $gc, 'find_by_id_works';
 
-is $gc->id, '1_1', 'find_by_id works';
+is $gc->id, '2_1', 'find_by_id works';
 
 $group->invite_contact($account2->contact, $account);
 
@@ -134,13 +134,5 @@ ok $change->reject ($adminaccount), 'Rejecting changes works.';
 $gc->discard_changes;
 
 is $gc->is_primary, 1, 'Change has not been applied';
-
-ok $gc->change ( $adminaccount, 'admin',  { 'status' => 'deleted' });
-
-$group->invite_contact ( $account3->contact, $account, { 'primary' => 1 } );
-$gc->discard_changes;
-
-is $gc->status->is_invited, 1, 'gc is invited';
-is $gc->is_primary, 1, 'We can invite a group contact that has primary status from the start';
 
 done_testing;

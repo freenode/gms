@@ -13,6 +13,11 @@
             "quantity": "all"
         },
         {
+            "class": "ContactChange",
+            "quantity": "all"
+        },
+
+        {
             "class": "GroupContact",
             "quantity": "all"
         },

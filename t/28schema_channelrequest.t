@@ -111,7 +111,7 @@ ok $request->active_change->status->is_applied, "Approving syncs to atheme, and 
 
 is_deeply \@data, [
     '#group0',
-    '9'
+    '3EAB67EC'
 ];
 
 $mockClient->mock ('take_over', sub {
@@ -136,8 +136,8 @@ ok $request->active_change->status->is_applied, "Approving syncs to atheme, and 
 
 is_deeply \@data, [
     '#group0',
-    '9',
-    '9'
+    '3EAB67EC',
+    '3EAB67EC'
 ];
 
 ok $request->change ($admin, { status => 'pending_staff' });

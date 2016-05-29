@@ -3,5 +3,9 @@ $HASH1 = {
                     => 3,
            active_change
                     => 3,
-           id       => 3
+           id       => 3,
+           name    => 'test contact',
+           email   => 'test03@example.com',
+           phone   => '0000000000',
+
          };
