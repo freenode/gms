@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'approved_group';
 use GMSTest::Database;
 use Test::More;
 use Test::MockObject;
@@ -86,6 +86,6 @@ $ua->get("http://localhost/json/group/1/listchans", "Listing channels page");
 my $json = decode_json($ua->content);
 ok !$json->{json_success};
 
-is $json->{json_error}, 'Could not talk to Atheme: Test error', 'Error is shown';
+is $json->{json_error}, 'Test error', 'Error is shown';
 
 done_testing;

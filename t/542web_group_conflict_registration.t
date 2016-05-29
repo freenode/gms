@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'approved_group';
 use GMSTest::Database;
 use Test::MockModule;
 

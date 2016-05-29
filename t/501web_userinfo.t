@@ -6,7 +6,7 @@ use Test::More;
 use Test::MockModule;
 
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'three_groups';
 use GMSTest::Database;
 
 need_database 'three_groups';

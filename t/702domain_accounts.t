@@ -42,7 +42,7 @@ $mockSchema->mock ('resultset', sub {
     });
 
 $mockSchema->mock ('find', sub {
-        undef;
+        $mockSchema;
     });
 
 $mockSchema->mock ('find_or_new', sub {
@@ -57,14 +57,20 @@ $mockSchema->mock ('accountname', sub {
         'erry';
     });
 
+$mockSchema->mock('dropped', sub { 0 });
+
+$mockSchema->mock('uuid', sub { 'AAAAAAAAH'});
+$mockSchema->mock('id', sub { 1} );
+
 my $accounts = GMS::Domain::Accounts->new ( $mockSession, $mockSchema );
 
 use Data::Dumper;
 
-my @result = $accounts->find_by_uid ('AAAAAAAAH');
+my @result = $accounts->find_by_uid ('1');
 
 is_deeply \@result, [
     'GMS::Domain::Account',
+    '1',
     'AAAAAAAAH',
     'erry',
     $mockSession,
@@ -75,6 +81,7 @@ is_deeply \@result, [
 
 is_deeply \@result, [
     'GMS::Domain::Account',
+    '1',
     'AAAAAAAAH',
     'erry',
     $mockSession,
@@ -89,10 +96,11 @@ $mockSchema->mock ('dropped', sub {
     });
 
 $accounts = GMS::Domain::Accounts->new ( $mockSession, $mockSchema );
-@result = $accounts->find_by_uid ('AAAAAAAAH');
+@result = $accounts->find_by_uid ('1');
 
 is_deeply \@result, [
     'GMS::Domain::Account',
+    '1',
     'AAAAAAAAH',
     'erry',
     $mockSession,
@@ -103,7 +111,7 @@ $mockSchema->mock ('dropped', sub {
         1;
     });
 
-@result = $accounts->find_by_uid ('AAAAAAAAH');
+@result = $accounts->find_by_uid ('1');
 
 is_deeply \@result, [ $mockSchema ], 'If account is dropped we get the account from the schema';
 
@@ -125,35 +133,6 @@ $accounts = GMS::Domain::Accounts->new ( $mockSession, $mockSchema );
 $accounts->find_by_uid ('AAAAAAAAH');
 
 is $dropped, 1, 'If the account doesn\'t exist in atheme, we\'re telling the db it is dropped';
-
-$mockSchema->mock ('find', sub {
-        undef;
-    });
-
-$accounts = GMS::Domain::Accounts->new ( $mockSession, $mockSchema );
-
-throws_ok {
-    $accounts->find_by_uid ('AAAAAAAAH');
-} qr /Could not find an account with the UID AAAAAAAAH/, 'Exceptions are thrown if the account could not be found';
-
-throws_ok {
-    $accounts->find_by_name ('erry');
-} qr /Could not find an account with the account name erry/, 'Exceptions are thrown if the account could not be found';
-
-
-$mockSession->mock ('command', sub {
-        die RPC::Atheme::Error->new ( 1, 'Test error' );
-    });
-
-$accounts = GMS::Domain::Accounts->new ( $mockSession, $mockSchema );
-
-throws_ok {
-    $accounts->find_by_uid ('AAAAAAAAH');
-} qr /Test error/, 'Other errors thrown back';
-
-throws_ok {
-    $accounts->find_by_name ('erry');
-} qr /Test error/, 'Other errors thrown back';
 
 throws_ok {
     $accounts->find_by_name;

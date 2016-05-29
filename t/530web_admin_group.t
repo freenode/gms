@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'staff';
 use GMSTest::Database;
 use Test::More;
 use Test::More;

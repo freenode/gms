@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'approved_group';
 use GMSTest::Database;
 use Test::More;
 use Test::MockModule;

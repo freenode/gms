@@ -5,10 +5,13 @@ use warnings;
 use Test::More;
 
 use lib qw(t/lib);
-use GMSTest::Common;
+
+# Don't ask.
+use GMSTest::Common 'three_groups';
+
 use GMSTest::Database;
 
-need_database 'basic_db';
+need_database 'three_groups';
 
 use ok 'Test::WWW::Mechanize::Catalyst' => 'GMS::Web';
 

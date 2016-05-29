@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'approved_group';
 use GMSTest::Database;
 use Test::More;
 use Test::MockObject;
@@ -56,7 +56,7 @@ $ua->content_contains('#example-1', 'List is shown immediatelly on 1 namespaces'
 $ua->content_contains('#example-2', 'List is shown immediatelly on 1 namespaces');
 
 my $group = $schema->resultset('Group')->find({ id => 1 });
-$group->add_to_channel_namespaces({ namespace => 'example2', 'group_id' => 1, 'status' => 'active', 'account' => 'AAAAAAAAP'});
+$group->add_to_channel_namespaces({ namespace => 'example2', 'group_id' => 1, 'status' => 'active', 'account' => '1'});
 
 $ua->get_ok("http://localhost/group/1/listchans", "Listing channels page");
 
@@ -89,8 +89,8 @@ $schema->resultset("ChannelRequest")->create({
         namespace => 'example2',
         group => $group,
         request_type => 'transfer',
-        target => 'AAAAAAAAP',
-        changed_by => 'AAAAAAAAP'
+        target => '1',
+        changed_by => '1'
     });
 
 $ua->get_ok("http://localhost/group/1/listchans", "Listing channels page");

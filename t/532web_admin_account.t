@@ -1,5 +1,5 @@
 use lib qw(t/lib);
-use GMSTest::Common;
+use GMSTest::Common 'approved_group';
 use GMSTest::Database;
 use Test::More;
 use Test::MockModule;
@@ -38,7 +38,7 @@ $ua->submit_form(
 
 $ua->content_contains("You are now logged in as admin01", "Check we can log in");
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/view", "View account page works");
+$ua->get_ok("http://localhost/admin/account/1/view", "View account page works");
 
 $ua->content_contains("test01's contact information", "Account viewing page works");
 
@@ -46,7 +46,7 @@ $ua->text_like (qr#Account name.*test01#, "Account viewing page works");
 $ua->text_like (qr#Real name.*test01#, "Account viewing page works");
 $ua->text_like (qr#E-mail Address.*test01\@example.com#, "Account viewing page works");
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
+$ua->get_ok("http://localhost/admin/account/1/edit", "Check contact info editing form");
 
 $ua->submit_form(fields => {
         user_name => 'Second Contact Test',
@@ -55,12 +55,12 @@ $ua->submit_form(fields => {
 
 $ua->content_contains("Successfully edited the user's contact information", "Check editing contact info");
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
+$ua->get_ok("http://localhost/admin/account/1/edit", "Check contact info editing form");
 
 $ua->content_contains("Second Contact Test", "The input fields have the new information for editing");
 $ua->content_contains('test03@example.com', "The input fields have the new information for editing");
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/view", "View account page works");
+$ua->get_ok("http://localhost/admin/account/1/view", "View account page works");
 
 $ua->content_contains("Second Contact Test", "Info has changed");
 $ua->content_contains('test03@example.com', "Info has changed");
@@ -76,7 +76,7 @@ is $account->contact->email, 'test03@example.com', 'Admin changes are applied';
 
 ok $account->contact->change ( $account, 'request', { 'name' => 'Another Test' });
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
+$ua->get_ok("http://localhost/admin/account/1/edit", "Check contact info editing form");
 
 $ua->content_contains ("already a change request pending", "Pending request is recognised");
 $ua->content_contains ("Another Test", "Pending change is recognised");
@@ -89,9 +89,9 @@ $account->contact->discard_changes;
 
 is $account->contact->phone, 9876543210, 'Updating contact info works';
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAP/edit", "Check contact info editing form");
+$ua->get_ok("http://localhost/admin/account/1/edit", "Check contact info editing form");
 
-$ua->get_ok("http://localhost/admin/account/AAAAAAAAS/edit", "Check contact info editing form");
+$ua->get_ok("http://localhost/admin/account/4/edit", "Check contact info editing form");
 
 my $account = $schema->resultset('Account')->find({ 'accountname' => 'admin01' });
 ok $account;
