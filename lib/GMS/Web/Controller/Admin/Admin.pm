@@ -641,7 +641,7 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
             try {
                 my $accounts = $c->model('Accounts');
                 my $account = $accounts->find_by_name ( $accname );
-                my $uid = $account->id;
+                my $uid = $account->uuid;
 
                 $account_search = $uid;
 
@@ -665,11 +665,11 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
 
         $rs = $change_rs -> search(
             {
-                'contact.account_id' => $account_search,
+                'account.uuid' => $account_search,
                 'group.group_name' => { 'ilike', '%' . $groupname . '%' }
             },
             {
-                join => { 'group_contact' => [ 'contact', 'group' ] },
+                join => { 'group_contact' => [ { 'contact' => ['account'] }, 'group' ] },
                 order_by => 'id',
                 page => $page,
                 rows => 15
@@ -811,7 +811,7 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
             try {
                 my $accounts = $c->model('Accounts');
                 my $account = $accounts->find_by_name ( $accountname );
-                my $uid = $account->id;
+                my $uid = $account->uuid;
 
                 $account_search = $uid;
 
@@ -833,10 +833,11 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
 
         $rs = $change_rs -> search(
             {
-                'target' => $account_search
+                'target.uuid' => $account_search
             },
             {
-                join => { cloak_change => 'target' },
+                #  join => { 'group_contact' => [ { 'contact' => ['account'] }, 'group' ] },
+                join => { cloak_change => [ 'target' ] },
                 order_by => 'id',
                 page => $page,
                 rows => 15
@@ -872,7 +873,7 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
             try {
                 my $accounts = $c->model('Accounts');
                 my $account = $accounts->find_by_name ( $target );
-                my $uid = $account->id;
+                my $uid = $account->uuid;
 
                 $target_search = $uid;
 
@@ -896,7 +897,7 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
             try {
                 my $accounts = $c->model('Accounts');
                 my $account = $accounts->find_by_name ( $requestor );
-                my $uid = $account->id;
+                my $uid = $account->uuid;
 
                 $requestor_search = $uid;
 
@@ -918,11 +919,12 @@ sub do_search_changes :Chained('/admin/admin_only') :PathPart('search_changes/su
 
         $rs = $change_rs -> search(
             {
-                'target' => $target_search,
-                'requestor.account_id' => $requestor_search
+                'target.uuid'  => $target_search,
+                'account.uuid' => $requestor_search
             },
             {
-                join => { channel_request => [ 'target', 'requestor' ] },
+                #  join => { 'group_contact' => [ { 'contact' => ['account'] }, 'group' ] },
+                join => { channel_request => [ 'target', { 'requestor' => ['account'] } ] },
                 order_by => 'id',
                 page => $page,
                 rows => 15
