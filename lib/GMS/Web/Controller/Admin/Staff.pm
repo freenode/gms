@@ -178,7 +178,7 @@ sub do_search_groups :Chained('/admin/base') :PathPart('search_groups/submit') :
         try {
             my $accounts = $c->model('Accounts');
             my $account = $accounts->find_by_name ( $accname );
-            my $uid = $account->id;
+            my $uid = $account->uuid;
 
             $account_search = { 'account.uuid' => $uid };
 
@@ -284,7 +284,7 @@ sub do_search_users :Chained('/admin/base') :PathPart('search_users/submit') :Ar
         try {
             my $accounts = $c->model('Accounts');
             my $account = $accounts->find_by_name ( $accname );
-            my $uid = $account->id;
+            my $uid = $account->uuid;
 
             $account_search = { 'me.uuid' => $uid };
 

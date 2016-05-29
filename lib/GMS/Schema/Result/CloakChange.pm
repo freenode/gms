@@ -482,7 +482,7 @@ sub sync_to_atheme {
 
     foreach my $cloakChange (@unapplied) {
         my $cloak = $cloakChange->cloak;
-        my $uid = $cloakChange->target->id;
+        my $uid = $cloakChange->target->uuid;
 
         try {
             $client->cloak ( $uid, $cloak );

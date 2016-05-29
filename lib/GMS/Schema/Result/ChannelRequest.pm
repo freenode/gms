@@ -502,7 +502,7 @@ sub sync_to_atheme {
         my $contact_id = $channelRequest->requestor->id;
 
         my $contact = $contact_rs->find({ 'id' => $contact_id });
-        my $requestor_id = $contact->account->id;
+        my $requestor_id = $contact->account->uuid;
 
         my $request_type = $channelRequest->request_type;
 
@@ -510,7 +510,7 @@ sub sync_to_atheme {
             if ( $request_type->is_transfer) {
                 my $target = $channelRequest->target;
 
-                $client->take_over ( $channel, $target->id, $requestor_id );
+                $client->take_over ( $channel, $target->uuid, $requestor_id );
             } elsif ( $request_type->is_drop ) {
                 $client->drop ( $channel, $requestor_id );
             }
