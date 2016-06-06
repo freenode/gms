@@ -2,7 +2,7 @@ package GMS::Web::Controller::Logout;
 
 use strict;
 use warnings;
-use base qw (GMS::Web::TokenVerification);
+use base qw (GMS::Web::TokenVerification GMS::Web::SessionManagement);
 
 =head1 NAME
 
@@ -20,7 +20,7 @@ Catalyst Controller.
 
 =cut
 
-sub base :Chained('/') :PathPart('logout') :CaptureArgs(0) :DestroyToken {
+sub base :Chained('/') :PathPart('logout') :CaptureArgs(0) :DestroyToken :DeleteSession {
 }
 
 =head2 index

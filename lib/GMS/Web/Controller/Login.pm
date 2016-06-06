@@ -2,7 +2,7 @@ package GMS::Web::Controller::Login;
 
 use strict;
 use warnings;
-use base qw (GMS::Web::TokenVerification);
+use base qw (GMS::Web::TokenVerification GMS::Web::SessionManagement);
 
 use TryCatch;
 
@@ -43,7 +43,7 @@ Processes the form, sees if we can log in with the provided credentials.
 
 =cut
 
-sub do_login :Chained('base') :PathPart('submit') :Args(0) :Local :VerifyToken {
+sub do_login :Chained('base') :PathPart('submit') :Args(0) :Local :VerifyToken :UpdateSession {
     my ( $self, $c ) = @_;
 
     my $username = $c->request->params->{username} || "";
