@@ -93,6 +93,15 @@ Attempt to render a view, if needed.
 sub end : ActionClass('RenderView::ErrorHandler') {
     my ($self, $c) = @_;
 
+    $c->response->header(
+        'X-XSS-Protection' => '1; mode=block',
+        'X-Content-Type-Options' => 'nosniff',
+        'Cache-control' => 'no-store',
+        'Pragma' => 'no-cache',
+        'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains',
+    );
+
+
     if ( $c->request->path =~ /^json\// ) {
         $c->detach('View::JSON');
     } 
