@@ -77,26 +77,11 @@ $ua->submit_form(
     }
 );
 
-$ua->content_contains( "Another group has requested the test namespace. Are you sure you want to create a conflicting request?", "We get a warning when requesting another group's namespace" );
 
-$ua->get_ok("http://localhost/group/new", "Check new group page works");
-
-$ua->submit_form(
-    fields => {
-        group_type => 'informal',
-        group_name => 'third test',
-        group_url  => 'http://www.example.com/',
-        channel_namespace => 'test',
-        has_address => 'n',
-        do_confirm => 1
-    }
-);
-
-$ua->content_contains( "successfully added", "We can create a conflicting request if we confirm we want to" );
+$ua->content_contains( "The namespace test is already taken", "Group is now taken and can't be requested again");
 
 $ua->get_ok ("http://localhost/group", "Group page works");
 
 $ua->content_contains ("first test", "Group is in the user's group list");
-$ua->content_contains ("third test", "Group is in the user's group list");
 
 done_testing;

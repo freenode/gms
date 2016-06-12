@@ -46,6 +46,10 @@ my $rs = $schema->resultset('ChannelNamespace');
 my $ns = $rs->find({ namespace => 'new_namespace_3' });
 
 ok $ns->status->is_deleted, 'active change is deleted';
+
+
+warn $ns->last_change->change_type;
+
 ok $ns->last_change->change_type->is_request, 'last change is request';
 ok $ns->last_change->status->is_active, 'requested status is active';
 
