@@ -16,6 +16,10 @@ L<GMS::Authentication::Store>.
 
 =head1 METHODS
 
+=head2 uuid
+
+Returns the Atheme UUID for the user.
+
 =head2 id
 
 Returns the numeric account ID for this user.
