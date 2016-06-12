@@ -117,15 +117,9 @@ $ua->submit_form(
         namespace => 'test'
     }
 );
-$ua->content_contains("Another group has requested that namespace. Are you sure you want to create a conflicting request?", "We get a warning now that we have already requested revivng the namespace");
 
-$ua->submit_form(
-    fields => {
-        namespace => 'test',
-        do_confirm => 1
-    }
-);
-$ua->content_contains("Successfully submitted the cloak namespace change request. Please wait for staff to approve the change", "We can request the namespace if we confirm we want to");
+
+$ua->content_contains("That namespace is already taken", "Errors since we already requested reactivation");
 
 $ua->get_ok("http://localhost/group/1/edit_cloak_namespaces", "Edit channel namespaces page works");
 

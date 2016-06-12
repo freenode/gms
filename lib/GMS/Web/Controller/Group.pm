@@ -1068,7 +1068,7 @@ sub do_edit_channel_namespaces :Chained('active_group') :PathPart('edit_channel_
                     $c->detach ('edit_channel_namespaces');
                 }
 
-                $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
+                $ns->change ($c->user->account, 'workflow_change', { 'status' => 'pending_staff', 'group_id' => $group->id });
             }
         } else {
             try {
@@ -1179,7 +1179,7 @@ sub do_edit_cloak_namespaces :Chained('active_group') :PathPart('edit_cloak_name
                     $c->detach ('edit_cloak_namespaces');
                 }
 
-                $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
+                $ns->change ($c->user->account, 'workflow_change', { 'status' => 'pending_staff', 'group_id' => $group->id });
             }
         } else {
             try {
@@ -1321,7 +1321,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                 $channel_ns =~ s/-\*//;
 
                 if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
-                    $ns->change ($c->user->account, 'request', { 'status' => 'active', 'group_id' => $group->id });
+                    $ns->change ($c->user->account, 'workflow_change', { 'status' => 'pending_staff', 'group_id' => $group->id });
                 } else {
                     $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $channel_ns, 'status' => 'pending_staff' });
                 }
