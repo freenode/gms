@@ -40,6 +40,13 @@ DISTRIBUTIONS
       POSIX::strftime::Compiler 0.30
       Time::Local 0
       perl 5.008001
+  App-cpanminus-1.7042
+    pathname: M/MI/MIYAGAWA/App-cpanminus-1.7042.tar.gz
+    provides:
+      App::cpanminus 1.7042
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008001
   AppConfig-1.66
     pathname: A/AB/ABW/AppConfig-1.66.tar.gz
     provides:
@@ -170,29 +177,6 @@ DISTRIBUTIONS
       Storable 0
       Test::Deep 0
       Test::More 0
-  CPAN-Meta-2.150005
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-2.150005.tar.gz
-    provides:
-      CPAN::Meta 2.150005
-      CPAN::Meta::Converter 2.150005
-      CPAN::Meta::Feature 2.150005
-      CPAN::Meta::History 2.150005
-      CPAN::Meta::Merge 2.150005
-      CPAN::Meta::Prereqs 2.150005
-      CPAN::Meta::Spec 2.150005
-      CPAN::Meta::Validator 2.150005
-    requirements:
-      CPAN::Meta::Requirements 2.121
-      CPAN::Meta::YAML 0.008
-      Carp 0
-      ExtUtils::MakeMaker 6.17
-      JSON::PP 2.27200
-      Parse::CPAN::Meta 1.4414
-      Scalar::Util 0
-      perl 5.008
-      strict 0
-      version 0.88
-      warnings 0
   Cache-FastMmap-1.40
     pathname: R/RO/ROBM/Cache-FastMmap-1.40.tar.gz
     provides:
@@ -253,6 +237,49 @@ DISTRIBUTIONS
       Carp::Clan 0
       ExtUtils::MakeMaker 6.42
       Test::More 0
+  Carton-v1.0.28
+    pathname: M/MI/MIYAGAWA/Carton-v1.0.28.tar.gz
+    provides:
+      Carton 1.000028
+      Carton::Builder undef
+      Carton::CLI undef
+      Carton::CPANfile undef
+      Carton::Dependency undef
+      Carton::Dist undef
+      Carton::Dist::Core undef
+      Carton::Environment undef
+      Carton::Error undef
+      Carton::Error::CPANfileNotFound undef
+      Carton::Error::CommandExit undef
+      Carton::Error::CommandNotFound undef
+      Carton::Error::SnapshotNotFound undef
+      Carton::Error::SnapshotParseError undef
+      Carton::Index undef
+      Carton::Mirror undef
+      Carton::Package undef
+      Carton::Packer undef
+      Carton::Snapshot undef
+      Carton::Snapshot::Emitter undef
+      Carton::Snapshot::Parser undef
+      Carton::Tree undef
+      Carton::Util undef
+    requirements:
+      App::cpanminus 1.703
+      CPAN::Meta 2.120921
+      CPAN::Meta::Requirements 2.121
+      Class::Tiny 1.001
+      ExtUtils::MakeMaker 0
+      Getopt::Long 2.39
+      JSON 2.53
+      Module::CPANfile 0.9031
+      Module::CoreList 0
+      Module::Metadata 1.000003
+      Module::Reader 0.002
+      Path::Tiny 0.033
+      Try::Tiny 0.09
+      parent 0.223
+      perl 5.008005
+      version 0.77
   Catalyst-Action-RenderView-0.16
     pathname: B/BO/BOBTFISH/Catalyst-Action-RenderView-0.16.tar.gz
     provides:
@@ -307,9 +334,7 @@ DISTRIBUTIONS
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
       DBIx::Class 0.08114
-      DBIx::Class::Schema::Loader 0.04005
       ExtUtils::MakeMaker 6.59
-      Hash::Merge 0
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
@@ -775,14 +800,15 @@ DISTRIBUTIONS
       Class::Singleton 1.4
     requirements:
       ExtUtils::MakeMaker 0
-  Class-Tiny-1.000
-    pathname: D/DA/DAGOLDEN/Class-Tiny-1.000.tar.gz
+  Class-Tiny-1.004
+    pathname: D/DA/DAGOLDEN/Class-Tiny-1.004.tar.gz
     provides:
-      Class::Tiny 1.000
-      Class::Tiny::Object 1.000
+      Class::Tiny 1.004
+      Class::Tiny::Object 1.004
     requirements:
       Carp 0
       ExtUtils::MakeMaker 6.17
+      perl 5.006
       strict 0
       warnings 0
   Class-Unload-0.08
@@ -1242,7 +1268,7 @@ DISTRIBUTIONS
       DBIx::Class::IntrospectableM2M 0.001001
     requirements:
       DBIx::Class 0
-      ExtUtils::MakeMaker 7.1
+      ExtUtils::MakeMaker 7.18
       Test::More 0
   DBIx-Class-Schema-Loader-0.07042
     pathname: I/IL/ILMARI/DBIx-Class-Schema-Loader-0.07042.tar.gz
@@ -2462,12 +2488,12 @@ DISTRIBUTIONS
       Test::Requires 0
       parent 0
       perl 5.008001
-  Devel-Declare-0.006016
-    pathname: E/ET/ETHER/Devel-Declare-0.006016.tar.gz
+  Devel-Declare-0.006018
+    pathname: E/ET/ETHER/Devel-Declare-0.006018.tar.gz
     provides:
-      Devel::Declare 0.006016
-      Devel::Declare::Context::Simple 0.006016
-      Devel::Declare::MethodInstaller::Simple 0.006016
+      Devel::Declare 0.006018
+      Devel::Declare::Context::Simple 0.006018
+      Devel::Declare::MethodInstaller::Simple 0.006018
     requirements:
       B::Hooks::EndOfScope 0.05
       B::Hooks::OP::Check 0.19
@@ -2779,13 +2805,13 @@ DISTRIBUTIONS
     pathname: E/EX/EXODIST/Exporter-Declare-0.113.tar.gz
     provides:
       Exporter::Declare 0.113
-      Exporter::Declare::Export undef
-      Exporter::Declare::Export::Alias undef
-      Exporter::Declare::Export::Generator undef
-      Exporter::Declare::Export::Sub undef
-      Exporter::Declare::Export::Variable undef
-      Exporter::Declare::Meta undef
-      Exporter::Declare::Specs undef
+      Exporter::Declare::Export 0
+      Exporter::Declare::Export::Alias 0
+      Exporter::Declare::Export::Generator 0
+      Exporter::Declare::Export::Sub 0
+      Exporter::Declare::Export::Variable 0
+      Exporter::Declare::Meta 0
+      Exporter::Declare::Specs 0
     requirements:
       Carp 0
       Fennec::Lite 0.004
@@ -2851,6 +2877,51 @@ DISTRIBUTIONS
       File::Spec 0
       strict 0
       warnings 0
+  ExtUtils-MakeMaker-7.18
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.18.tar.gz
+    provides:
+      ExtUtils::Command 7.18
+      ExtUtils::Command::MM 7.18
+      ExtUtils::Liblist 7.18
+      ExtUtils::Liblist::Kid 7.18
+      ExtUtils::MM 7.18
+      ExtUtils::MM_AIX 7.18
+      ExtUtils::MM_Any 7.18
+      ExtUtils::MM_BeOS 7.18
+      ExtUtils::MM_Cygwin 7.18
+      ExtUtils::MM_DOS 7.18
+      ExtUtils::MM_Darwin 7.18
+      ExtUtils::MM_MacOS 7.18
+      ExtUtils::MM_NW5 7.18
+      ExtUtils::MM_OS2 7.18
+      ExtUtils::MM_QNX 7.18
+      ExtUtils::MM_UWIN 7.18
+      ExtUtils::MM_Unix 7.18
+      ExtUtils::MM_VMS 7.18
+      ExtUtils::MM_VOS 7.18
+      ExtUtils::MM_Win32 7.18
+      ExtUtils::MM_Win95 7.18
+      ExtUtils::MY 7.18
+      ExtUtils::MakeMaker 7.18
+      ExtUtils::MakeMaker::Config 7.18
+      ExtUtils::MakeMaker::Locale 7.18
+      ExtUtils::MakeMaker::_version 7.18
+      ExtUtils::MakeMaker::charstar 7.18
+      ExtUtils::MakeMaker::version 7.18
+      ExtUtils::MakeMaker::version::regex 7.18
+      ExtUtils::MakeMaker::version::vpp 7.18
+      ExtUtils::Mkbootstrap 7.18
+      ExtUtils::Mksymlists 7.18
+      ExtUtils::testlib 7.18
+      MM 7.18
+      MY 7.18
+    requirements:
+      Data::Dumper 0
+      Encode 0
+      File::Basename 0
+      File::Spec 0.8
+      Pod::Man 0
+      perl 5.006
   FCGI-0.77
     pathname: E/ET/ETHER/FCGI-0.77.tar.gz
     provides:
@@ -3266,18 +3337,19 @@ DISTRIBUTIONS
     provides:
       JSON::MaybeXS 1.002002
     requirements:
+      Cpanel::JSON::XS 2.3310
       ExtUtils::CBuilder 0.27
       ExtUtils::MakeMaker 0
       File::Spec 0
       File::Temp 0
       JSON::PP 2.27202
       perl 5.006
-  JSON-PP-2.27300
-    pathname: M/MA/MAKAMAKA/JSON-PP-2.27300.tar.gz
+  JSON-PP-2.27400
+    pathname: M/MA/MAKAMAKA/JSON-PP-2.27400.tar.gz
     provides:
-      JSON::PP 2.27300
-      JSON::PP::Boolean 2.27300
-      JSON::PP::IncrParser 2.27300
+      JSON::PP 2.27400
+      JSON::PP::Boolean 2.27400
+      JSON::PP::IncrParser 2.27400
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
@@ -3633,6 +3705,20 @@ DISTRIBUTIONS
       XSLoader 0.02
       parent 0
       perl 5.008005
+  Module-CPANfile-1.1002
+    pathname: M/MI/MIYAGAWA/Module-CPANfile-1.1002.tar.gz
+    provides:
+      Module::CPANfile 1.1002
+      Module::CPANfile::Environment undef
+      Module::CPANfile::Prereq undef
+      Module::CPANfile::Prereqs undef
+      Module::CPANfile::Requirement undef
+    requirements:
+      CPAN::Meta 2.12091
+      CPAN::Meta::Prereqs 2.12091
+      ExtUtils::MakeMaker 0
+      JSON::PP 2.27300
+      parent 0
   Module-Find-0.12
     pathname: C/CR/CRENZ/Module-Find-0.12.tar.gz
     provides:
@@ -3669,6 +3755,14 @@ DISTRIBUTIONS
       Module::Build 0.38
       Test::More 0.62
       if 0
+  Module-Reader-0.002003
+    pathname: H/HA/HAARG/Module-Reader-0.002003.tar.gz
+    provides:
+      Module::Reader 0.002003
+    requirements:
+      ExtUtils::MakeMaker 0
+      Scalar::Util 0
+      perl 5.006
   Module-Runtime-0.014
     pathname: Z/ZE/ZEFRAM/Module-Runtime-0.014.tar.gz
     provides:
@@ -4891,6 +4985,31 @@ DISTRIBUTIONS
       overload 0
       parent 0
       strict 0
+  Path-Tiny-0.094
+    pathname: D/DA/DAGOLDEN/Path-Tiny-0.094.tar.gz
+    provides:
+      Path::Tiny 0.094
+      Path::Tiny::Error 0.094
+    requirements:
+      Carp 0
+      Cwd 0
+      Digest 1.03
+      Digest::SHA 5.45
+      Exporter 5.57
+      ExtUtils::MakeMaker 6.17
+      Fcntl 0
+      File::Copy 0
+      File::Glob 0
+      File::Path 2.07
+      File::Spec 0.86
+      File::Temp 0.19
+      File::stat 0
+      constant 0
+      if 0
+      overload 0
+      perl 5.008001
+      strict 0
+      warnings 0
   Plack-1.0031
     pathname: M/MI/MIYAGAWA/Plack-1.0031.tar.gz
     provides:
@@ -5701,28 +5820,65 @@ DISTRIBUTIONS
       Test::Builder::Module 0
       Test::More 0.88
       perl 5.008_001
-  Test-Simple-1.001014
-    pathname: E/EX/EXODIST/Test-Simple-1.001014.tar.gz
+  Test-Simple-1.302026
+    pathname: E/EX/EXODIST/Test-Simple-1.302026.tar.gz
     provides:
-      Test::Builder 1.001014
+      Test2 1.302026
+      Test2::API 1.302026
+      Test2::API::Breakage 1.302026
+      Test2::API::Context 1.302026
+      Test2::API::Instance 1.302026
+      Test2::API::Stack 1.302026
+      Test2::Event 1.302026
+      Test2::Event::Bail 1.302026
+      Test2::Event::Diag 1.302026
+      Test2::Event::Exception 1.302026
+      Test2::Event::Generic 1.302026
+      Test2::Event::Note 1.302026
+      Test2::Event::Ok 1.302026
+      Test2::Event::Plan 1.302026
+      Test2::Event::Skip 1.302026
+      Test2::Event::Subtest 1.302026
+      Test2::Event::Waiting 1.302026
+      Test2::Formatter 1.302026
+      Test2::Formatter::TAP 1.302026
+      Test2::Hub 1.302026
+      Test2::Hub::Interceptor 1.302026
+      Test2::Hub::Interceptor::Terminator 1.302026
+      Test2::Hub::Subtest 1.302026
+      Test2::IPC 1.302026
+      Test2::IPC::Driver 1.302026
+      Test2::IPC::Driver::Files 1.302026
+      Test2::Util 1.302026
+      Test2::Util::ExternalMeta 1.302026
+      Test2::Util::HashBase 1.302026
+      Test2::Util::Trace 1.302026
+      Test::Builder 1.302026
+      Test::Builder::Formatter 1.302026
       Test::Builder::IO::Scalar 2.113
-      Test::Builder::Module 1.001014
-      Test::Builder::Tester 1.28
-      Test::Builder::Tester::Color 1.290001
-      Test::Builder::Tester::Tie 1.28
-      Test::More 1.001014
-      Test::Simple 1.001014
-      Test::Tester 0.114
-      Test::Tester::Capture undef
-      Test::Tester::CaptureRunner undef
-      Test::Tester::Delegate undef
-      Test::use::ok 0.16
-      ok 0.16
+      Test::Builder::Module 1.302026
+      Test::Builder::Tester 1.302026
+      Test::Builder::Tester::Color 1.302026
+      Test::Builder::Tester::Tie 1.302026
+      Test::Builder::TodoDiag 1.302026
+      Test::More 1.302026
+      Test::Simple 1.302026
+      Test::Tester 1.302026
+      Test::Tester::Capture 1.302026
+      Test::Tester::CaptureRunner 1.302026
+      Test::Tester::Delegate 1.302026
+      Test::use::ok 1.302026
+      ok 1.302026
     requirements:
+      Carp 0
       ExtUtils::MakeMaker 0
+      File::Spec 0
+      File::Temp 0
+      PerlIO 0
       Scalar::Util 1.13
-      Test::Harness 2.03
-      perl 5.006
+      Storable 0
+      perl 5.008001
+      utf8 0
   Test-SubCalls-1.09
     pathname: A/AD/ADAMK/Test-SubCalls-1.09.tar.gz
     provides:
@@ -5946,15 +6102,16 @@ DISTRIBUTIONS
       base 2.16
       strict 0
       warnings 0
-  Try-Tiny-0.22
-    pathname: D/DO/DOY/Try-Tiny-0.22.tar.gz
+  Try-Tiny-0.24
+    pathname: E/ET/ETHER/Try-Tiny-0.24.tar.gz
     provides:
-      Try::Tiny 0.22
+      Try::Tiny 0.24
     requirements:
       Carp 0
       Exporter 5.57
-      ExtUtils::MakeMaker 6.30
+      ExtUtils::MakeMaker 0
       constant 0
+      perl 5.006
       strict 0
       warnings 0
   TryCatch-1.003002
@@ -6288,6 +6445,14 @@ DISTRIBUTIONS
       URI::Escape 0
       WWW::RobotRules 6
       perl 5.008001
+  local-lib-2.000019
+    pathname: H/HA/HAARG/local-lib-2.000019.tar.gz
+    provides:
+      lib::core::only undef
+      local::lib 2.000019
+    requirements:
+      ExtUtils::MakeMaker 7.00
+      perl 5.006
   multidimensional-0.011
     pathname: I/IL/ILMARI/multidimensional-0.011.tar.gz
     provides:

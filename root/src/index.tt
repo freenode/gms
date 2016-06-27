@@ -1,9 +1,54 @@
 [% META title = 'Index' %]
 
-<h3>Welcome to the Group Management System.</h3>
+<h3>Welcome to the freenode Group Management System.</h3>
 
-<p>GMS allows groups to manage their groups, take over channels, assign cloaks, and more.</p>
-<p>Need help? Staff are around in #freenode.</p>
+<p>Group registration allows your project or organisation to maintain unambiguous "real world" contact with the freenode network and represents an official relationship with freenode.</p>
+
+<p>By registering your group, you are indicating that you are maintaining an official presence on the network. If your group is a legal entity, we want to make sure that management has approved your registration.</p>
+
+<p>You may maintain as little or as much control over your channels as desired. You may cloak your members, employees or participants, or not, as you decide.</p> 
+    
+<h4>Group contacts represent your project or organisation to the freenode volunteers. </h4>
+
+<p>A group contact should belong to upper management or the organisation's board. This authority can be delegated further in the case of larger organisations, but it's not recommended; in cases where such delegation occurs, contact with the organisation is often lost and the group registration must subsequently be removed.</p>
+
+<p>Informal groups vary considerably in their internal organisation. If the group is run by a single project leader or developer, that person should submit a group registration form. If the group is run by two equal participants, each should submit a group registration form to make it clear that both wish to have the group registered.<br>
+If it's run by a larger core group or by voting across the project, the voting group should make a collective decision to register and should appoint one of their number as primary contact.</p>
+
+<p>The group contact may also appoint additional group contacts, assigned with full or limited access and/or privileges. They need no special level of authority; delegate whatever level of authority seems appropriate.  We will not expect them to make policy decisions, just to find out the answers to any questions that are raised.</p>
+
+
+<h4>Group registration provides:</h4>
+
+<p><b>Additional channel management capabilities.</b></p>
+
+<p>freenode policy means that projects and organisations are entitled to own channels bearing their names. Your group contact can request changes in channel ownership in accordance with this policy and can directly request changes to access lists and configuration for any channels you own.</p>
+
+<p><b>Group hostname cloaks.</b></p>
+
+<p>Cloaks allow your project or organisation to grant official recognition to project participants. Your group contact maintains this cloak list.</p>
+
+<p><b>Problem solving.</b></p>
+
+<p>When there's a problem with one of your channels, a complaint by a user or a question about policy, we'll pass it on to your group contact.</p>
+
+<p><b>Your group contacts:</b></p>
+
+<ul>
+<li>Are designated by your project or organisation (e.g. a group contact might be your IT manager or someone involved with your project infrastructure).</li>  
+<li>Can be one person or several (you decide who acts as group contact.  Each contact can be designated to handle issues pertaining to your entire group, or to a limited set of projects or users).</li>
+<li>Acts as your project's "goto" (when you need someone to talk to us about a network issue, your group contact is the person.  They are your formal point of contact with our volunteers).</li>
+<li>Acts as our "goto" (we will ask your group contact whenever we have any question about your project or organisational policies as they pertain to participation in the network).</li>
+</ul>
+
+<h4>Group Advisory Board</h4>
+
+<p>In order for freenode to provide the best possible service to the communities we serve, it is important for us to be able to seek feedback from the projects with which we have a relationship.</p>
+
+<p>We therefore ask that you consider whether you, as a GC, are happy for us to contact you to seek feedback on issues pertaining to services rendered to groups, changes to group specific policy and other relevant issues. </p>
+
+<p>We would invite you to participate in such consultation via e-mail or IRC.</p>
+
 <p>
 You can report bugs and issues on the <a href="https://github.com/freenode/gms" target="_blank">Github project page.</a>
 </p>
