@@ -41,9 +41,10 @@ our $VERSION = '0.01';
 __PACKAGE__->config(
     name => 'GMS::Web',
 
-    session => { flash_to_stash => 1 },
-
-    cookie_secure => 1,
+    session => {
+        flash_to_stash => 1,
+        cookie_secure => 1,
+    },
 
     default_view => 'TT',
 
