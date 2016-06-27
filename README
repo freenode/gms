@@ -4,6 +4,12 @@ exactly useful yet, but most parts are working now.
 If you're interested in development of it, then further information is in the
 doc/ subdirectory.
 
+UPDATE 2016-06-27
+=================
+From now on, you need to run the service with `GMS_WEB_CONFIG_LOCAL_SUFFIX=dev
+./script/gms_web_server.pl` in order to disable secure cookie locally.
+
+
 INSTALLING:
 ==========
 
@@ -174,8 +180,8 @@ Having set up your configuration file, run `./bin/deploy.pl install` from the
 root of your GMS checkout to set up the database schema used by GMS.
 
 Once all this is done, start the GMS development web server by running
-`./script/gms_web_server.pl'. At this point begins the job of tracking 
-down what doesn't work and why.
+`GMS_WEB_CONFIG_LOCAL_SUFFIX=dev ./script/gms_web_server.pl`. At this point
+begins the job of tracking down what doesn't work and why.
 
 After having logged in for the first time with your user, setup yourself a admin and/or staff acount by executing
 
