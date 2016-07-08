@@ -37,41 +37,63 @@ addEventHandler ( window, 'load', function() {
     }, 1 );
 });
 
-function addAnother() {
+/* Adds a new set of fields on the user cloak request form
+ * if requested is true, the fields are added regardless of the value of others
+ */
+function addAnother(requested) {
+    /* Default parameter value */
+    if(requested === undefined) {
+        requested = false;
+    }
+
     var container = document.getElementById(__ID_CLOAK_CONTAINER);
-    var cloak = document.getElementById(__ID_CLOAK);
+    var cloak = document.getElementById(__ID_CLOAK + 0);
 
-    var elem = cloak.cloneNode ( true );
-    elem.removeAttribute ('id');
-    elem.className = __CLASS_CLOAK;
+    /* Lookup all 'usercloakn' fields and check if empty */
+    var one_is_empty = false;
+    for(var i = 0; i < count && !one_is_empty; ++i) {
+        var usercloak = document.getElementById(__ID_USERCLOAK + i);
+        var value = usercloak.value;
+        one_is_empty = one_is_empty || (value == "");
+    }
 
-    var account_input = getId (elem, __ID_ACCOUNTNAME );
-    account_input.setAttribute ('name', __NAME_ACCOUNTNAME + count);
-    account_input.setAttribute('value', '');
-    account_input.value = '';
-    account_input.removeAttribute('id');
+    /* Do not add anything if all fields are not yet filled
+     * if requested then user asked manually, add regardless */
+    if(requested || (!requested && !one_is_empty)) {
+        var elem = cloak.cloneNode ( true );
+        elem.setAttribute('id', __ID_CLOAK + count);
 
-    var cloakns_input = getId  (elem, __ID_CLOAKNS);
-    cloakns_input.setAttribute('name', __NAME_CLOAKNS + count);
-    cloakns_input.selectedIndex = document.getElementById(__ID_CLOAKNS).selectedIndex;
-    cloakns_input.removeAttribute('id');
+        /* account */
+        var account_input = getId (elem, __ID_ACCOUNTNAME + 0);
+        account_input.setAttribute ('name', __NAME_ACCOUNTNAME + count);
+        account_input.setAttribute('value', '');
+        account_input.value = '';
+        account_input.setAttribute('id', __ID_ACCOUNTNAME + count);
 
-    var cloak_input = getId (elem, __ID_USERCLOAK);
-    cloak_input.setAttribute('name', __NAME_CLOAK + count);
-    cloak_input.setAttribute('value','');
-    cloak_input.value = '';
-    cloak_input.removeAttribute('id');
+        /* cloak namespace */
+        var cloakns_input = getId  (elem, __ID_CLOAKNS + 0);
+        cloakns_input.setAttribute('name', __NAME_CLOAKNS + count);
+        cloakns_input.selectedIndex = document.getElementById(__ID_CLOAKNS + (count - 1)).selectedIndex;
+        cloakns_input.setAttribute('id', __ID_CLOAKNS + count);
 
-    container.appendChild(elem);
-    account_input.focus();
+        /* role/user */
+        var cloak_input = getId (elem, __ID_USERCLOAK + 0);
+        cloak_input.setAttribute('name', __NAME_CLOAK + count);
+        cloak_input.setAttribute('value','');
+        cloak_input.value = '';
+        cloak_input.setAttribute('id', __ID_USERCLOAK + count);
 
-    document.getElementById(__ID_NUM_CLOAKS).setAttribute('value', ++count);
-    ++numElems;
+        container.appendChild(elem);
+        account_input.focus();
+
+        document.getElementById(__ID_NUM_CLOAKS).setAttribute('value', ++count);
+        ++numElems;
+    }
 }
 
 function addButtonClick() {
     var input = document.getElementById(__ID_BTN_ADD);
     addEventHandler ( input, 'click', function() {
-        addAnother();
+        addAnother(true);
     } );
 }
