@@ -46,6 +46,7 @@ requires 'DBIx::Class::DeploymentHandler';
 requires 'MooseX::AttributeShortcuts';
 
 requires 'Data::UUID';
+requires 'Data::Munge';
 
 on 'test' => sub {
 
