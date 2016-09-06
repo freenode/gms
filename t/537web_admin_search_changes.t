@@ -109,31 +109,6 @@ $ua->content_contains ('active', 'Change is there');
 $ua->content_contains ('Changed By: admin', 'Change is there');
 $ua->content_contains ('Affected Change: 6', 'Change is there');
 
-$ua->submit_form (
-    fields => {
-        change_item => 6,
-        cloak_accountname => 'account6'
-    }
-);
-
-$ua->content_contains ('group6/user6', 'Change is there 8');
-$ua->content_contains ('applied', 'Change is there');
-
-$ua->get_ok("http://localhost/admin/search_changes", "Search changes page works");
-
-$ua->submit_form (
-    fields => {
-        change_item => 7,
-        target => 'account0'
-    }
-);
-
-$ua->content_contains ('account0', 'change is there');
-$ua->content_contains ('#group0', 'change is there');
-$ua->content_contains ('transfer', 'change is there');
-$ua->content_contains ('applied', 'change is there');
-$ua->content_contains ('admin', 'change is there');
-
 $ua->get_ok("http://localhost/admin/search_changes", "Search changes page works");
 
 $ua->submit_form (

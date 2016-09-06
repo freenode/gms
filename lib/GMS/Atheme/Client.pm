@@ -40,54 +40,6 @@ sub new {
     bless $self, $class;
 }
 
-=head2 cloak
-
-Uses Atheme to cloak a user.
-It takes 2 arguments, the account name of the
-user we want to cloak, and the cloak to set.
-
-=cut
-
-sub cloak {
-    my ( $self, $accountname, $cloak ) = @_;
-    my $session = $self->{_session};
-
-    return $session->command($session->service, 'cloak', $accountname, $cloak);
-}
-
-=head2 take_over
-
-Takes 3 arguments, a channel name, the account name
-of a group contact, and the person who requested the change
-( for logging )
-It uses Atheme to transfer the channel to the contact.
-
-=cut
-
-sub take_over {
-    my ($self, $channel, $gc_name, $requestor) = @_;
-    my $session = $self->{_session};
-
-    if ( $self->chanregistered ( $channel ) ) {
-        return $session->command($session->service, 'transfer', $channel, $gc_name, $requestor);
-    } else {
-        return $session->command($session->service, 'fregister', $channel, $gc_name, $requestor);
-    }
-}
-
-=head2 drop
-
-Similar to take_over, but drops the channel instead of transferring it.
-
-=cut
-
-sub drop {
-    my ($self, $channel, $requestor) = @_;
-    my $session = $self->{_session};
-
-    return $session->command($session->service, 'drop', $channel, $requestor);
-}
-
 =head2 metadata
 
 Returns an account's metadata
@@ -160,32 +112,6 @@ sub verified {
     my $key = $self->metadata ($uid, 'private:verify:register:key');
 
     return !defined $key;
-}
-
-=head2 chanexists
-
-Returns if a channel has been created
-
-=cut
-
-sub chanexists {
-    my ($self, $channel) = @_;
-    my $session = $self->{_session};
-
-    return $session->command ($session->service, 'chanexists', $channel) == 1;
-}
-
-=head2 chanregistered
-
-Returns if a channel is registered
-
-=cut
-
-sub chanregistered {
-    my ($self, $channel) = @_;
-    my $session = $self->{_session};
-
-    return $session->command ($session->service, 'chanregistered', $channel) == 1;
 }
 
 =head2 registered
@@ -265,38 +191,6 @@ sub info {
 
 }
 
-=head2 listvhost
-
-Returns a list of vhosts matching a pattern.
-
-=cut
-
-sub listvhost {
-    my ($self, $pattern) = @_;
-    my $session = $self->{_session};
-
-    if (!$pattern) {
-        die GMS::Exception->new ("Please provide a search pattern");
-    }
-
-    my $result_str = $session->command ( 'NickServ', 'listvhost', $pattern );
-
-    my @results = split /\n/, $result_str;
-    pop @results;
-
-    return unless @results;
-
-    my %result_hash;
-
-    foreach my $result (@results) {
-        my ($user, $cloak) = $result =~ /-\s+(\S+)\s+(\S+)/;
-
-        $result_hash{$user} = $cloak;
-    }
-
-    return %result_hash;
-}
-
 =head2 notice_chan
 
 Sends a notice to a channel.
@@ -345,59 +239,6 @@ sub memo {
     my $session = $self->{_session};
 
     return $session->command("MemoServ", "send", $user, $memo);
-}
-
-=head2 listchans
-
-Returns a list of channels matching a pattern.
-
-=cut
-
-sub listchans {
-    my ($self, $pattern) = @_;
-    my $session = $self->{_session};
-
-    if (!$pattern) {
-        die GMS::Exception->new ("Please provide a search pattern");
-    }
-
-    my $result_str = $session->command ( 'ChanServ', 'list', 'pattern', $pattern );
-
-    my @results = split /\n/, $result_str;
-
-    # Channels matching pattern...
-    # And final count.
-    shift @results;
-    pop @results;
-
-    foreach my $result (@results) {
-        ($result) = $result =~ /^- (\#\S+) \(\S+\)/;
-    }
-
-    return \@results;
-}
-
-=head2 list_group_chans
-
-Returns a listchans for the given namespaces.
-
-=cut
-
-sub list_group_chans {
-    my ($self, @namespaces) = @_;
-
-    my @results;
-
-    foreach my $namespace (@namespaces) {
-        # #chan and #chan-*
-        my $resultref = $self->listchans("#" . $namespace->namespace);
-        push @results, @$resultref;
-
-        $resultref = $self->listchans("#" . $namespace->namespace . "-*");
-        push @results, @$resultref;
-    }
-
-    return \@results;
 }
 
 1;

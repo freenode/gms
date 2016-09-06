@@ -9,6 +9,8 @@ use lib qw(t/lib);
 use GMSTest::Common 'three_groups';
 use GMSTest::Database;
 
+use RPC::Atheme::Error;
+
 need_database 'three_groups';
 
 # Mock atheme model so we don't use real one.

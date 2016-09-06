@@ -24,6 +24,8 @@ $ua->content_contains("Login to GMS", "Check login page works");
 
 $ua->submit_form;
 
+warn $ua->content;
+
 $ua->content_contains("Please log in", "Need to fill in user and password to log in");
 
 $ua->submit_form(
