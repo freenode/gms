@@ -114,12 +114,8 @@ sub end : ActionClass('RenderView::ErrorHandler') {
                                      $c->model('DB::GroupContactChange')->active_requests->count +
                                      $c->model('DB::GroupChange')->active_requests->count +
                                      $c->model('DB::ChannelNamespaceChange')->active_requests->count +
-                                     $c->model('DB::CloakNamespaceChange')->active_requests->count +
-                                     $c->model('DB::CloakChange')->search_pending->count +
-                                     $c->model('DB::ChannelRequest')->search_pending->count;
-        $c->stash->{pending_approver} = $c->model('DB::CloakChange')->search_pending->count +
-                                        $c->model('DB::ChannelRequest')->search_pending->count;
-        $c->log->debug("Pending requests: " . $c->stash->{pending_admin} . " (" . $c->stash->{pending_approver} . " approver)");
+                                     $c->model('DB::CloakNamespaceChange')->active_requests->count ;
+        $c->log->debug("Pending requests: " . $c->stash->{pending_admin} );
     }
 
 }

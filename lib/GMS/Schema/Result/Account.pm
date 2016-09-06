@@ -110,66 +110,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 channel_request_changes
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::ChannelRequestChange>
-
-=cut
-
-__PACKAGE__->has_many(
-  "channel_request_changes",
-  "GMS::Schema::Result::ChannelRequestChange",
-  { "foreign.changed_by" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 channel_requests
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::ChannelRequest>
-
-=cut
-
-__PACKAGE__->has_many(
-  "channel_requests",
-  "GMS::Schema::Result::ChannelRequest",
-  { "foreign.target" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 cloak_change_changes
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::CloakChangeChange>
-
-=cut
-
-__PACKAGE__->has_many(
-  "cloak_change_changes",
-  "GMS::Schema::Result::CloakChangeChange",
-  { "foreign.changed_by" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 cloak_changes
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::CloakChange>
-
-=cut
-
-__PACKAGE__->has_many(
-  "cloak_changes",
-  "GMS::Schema::Result::CloakChange",
-  { "foreign.target" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 cloak_namespace_changes
 
 Type: has_many
@@ -278,16 +218,6 @@ __PACKAGE__->many_to_many("roles", "user_roles", "role");
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Object::Enum","Core");
 
 # Pseudo-relations not added by Schema::Loader
-
-__PACKAGE__->has_many(
-    "recent_cloak_changes",
-    "GMS::Schema::Result::CloakChange",
-    { "foreign.target" => "self.id" },
-    {
-        "join" => "active_change",
-        "where" => { "active_change.status" => [ "approved", "applied" ] }
-    }
-);
 
 =head2 is_dropped
 

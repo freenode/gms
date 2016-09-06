@@ -162,21 +162,6 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
-=head2 channel_requests
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::ChannelRequest>
-
-=cut
-
-__PACKAGE__->has_many(
-  "channel_requests",
-  "GMS::Schema::Result::ChannelRequest",
-  { "foreign.requestor" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 contact_changes
 
 Type: has_many

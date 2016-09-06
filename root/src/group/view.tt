@@ -94,18 +94,6 @@
 <a href="[% c.uri_for ("/group/${group.id}/invite"); %]">Invite Group Contact</a>
 </li>
 <li class="list-group-item">
-<a href="[% c.uri_for ("/group/${group.id}/take_over"); %]">Take over a channel that's in the group's namespace.</a>
-</li>
-<li class="list-group-item">
-<a href="[% c.uri_for ("/group/${group.id}/listchans"); %]">View channels currently in the group's namespaces.</a>
-</li>
-<li class="list-group-item">
-<a href="[% c.uri_for ("/group/${group.id}/cloak"); %]">Assign a user a group cloak.</a>
-</li>
-<li class="list-group-item">
-<a href="[% c.uri_for ("/group/${group.id}/listvhost"); %]">View existing group cloaks</a>
-</li>
-<li class="list-group-item">
 <a href="[% c.uri_for ("/group/${group.id}/edit_channel_namespaces"); %]">View the group's channel namespaces or request a new namespace for your group</a>
 </li>
 <li class="list-group-item">

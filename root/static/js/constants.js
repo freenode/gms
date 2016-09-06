@@ -7,13 +7,10 @@ var __ACTION_VERIFY           = 'verify';
 /* approval types */
 var __TYPE_CC                 = 'cc';
 var __TYPE_CHANGE             = 'changes';
-var __TYPE_CHANNEL            = 'channels';
 var __TYPE_CLNC               = 'clnc';
 var __TYPE_CLNS               = 'clns';
-var __TYPE_CLOAK              = 'cloaks';
 var __TYPE_CNC                = 'cnc';
 var __TYPE_CNS                = 'cns';
-var __TYPE_DROP               = 'drop';
 var __TYPE_GC                 = 'gc';
 var __TYPE_GCC                = 'gcc';
 var __TYPE_GROUP              = 'group';
@@ -21,7 +18,6 @@ var __TYPE_NAMESPACE          = 'namespace';
 var __TYPE_NEW_GC             = 'gca';
 var __TYPE_NS1                = __TYPE_NAMESPACE + '_' + __TYPE_CNS;
 var __TYPE_NS2                = __TYPE_NAMESPACE + '_' + __TYPE_CLNS;
-var __TYPE_TRANSFER           = 'transfer';
 
 /* status */
 var __STATUS_ERROR            = 'error';
@@ -34,7 +30,6 @@ var __ID_APPLY_ALL            = 'apply_all_';
 var __ID_APPROVE              = 'approve_';
 var __ID_APPROVE_ALL          = 'approve_ALL_the_';
 var __ID_BTN_ADD              = 'btn_add';
-var __ID_CHANNEL              = 'channel';
 var __ID_CLOAK_CONTAINER      = 'cloak_container';
 var __ID_CLOAK                = 'cloak';
 var __ID_CLOAKNS              = 'cloakns';
@@ -101,11 +96,8 @@ var __ALREADY_VERIFIED        = ' ( Verified ) ';
 var __APPLY                   = 'Mark Applied';
 var __APPROVE                 = 'Approve';
 var __CHANGES                 = 'changes';
-var __CHANNEL_REQUESTS        = 'channel requests';
 var __CLNC                    = 'cloak namespace changes';
 var __CLNS                    = 'cloak namespaces';
-var __CLOAK_CHANGE            = 'Cloak: %cloak, approved on %time';
-var __CLOAK_CHANGES           = 'cloak changes';
 var __CNC                     = 'channel namespace changes';
 var __CNS                     = 'channel namespaces';
 var __CONTACT_CHANGES         = 'contact changes';
@@ -125,13 +117,11 @@ var __NAME                    = 'Name: ';
 var __NAMESPACE               = 'Namespace: ';
 var __NO                      = 'No';
 var __NOT_FAILED              = ' ( Not failed )';
-var __NO_CLOAK_CHANGES        = 'No cloak changes.';
 var __PHONE                   = 'Phone: ';
 var __PREFIX_RESPONSE         = 'response_';
 var __PREVIOUS_FAILURE_REASON = 'Previous failure reason:';
 var __PREVIOUSLY_FAILED       = 'Previously failed request';
 var __PRIMARY                 = 'Primary:';
-var __RECENT_CLOAK_CHANGES    = "'s recent cloak changes:";
 var __REJECT                  = 'Reject';
 var __REQUESTED_CONTACT       = 'Requested contact: ';
 var __REQUESTED_NAMESPACE     = 'Requested namespace: ';
@@ -150,7 +140,6 @@ var __ROOT                    = document.root_url;
 
 var __URL_ADMIN_APPROVE_CHAN  = __ROOT + '/json/admin/approve_channel_requests';
 var __URL_ADMIN_APPROVE_CHNG  = __ROOT + '/json/admin/approve_change';
-var __URL_ADMIN_APPROVE_CLOAK = __ROOT + '/json/admin/approve_cloak';
 var __URL_ADMIN_APPROVE_CLNS  = __ROOT + '/json/admin/approve_namespaces?approve_item=' + __TYPE_CLNS;
 var __URL_ADMIN_APPROVE_CNS   = __ROOT + '/json/admin/approve_namespaces?approve_item=' + __TYPE_CNS;
 var __URL_ADMIN_APPROVE_GCA   = __ROOT + '/json/admin/approve_new_gc';
@@ -164,7 +153,6 @@ var __URL_ADMIN_APPROVE_GCC   = __URL_ADMIN_APPROVE_CHNG + '?change_item=' + __T
 
 var __URL_ADMIN_SUBMIT_CHAN   = __ROOT + '/json/admin/approve_channel_requests/submit';
 var __URL_ADMIN_SUBMIT_CHNG   = __ROOT + '/json/admin/approve_change/submit';
-var __URL_ADMIN_SUBMIT_CLOAK  = __ROOT + '/json/admin/approve_cloak/submit';
 var __URL_ADMIN_SUBMIT_GCA    = __ROOT + '/json/admin/approve_new_gc/submit';
 var __URL_ADMIN_SUBMIT_GROUP  = __ROOT + '/json/admin/approve_groups/submit';
 var __URL_ADMIN_SUBMIT_NS     = __ROOT + '/json/admin/approve_namespaces/submit';
@@ -344,16 +332,6 @@ var __TEMPLATE_ACCOUNT_DROPPED =
 var __TEMPLATE_NO_REQUESTS          =
 "<b>No %req_type are currently pending approval. Congratulations!</b>";
 
-/* recent cloak changes */
-
-var __TEMPLATE_RECENT_CLOAK_CHANGES =
-"%target_name's" + __RECENT_CLOAK_CHANGES +
-"<ul>%recent_cloak_changes</ul>";
-var __TEMPLATE_CLOAK_CHANGE         =
-"<li>" + __CLOAK_CHANGE + "</li>";
-var __TEMPLATE_NO_CLOAK_CHANGES     =
-"<li>No cloak changes yet</li>";
-
 /* accept new GC - GC info */
 
 var __TEMPLATE_AGC_INFO      =
@@ -366,131 +344,6 @@ var __TEMPLATE_AGC_INFO      =
             "</a> - <a target='_blank' href='" + __URL_USER + "'>%gc_name</a>" +
         "</p>" +
         "%target_account_dropped" +
-    "</blockquote>" +
-"</div>";
-
-/* channel drop info */
-
-var __TEMPLATE_DROP_INFO      =
-"<div class='" + __CLASS_50 + "'>" +
-    "<blockquote>" +
-    "<p>" +
-        __TEMPLATE_CHECKBOX +
-        "%channel_name" +
-    "</p>" +
-    "<small>" +
-        "%request_type" +
-    "</small>" +
-    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
-    __GROUP + "%group_name" + __BR +
-    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
-    __NAMESPACE + "%namespace" + __BR +
-    "%requestor_account_dropped" +
-    "</blockquote>" +
-"</div>";
-
-/* channel drop info - previously failed*/
-
-var __TEMPLATE_DROP_FAILED    =
-"<div class='" + __CLASS_50 + "'>" +
-    "<blockquote>" +
-    "<p>" +
-        __TEMPLATE_CHECKBOX +
-        "%channel_name" +
-    "</p>" +
-    "<small>" +
-        "%request_type" +
-    "</small>" +
-    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
-    __GROUP + "%group_name" + __BR +
-    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
-    __NAMESPACE + "%namespace" + __BR +
-    "%requestor_account_dropped" +
-    __BR + __PREVIOUSLY_FAILED + __BR
-    "</blockquote>" +
-"</div>";
-
-/* channel transfer info */
-
-var __TEMPLATE_TRANSFER_INFO      =
-"<div class='" + __CLASS_50 + "'>" +
-    "<blockquote>" +
-    "<p>" +
-        __TEMPLATE_CHECKBOX +
-        "%channel_name" +
-    "</p>" +
-    "<small>" +
-        "%request_type" +
-        " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
-    "</small>" +
-    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
-    __GROUP + "%group_name" + __BR +
-    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
-    __NAMESPACE + "%namespace" + __BR +
-    "%requestor_account_dropped" + __BR +
-    "%target_account_dropped" +
-    "</blockquote>" +
-"</div>";
-
-/* channel transfer info - previously failed*/
-
-var __TEMPLATE_TRANSFER_FAILED      =
-"<div class='" + __CLASS_50 + "'>" +
-    "<blockquote>" +
-    "<p>" +
-         __TEMPLATE_CHECKBOX +
-        "%channel_name" +
-    "</p>" +
-    "<small>" +
-        "%request_type" +
-        " to <a href='" + __URL_USER + "' target='_blank'>%target_name</a>" +
-    "</small>" +
-    __REQUESTOR + "<a target='_blank' href='" + __URL_USER.replace(/\%account_id/g, '%requestor_id') + "'>%requestor_name</a>" + __BR +
-    __GROUP + "%group_name" + __BR +
-    __URL + '<a href="%group_url" target="_blank">%group_url</a>' + __BR +
-    __NAMESPACE + "%namespace" + __BR +
-    "%requestor_account_dropped" + __BR +
-    "%target_account_dropped" +
-    __BR + __PREVIOUSLY_FAILED +
-    "</blockquote>" +
-"</div>";
-
-/* cloak info */
-
-var __TEMPLATE_CLOAK_INFO     =
-"<div class='" + __CLASS_50 + "'>" +
-    "<blockquote>" +
-        "<p>" +
-            __TEMPLATE_CHECKBOX +
-            "<a target='_blank' href='" + __URL_USER + "'>%target_name</a>" +
-        "</p>" +
-        "<small>" +
-            "%cloak" +
-        "</small>" +
-        __NAMESPACE + "%namespace/*" + __BR +
-        __GROUP + "%group_name" + __BR +
-        __URL + "<a href='%group_url' target='_blank'>%group_url</a>" + __BR +
-        "%target_account_dropped" +
-    "</blockquote>" +
-"</div>";
-
-/* information of a cloak that previously failed applying */
-
-var __TEMPLATE_CLOAK_FAILED =
-"<div class='" + __CLASS_50 + "'>" +
-    "<blockquote>" +
-        "<p>" +
-            __TEMPLATE_CHECKBOX +
-            "<a target='_blank' href='" + __URL_USER + "'>%target_name</a>" +
-        "</p>" +
-        "<small>" +
-            "%cloak" +
-        "</small>" +
-        __NAMESPACE + "%namespace/*" + __BR +
-        __GROUP + "%group_name" + __BR +
-        __URL + "<a href='%group_url' target='_blank'>%group_url</a>" + __BR +
-        "%target_account_dropped" + __BR +
-        __PREVIOUSLY_FAILED +
     "</blockquote>" +
 "</div>";
 
@@ -700,35 +553,6 @@ __TEMPLATE_HIDDEN             +
 __TEMPLATE_TEXTAREA           +
 __TEMPLATE_HIDDEN_END;
 
-var __TEMPLATE_HIDDEN_CHANNEL_FAILED =
-__TEMPLATE_HIDDEN                    +
-__TEMPLATE_FAIL_REASON               +
-__TEMPLATE_MARK                      +
-__TEMPLATE_TEXTAREA                  +
-__TEMPLATE_HIDDEN_END;
-
-var __TEMPLATE_HIDDEN_CHANNEL        =
-__TEMPLATE_HIDDEN                    +
-__TEMPLATE_MARK                      +
-__TEMPLATE_TEXTAREA                  +
-__TEMPLATE_HIDDEN_END;
-
-
-var __TEMPLATE_HIDDEN_CLOAK_FAILED   =
-__TEMPLATE_HIDDEN                    +
-__TEMPLATE_FAIL_REASON               +
-__TEMPLATE_MARK                      +
-__TEMPLATE_RECENT_CLOAK_CHANGES      +
-__TEMPLATE_TEXTAREA                  +
-__TEMPLATE_HIDDEN_END;
-
-var __TEMPLATE_HIDDEN_CLOAK          =
-__TEMPLATE_HIDDEN                    +
-__TEMPLATE_MARK                      +
-__TEMPLATE_RECENT_CLOAK_CHANGES      +
-__TEMPLATE_TEXTAREA                  +
-__TEMPLATE_HIDDEN_END;
-
 /* templates for each thing that needs approving */
 
 var __TEMPLATE_AGC            =
@@ -754,60 +578,6 @@ __TEMPLATE_APPROVE            +
 __TEMPLATE_REJECT             +
 __TEMPLATE_CONTAINER_END      +
 __TEMPLATE_HIDDENDIV;
-
-var __TEMPLATE_FAILED_DROP    =
-__TEMPLATE_CONTAINER          +
-__TEMPLATE_DROP_FAILED        +
-__TEMPLATE_RETRY              +
-__TEMPLATE_APPLY              +
-__TEMPLATE_REJECT             +
-__TEMPLATE_CONTAINER_END      +
-__TEMPLATE_HIDDEN_CHANNEL_FAILED;
-
-var __TEMPLATE_DROP           =
-__TEMPLATE_CONTAINER          +
-__TEMPLATE_DROP_INFO          +
-__TEMPLATE_APPROVE            +
-__TEMPLATE_APPLIED            +
-__TEMPLATE_REJECT             +
-__TEMPLATE_CONTAINER_END      +
-__TEMPLATE_HIDDEN_CHANNEL;
-
-var __TEMPLATE_FAILED_TRANSFER =
-__TEMPLATE_CONTAINER           +
-__TEMPLATE_TRANSFER_FAILED     +
-__TEMPLATE_RETRY               +
-__TEMPLATE_APPLY               +
-__TEMPLATE_REJECT              +
-__TEMPLATE_CONTAINER_END       +
-__TEMPLATE_HIDDEN_CHANNEL_FAILED;
-
-var __TEMPLATE_TRANSFER       =
-__TEMPLATE_CONTAINER          +
-__TEMPLATE_TRANSFER_INFO      +
-__TEMPLATE_APPROVE            +
-__TEMPLATE_APPLIED            +
-__TEMPLATE_REJECT             +
-__TEMPLATE_CONTAINER_END      +
-__TEMPLATE_HIDDEN_CHANNEL;
-
-var __TEMPLATE_FAILED_CLOAK   =
-__TEMPLATE_CONTAINER          +
-__TEMPLATE_CLOAK_FAILED       +
-__TEMPLATE_RETRY              +
-__TEMPLATE_APPLY              +
-__TEMPLATE_REJECT             +
-__TEMPLATE_CONTAINER_END      +
-__TEMPLATE_HIDDEN_CLOAK_FAILED;
-
-var __TEMPLATE_PENDING_CLOAK  =
-__TEMPLATE_CONTAINER          +
-__TEMPLATE_CLOAK_INFO         +
-__TEMPLATE_APPROVE            +
-__TEMPLATE_APPLIED            +
-__TEMPLATE_REJECT             +
-__TEMPLATE_CONTAINER_END      +
-__TEMPLATE_HIDDEN_CLOAK;
 
 var __TEMPLATE_PENDING_GROUP  =
 __TEMPLATE_CONTAINER          +

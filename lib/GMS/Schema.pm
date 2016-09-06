@@ -1,19 +1,12 @@
 use utf8;
 package GMS::Schema;
 
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
-
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces;
-
-
-# Created by DBIx::Class::Schema::Loader v0.07035 @ 2013-07-07 12:07:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DqFS3cQmQC0J5TAqos99DA
 
 =head1 NAME
 
@@ -71,7 +64,6 @@ Do nothing for now.
 
 sub install_defaults { }
 
-our $VERSION = 5;
+our $VERSION = 6;
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

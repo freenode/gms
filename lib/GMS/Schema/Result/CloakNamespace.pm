@@ -170,21 +170,6 @@ __PACKAGE__->belongs_to(
     { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
-=head2 cloak_changes
-
-Type: has_many
-
-Related object: L<GMS::Schema::Result::CloakChange>
-
-=cut
-
-__PACKAGE__->has_many(
-  "cloak_changes",
-  "GMS::Schema::Result::CloakChange",
-  { "foreign.namespace_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 cloak_namespace_changes
 
 Type: has_many

@@ -101,118 +101,6 @@ function format_change ( json ) {
     return html;
 }
 
-function format_channel ( request ) {
-    var html;
-    var type = request.request_type;
-    var status = request.status;
-
-    if ( type === __TYPE_DROP ) {
-        if ( status === __STATUS_ERROR ) {
-            html = __TEMPLATE_FAILED_DROP;
-        } else {
-            html = __TEMPLATE_DROP;
-        }
-    } else if ( type === __TYPE_TRANSFER ) {
-        if ( status === __STATUS_ERROR ) {
-            html = __TEMPLATE_FAILED_TRANSFER;
-        } else {
-            html = __TEMPLATE_TRANSFER;
-        }
-    }
-
-    html = html.replace (/\%req_type/g, __TYPE_CHANNEL);
-    html = html.replace (/\%channel_name/g, escapeHtml(request.channel));
-    html = html.replace (/\%id/g, escapeHtml(request.id));
-    html = html.replace (/\%account_id/g, escapeHtml(request.target_id));
-    html = html.replace (/\%target_name/g, escapeHtml(request.target_name));
-    html = html.replace (/\%requestor_name/g, escapeHtml(request.requestor_name));
-    html = html.replace (/\%requestor_id/g, escapeHtml(request.requestor_id));
-    html = html.replace (/\%fail_reason/g, escapeHtml(request.change_freetext));
-    html = html.replace (/\%request_type/g, escapeHtml(type));
-
-    html = html.replace (/\%group_name/g, escapeHtml( request.group_name));
-    html = html.replace (/\%group_url/g,  escapeHtml(request.group_url));
-    html = html.replace (/\%namespace/g, escapeHtml(request.namespace));
-
-    if ( !request.target_mark ) {
-        html = html.replace (/\%marked/g, '');
-    } else {
-        html = html.replace (/\%marked/g, format_mark ( request.target_mark ) );
-    }
-
-    if ( request.requestor_dropped ) {
-        html = html.replace ( /\%requestor_account_dropped/g, format_account_drop ( request.requestor_name ) );
-    } else {
-        html = html.replace ( /\%requestor_account_dropped/g, '' );
-    }
-
-    if ( request.target_dropped ) {
-        html = html.replace ( /\%target_account_dropped/g, format_account_drop ( request.target_name ) );
-    } else {
-        html = html.replace ( /\%target_account_dropped/g, '' );
-    }
-
-    return html;
-}
-
-function format_cloak_change ( change ) {
-    var html = __TEMPLATE_CLOAK_CHANGE;
-    html = html.replace (/\%cloak/, escapeHtml(change.cloak));
-    html = html.replace (/\%time/, escapeHtml(change.change_time));
-
-    return html;
-}
-
-function format_cloak ( request ) {
-    var html;
-    var status = request.status;
-
-    if ( status === __STATUS_ERROR ) {
-        html = __TEMPLATE_FAILED_CLOAK;
-    } else {
-        html = __TEMPLATE_PENDING_CLOAK;
-    }
-
-    html = html.replace (/\%req_type/g, __TYPE_CLOAK);
-    html = html.replace (/\%cloak/g, escapeHtml(request.cloak));
-    html = html.replace (/\%id/g,  escapeHtml(request.id));
-    html = html.replace (/\%account_id/g, escapeHtml(request.target_id));
-    html = html.replace (/\%target_name/g, escapeHtml(request.target_name));
-    html = html.replace (/\%fail_reason/g, escapeHtml(request.change_freetext));
-    html = html.replace(/\%namespace/g, escapeHtml(request.namespace));
-    html = html.replace(/\%group_name/g, escapeHtml(request.group_name));
-    html = html.replace(/\%group_url/g,  escapeHtml(request.group_url));
-
-    if ( !request.target_mark ) {
-        html = html.replace (/\%marked/g, '');
-    } else {
-        html = html.replace (/\%marked/g, format_mark ( request.target_mark ) );
-    }
-
-    var recent = request.target_recent_cloak_changes;
-    var recent_length = recent.length;
-
-    if ( recent_length === 0) {
-        html = html.replace (/\%recent_cloak_changes/g, __TEMPLATE_NO_CLOAK_CHANGES);
-    } else {
-        var replacement = '';
-
-        for ( var i = 0; i < recent_length; i++ ) {
-            replacement += format_cloak_change ( recent[i] );
-        }
-
-        html = html.replace (/\%recent_cloak_changes/g, replacement);
-    }
-
-    if ( request.target_dropped ) {
-        html = html.replace ( /\%target_account_dropped/g, format_account_drop ( request.target_name ) );
-    } else {
-        html = html.replace ( /\%target_account_dropped/g, '' );
-    }
-
-    return html;
-}
-
 function format_gc ( change ) {
     var html = __TEMPLATE_GC;
 
@@ -241,6 +129,13 @@ function format_gc ( change ) {
     }
 
     return html;
+}
+
+function format_user_cloak_url ( id ) {
+    var url = __URL_USER_ACCEPT_CLOAK;
+
+    url = url.replace (/\%id/g, escapeHtml(id));
+    return url;
 }
 
 function format_gcc ( change ) {
@@ -469,14 +364,10 @@ function format_no_requests ( type ) {
         html = html.replace (/\%req_type/g, __CONTACT_CHANGES);
     } else if (type === __TYPE_CHANGE) {
         html = html.replace (/\%req_type/g, __CHANGES);
-    } else if ( type === __TYPE_CHANNEL ) {
-        html = html.replace (/\%req_type/g, __CHANNEL_REQUESTS);
     } else if ( type === __TYPE_CLNC ) {
         html = html.replace (/\%req_type/g, __CLNC);
     } else if ( type === __TYPE_CLNS ) {
         html = html.replace (/\%req_type/g, __CLNS);
-    } else if ( type === __TYPE_CLOAK ) {
-        html = html.replace (/\%req_type/g, __CLOAK_CHANGES);
     } else if ( type === __TYPE_CNC ) {
         html = html.replace (/\%req_type/g, __CNC);
     } else if ( type === __TYPE_CNS ) {
@@ -549,11 +440,4 @@ function format_url_change ( new_url, old_url ) {
     html = html.replace (/\%new_url/g, escapeHtml(new_url));
 
     return html;
-}
-
-function format_user_cloak_url ( id ) {
-    var url = __URL_USER_ACCEPT_CLOAK;
-
-    url = url.replace (/\%id/g, escapeHtml(id));
-    return url;
 }

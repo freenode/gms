@@ -39,8 +39,6 @@ function handleJSON_list ( text, type ) {
 
     if ( type === __TYPE_GROUP ) {
         html = format_mass_action(type, __ACTION_VERIFY);
-    } else if ( type === __TYPE_CHANNEL || type === __TYPE_CLOAK ) {
-        html = format_mass_action(type, __ACTION_APPLY);
     } else {
         html = format_mass_action(type);
     }
@@ -53,10 +51,6 @@ function handleJSON_list ( text, type ) {
 
         if ( type === __TYPE_CC ) {
             html = format_cc ( approve );
-        } else if ( type === __TYPE_CHANNEL ) {
-            html = format_channel ( approve );
-        } else if ( type === __TYPE_CLOAK ) {
-            html = format_cloak ( approve );
         } else if ( type === __TYPE_CNC || type === __TYPE_CLNC ) {
             html = format_nsc ( approve, type );
         } else if ( type === __TYPE_CNS || type === __TYPE_CLNS ) {
@@ -94,17 +88,11 @@ function addClickExpand (elem, type) {
         case __TYPE_CHANGE:
             url = __URL_ADMIN_APPROVE_CHNG;
         break;
-        case __TYPE_CHANNEL:
-            url = __URL_ADMIN_APPROVE_CHAN;
-        break;
         case __TYPE_CLNC:
             url = __URL_ADMIN_APPROVE_CLNC;
         break;
         case __TYPE_CLNS:
             url = __URL_ADMIN_APPROVE_CLNS;
-        break;
-        case __TYPE_CLOAK:
-            url = __URL_ADMIN_APPROVE_CLOAK;
         break;
         case __TYPE_CNC:
             url = __URL_ADMIN_APPROVE_CNC;
@@ -160,8 +148,6 @@ function afterLoad() {
     pageLoad(__TYPE_CHANGE, __TYPE_GCC);
     pageLoad(__TYPE_NAMESPACE, __TYPE_CLNS);
     pageLoad(__TYPE_NAMESPACE, __TYPE_CNS);
-    pageLoad(__TYPE_CLOAK);
-    pageLoad(__TYPE_CHANNEL);
 }
 
 addEventHandler ( window, 'load', function() {

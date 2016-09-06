@@ -82,31 +82,6 @@
             <input type="text" id="cl_gname" name="cloak_groupname" />
         </div>
     </div>
-
-    <div class="form-group">
-        <input name="change_item" value="7" type="radio"  id="crc" />
-        <label class=" control-label" for="crc">Channel Request Changes</label>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label" for="channel">Channel:</label>
-        <div class="col-sm-9">
-            <input type="text" id="channel" name="channel" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label" for="req">Requestor:</label>
-        <div class="col-sm-9">
-            <input type="text" id="req" name="requestor" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label" for="target">Target:</label>
-        <div class="col-sm-9">
-            <input type="text" id="target" name="target" />
-        </div>
-    </div>
-
     <div>
       <input type='submit' value='Submit' class='btn btn-primary' />
     </div>

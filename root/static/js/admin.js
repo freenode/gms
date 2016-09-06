@@ -329,14 +329,6 @@ function approve ( id, type, action, extraData ) {
                 post['change_item'] = extraData;
             }
         break;
-        case __TYPE_CLOAK:
-            url = __URL_ADMIN_SUBMIT_CLOAK;
-            post['approve_changes'] = ids_str;
-        break;
-        case __TYPE_CHANNEL:
-            url = __URL_ADMIN_SUBMIT_CHAN;
-            post['approve_requests'] = ids_str;
-        break;
         case __TYPE_NAMESPACE:
             url = __URL_ADMIN_SUBMIT_NS;
             post['approve_namespaces'] = ids_str;
