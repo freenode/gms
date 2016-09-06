@@ -931,6 +931,9 @@ sub approve {
         $namespace->change ($account, 'admin', { status => 'active' });
     }
 
+    foreach my $cloak_namespace ($self->cloak_namespaces) {
+        $cloak_namespace->change ($account, 'admin', { status => 'active' });
+    }
 }
 
 =head2 reject

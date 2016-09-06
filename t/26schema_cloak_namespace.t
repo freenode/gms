@@ -19,6 +19,9 @@ my $admin = $schema->resultset('Account')->find({ 'accountname' => 'admin01' });
 
 ok $group;
 
+$group->change( $admin, 'admin', { status => 'active' } );
+$group->discard_changes;
+
 my $namespace = $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $user, 'namespace' => "test" });
 
 

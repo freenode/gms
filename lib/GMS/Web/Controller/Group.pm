@@ -778,6 +778,7 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
 
     my $group_rs = $c->model('DB::Group');
     my $namespace_rs = $c->model('DB::ChannelNamespace');
+    my $cloak_namespace_rs = $c->model('DB::CloakNamespace');
 
     my $group;
 
@@ -806,6 +807,17 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
         $channel_ns =~ s/-\*$//;
 
         if ( ( my $ns = $namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
+            if (!$ns->status->is_deleted) {
+                push @errors, "The namespace $channel_ns is already taken";
+            } else {
+                if ($ns->last_change->change_type->is_request && !$p->{'do_confirm'}) {
+                    push @errors, "Another group has requested the $channel_ns namespace. Are you sure you want to create a conflicting request?";
+                    $c->stash->{confirm} = 1;
+                }
+            }
+        }
+
+        if ( ( my $ns = $cloak_namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
             if (!$ns->status->is_deleted) {
                 push @errors, "The namespace $channel_ns is already taken";
             } else {
@@ -857,6 +869,12 @@ sub do_new :Chained('base') :PathPart('new/submit') :Args(0) {
                     $ns->change ($c->user->account, 'workflow_change', { 'status' => 'pending_staff', 'group_id' => $group->id });
                 } else {
                     $group->add_to_channel_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $channel_ns, 'status' => 'pending_staff' });
+                }
+
+                if ( ( my $ns = $cloak_namespace_rs->find({ 'namespace' => $channel_ns }) ) ) {
+                    $ns->change ($c->user->account, 'workflow_change', { 'status' => 'pending_staff', 'group_id' => $group->id });
+                } else {
+                    $group->add_to_cloak_namespaces ({ 'group_id' => $group->id, 'account' => $c->user->account, 'namespace' => $channel_ns, 'status' => 'pending_staff' });
                 }
             }
 
