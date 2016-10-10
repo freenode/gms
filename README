@@ -183,7 +183,7 @@ Once all this is done, start the GMS development web server by running
 `GMS_WEB_CONFIG_LOCAL_SUFFIX=dev ./script/gms_web_server.pl`. At this point
 begins the job of tracking down what doesn't work and why.
 
-After having logged in for the first time with your user, setup yourself a admin and/or staff acount by executing
+After having logged in for the first time with your user, setup yourself an admin and/or staff account by executing
 
 bin/manage_user_roles.pl [username, probably admin] --add=admin
 -or, to add a staff--
